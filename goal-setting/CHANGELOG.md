@@ -3,6 +3,41 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.2 — 2026-07-12
+
+The register patch. Iteration-1 of the goal-setting eval ran all ten goldens; every
+deterministic gate on every valid run passed, and the only *plugin*-caused red was one
+scenario failing on **register** — how the advisor sounds, not what it decides. Both leaks
+were in the same wall (`reference/heartbeat.md`), and both had cleared the doctrine that
+already banned them.
+
+- **Machinery leaks — the ban now covers paraphrase (§5).** §5 already forbade "STATE.md"
+  and `restart_phase`, and the leak walked straight past it: *"the restart machine tracks it
+  in the state file."* Banning spellings doesn't ban the fourth wall. §5 now names the
+  paraphrase family ("the state file", "the files", "my notes", "the tracker", "the restart
+  machine"), and states the test that actually generalizes: **it isn't which words appear,
+  it's who the sentence is about.** How the system knows something is backstage; what the
+  user did, and when, is the product. *"Your last pulse was July 13"* — not *"the state file
+  shows your last pulse was July 13."*
+- **Internal labels never surface (§5).** The monthly handed a user the raw enum
+  `insufficient_time`. Every classification key in `schemas.md` is now explicitly agent
+  vocabulary with a spoken gloss: record the label, say the meaning — "it's too early to
+  call; the lag you set hasn't run out." The monthly review carries the rule at the point of
+  use, since that's where the labels live.
+- **Route, don't menu (§4).** Against an unambiguous 42-day gap the advisor offered *"either
+  is fine, but I'd steer you toward the restart"* — a route diluted into a menu of equals.
+  The ~6-week row now says **recommend** the restart, and §4 carries the general rule: the
+  decision stays the user's, but the recommendation is not hedged into equivalence.
+  Softening scales with ambiguity, not with discomfort.
+- **The monthly lands its call (review skill).** The differential is answerable from the
+  record the deployment already keeps — the system's experiment terms plus the weekly
+  entries. Check them before asking the user for anything: a question whose answer is
+  written in `goals/active.md` is a stall. `unknown` remains the honest landing for a
+  genuinely thin record, not a resting place for an unread one.
+
+No behavior change to the arcs, the three-goal rule, the state files, or the critic. Register
+only.
+
 ## 0.2.1 — 2026-07-12
 
 The F1/F2 playbook release — the one STOP item from 0.2.0 that awaited Kelsey's review,

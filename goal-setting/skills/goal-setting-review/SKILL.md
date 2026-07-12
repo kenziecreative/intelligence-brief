@@ -63,6 +63,17 @@ For **each active Objective:**
    #5 (lower the target). Make them walk past dose, time, mechanism, and metric first —
    with their own weekly record as the evidence. Where the record shows `mixed`, untangle
    the split here: which KR moved, which system ran, and what that pair actually says.
+
+   **Record the classification; speak its gloss.** `insufficient_time` is a field value, not
+   a sentence. Write the label into the record and tell the user what it *means* — "too early
+   to call; the lag you set hasn't run out." Never hand them the key (heartbeat §5).
+
+   **Land the call.** The differential is answerable from the record the deployment already
+   keeps: the system's experiment terms (dose, lag, minimum duration, decision rule) plus the
+   weekly entries. Check them before asking the user for anything — a question whose answer is
+   written in `goals/active.md` is a stall, and it reads as one. `unknown` is the honest
+   landing when the record is genuinely too thin (a month of `unknown` pulses), not a place to
+   stop when the record is thin only because you didn't read it.
 3. **Check the countermetric** (if the Objective's goal contract names one): did the thing
    that must not deteriorate hold? A KR on track at the countermetric's expense is a finding,
    not a win.
