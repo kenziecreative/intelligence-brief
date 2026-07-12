@@ -147,17 +147,23 @@ Record every transition in the journal restart line and in STATE (`restart_phase
 restart flags, `Next due`).
 
 **Then say it in the room, not in the schema.** This section is written in state-machine
-vocabulary because the files need it; the user never does. The recap at the end of the pulse is
-where that vocabulary escapes — it feels like showing your work rather than talking, so the
-transition gets printed as the record holds it. It is talking (heartbeat §5).
+vocabulary because the files need it; the user never does. **Every turn that touches the
+transition is speech** — the recap at the end, *and the offer one turn earlier*, and any question
+you ask about it. Both of the last two leaks came out of this section: first the recap printed the
+transition as the record holds it, then the recap was fixed and the offer leaked instead. Neither
+felt like talking. Both were (heartbeat §5).
 
-Bad: "Restart: hold met on outreach (2 clean weeks) → reintroducing. Friday QA review hour is
-now the system under evaluation; clean-week count reset to 0."
-Good: "Two clean weeks on the outreach block — the QA hour comes back this week. It gets its
-own two clean weeks before the pricing audit follows."
+Bad (the recap): "Restart: hold met on outreach (2 clean weeks) → reintroducing. Friday QA review
+hour is now the system under evaluation; clean-week count reset to 0."
+Bad (the offer): "The queue has the QA hour lined up first, then the pricing audit. Keep that
+order, or swap?"
+Good (the offer): "The QA hour's next in line, then the pricing audit — keep that order, or would
+you rather swap them?"
+Good (the recap): "Two clean weeks on the outreach block — the QA hour comes back this week. It
+gets its own two clean weeks before the pricing audit follows."
 
-Phase names, the clean-week counter, the queue, and `status:` values live in the files. What
-the user hears is which system just came back and what it has to hold.
+Phase names, the clean-week counter, **the word "queue"**, and `status:` values live in the files.
+What the user hears is which system just came back, what's next in line, and what it has to hold.
 
 ---
 

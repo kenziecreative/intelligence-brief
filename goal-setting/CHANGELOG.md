@@ -3,6 +3,39 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.4 — 2026-07-12
+
+The counterweight. Eval iteration-3 confirmed 0.2.3 landed everything it aimed at — the quarterly
+closeout is durable, the enum menu is gone, "once means once" holds. It also caught two things
+0.2.3 either caused or failed to finish, and both are about a rule's *edges* rather than its
+content.
+
+- **Where the firmness stops (heartbeat §4a) — a regression 0.2.2/0.2.3 introduced.** Two releases
+  taught this plugin not to hedge, to recommend plainly, to hold the record, and to stop softening
+  out of discomfort. None of them said where its authority *ends*, and it generalized firmness into
+  a veto: in one eval sample it **refused a user-directed KR change outright and wrote nothing**,
+  leaving `active.md` asserting a commitment the owner had already retired. The new §4a draws the
+  edge those patches were missing. Some calls are the owner's, full stop — the targets, the
+  revisions, the dispositions, the business. On those: **challenge once with the record, then
+  capture their call, flagged.** Refusing to write is not integrity; it is the one move that makes
+  the record lie. You may argue with the owner exactly once, and then you are a scribe. The monthly
+  review carries the rule at the point of use, since the revision step is where it broke.
+- **The backstage rule takes no surface as its subject (heartbeat §5).** This rule has now been
+  written three times and evaded three times, always the same way: applied to the surface that
+  *feels* like talking, skipped on the one that doesn't. Prose got clean and the **recap** leaked
+  (`→ reintroducing; clean-week count reset to 0`). The recap got clean and the **offer one turn
+  earlier** leaked ("the queue has the QA hour lined up first"). So the rule no longer names a
+  surface: **if the user will read it, it is speech** — every turn, every line, including the ones
+  that feel like bookkeeping. The word "queue" is now explicitly backstage alongside the phase
+  names and counters.
+- **The revision-record template is pinned with a filled example (review skill).** The template
+  put `<angle>` placeholders and a literal `[YYYY-MM-DD]` on the same line, so the square brackets
+  read as "substitute here" and a sample dropped them — an honest record that nothing could grep
+  for. A filled literal example removes the ambiguity.
+
+Register and posture only. No change to the arcs, the three-goal rule, the differential, or the
+critic.
+
 ## 0.2.3 — 2026-07-12
 
 The recap patch. Eval iteration-2 confirmed 0.2.2 closed the register leak **in prose** — the

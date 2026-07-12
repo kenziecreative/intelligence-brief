@@ -12,7 +12,7 @@ Install: `/plugin marketplace add kenziecreative/kenzie-creative`, then `/plugin
 
 ## Plugins (current versions)
 
-- **goal-setting** (0.2.3) — a business goal-setting method in two arcs: a six-stage Setup Arc + a five-cadence Ongoing Arc over a Markdown `goals/` state dir, with a three-goal-rule hard cap, an operating heartbeat (overdue routing, closeout gate, operated mitigations), immutable goal history, and a goal-formulation critic with memory. *Standalone.*
+- **goal-setting** (0.2.4) — a business goal-setting method in two arcs: a six-stage Setup Arc + a five-cadence Ongoing Arc over a Markdown `goals/` state dir, with a three-goal-rule hard cap, an operating heartbeat (overdue routing, closeout gate, operated mitigations), immutable goal history, and a goal-formulation critic with memory. *Standalone.*
 - **intelligence-briefing** (0.3.0) — a daily/weekly environmental brief that triages the outside world into a self-contained HTML brief. *Triage-stream.*
 - **photo-generator** (1.2.0) — a guided photography director: plain-language scene → physics-aware Nano Banana Pro prompt (camera, lens, lighting, grade from a bundled reference library), optionally rendered via the Gemini API; batch, variations, and a refinement loop. *Standalone.*
 - **researcher** (1.4.1) — a structured, audited research system. *Standalone.*

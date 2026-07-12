@@ -86,7 +86,10 @@ For **each active Objective:**
 
 **If a change revises a KR or an Objective, the original commitment is preserved — never
 overwritten.** Append a revision record under that goal in `goals/active.md` before making
-the change:
+the change.
+
+The shape (`<angled>` parts are yours to fill; **the square brackets around the date are
+literal — type them**):
 
 ```
 - revised [YYYY-MM-DD]: <field> was <original target> (actual at change: <current value>) →
@@ -94,6 +97,27 @@ the change:
   justified it — usually goal_wrong or metric_wrong; a revision claiming any other
   classification deserves a second look>.
 ```
+
+Filled, so there's no ambiguity about the brackets — this is exactly what a real line looks like:
+
+```
+- revised [2026-08-01]: KR target was 3 signed retainers by Sep 30 (actual at change: 0) →
+  now 1 signed retainer by Sep 30. Reason: the owner judged the original too ambitious.
+  Classification: goal_wrong — owner's call; the stated reason is a volume read, not the
+  offer-based pipeline evidence this goal's contract set as its revision bar.
+```
+
+The bracketed date is what makes revisions findable across a long `active.md` (it matches the
+journal's `- **[2026-07-28] weekly**` convention). A revision written without them is still an
+honest record, but it is one nobody can grep for.
+
+**Push once, then write it (heartbeat §4a).** The revision conditions in the goal's contract are
+there to make the change *examined*, not to make it *impossible*. Cite them, say plainly if the
+user's stated reason doesn't clear the bar they set for themselves, and then — if they still want
+the change — **make it, and record it with that note attached.** The target is theirs. Refusing to
+write leaves `active.md` asserting a commitment the owner has already retired, which is not
+holding the line; it is just a file that lies. The honest note in the Classification field is how
+the record keeps its integrity. Withholding the pen is not.
 
 The revised goal keeps its full record; a goal that gets easier quietly is exactly what this
 line exists to prevent. If the revision is deep enough that it's really a *different*

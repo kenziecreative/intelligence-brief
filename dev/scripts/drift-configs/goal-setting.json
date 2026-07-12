@@ -81,17 +81,21 @@
         "## 3. Additive migration",
         "## 4. Compute what's overdue, and route",
         "## 5. Keep the machinery backstage",
+        "## 4a. Where the firmness stops",
         "Route, don't menu.",
         "The ban is on the machinery, not on its spelling.",
         "Internal labels never surface",
-        "The read-back is speech too",
-        "Never offer an enum as a menu."
+        "Every sentence the user reads is speech",
+        "Never offer an enum as a menu.",
+        "Refusing to write is not integrity."
       ]
     },
     {
       "file": "skills/goal-setting-review/SKILL.md",
       "markers": [
-        "Commit the closeout before you go on"
+        "Commit the closeout before you go on",
+        "Push once, then write it",
+        "- revised [2026-08-01]:"
       ]
     },
     {
