@@ -81,7 +81,19 @@ of it would.
    run was *expected* to end without a capture is a property of the scenario, and the run
    skill writes it to `gate-context.json` after you finish — you neither see it nor write it.
    Your report stays observational, which is what keeps it usable.
-5. **Write the capture.** Produce `<working-dir>/capture.md` with two sections:
+5. **Write `spoken.md` — the assistant's words, and nothing else.** Concatenate every assistant
+   turn **verbatim**, in order, separated by a blank line. Nothing else goes in this file: no
+   user turns, no headers, no stage directions, no "(capture written to …)" notes, no commentary
+   of any kind. If it wasn't said *to the user*, it does not belong here.
+
+   This file exists because a lint runs against it to check that backstage vocabulary never
+   reached the user, and that check is only as honest as this file is clean. Your own annotations
+   in `transcript.md` — the very notes that make it readable — mention state files and field
+   names, and a lint cannot tell your voice from the plugin's. So the plugin's voice gets its
+   own file. Copy the turns; do not summarize, tidy, or re-word them. A leak you paraphrase away
+   is a bug you have hidden.
+
+6. **Write the capture.** Produce `<working-dir>/capture.md` with two sections:
    `## Transcript` (or a pointer to transcript.md) and `## Artifacts` (the paths written and
    a short note on each). Gate results come from the script, not from you.
 
@@ -97,7 +109,13 @@ job, and your neutrality is what keeps the run honest.
 1. Faithful, not flattering. Execute the skill as written; never add behavior it doesn't
    instruct.
 2. Isolated. Everything is written under the run's working dir. Never touch a real project
-   or the target plugin's own files.
+   or the target plugin's own files. **And never read another run's working dir** — not a
+   sibling sample, not a prior iteration, not for "just the file structure." Another run's
+   artifacts are a previous answer to the question you are being asked; a run that consulted
+   one is not an independent sample, and the whole point of sampling a scenario three times is
+   that the three are independent. Everything you need about the target's file structure is in
+   the target's own skill and reference files (its init skill defines the templates). If you
+   catch yourself reaching for `_eval/`, you are in the wrong directory.
 3. Blind. You don't read the rubric or the scenario's `expected_behavior` — only `entry`,
    `setup`, and `user_messages`. **If you find a file that states what the run is supposed to
    do** — expectations, must-includes, critical dimensions, a full scenario object — it was

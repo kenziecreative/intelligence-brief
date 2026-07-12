@@ -69,6 +69,15 @@
   ],
   "content_lint": [
     {
+      "name": "spoken_no_machinery",
+      "file": "spoken.md",
+      "optional_file": true,
+      "forbid": "\\b(restart_phase|restart_queue|restart_clean_weeks|restart_system|setup_status|current_stage|completed_stages|pushback_calibration|triggered_active|insufficient_dose|insufficient_time|mechanism_wrong|metric_wrong|goal_wrong|check_frequency|monitored_signal|response_evidence|min_test_duration|expected_signal|decision_rule|stabilizing|reintroducing|STATE\\.md|the state file|the restart machine|the queue|the system under evaluation|clean-week count)\\b",
+      "flags": "i",
+      "feeds": "Continuity",
+      "note": "The register class, made deterministic. The machinery leak was fixed twice and moved each time — prose (v0.2.2) -> the pulse recap (v0.2.3) -> the queue offer. Patching each instance never killed the class, because catching the next hiding place always required a judge to read for it. This runs against spoken.md (assistant turns verbatim, nothing else) rather than transcript.md ON PURPOSE: the runner's own transcript annotations name state files and fields, and a lint cannot tell the runner's voice from the plugin's — linting transcript.md false-positived on adv-out-of-order/run-2, whose register the judges had confirmed clean. It is a vocabulary blacklist rather than a rule about intent, because three iterations proved the leak survives any rule phrased as advice about how to talk. optional_file: n/a on pre-iteration-4 captures, which predate spoken.md."
+    },
+    {
       "name": "state_no_placeholders",
       "file": "goals/STATE.md",
       "forbid": "\\[(TODO|TBD|placeholder)\\b",
