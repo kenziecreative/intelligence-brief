@@ -105,6 +105,13 @@ the split is load-bearing:
 `gate-context` overlays `gate-inputs`. A scenario-declared fact must never depend on a blind
 runner remembering to copy it — that is exactly how six runs were lost.
 
+**`adapter.md` is runner-visible. Keep it mechanism-only.** The runner must read the adapter —
+it's how it knows which skill to execute and what to capture — so anything written there has
+been told to the system under test. Describe *what the gates check and who writes what*; never
+"scenario X should end with Y." A gate-context table listing which scenario declares which key
+is a rubric in a lab coat. (Caught in goal-setting iteration-2, by a runner that flagged the
+passage instead of using it — which is the only reason it wasn't a silent contamination.)
+
 ## scenarios.jsonl
 
 One JSON object per line. Fields (`tone_notes` and `severity` are optional but recommended):

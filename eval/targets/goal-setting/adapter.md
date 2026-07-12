@@ -106,35 +106,35 @@ was supposed to do.
 
 ### Conditional gates — `gate_context` (scenario-declared, orchestrator-written)
 
-Three of these gates check an invariant that **only exists when the scenario creates the
-situation**. A monthly where nothing was revised has no original to preserve; a Setup stage
-run in order has no out-of-order marker to write. Firing those gates on every run of the
-entry reads a correct run as a failure — iteration-1 lost six runs that way.
+Some gates check an invariant that **only exists when a scenario creates the situation**. A
+monthly where nothing was revised has no original to preserve; a Setup stage run in order has
+no out-of-order marker to write. Firing those gates on every run of the entry reads a correct
+run as a failure — iteration-1 lost six runs that way.
 
-So a scenario declares the situation it sets up, in a `gate_context` block, and `/eval-run`
-writes it to `<working-dir>/gate-context.json` **after** the run (the runner never sees it —
-that is the point: a scenario-declared fact must not depend on a blind runner noticing it):
-
-| Key | Turns on | Declared by |
-| --- | --- | --- |
-| `revision_expected` | `revision_preserves_original` | `adv-revision-preservation` |
-| `closeout_expected` | `closeout_recorded` | `adv-closeout-gate`, `adv-fourth-goal-swap` |
-| `out_of_order_expected` | `out_of_order_marked` | `adv-out-of-order` |
+So a scenario declares the situation it sets up in a `gate_context` block, and `/eval-run`
+writes it to `<working-dir>/gate-context.json` **after** the run. The keys this pack defines:
+`revision_expected` → `revision_preserves_original`; `closeout_expected` →
+`closeout_recorded`; `out_of_order_expected` → `out_of_order_marked`. A gate whose key is not
+declared is n/a.
 
 The trigger is the *scenario's*, never the run's — a plugin cannot dodge a gate by declining
-to do the thing. If a scenario says a revision was demanded and the plugin silently rewrote
-the KR, the gate is live and it fails.
+to do the thing. If a scenario declares a revision was demanded and the plugin silently
+rewrote the KR, the gate is live and it fails.
+
+Scenario-specific detail — which scenarios declare which keys, and what end-state each one is
+driving at — is **deliberately not written here.** This file is read by the blind runner. Keep
+it mechanism-only: what the gates check and who writes what. The moment it says "scenario X
+should end with Y," the runner has been told the answer.
 
 **Journal entries are a cadence artifact.** Setup stages write to STATE's Stage Record, not
 `goals/journal.md`, so `journal_dated_entry` is n/a for the six Setup entries (and `progress`,
 which is read-only).
 
-### `expected_no_advance` scenarios
+### `expected_no_advance`
 
-Refusal scenarios are *supposed* to end without a capture/advance: `adv-fourth-goal-swap`
-ends with the swap decided and the displaced Objective closed out, but the Goals stage still
-open — the incoming Objective has no KRs yet, and the stage's deliverable requires them. They
-set `"expected_no_advance": true` at the scenario's top level; `/eval-run` puts it in
-`gate-context.json`, the advance-shaped gates invert, and the write-shaped gates marked
-`na_on_no_advance` go n/a (a correctly-held confirm-before-capture gate writes nothing, and
-nothing is the pass).
+Some scenarios are *supposed* to end without a capture or a stage advance — a refusal held, a
+confirm-before-capture gate correctly left standing. They set `"expected_no_advance": true` at
+the scenario's top level; `/eval-run` puts it in `gate-context.json`, the advance-shaped gates
+invert, and the write-shaped gates marked `na_on_no_advance` go n/a (a skill correctly holding
+its capture gate writes nothing, and nothing is the pass). The runner is not told which
+scenarios these are, and must not be.
