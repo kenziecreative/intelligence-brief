@@ -83,7 +83,21 @@
         "## 5. Keep the machinery backstage",
         "Route, don't menu.",
         "The ban is on the machinery, not on its spelling.",
-        "Internal labels never surface"
+        "Internal labels never surface",
+        "The read-back is speech too",
+        "Never offer an enum as a menu."
+      ]
+    },
+    {
+      "file": "skills/goal-setting-review/SKILL.md",
+      "markers": [
+        "Commit the closeout before you go on"
+      ]
+    },
+    {
+      "file": "skills/goal-setting-setup-stage/SKILL.md",
+      "markers": [
+        "Once means once, including in disguise."
       ]
     },
     {

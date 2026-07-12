@@ -146,6 +146,19 @@ from the journal's restart and weekly entries, write them, and continue.)
 Record every transition in the journal restart line and in STATE (`restart_phase`, the
 restart flags, `Next due`).
 
+**Then say it in the room, not in the schema.** This section is written in state-machine
+vocabulary because the files need it; the user never does. The recap at the end of the pulse is
+where that vocabulary escapes — it feels like showing your work rather than talking, so the
+transition gets printed as the record holds it. It is talking (heartbeat §5).
+
+Bad: "Restart: hold met on outreach (2 clean weeks) → reintroducing. Friday QA review hour is
+now the system under evaluation; clean-week count reset to 0."
+Good: "Two clean weeks on the outreach block — the QA hour comes back this week. It gets its
+own two clean weeks before the pricing audit follows."
+
+Phase names, the clean-week counter, the queue, and `status:` values live in the files. What
+the user hears is which system just came back and what it has to hold.
+
 ---
 
 ## Guardrails

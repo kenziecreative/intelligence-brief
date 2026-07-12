@@ -3,6 +3,44 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.3 — 2026-07-12
+
+The recap patch. Eval iteration-2 confirmed 0.2.2 closed the register leak **in prose** — the
+42-day-return golden went from red to a stable 3 across every sample. The same leak then turned
+up one surface over, in the construct §5 never reached: the **recap**, the line where the
+advisor reads back what it is about to write. Seven judges found it independently across six
+runs. Plus one real durability bug the gates caught in the quarterly.
+
+- **The read-back is speech too (heartbeat §5).** A recap doesn't *feel* like talking — it feels
+  like showing your work — so the record's own shape walks straight through it: phase names,
+  counters, enum values, field keys. It is talking; the user is reading it. **The record is a
+  data structure; the recap is a sentence.** The proof this was the right diagnosis: in the
+  failing run, the prose one line *above* the leak was perfect, and then the recap block printed
+  `→ reintroducing … clean-week count reset to 0`. The pulse's restart section now carries the
+  rule at the point of use, since that section is necessarily written in state-machine vocabulary
+  and the recap is where that vocabulary escapes.
+- **Never offer an enum as a menu (§5, and the quarterly closeout).** "Each one needs a
+  disposition — achieved, missed, abandoned, or superseded" hands the user the schema and makes
+  them do the mapping, including options that don't apply to anything on the table. Ask in
+  English ("did it get there, did it fall short, or did you stop working it?"); write the label
+  down yourself.
+- **The quarterly closeout commits its own trace (durability bug, review skill).** The journal
+  entry and the STATE update were written only after all six steps of a half-day cadence. So a
+  review that cleared the closeout gate and then stopped had already moved three commitments to
+  `history.md` and **emptied `active.md`** while leaving the journal blank and STATE still reading
+  the old quarter: files claiming the quarter was never closed, over goals that were already gone.
+  The closeout now writes its dated entry and advances STATE the moment the last record lands, and
+  every later step writes as it finishes. A half-day cadence is one that gets interrupted; an
+  interrupted review must leave the files telling the truth about how far it got.
+- **Once means once, including in disguise (setup-stage).** The out-of-order advisory was
+  delivered twice — the second time as diligence ("just to be sure before we lock it in…"), which
+  is the same question wearing a clipboard and reads to the user as not being heard. Confirming
+  the *content* about to be captured stays welcome; re-litigating a decision the user already made
+  does not. The record is what keeps the gap honest, not a second warning.
+
+Register and record-durability only. No change to the arcs, the three-goal rule, the differential,
+or the critic.
+
 ## 0.2.2 — 2026-07-12
 
 The register patch. Iteration-1 of the goal-setting eval ran all ten goldens; every

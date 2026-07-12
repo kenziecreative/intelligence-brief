@@ -126,6 +126,22 @@ force — and **nothing gets planned until the outgoing quarter is closed.**
    three-goal cap without inventing an archival step under pressure; a quarter that ends
    with three actives and no dispositions is the forbidden-fourth trap. The disposition
    calls are the user's; requiring *a* disposition is yours.
+
+   Ask for the dispositions in plain language, never as a menu of the schema's four values
+   (heartbeat §5): *"did it get there, did it fall short, or did you stop working it?"* The
+   label is yours to write down; the call is theirs to make.
+
+   **Commit the closeout before you go on — it is its own durable event.** The moment the last
+   record lands in `goals/history.md`, write the dated closeout entry to `goals/journal.md`
+   (`- **[YYYY-MM-DD] quarterly** — closeout: <objective> <disposition>, …`, one line per
+   Objective with its lessons) and update `Quarterly review last run` and the Current Period in
+   `goals/STATE.md`. **Do not defer these writes to the end of the review.** The quarterly is a
+   half-day cadence and it gets interrupted; this step has already emptied `active.md` and moved
+   three commitments to history, so a session that dies at step 2 would otherwise leave a
+   deployment whose files say the quarter was never closed while its goals are already gone. The
+   record must survive the session that made it. If the remaining steps don't run today, note
+   what's outstanding in Backstage Tasks and pick it up next time — a closeout that happened is
+   never a closeout that isn't written down.
 2. **Re-run the Anchor Areas Scorecard.** Fresh diagnostic, not a reaffirmation — has anything
    moved? Did the focused area improve? New vulnerabilities? Score all seven honestly (use the
    chapters in `${CLAUDE_PLUGIN_ROOT}/reference/anchor-areas/` and the signals of strength as
@@ -154,10 +170,15 @@ force — and **nothing gets planned until the outgoing quarter is closed.**
    recorded protocol as the Setup close. New commitments get the critic before they start,
    not after they wobble.
 
-Write the full quarterly entry to `goals/journal.md` (dispositions with lessons, updated
-scorecard snapshot, system keep/revise/retire decisions, backlog decisions, next-quarter
-Objectives, revised mitigations). Update the `Quarterly review last run` and the Current
-Period (advance the quarter) in `goals/STATE.md`.
+Complete the quarterly entry in `goals/journal.md` — the closeout line is already there from
+step 1; extend it with the rest of the review (updated scorecard snapshot, system
+keep/revise/retire decisions, backlog decisions, next-quarter Objectives, revised mitigations).
+Advance the Current Period (the new quarter) in `goals/STATE.md`.
+
+Each step of the quarterly writes as it finishes, rather than banking every write for the end.
+A half-day cadence is one that gets interrupted, and an interrupted review must leave the files
+telling the truth about how far it got — never a half-applied quarter that reads as if nothing
+happened.
 
 ---
 

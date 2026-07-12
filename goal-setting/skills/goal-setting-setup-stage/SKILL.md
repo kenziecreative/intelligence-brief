@@ -96,6 +96,17 @@ The Setup Arc runs in order, but it iterates. Check this stage against `complete
   stage] yet; [this stage] builds on it. Want to go there first, or work [this stage] anyway?"
   Respect their answer. Do not block — but if they work this stage anyway, the completion is
   recorded as out of order (Step 6), so the gap stays visible instead of vanishing.
+
+  **Once means once, including in disguise.** The second ask rarely arrives as a repeat; it
+  arrives as diligence — "just to be sure before we lock it in…", "you're certain you want the
+  scores to stand without the horizons?" That is the same question wearing a clipboard, and to
+  the user who already answered it plainly, it reads as not being heard. When they answer, the
+  ordering question is **closed**: open the stage on the very next turn.
+
+  Confirming the *content* you are about to capture is a different act and stays welcome ("seven
+  scores, demand gen and operations active — capture it?"). The line is simple: **confirm what
+  goes in the record; never re-litigate a decision the user already made.** The record is what
+  keeps the gap honest here, not a second warning.
 - **Returning to a completed stage** (iteration): expected, especially from the annual vision
   check. Read the existing content and treat this as a revision pass — preserve what holds,
   revise what changed. Do not rebuild from scratch.

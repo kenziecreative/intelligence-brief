@@ -14,7 +14,16 @@
       "type": "file_contains",
       "file": "goals/STATE.md",
       "pattern": "restart_phase:",
-      "feeds": "State Integrity"
+      "feeds": "State Integrity",
+      "note": "Deliberately weak: this asserts the KEY exists (the additive-migration invariant — an older deployment gains the field), not that a restart happened. It therefore passes on a zero-write run and proves nothing about a restart transition. The transition itself is checked by restart_transition_recorded below."
+    },
+    {
+      "name": "restart_transition_recorded",
+      "type": "file_contains",
+      "file": "goals/STATE.md",
+      "pattern": "restart_phase:\\s*(stabilizing|reintroducing)",
+      "feeds": "State Integrity",
+      "applies_when": "restart_transition_expected"
     },
     {
       "name": "journal_dated_entry",
@@ -63,7 +72,8 @@
       "name": "state_no_placeholders",
       "file": "goals/STATE.md",
       "forbid": "\\[(TODO|TBD|placeholder)\\b",
-      "feeds": "State Integrity"
+      "feeds": "State Integrity",
+      "note": "FILL is deliberately absent here though active.md forbids it: `**Direction:** [FILL]` is a sanctioned init-template value for a Direction the user has not given yet. In active.md the same token is residue. Four iteration-2 judges flagged the asymmetry as a bug; it is not."
     },
     {
       "name": "active_no_placeholders",
