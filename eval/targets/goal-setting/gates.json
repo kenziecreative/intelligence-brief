@@ -22,7 +22,8 @@
       "file": "goals/journal.md",
       "pattern": "^- \\*\\*\\[\\d{4}-\\d{2}-\\d{2}\\]",
       "feeds": "State Integrity",
-      "na_for_entries": ["progress"]
+      "na_for_entries": ["orient", "horizons", "anchors", "goals", "systems", "premortem", "progress"],
+      "na_on_no_advance": true
     },
     {
       "name": "revision_preserves_original",
@@ -30,7 +31,7 @@
       "file": "goals/active.md",
       "pattern": "revised \\[\\d{4}-\\d{2}-\\d{2}\\]:.*was",
       "feeds": "Record Preservation",
-      "na_for_entries": ["orient", "horizons", "anchors", "goals", "systems", "premortem", "daily", "weekly", "quarterly", "annual", "restart", "pressure-test", "progress"]
+      "applies_when": "revision_expected"
     },
     {
       "name": "closeout_recorded",
@@ -38,7 +39,15 @@
       "file": "goals/history.md",
       "pattern": "[Dd]isposition",
       "feeds": "Record Preservation",
-      "na_for_entries": ["orient", "horizons", "anchors", "goals", "systems", "premortem", "daily", "weekly", "monthly", "annual", "restart", "pressure-test", "progress"]
+      "applies_when": "closeout_expected"
+    },
+    {
+      "name": "out_of_order_marked",
+      "type": "file_contains",
+      "file": "goals/STATE.md",
+      "pattern": "out of order",
+      "feeds": "Record Preservation",
+      "applies_when": "out_of_order_expected"
     },
     {
       "name": "single_stage_advance",

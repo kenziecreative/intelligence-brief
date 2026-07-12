@@ -73,10 +73,14 @@ of it would.
    compute or judge the gates yourself; the script does, so verdicts are deterministic and
    not your reading. Write `<working-dir>/gate-inputs.json`: `entry` (the scenario's entry),
    `baseline_completed_stages` (how many stages `setup` already marked complete, 0 if none),
-   `claimed_frameworks` (every framework name the assistant said it was *applying*, verbatim
-   — extraction is the one thing only you can see), and `expected_no_advance` (copy the
-   scenario's flag, else `false`). Be literal: list a framework only if the assistant
-   claimed to use it; copy the setup baseline exactly.
+   and `claimed_frameworks` (every framework name the assistant said it was *applying*,
+   verbatim — extraction is the one thing only you can see). Be literal: list a framework
+   only if the assistant claimed to use it; copy the setup baseline exactly.
+
+   Record **what you observed**, never what you think the run was supposed to do. Whether a
+   run was *expected* to end without a capture is a property of the scenario, and the run
+   skill writes it to `gate-context.json` after you finish — you neither see it nor write it.
+   Your report stays observational, which is what keeps it usable.
 5. **Write the capture.** Produce `<working-dir>/capture.md` with two sections:
    `## Transcript` (or a pointer to transcript.md) and `## Artifacts` (the paths written and
    a short note on each). Gate results come from the script, not from you.
@@ -95,6 +99,10 @@ job, and your neutrality is what keeps the run honest.
 2. Isolated. Everything is written under the run's working dir. Never touch a real project
    or the target plugin's own files.
 3. Blind. You don't read the rubric or the scenario's `expected_behavior` — only `entry`,
-   `setup`, and `user_messages`.
+   `setup`, and `user_messages`. **If you find a file that states what the run is supposed to
+   do** — expectations, must-includes, critical dimensions, a full scenario object — it was
+   staged there by mistake. Do not open it. Say so in your final report and continue the run
+   from what you were given. A run that peeked is a run that has to be thrown away, and only
+   you can see that it happened.
 4. Complete capture. The judge sees only what you write down — capture every turn and every
    artifact, including ones that look like failures. Especially those.

@@ -56,16 +56,34 @@ NL mapping: "run the eval" / "the full set" → golden. "adversarial only" → `
 - **Multi-sampling:** read the rubric's `noisy_dimensions`. A scenario whose `critical_dimensions` intersect `noisy_dimensions` is **noisy** → run it **3×** (`run-1/`, `run-2/`, `run-3/`); all others run once. (Judge-graded posture/critic dimensions are noisy; one roll is not a reading — see iteration-discipline.)
 
 ### Step 2 — run each (scenario × sample) through the blind runner
-For each run, spawn an **eval-runner**. Pass it: the `adapter`, the scenario's `entry`/`setup`/`user_messages` **only** (never the rubric or `expected_behavior` — the runner is blind), `PLUGIN_ROOT`, and the working dir:
+For each run, spawn an **eval-runner**. Pass it — **in the dispatch message, as text** — the `adapter`, the scenario's `entry`/`setup`/`user_messages` **only** (never the rubric or `expected_behavior` — the runner is blind), `PLUGIN_ROOT`, and the working dir:
 `PACK/_eval/iteration-N/<scenario-id>/` (single-sample) or `…/<scenario-id>/run-k/` (noisy).
 The runner writes `transcript.md`, `capture.md`, and `gate-inputs.json`.
 
+> **Staging rule — the runner's working dir contains only the slice it is allowed to see.**
+> Never write the full scenario object (expectations included) into the runner's working dir,
+> under any filename. A runner reads the files around it; a `scenario-full.json` sitting in its
+> cwd is not blind, whatever the dispatch message said. This is not hypothetical — goal-setting
+> iteration-1 staged exactly that file and a runner read it and self-reported, costing a run.
+> If the full scenario needs to live on disk for the judge, stage it **outside** the runner's
+> dir — e.g. `PACK/_eval/iteration-N/_scenarios/<scenario-id>.json` (the `_scenarios/` dir is
+> judge-only; no runner is ever pointed at it).
+
 ### Step 3 — compute deterministic gates (script, not judgment)
-For each completed run:
+For each completed run, **first write the scenario's gate context** — the facts the gates need
+that are declared by the *scenario*, not observed by the runner. Write
+`<working-dir>/gate-context.json` yourself (Write tool) with the scenario's `expected_no_advance`
+(default `false`) and every key of its `gate_context` block, if it has one:
+```json
+{ "expected_no_advance": true, "closeout_expected": true }
+```
+This is the orchestrator's job precisely because the runner is blind: a scenario-declared fact
+must not depend on a blind runner noticing it (iteration-1 false-failed six runs when it did).
+Writing it after the run keeps it out of the runner's way. Then:
 ```
 node eval/lib/run-gates.mjs --working-dir <working-dir> --gates PACK/gates.json --plugin-root PLUGIN_ROOT
 ```
-Capture its JSON array (`{gate, feeds, status, evidence}`). These verdicts are inherited as-is; the judge never recomputes them. `gate-inputs.json` carries `expected_no_advance`, so the inversion is automatic.
+Capture its JSON array (`{gate, feeds, status, evidence}`). These verdicts are inherited as-is; the judge never recomputes them. `gate-context.json` overlays `gate-inputs.json`, so the `expected_no_advance` inversion and every `applies_when` gate resolve automatically.
 
 ### Step 4 — score each run through the judge
 Spawn an **eval-judge** per run. Pass it: `rubric.md` + `principles.md`, the **full** scenario (now including `expected_behavior` + `critical_dimensions`), the path to `capture.md` + artifacts, the **gate-results JSON** from Step 3, and `eval/reference/grade-procedure.md`. It returns a per-run scorecard, inheriting gates and judging the rest.
@@ -84,7 +102,9 @@ Write `PACK/_eval/iteration-N/scores.md`:
 Short summary: scenarios graded, pass/fail, pass-rate by kind, mean-by-dimension, any noisy-dimension spread, the top-3 fixes, and where the artifacts live (`PACK/_eval/iteration-N/`). **Flag any golden failure prominently — a red golden is a ship-blocker.**
 
 ## Guardrails
-1. The runner is blind — never pass it the rubric or `expected_behavior`.
+1. The runner is blind — never pass it the rubric or `expected_behavior`, and never leave them
+   in its working dir (Step 2's staging rule). Blindness is a property of the *filesystem the
+   runner sees*, not just of the dispatch message.
 2. Gates are script-computed; the judge inherits them and scores the capture only — it never re-runs the plugin.
 3. Faithful execution: the runner follows the target's skills as written; a missing instruction shows up as a regression signal, not a bug to patch mid-run.
 4. Isolation + fresh transcripts: every run writes under `PACK/_eval/iteration-N/`; never touch a real project or the target's own files, and never grade a prior iteration's captures.
