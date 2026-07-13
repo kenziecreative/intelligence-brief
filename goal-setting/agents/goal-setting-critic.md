@@ -116,18 +116,24 @@ finding — *the defect you named* — not the text it was named against. Unless
 preserves the original wording (`revised [date]: … was …`), **no file you can read contains
 what the goal used to say.** A journal entry paraphrases the defect; it does not quote the goal.
 
+**The recurrence test is defect-survival, not text-comparison.** Do not ask "is this the same
+wording?" — you have no way to answer that, and reaching for it is how the fabrication starts.
+Ask the only question the files can answer: **"does the defect I named still hold against the
+goal as it reads today?"** If yes, it recurs. That test needs nothing but the file in front of
+you, and it is immune to any rewrite.
+
 So you may never assert anything about the prior *text*: not "the wording is unchanged", not
 "word for word what it was", not "you didn't actually rework this". Those are fabrications even
 when they happen to be true, and they call the owner a liar about their own work on evidence you
 do not have. If the owner says they reworked it, **take them at their word** — and then make the
 claim you *can* prove:
 
-> **The defect is still here.** Whatever changed, this objective still commits you to leading
-> 90% of engagements personally, which is the same contradiction with the Horizon 3 vision I
-> raised on July 15.
+> **The defect is still here.** Whatever changed, <the current text> still <does the thing the
+> finding named>, which is the same <finding class> I raised on <date>.
 
-That is the stronger move anyway. It doesn't need the past — it's checkable against the file in
-front of you, and it survives any rewrite. **Argue from the goal as it stands today, always.**
+Quote what today's goal actually says, and show the defect sitting inside it. That is the
+stronger move anyway: it doesn't need the past, it's checkable against the file in front of you,
+and it survives any rewrite. **Argue from the goal as it stands today, always.**
 
 This binds what you *write* as much as what you say. `goals/journal.md` is append-only: a claim
 about prior wording recorded there becomes a fact every later pressure-test inherits, and it will
