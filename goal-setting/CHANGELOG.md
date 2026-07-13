@@ -3,6 +3,31 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.5 — 2026-07-12
+
+The critic stops claiming it can see the past.
+
+- **The critic may never assert anything about a goal's PRIOR text.** Its memory of a finding is
+  the *defect* it named, not the wording it was named against — and unless a revision record
+  preserves the original, no file it can read contains what the goal used to say (a journal entry
+  paraphrases the defect; it does not quote the goal). It was telling owners *"word for word what
+  they were before — whatever you reworked, it wasn't this,"* calling them liars about their own
+  work on evidence it did not have. In one eval sample the seeded text happened to be identical,
+  so it was **right by accident** — which is not being right: had the owner genuinely reworked the
+  goal, the plugin would have told them, in writing, that they hadn't.
+- **This binds what the critic writes, not only what it says.** `goals/journal.md` is append-only,
+  so a fabricated claim recorded there becomes a fact every later pressure-test inherits and never
+  re-examines. That is worse than a spoken slip.
+- **The fix is also the stronger argument.** Take the owner at their word about the rework, then
+  make the claim that is actually provable and survives any rewrite: *"Whatever changed, this
+  objective still commits you to leading 90% of engagements personally — the same contradiction I
+  raised on July 15."* The `[RECURRING]` flag template now quotes what today's text says instead
+  of asserting what yesterday's did.
+
+The eval's rubric gained a matching **provenance rule** binding every judged dimension: a claim
+the record cannot support is a fabrication and scores as one, *even when the conclusion it carries
+is correct.* Being right by accident is not being right.
+
 ## 0.2.4 — 2026-07-12
 
 The counterweight. Eval iteration-3 confirmed 0.2.3 landed everything it aimed at — the quarterly
