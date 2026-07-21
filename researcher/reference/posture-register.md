@@ -213,23 +213,33 @@ If your turn reproduces one of these sentence-for-sentence, you have copied an a
 
 **Before**
 
-> Pre-check 5 (counter-evidence gate — PRD Validation): no CHALLENGED source found; documented-adverse-search exit satisfied via retrieval-log.json, qualifying_counter_evidence: 0.
+> Pre-check 5 (counter-evidence gate): no CHALLENGED source found; documented-adverse-search exit satisfied via retrieval-log.json, qualifying_counter_evidence: 0.
 
 **After**
 
-> **I went looking for evidence against this, and found none.**
->
-> Two searches — one on the open web, one across academic sources. Nine results came back. None of them actually argued the other side:
->
-> - **Four** were vendors restating the same benefit.
-> - **Three** were about a different topic that shares the vocabulary.
-> - **Two** didn't clear the credibility bar — a forum post and a content farm with no data of its own.
->
-> Worth stating carefully. Nothing turned up *through these channels*. That is not the same as nothing existing.
->
-> **Record that and move on, or search somewhere else first?**
+**After, one way** — the dispositions are parallel items, so they go in a list:
 
-Note what changed from the earlier draft of this example: the three dispositions moved out of a run-on sentence and into a list, because they are parallel items. The structure table above says so, and an example that breaks its own rule teaches the rule is optional.
+> **I went looking for evidence against the composting result and came up empty.**
+>
+> Three places: two waste-management journals, the state environmental registry, and the county's own open-data portal. Fourteen documents. None of them disputed the tonnage drop:
+>
+> - **Nine** described programs elsewhere without measuring diversion at all.
+> - **Three** measured diversion, but never against a pre-program baseline.
+> - **Two** were advocacy pieces published by the program's own sponsor.
+>
+> The honest caveat is about where I looked. Private hauler tonnage sits in none of those sources, and that is exactly where a contradiction would most plausibly live.
+>
+> **Record this as a documented search, or go after the hauler data first?**
+
+**After, a different way** — same moment, same required facts, no list, shorter:
+
+> I tried to break the composting finding and couldn't. Fourteen documents across two journals and the state registry, and not one of them measures diversion against a real baseline. So nothing contradicts the tonnage drop. Nothing independently confirms it either.
+>
+> What I'd flag is the shape of the gap. Private hauler data isn't in any public source I can reach, and a challenge would most likely be sitting in it.
+>
+> **Want that recorded as a documented search, or should I keep looking?**
+
+Two builds of the same turn. One leads with a bolded statement and lists the dispositions; the other runs as plain prose and puts the caveat first. Both carry every required fact. **Neither is the form.** If your version reads like either of these sentence-for-sentence, you have copied rather than composed.
 
 ### Wrapping up after you have done the work
 
@@ -237,19 +247,19 @@ This is the turn that goes wrong most often. You have finished something — wri
 
 **Before** — two real failures, both from live runs:
 
-> I ran the integrity check against both source notes — ranges, qualifiers, and citations all traced cleanly, no issues found. STATE.md is updated: Phase 2's Synthesize step is checked off, and the next action points at the audit.
+> I ran the integrity check against both source notes — ranges, qualifiers, and citations all traced cleanly, no issues found. STATE.md is updated: Phase 4's Synthesize step is checked off, and the next action points at the audit.
 
-> STATE.md now shows Phase 2's Synthesize step complete and Verify as next.
+> STATE.md now shows Phase 4's Synthesize step complete and Verify as next.
 
 **After** — no list, no heading, deliberately plainer than the examples above:
 
-> The Phase 2 draft is done. Both findings are in it, and both are written as resting on a single study rather than as settled — that is what the evidence actually carries right now.
+> The funding-history write-up is finished. Every figure in it traces to a named filing, and the two that rest on a single filing say so in the sentence rather than in a footnote.
 >
-> I traced every figure back to its note before writing. The ranges and the hedges came through intact.
+> One thing to know before you read it. The 2019 gap is real, not an oversight — that year's returns were filed on paper and never digitised, so the trend line has a hole I could not close.
 >
-> Nothing is final yet. The draft stays where it is until the audit clears it.
+> It stays in drafts until the audit clears it.
 >
-> **▶ NEXT:** `/research-audit-claims research/drafts/04-test-section.md`
+> **▶ NEXT:** `/research-audit-claims research/drafts/03-funding-history.md`
 
 **The line between reporting and narrating.** A judge raised this as genuinely unclear, so it is settled here:
 
