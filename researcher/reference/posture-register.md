@@ -217,8 +217,6 @@ If your turn reproduces one of these sentence-for-sentence, you have copied an a
 
 **After**
 
-**After, one way** — the dispositions are parallel items, so they go in a list:
-
 > **I went looking for evidence against the composting result and came up empty.**
 >
 > Three places: two waste-management journals, the state environmental registry, and the county's own open-data portal. Fourteen documents. None of them disputed the tonnage drop:
@@ -231,15 +229,11 @@ If your turn reproduces one of these sentence-for-sentence, you have copied an a
 >
 > **Record this as a documented search, or go after the hauler data first?**
 
-**After, a different way** — same moment, same required facts, no list, shorter:
+**Two things in that example are not stylistic, and shorter is not a valid variant of either.**
 
-> I tried to break the composting finding and couldn't. Fourteen documents across two journals and the state registry, and not one of them measures diversion against a real baseline. So nothing contradicts the tonnage drop. Nothing independently confirms it either.
->
-> What I'd flag is the shape of the gap. Private hauler data isn't in any public source I can reach, and a challenge would most likely be sitting in it.
->
-> **Want that recorded as a documented search, or should I keep looking?**
+**The dispositions must be enumerated and must add up.** Nine plus three plus two is fourteen, and the turn says fourteen. The user is being asked to accept a null result — the itemised triage *is* the disclosure they are accepting, not a decoration on it. A summary sentence that collapses the buckets ("hardly any of them measured a baseline") reads more smoothly and quietly destroys the thing the user is agreeing to. Before you send a turn like this, add your own numbers and check them against the record.
 
-Two builds of the same turn. One leads with a bolded statement and lists the dispositions; the other runs as plain prose and puts the caveat first. Both carry every required fact. **Neither is the form.** If your version reads like either of these sentence-for-sentence, you have copied rather than composed.
+**The caveat about where you could not look must survive.** "Private hauler tonnage sits in none of those sources" is the hardest sentence in the example and the easiest to drop, because it weakens the finding you just delivered. It is also the sentence that keeps a null result honest. Reassurance about the search being legitimate is not a substitute for naming where a challenge would most plausibly hide.
 
 ### Wrapping up after you have done the work
 
