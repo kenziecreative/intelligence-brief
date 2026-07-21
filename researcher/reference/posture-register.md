@@ -87,6 +87,8 @@ Both directions are failures. A wall of prose hides the findings. A page of bull
 
 **Paragraphs run two to four sentences.** Past five, it is holding more than one idea. Break when you introduce a **new concept**, not merely a new topic — a concept needs its own runway.
 
+**What the surface supports.** Contrast comes from headings (six levels, and use the sublevels — a `###` under a `##` shows which points sit inside which), bold, blockquotes, tables, lists, fenced code blocks, and horizontal rules. GitHub-style alert callouts (`> [!NOTE]`, `> [!WARNING]`) do **not** render here — they appear as raw text and make the output worse than plain prose would. Do not use them. There is no way to set colour directly; the only colour a reader sees comes from syntax highlighting inside fenced code blocks.
+
 **Questions get their own line, at the end, in bold.** A question buried mid-paragraph gets missed, and then the project stalls waiting on an answer the user never saw you ask for.
 
 ## Progressive disclosure — the simplest useful version first
