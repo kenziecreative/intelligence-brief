@@ -5,7 +5,7 @@ allowed-tools: [Bash, WebSearch, Read, Grep, Glob]
 model: sonnet
 ---
 
-# /research:discover
+# /research-discover
 
 Execute source discovery for the current research phase using all channels configured for the project's research type. Produces a reviewable candidate list — never auto-feeds into process-source.
 
@@ -14,12 +14,12 @@ Supports optional `--channel {name}` argument for targeted re-runs against a sin
 ## Pre-check (mandatory before execution)
 
 1. **Read `research/STATE.md`** — extract the current active phase name.
-   - If `research/STATE.md` does not exist at all: error: "No STATE.md found — this project hasn't been initialized. Run `/research:init` first." Do not proceed. (Note: `/research:start-phase` won't help here either — it also requires STATE.md.)
+   - If `research/STATE.md` does not exist at all: error: "No STATE.md found — this project hasn't been initialized. Run `/research-init` first." Do not proceed. (Note: `/research-start-phase` won't help here either — it also requires STATE.md.)
    - If `research/STATE.md` exists but the "Active phase" field is missing or empty: error: "STATE.md exists but has no active phase set. Check STATE.md — the active phase may need to be set manually." Do not proceed.
-   - If `Active phase` is set to a completion sentinel like `— all phases complete` (or any value indicating no active phase remains): error: "All phases are complete per STATE.md. There is nothing to discover. Run `/research:progress` to review the project or `/research:check-gaps` for a final coverage pass." Do not proceed.
+   - If `Active phase` is set to a completion sentinel like `— all phases complete` (or any value indicating no active phase remains): error: "All phases are complete per STATE.md. There is nothing to discover. Run `/research-progress` to review the project or `/research-check-gaps` for a final coverage pass." Do not proceed.
 
 1a. **Stale-active-phase check (self-healing for missed closeouts).** Read the `Current Phase Cycle` block in STATE.md for the active phase. Count checked vs. unchecked steps:
-   - If the active phase has **Verify checked `[x]`** (or all five steps checked), STATE.md is inconsistent: the phase has been completed but Active phase was never advanced. `/research:audit-claims` owns the closeout; this is its job, not discover's. Stop with an error: `"STATE.md inconsistency: Phase {N} ({name}) shows Verify checked in Current Phase Cycle, but Active phase still points at Phase {N}. This means the previous /research:audit-claims run promoted the draft but did not advance STATE.md. Do NOT run discovery against a completed phase. Options: (a) run /research:progress to see the full state, (b) manually advance STATE.md to the next phase using the format from /research:init (advance Active phase, replace Current Phase Cycle with a fresh next-phase checklist, mark Phase {N} complete in Completed Phases, reset Next Action), or (c) if you intended to re-run discovery for Phase {N}, first revert the completed marker in Completed Phases and uncheck Verify. Refuse to guess the right branch — the user must confirm which one applies."` Do not proceed until the user resolves the inconsistency.
+   - If the active phase has **Verify checked `[x]`** (or all five steps checked), STATE.md is inconsistent: the phase has been completed but Active phase was never advanced. `/research-audit-claims` owns the closeout; this is its job, not discover's. Stop with an error: `"STATE.md inconsistency: Phase {N} ({name}) shows Verify checked in Current Phase Cycle, but Active phase still points at Phase {N}. This means the previous /research-audit-claims run promoted the draft but did not advance STATE.md. Do NOT run discovery against a completed phase. Options: (a) run /research-progress to see the full state, (b) manually advance STATE.md to the next phase using the format from /research-init (advance Active phase, replace Current Phase Cycle with a fresh next-phase checklist, mark Phase {N} complete in Completed Phases, reset Next Action), or (c) if you intended to re-run discovery for Phase {N}, first revert the completed marker in Completed Phases and uncheck Verify. Refuse to guess the right branch — the user must confirm which one applies."` Do not proceed until the user resolves the inconsistency.
    - If Verify is unchecked but earlier cycle steps (Collect/Connect/Assess/Synthesize) are mid-progress, this is a normal mid-phase discover re-run (e.g., gap-driven top-up) — proceed. Discovery in the middle of a phase is legitimate.
 
 2. **Read `research/research-plan.md`** — extract the research questions and research subject (the entity, topic, or organization being researched) for the active phase. These become the primary inputs for query construction.
@@ -39,11 +39,11 @@ Supports optional `--channel {name}` argument for targeted re-runs against a sin
 
    ───────────────────────────────────────────────────────────
 
-   **▶ NEXT:** `/research:summarize-section` — Draft outputs from existing findings.
+   **▶ NEXT:** `/research-summarize-section` — Draft outputs from existing findings.
 
    **Also available:**
-   - `/research:check-gaps` — Verify coverage is adequate before drafting.
-   - `/research:cross-ref` — Refresh cross-reference patterns before synthesis.
+   - `/research-check-gaps` — Verify coverage is adequate before drafting.
+   - `/research-cross-ref` — Refresh cross-reference patterns before synthesis.
 
    **Cycle guidance:** Collect, Connect, and Assess are no-ops for synthesis phases — mark them complete when ready. The core work is Synthesize and Verify.
 
@@ -345,7 +345,7 @@ Parse the user's response against that list. If the response is ambiguous (mixed
 ```markdown
 # Source Exclusion Ledger
 
-Candidates the user explicitly declined during discovery or processing, with reasons. Read by /research:check-gaps and /research:cross-ref — an excluded source is never processed, but the exclusion stays visible to gap analysis and pattern assessment. Record, never restrict.
+Candidates the user explicitly declined during discovery or processing, with reasons. Read by /research-check-gaps and /research-cross-ref — an excluded source is never processed, but the exclusion stays visible to gap analysis and pattern assessment. Record, never restrict.
 
 | Date | Phase | Candidate | URL | Disposition | Reason (verbatim) |
 |---|---|---|---|---|---|
@@ -353,7 +353,7 @@ Candidates the user explicitly declined during discovery or processing, with rea
 
 Ask once, briefly: "Quick reason for the skips? One line is fine — it goes in the exclusion ledger so gap analysis can see what was left out and why." Accept one reason covering all skips or per-candidate reasons; if the user declines to give one, record `no reason given`. Never argue with an exclusion and never require a "good" reason — the user's sovereignty over source selection is absolute; the ledger records it, nothing restricts it. Two boundaries on scope: candidates merely not yet selected (`top 5` leaves the rest unprocessed) are NOT exclusions — they remain in the candidates file as unprocessed; and a `no`/`review first` response is a deferral, not an exclusion.
 
-Once the user gives an unambiguous choice, begin processing sources sequentially using `/research:process-source` for each URL — **in the main conversation, as the main agent**. Track the count — after processing 5-8 sources, pause and present the cross-reference checkpoint:
+Once the user gives an unambiguous choice, begin processing sources sequentially using `/research-process-source` for each URL — **in the main conversation, as the main agent**. Track the count — after processing 5-8 sources, pause and present the cross-reference checkpoint:
 
 **Do not delegate source processing to a subagent.** Do not spawn the Agent tool to "run the batch in parallel," "work through the queue," or "process sources while I handle something else." Each `process-source` call reads, extracts, writes a note, updates `research/sources/registry.md`, increments the cross-reference counter in `research/STATE.md`, and may surface a contradiction or access failure the user needs to see. All of that has to land in the main agent's context — not a subagent's window that returns a summary 15 minutes later — so that:
 
@@ -380,7 +380,7 @@ piling on what we already know.
 Want me to run cross-referencing now? ({M} candidates remaining after this.)
 ```
 
-If the user approves, run `/research:cross-ref`, then resume processing the remaining candidates with the same pause cadence.
+If the user approves, run `/research-cross-ref`, then resume processing the remaining candidates with the same pause cadence.
 
 If the user wants to skip a source during processing, skip it and move to the next — and append it to `research/discovery/exclusions.md` with a one-line reason (ask; record `no reason given` if declined). The skip is always honored; the record is never optional.
 
@@ -401,7 +401,7 @@ I'd recommend skipping the last candidate (topstartups.io broader data) — we a
 have strong startup-specific salary data from the earlier topstartups.io source, and
 the 7 sources processed give solid coverage across all three research questions.
 
-My recommendation: move to gap assessment (/research:check-gaps) to confirm coverage
+My recommendation: move to gap assessment (/research-check-gaps) to confirm coverage
 before writing. If gaps surface, we can circle back to remaining candidates.
 
 Sound good?
@@ -564,7 +564,7 @@ Fallback chain (per regulatory.md):
 
 Once the user has approved a batch of candidates for processing, you drive the workflow forward. You may pause ONLY at these points:
 
-1. **Mandatory cross-ref checkpoint.** When "Sources since last cross-reference" in STATE.md reaches 5 (or whatever interval the project has configured, typically 5–8). Stop and run `/research:cross-ref` before processing the next source. This is the only scheduled pause.
+1. **Mandatory cross-ref checkpoint.** When "Sources since last cross-reference" in STATE.md reaches 5 (or whatever interval the project has configured, typically 5–8). Stop and run `/research-cross-ref` before processing the next source. This is the only scheduled pause.
 2. **Real access failure.** A source cannot be fetched — domain block, paywall, 403, rendering issue, extraction returned stub content. Present the options defined in `process-source` step 1 and wait for the user.
 3. **Genuine strategic decision surfaces.** Something the user needs to decide because it changes the approach: a gap analysis result that suggests the phase needs different sources, a contradiction that needs resolution before more processing is useful, a discovery that the candidate list is wrong for the phase. These are rare.
 4. **End of the approved candidate list.** You finished the batch. Report what was processed, surface the cross-ref or gap-check status, and ask the user what's next.
@@ -580,7 +580,7 @@ If you catch yourself wanting to ask "should I keep going?" after a clean source
 | Failure Mode | Prevention |
 |---|---|
 | Running discovery with no active phase | Pre-check step 1 reads `research/STATE.md`. If no active phase, error with guidance before any channel execution. |
-| Silently re-discovering a phase that was already completed (audit-claims forgot to advance STATE.md) | Pre-check step 1a detects `Verify` already checked on the active phase and refuses to run. `/research:audit-claims` owns phase closeout — if it skipped the STATE.md advance, discovery must not paper over it. Surface the inconsistency and make the user (or a targeted STATE.md edit) resolve it before any queries execute. |
+| Silently re-discovering a phase that was already completed (audit-claims forgot to advance STATE.md) | Pre-check step 1a detects `Verify` already checked on the active phase and refuses to run. `/research-audit-claims` owns phase closeout — if it skipped the STATE.md advance, discovery must not paper over it. Surface the inconsistency and make the user (or a targeted STATE.md edit) resolve it before any queries execute. |
 | Backgrounding source processing into a subagent or Agent-tool spawn after the user approves a batch | Source processing runs in the main conversation, full stop. A subagent loses the cross-ref checkpoint (it walks past the 5-source trigger silently because the main agent isn't watching), loses per-source STATE.md updates (they either race with the main agent or happen in bulk at the end), loses the user's ability to react to contradictions and access failures in real time, and loses recoverability on `/clear` (STATE.md lags by a whole batch). When the user approves a candidate batch, the main agent processes sources sequentially itself — one at a time, one status line per source, cross-ref at the threshold, done. Do not spawn the Agent tool for batch processing regardless of how many candidates are queued. |
 | Building a TodoWrite/TaskCreate task list to drive source processing | The candidates file is the queue, STATE.md is the counter, registry.md is the ledger. A parallel task list ("Process Source 39", "Process Source 40", "Run cross-ref at 5-source threshold", "Process Source 42", …) duplicates state that already exists in authoritative files, lives in a place that disappears on `/clear`, and turns the cross-ref checkpoint from a hard gate into just another checkbox a subagent will happily cross. Read the candidates file in order and process each source inline — no todo list wrapping the batch. |
 | Querying channels not relevant to the research type | Pre-check step 4 reads the type-channel map first. Only execute channels in the matched Discovery Group — never execute all 6 channels by default. |
@@ -620,11 +620,11 @@ After presenting the prioritized candidate list and receiving user approval to p
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:process-source <first-url>` — Start processing the approved candidates in priority order.
+**▶ NEXT:** `/research-process-source <first-url>` — Start processing the approved candidates in priority order.
 
 **Also available:**
-- `/research:cross-ref` — Cross-reference sources processed so far before continuing.
-- `/research:check-gaps` — Check coverage against the phase's questions before collecting more sources.
+- `/research-cross-ref` — Cross-reference sources processed so far before continuing.
+- `/research-check-gaps` — Check coverage against the phase's questions before collecting more sources.
 
 ───────────────────────────────────────────────────────────
 
@@ -632,11 +632,11 @@ After discovery is complete and all approved sources have been processed (post-b
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:cross-ref` — Cross-reference the [N] sources processed so far before continuing.
+**▶ NEXT:** `/research-cross-ref` — Cross-reference the [N] sources processed so far before continuing.
 
 **Also available:**
-- `/research:check-gaps` — Check coverage against the phase's questions before collecting more sources.
-- `/research:process-source <url>` — Process a specific source not in the candidates list.
+- `/research-check-gaps` — Check coverage against the phase's questions before collecting more sources.
+- `/research-process-source <url>` — Process a specific source not in the candidates list.
 
 ───────────────────────────────────────────────────────────
 

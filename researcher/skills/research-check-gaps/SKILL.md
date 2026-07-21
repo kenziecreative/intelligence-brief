@@ -4,7 +4,7 @@ description: This skill should be used when the user asks where the research is 
 model: opus
 ---
 
-# /research:check-gaps
+# /research-check-gaps
 
 Assess research coverage against the research plan and identify what's missing.
 
@@ -113,7 +113,7 @@ Assess research coverage against the research plan and identify what's missing.
 
 Dashboard summary showing coverage status per phase. Per-question detail with independent source counts, Direct/Adjacent classification, and lopsided flags.
 
-**Strength vocabulary (definition site — referenced by `/research:phase-insight`):**
+**Strength vocabulary (definition site — referenced by `/research-phase-insight`):**
 - **Strong:** ≥2 independent Direct sources (independence per the origin_chain map in step 5).
 - **Thin:** exactly 1 independent Direct source. This is the same condition as the Lopsided flag — "Thin" is the strength label, "Lopsided" is the coverage-dashboard flag.
 - **Unsupported:** 0 Direct sources (even if Adjacent sources exist — Adjacent matches never contribute to strength).
@@ -132,7 +132,7 @@ Criticality order for the list:
 4. Not Started questions on upcoming phases (beyond the next Verify).
 5. Adjacent-only questions on any phase.
 
-Note: "Not Started" questions are discovery targets — run /research:discover to fill them. "Evidence Against" questions are synthesis challenges — the user must address the contradiction in the draft, not find more sources.
+Note: "Not Started" questions are discovery targets — run /research-discover to fill them. "Evidence Against" questions are synthesis challenges — the user must address the contradiction in the draft, not find more sources.
 
 **Context-sensitive next-action block:**
 
@@ -140,11 +140,11 @@ If gaps exist (Not Started, Lopsided, or Evidence Against questions):
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:discover` — [state the gap truthfully, in the shape it actually has: "[N] questions have no Direct coverage" when that is what you found; "[N] questions rest on a single independent source" for lopsided coverage; "[N] questions are covered only by sources sharing one origin" for a shared-origin cluster. Do not emit the no-Direct-coverage wording for a lopsided gap — it contradicts the report you just gave.] — find sources to fill them.
+**▶ NEXT:** `/research-discover` — [state the gap truthfully, in the shape it actually has: "[N] questions have no Direct coverage" when that is what you found; "[N] questions rest on a single independent source" for lopsided coverage; "[N] questions are covered only by sources sharing one origin" for a shared-origin cluster. Do not emit the no-Direct-coverage wording for a lopsided gap — it contradicts the report you just gave.] — find sources to fill them.
 
 **Also available:**
-- `/research:phase-insight` — Review which questions are thin vs. strong before deciding.
-- `/research:cross-ref` — Re-run cross-reference if sources have been added since the last run.
+- `/research-phase-insight` — Review which questions are thin vs. strong before deciding.
+- `/research-cross-ref` — Re-run cross-reference if sources have been added since the last run.
 
 ───────────────────────────────────────────────────────────
 
@@ -152,11 +152,11 @@ If all questions have Direct coverage (>= 2 independent sources per question):
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:summarize-section` — Coverage is adequate — draft the phase output.
+**▶ NEXT:** `/research-summarize-section` — Coverage is adequate — draft the phase output.
 
 **Also available:**
-- `/research:phase-insight` — Review phase strength in detail before drafting.
-- `/research:cross-ref` — Confirm patterns are current before synthesis.
+- `/research-phase-insight` — Review phase strength in detail before drafting.
+- `/research-cross-ref` — Confirm patterns are current before synthesis.
 
 ───────────────────────────────────────────────────────────
 

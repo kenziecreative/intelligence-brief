@@ -4,7 +4,7 @@ description: This skill should be used when the user gives a URL, PDF, or docume
 argument-hint: "[url-or-file-path]"
 ---
 
-# /research:process-source
+# /research-process-source
 
 Process a source into a structured research note.
 
@@ -14,7 +14,7 @@ The user will provide a URL, file path, or pasted content.
 ## Pre-check (mandatory)
 
 1. **Read `research/STATE.md`** and check "Sources since last cross-reference."
-2. **If the count is 5 or higher, stop.** Tell the user: "Cross-reference is overdue (N sources since last `/research:cross-ref`). Run `/research:cross-ref` before processing more sources." Do not proceed until cross-ref is run.
+2. **If the count is 5 or higher, stop.** Tell the user: "Cross-reference is overdue (N sources since last `/research-cross-ref`). Run `/research-cross-ref` before processing more sources." Do not proceed until cross-ref is run.
 2a. **Verify `research/sources/registry.md` exists and is parseable.** If the file does not exist, create it with the empty header row before proceeding (first-source case — this is normal for a new project):
 
    ```markdown
@@ -71,7 +71,7 @@ The user will provide a URL, file path, or pasted content.
    3. Try an alternative URL — if you have a cached/archived version
    ```
 
-   If the user chooses option 2, append the source to `research/discovery/exclusions.md` (create with the ledger header from `/research:discover` if absent) with disposition `inaccessible — skipped by user` and whatever reason they gave (or `no reason given`). The skip is honored without argument; the ledger keeps it visible to `/research:check-gaps` and `/research:cross-ref`.
+   If the user chooses option 2, append the source to `research/discovery/exclusions.md` (create with the ledger header from `/research-discover` if absent) with disposition `inaccessible — skipped by user` and whatever reason they gave (or `no reason given`). The skip is honored without argument; the ledger keeps it visible to `/research-check-gaps` and `/research-cross-ref`.
 
    **Option 1 disambiguation:** if the user pastes content that looks like an abstract, an article preview, a list of bullet points from a marketing page, or anything notably shorter than a real article body, do not silently accept it. Ask: "That looks like a preview or abstract — is that the full article text, or is there more? If it's just the preview, I'll process it as an abstract-only source with reduced credibility weight and note the limitation in the source note. Tell me which one." Wait for the user to confirm before processing.
 
@@ -91,7 +91,7 @@ The user will provide a URL, file path, or pasted content.
    - Contradictions or tensions with previously processed sources (if any)
 6. **Add the source to `research/sources/registry.md`** — new row with source number, name, type, credibility rating, date, and note filename.
 7. **Update `research/STATE.md`** — increment both "Total count" and "Sources since last cross-reference." **After the edit, re-read STATE.md and confirm both counters reflect the new value (old value + 1).** If the re-read shows either counter unchanged, do not report the source as processed — surface the write failure with the expected vs. actual values, and stop before moving on to the next step. The cross-ref checkpoint depends on this counter being correct; silent drift here produces a silently-overdue cross-reference.
-8. **Update the source material digest (if applicable).** If the source being processed is a file located in `source-material/`, check whether it is listed in `research/source-material-digest.md`. If the digest exists and the file is not listed, add it to the "Files Read" table with read status "full" and append any new named entities, dates, credentials, stated facts, or assumptions to the corresponding digest sections. If the digest does not exist but `source-material/` contains multiple files, note to the user that the digest is missing and suggest running `/research:start-phase` (which will prompt for retroactive digest generation). If the source is a URL or a file outside `source-material/`, skip this step.
+8. **Update the source material digest (if applicable).** If the source being processed is a file located in `source-material/`, check whether it is listed in `research/source-material-digest.md`. If the digest exists and the file is not listed, add it to the "Files Read" table with read status "full" and append any new named entities, dates, credentials, stated facts, or assumptions to the corresponding digest sections. If the digest does not exist but `source-material/` contains multiple files, note to the user that the digest is missing and suggest running `/research-start-phase` (which will prompt for retroactive digest generation). If the source is a URL or a file outside `source-material/`, skip this step.
 
 ## Guardrails
 
@@ -101,7 +101,7 @@ The user will provide a URL, file path, or pasted content.
 4. Preserve the source's own qualifiers, ranges, and uncertainty language in the structured note. Do not clean up hedging.
 5. If the source contradicts previously processed sources, flag the contradiction explicitly in the note — do not leave it for cross-ref to discover.
 6. Record the origin chain for every source. If a source presents its own original research, record it as primary. If it reports on others' findings, record each cited original with enough detail (title, author, date) for cross-ref to match origins across sources.
-7. **Run in the main conversation, not in a spawned subagent.** `/research:process-source` is meant to execute in the main agent's context — the one the user is talking to — not as a task delegated to the Agent tool. This is non-negotiable and applies equally to single-source invocations and to batch processing after `/research:discover`. The reasoning: each call reads STATE.md, updates STATE.md's "Sources since last cross-reference" counter, writes to `research/sources/registry.md`, consults the commonplace book and prior source notes for contradiction detection, and may surface an access failure or contradiction the user needs to react to in real time. A subagent running this in a cold context races with the main agent over STATE.md, can't see contradictions the main agent already surfaced earlier in the session, can't be interrupted by the user mid-source, and turns the mandatory cross-reference checkpoint into a silent threshold that gets walked past. If you are tempted to spawn a subagent to "process the remaining N sources in parallel" or "work through the queue while I do something else," stop — that is the failure mode, not the solution. Process one source, print the status, process the next.
+7. **Run in the main conversation, not in a spawned subagent.** `/research-process-source` is meant to execute in the main agent's context — the one the user is talking to — not as a task delegated to the Agent tool. This is non-negotiable and applies equally to single-source invocations and to batch processing after `/research-discover`. The reasoning: each call reads STATE.md, updates STATE.md's "Sources since last cross-reference" counter, writes to `research/sources/registry.md`, consults the commonplace book and prior source notes for contradiction detection, and may surface an access failure or contradiction the user needs to react to in real time. A subagent running this in a cold context races with the main agent over STATE.md, can't see contradictions the main agent already surfaced earlier in the session, can't be interrupted by the user mid-source, and turns the mandatory cross-reference checkpoint into a silent threshold that gets walked past. If you are tempted to spawn a subagent to "process the remaining N sources in parallel" or "work through the queue while I do something else," stop — that is the failure mode, not the solution. Process one source, print the status, process the next.
 8. **Do not wrap batch processing in a TodoWrite/TaskCreate task list.** The candidates file at `research/discovery/{phase}-candidates.md` is the work queue. `research/STATE.md`'s counter is the checkpoint trigger. `research/sources/registry.md` is the completion ledger. A parallel todo list ("Process Source 39", "Process Source 40", "Run cross-ref", "Process Source 42"…) duplicates state into a place that disappears on `/clear`, drifts from the authoritative files, and — most importantly — reframes the cross-ref checkpoint as just another checkbox in a list. The checkpoint is a hard interrupt on the batch, not a queue item. Read the candidates file in order, process each source inline, print one status line per completion, stop when STATE.md shows the counter has hit the threshold.
 
 ## Common Failure Modes
@@ -112,14 +112,14 @@ The user will provide a URL, file path, or pasted content.
 | Accepting source claims at face value without credibility assessment | Every note must include a credibility assessment. A company's blog post about its own product is low-credibility for performance claims regardless of how detailed it is. |
 | Processing sources for future phases instead of the current one | Check STATE.md for the active phase. Extract findings relevant to the current phase only. Note future-phase relevance in the Relevance field but do not tag those findings. |
 | Working from search snippets instead of full content | Always extract or read the full source content. Search snippets are for discovery, not for note-taking. Partial content leads to missing context and qualifier stripping. |
-| Processing a file from source-material/ without updating the digest | When the source path begins with `source-material/`, after writing the note, update `research/source-material-digest.md` with the file's contents (add to Files Read table, append new entities/dates/credentials/facts/assumptions). The digest is the reconciliation anchor for `/research:start-phase` — drift produces false blockers or misses real drops. |
+| Processing a file from source-material/ without updating the digest | When the source path begins with `source-material/`, after writing the note, update `research/source-material-digest.md` with the file's contents (add to Files Read table, append new entities/dates/credentials/facts/assumptions). The digest is the reconciliation anchor for `/research-start-phase` — drift produces false blockers or misses real drops. |
 | Silently skipping blocked or paywalled sources | Never decide on your own to skip a source you can't access. Present the access failure to the user with options: they provide the content, explicitly skip it, or offer an alternative URL. The user decides, not the agent. |
 | Sticky fallback — using a lower tier for all sources after one failure | Fallbacks are per-source, not per-session. Always start from the highest available tier (per step 1 pre-flight) on every source. A runtime failure on one URL (timeout, 403, API error) does not mean that tier won't work on the next. Reset to the highest available tier on every new source. But if step 1 confirmed a tier is missing (binary not installed), skip it for all sources — don't retry a missing binary. |
 | Assuming "command not found" means "not installed" | The harness shell has a different PATH than your terminal. Step 1's diagnostic distinguishes "not on PATH" from "not installed." If a binary exists on disk but isn't callable, tell the user which directory to add to settings.json env.PATH — don't silently degrade for the whole session. |
 | Silently resolving contradictions within a source | When a source contains contradictory figures for the same metric, flag both values. Do not pick the one that fits the narrative. |
 | Missing origin chain — not recording whether a source is primary or secondary | Every source note must include an origin chain field. If the source's originality status is unclear from the content, record "Origin unclear — could not determine from extracted content" rather than omitting the field. Downstream, an unclear origin means independence is UNKNOWN, not assumed — cross-ref and check-gaps will not count the source as independent corroboration until its origin is established. |
 | Undefined recovery state after a mid-source interruption | The duplicate pre-check covers all four states: registry+note (user choice), registry+missing-note (re-process), note-without-registry (backfill the registry row from the note and update counters — do not re-fetch), and neither (proceed normally). A session dying between the note write and the registry write is expected, not exceptional — the backfill branch exists so the re-run neither duplicates work nor double-counts. |
-| Delegating source processing to a spawned subagent (Agent tool) — individual or batch | `/research:process-source` runs in the main conversation, not a subagent. A spawned subagent has a cold context (no commonplace book, no prior source notes in memory, no in-session contradictions), races with the main agent over STATE.md and registry.md, can't be interrupted by the user mid-source, and — in batch mode — silently walks past the cross-reference checkpoint because the main agent isn't watching the counter. Process each source inline. If the candidate list is long and you are tempted to "parallelize" by spawning subagents, resist: the bottleneck isn't agent throughput, it's the cross-ref cadence and user visibility. |
+| Delegating source processing to a spawned subagent (Agent tool) — individual or batch | `/research-process-source` runs in the main conversation, not a subagent. A spawned subagent has a cold context (no commonplace book, no prior source notes in memory, no in-session contradictions), races with the main agent over STATE.md and registry.md, can't be interrupted by the user mid-source, and — in batch mode — silently walks past the cross-reference checkpoint because the main agent isn't watching the counter. Process each source inline. If the candidate list is long and you are tempted to "parallelize" by spawning subagents, resist: the bottleneck isn't agent throughput, it's the cross-ref cadence and user visibility. |
 | Wrapping batch processing in a TodoWrite/TaskCreate task list | The candidates file is the queue, STATE.md is the counter, registry.md is the ledger. A parallel todo list ("Process Source 39", "Run cross-ref at 5-source threshold", "Process Source 42"…) duplicates state into a place `/clear` destroys, drifts from the authoritative files, and — the real bug — converts the cross-reference checkpoint from a hard interrupt into a queue item a task-list-driven loop will simply tick past. Read the candidates file top-to-bottom and process sources inline. One status line per source is the correct cadence; a progress bar is not. |
 
 ## Output
@@ -132,14 +132,14 @@ The user will provide a URL, file path, or pasted content.
 **Contradictions:** [N found / none]
 **Sources since last cross-ref:** [N]/5
 
-If N >= 4: "Cross-reference is due — run `/research:cross-ref` after the next source."
+If N >= 4: "Cross-reference is due — run `/research-cross-ref` after the next source."
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:process-source <next-url>` — Continue processing the approved candidate list.
+**▶ NEXT:** `/research-process-source <next-url>` — Continue processing the approved candidate list.
 
 **Also available:**
-- `/research:cross-ref` — Run cross-reference now if 5+ sources have been processed.
-- `/research:check-gaps` — Check coverage before processing more sources.
+- `/research-cross-ref` — Run cross-reference now if 5+ sources have been processed.
+- `/research-check-gaps` — Check coverage before processing more sources.
 
 ───────────────────────────────────────────────────────────

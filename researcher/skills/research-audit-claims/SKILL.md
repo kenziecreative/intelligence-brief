@@ -5,7 +5,7 @@ argument-hint: "[filepath]"
 model: opus
 ---
 
-# /research:audit-claims
+# /research-audit-claims
 
 Audit a research draft for unsupported claims. If the audit passes, promote the draft from `research/drafts/` to `research/outputs/`. If it fails, the draft stays in `drafts/` until issues are fixed and the audit is re-run.
 
@@ -18,7 +18,7 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 2. **Read `research/reference/source-standards.md`** for evidence rules.
 3. **Read `research/reference/writing-standards.md`** for precision preservation and synthesis rules.
 4. **Read `${CLAUDE_PLUGIN_ROOT}/reference/evidence-failure-modes.md`** for the catalog of evidence degradation patterns. Check for each pattern type during the audit.
-4a. **Read the project's commissioned evidence standard.** Read `research/reference/evidence-standard.md` (written by `/research:init`). If it does not exist (project predates the convention), fall back to the "Audience & Evidence Standard" section of the project's `CLAUDE.md`. If neither exists, note in the audit report: "No audience evidence standard on file — standard gate inactive for this project" and skip the standard checks below. The standard's Enforceable Rules are part of this audit's pass/fail criteria — see "Audience-standard violations" under Pass/Fail Criteria.
+4a. **Read the project's commissioned evidence standard.** Read `research/reference/evidence-standard.md` (written by `/research-init`). If it does not exist (project predates the convention), fall back to the "Audience & Evidence Standard" section of the project's `CLAUDE.md`. If neither exists, note in the audit report: "No audience evidence standard on file — standard gate inactive for this project" and skip the standard checks below. The standard's Enforceable Rules are part of this audit's pass/fail criteria — see "Audience-standard violations" under Pass/Fail Criteria.
 4b. **Read the waivers already standing against this draft.** Read the existing audit report at `research/audits/<basename>-audit.md` (if one exists from a prior audit) and the draft's Methodology & Limitations section. Collect every waiver recorded for this draft — each names a claim and carries the commissioner's rationale verbatim. A finding covered by a standing waiver is still found and still reported (it appears in the findings table, marked `waived`), but it does not fail the draft. A waiver covers only the claim it names: it does not carry to a different claim, or to a different violation on the same claim. If a waived claim has changed materially since the waiver was granted — the figure moved, the sourcing changed — the waiver has lapsed: report the violation as open and say why.
 5. **For every factual claim in the document:**
    - Does it trace to a file in `research/notes/` or a previous phase output? If yes, note the source.
@@ -136,7 +136,7 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
    Write the updated JSON back to `research/reference/claim-graph.json`.
 
-   **After writing, verify the write succeeded.** Re-read the file and confirm it parses as valid JSON with a `claims` array. If the read fails or the array is missing, log: "WARNING: claim-graph.json write failed — graph incomplete for this phase. Re-run `/research:audit-claims` to retry graph write without re-running the full audit." Do not fail the audit or block promotion.
+   **After writing, verify the write succeeded.** Re-read the file and confirm it parses as valid JSON with a `claims` array. If the read fails or the array is missing, log: "WARNING: claim-graph.json write failed — graph incomplete for this phase. Re-run `/research-audit-claims` to retry graph write without re-running the full audit." Do not fail the audit or block promotion.
 
 9. **Write audit report to `research/audits/<basename>-audit.md`**, where `<basename>` is the draft's filename with its `.md` extension stripped — `research/drafts/04-test-section.md` audits to `research/audits/04-test-section-audit.md`, not `04-test-section.md-audit.md`. Include: scorecard, pass/fail determination, findings table, list of claims that need correction, and the confidence tier table (section name, tier, rationale) from step 8a.
 
@@ -183,11 +183,11 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
   2. **Deliverable manifest check — close against the whole contract.** Read `research/research-plan.md` and list every output the current phase promises: the phase's `**Output:**` line, or the full `**Outputs:**` list for a synthesis phase (e.g., executive summary + final report + recommendations). For each promised deliverable, check two things: the file exists in `research/outputs/`, and a passing audit report for it exists in `research/audits/`. Present the manifest as a short table: deliverable | in outputs/ | audited.
 
      - **All promised deliverables exist and are audited:** the phase's contract is met — proceed to step 3 (phase closeout).
-     - **Any promised deliverable is missing or unaudited:** do NOT close the phase. Leave the phase active in STATE.md with Synthesize/Verify unchecked (the cycle is not done until the whole inventory is), and rewrite `Next Action` to the next concrete step, e.g.: `Run /research:summarize-section <next-deliverable> for Phase N — 2 of 3 promised deliverables remain: <list>.` Tell the user exactly which deliverables remain and confirm the one just promoted. Do not present the phase debrief — the debrief marks phase completion, and the phase is not complete. Stop here.
+     - **Any promised deliverable is missing or unaudited:** do NOT close the phase. Leave the phase active in STATE.md with Synthesize/Verify unchecked (the cycle is not done until the whole inventory is), and rewrite `Next Action` to the next concrete step, e.g.: `Run /research-summarize-section <next-deliverable> for Phase N — 2 of 3 promised deliverables remain: <list>.` Tell the user exactly which deliverables remain and confirm the one just promoted. Do not present the phase debrief — the debrief marks phase completion, and the phase is not complete. Stop here.
 
      One audited executive summary does not close a synthesis phase that promised a report and recommendations. The final-phase branch in step 3 is subject to the same rule: "all phases complete" cannot be declared while any promised deliverable of the final phase is missing or unaudited.
 
-  3. **Close out the phase in `research/STATE.md`.** A passing audit that completes the phase's deliverable manifest (step 2) is the end of the current phase's cycle. STATE.md must be advanced *before* the debrief so that any subsequent `/clear` leaves the project in a correct state — the user may jump straight to `/research:discover` on resume without running `/research:start-phase`, and `discover`'s pre-check depends on "Active phase" already pointing at Phase N+1.
+  3. **Close out the phase in `research/STATE.md`.** A passing audit that completes the phase's deliverable manifest (step 2) is the end of the current phase's cycle. STATE.md must be advanced *before* the debrief so that any subsequent `/clear` leaves the project in a correct state — the user may jump straight to `/research-discover` on resume without running `/research-start-phase`, and `discover`'s pre-check depends on "Active phase" already pointing at Phase N+1.
 
      Perform all of the following writes in a single STATE.md update:
      - **Check off Verify.** In `Current Phase Cycle → Phase N`, change `- [ ] **Verify** …` to `- [x] **Verify** …`. Confirm all five steps (Collect, Connect, Assess, Synthesize, Verify) are now checked. If any earlier step is still unchecked, **verify artifacts before prompting the user.** For each unchecked step, check whether the expected artifact exists and is current:
@@ -204,15 +204,15 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      - **Advance `Active phase`** in `Current Position` from `N — [Phase N Name]` to `N+1 — [Phase N+1 Name]`.
      - **Reset `Cycle step`** to `Collect (1 of 5)`.
      - **Reset `Blocking on`** to `Nothing — ready to start.` (unless a real blocker carried over, in which case preserve it and note the phase transition).
-     - **Replace the Current Phase Cycle block** with a fresh Phase N+1 cycle checklist, all five steps unchecked, using the same format as the Phase 1 template in `/research:init`:
+     - **Replace the Current Phase Cycle block** with a fresh Phase N+1 cycle checklist, all five steps unchecked, using the same format as the Phase 1 template in `/research-init`:
 
        ```markdown
        ### Phase N+1: [Name]
-       - [ ] **Collect** — Sources gathered for this phase's questions (start with /research:discover)
-       - [ ] **Connect** — `/research:cross-ref` run, cross-reference.md current
-       - [ ] **Assess** — `/research:check-gaps` run, coverage confirmed for this phase
-       - [ ] **Synthesize** — `/research:summarize-section` run, draft in `drafts/`, integrity checked
-       - [ ] **Verify** — `/research:audit-claims` passed, output promoted to `outputs/`
+       - [ ] **Collect** — Sources gathered for this phase's questions (start with /research-discover)
+       - [ ] **Connect** — `/research-cross-ref` run, cross-reference.md current
+       - [ ] **Assess** — `/research-check-gaps` run, coverage confirmed for this phase
+       - [ ] **Synthesize** — `/research-summarize-section` run, draft in `drafts/`, integrity checked
+       - [ ] **Verify** — `/research-audit-claims` passed, output promoted to `outputs/`
        ```
 
        The completed Phase N checklist is NOT preserved in `Current Phase Cycle` — its record lives in `Completed Phases`. `Current Phase Cycle` always reflects exactly one active phase.
@@ -222,7 +222,7 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      - **Update `Next Action`** to a specific executable command for Phase N+1. Prefer:
 
        ```
-       Run /research:start-phase to brief Phase N+1, or /research:discover to jump straight to source collection. No sources collected yet for Phase N+1.
+       Run /research-start-phase to brief Phase N+1, or /research-discover to jump straight to source collection. No sources collected yet for Phase N+1.
        ```
 
        `Next Action` must be a concrete command the user can execute after a fresh session load, not a phase-level description.
@@ -231,9 +231,9 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      - Set `Active phase: — all phases complete`.
      - Set `Cycle step: — all cycles complete`.
      - Do NOT generate a new Current Phase Cycle block — remove it or replace it with `*(No active phase — all phases complete.)*`.
-     - Update `Next Action` to: `Run /research:progress to review the full project dashboard. Consider running /research:check-gaps one final time to confirm no unresolved items before wrap-up.`
+     - Update `Next Action` to: `Run /research-progress to review the full project dashboard. Consider running /research-check-gaps one final time to confirm no unresolved items before wrap-up.`
 
-  4. **Append backstage tasks for the next phase.** Before the debrief, append to `research/reference/backstage-tasks.md` (create with its header if absent) any private prep items this phase surfaced for future work — a figure that looked shaky and deserves a re-check, a suspected shared-origin cluster to trace, a source type the next phase should prioritize. These are the agent's own homework, not user-facing actions: `/research:start-phase` reads and works through them silently at the next phase start. Do not narrate this write to the user or read the list aloud — if an item is worth the user's attention, it belongs in the debrief instead. If nothing warrants an entry, write nothing.
+  4. **Append backstage tasks for the next phase.** Before the debrief, append to `research/reference/backstage-tasks.md` (create with its header if absent) any private prep items this phase surfaced for future work — a figure that looked shaky and deserves a re-check, a suspected shared-origin cluster to trace, a source type the next phase should prioritize. These are the agent's own homework, not user-facing actions: `/research-start-phase` reads and works through them silently at the next phase start. Do not narrate this write to the user or read the list aloud — if an item is worth the user's attention, it belongs in the debrief instead. If nothing warrants an entry, write nothing.
 
   5. **Present the phase debrief** (see below). The debrief runs *after* STATE.md is advanced, not before.
 
@@ -248,8 +248,8 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
   3. **List what you did and what remains.** For each mechanical fix applied, show: file, line, before → after. For each judgment issue, describe what needs to change and why the user must decide.
 
   4. **Tell the user to re-run the audit.** End by handing the re-run back — and say only what is true of this audit:
-     - Mechanical fixes were applied → "Fixes applied. Re-run `/research:audit-claims <filepath>` to verify."
-     - No mechanical fixes existed (every finding is a judgment call — an audience-standard violation always is) → do NOT claim fixes were applied. End with: "No mechanical fixes to apply — the open findings need your decision. Re-run `/research:audit-claims <filepath>` once they're resolved."
+     - Mechanical fixes were applied → "Fixes applied. Re-run `/research-audit-claims <filepath>` to verify."
+     - No mechanical fixes existed (every finding is a judgment call — an audience-standard violation always is) → do NOT claim fixes were applied. End with: "No mechanical fixes to apply — the open findings need your decision. Re-run `/research-audit-claims <filepath>` once they're resolved."
 
      Never auto-re-run — re-audit is always user-invoked so each audit is a fresh, full check (fixes can introduce new problems). If the user's next message is a waiver rather than a re-run, follow "Waiver Arriving Between Audits" below: record it, then hand the re-run back to them.
 
@@ -263,7 +263,7 @@ When a `waive:` message arrives outside an audit run:
 
 1. **Validate it.** The message must carry the user's own rationale in the format `waive: <claim or finding> — <rationale>`. "Just waive it," "fine, ship it," or a bare `waive:` with no rationale is not a waiver — re-ask with the format and record nothing. Never author the rationale.
 
-   It must also name a finding on record. Read the audit report at `research/audits/<basename>-audit.md`. If no audit report exists, or it holds no open audience-standard violation this waiver could address, say so and ask the user to run `/research:audit-claims <filepath>` first — a waiver against nothing is not recorded. If the finding it names is real but not an audience-standard violation, it is not waivable (see Pass/Fail Criteria): tell the user which kind of finding it is and that evidence accuracy has no waiver exit.
+   It must also name a finding on record. Read the audit report at `research/audits/<basename>-audit.md`. If no audit report exists, or it holds no open audience-standard violation this waiver could address, say so and ask the user to run `/research-audit-claims <filepath>` first — a waiver against nothing is not recorded. If the finding it names is real but not an audience-standard violation, it is not waivable (see Pass/Fail Criteria): tell the user which kind of finding it is and that evidence accuracy has no waiver exit.
 
 2. **Scope it to what the rationale actually covers.** A waiver covers the finding(s) its rationale speaks to — not every finding open on the draft. If the audit found two violations and the rationale addresses one, the second stays open, and the draft still does not promote. Do not stretch the user's words to cover a finding they did not address, and do not ask them to re-type a waiver you could scope yourself. State plainly which findings the waiver clears and which remain.
 
@@ -283,7 +283,7 @@ When a `waive:` message arrives outside an audit run:
 
    After writing, re-read each of the three files and confirm the waiver text landed. If any write failed, say which one, with the path — do not report the waiver as recorded.
 
-4. **Confirm, and hand the re-run back.** Tell the user what was recorded and where, which findings it clears, which remain open, and that the draft has not moved. Then stop: `Recorded. Re-run /research:audit-claims <filepath> to verify the draft against the standing waiver.` Do not re-run the audit, do not promote, do not touch STATE.md. The next audit reads the waiver at step 4b and will not fail the draft on the waived finding.
+4. **Confirm, and hand the re-run back.** Tell the user what was recorded and where, which findings it clears, which remain open, and that the draft has not moved. Then stop: `Recorded. Re-run /research-audit-claims <filepath> to verify the draft against the standing waiver.` Do not re-run the audit, do not promote, do not touch STATE.md. The next audit reads the waiver at step 4b and will not fail the draft on the waived finding.
 
 ## Phase Debrief (after pass)
 
@@ -312,11 +312,11 @@ Only after the user is done reacting to the debrief, render the transition promp
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/clear` then `/research:start-phase` — Start Phase [N+1] with a fresh context window.
+**▶ NEXT:** `/clear` then `/research-start-phase` — Start Phase [N+1] with a fresh context window.
 
 **Also available:**
-- `/research:progress` — See the overall project dashboard before clearing.
-- `/research:check-gaps` — Confirm no unresolved gaps from Phase [N] should be carried forward.
+- `/research-progress` — See the overall project dashboard before clearing.
+- `/research-check-gaps` — Confirm no unresolved gaps from Phase [N] should be carried forward.
 
 **What to expect:** A fresh context window gives sharper analysis for the new phase. STATE.md and commonplace.md carry everything forward — no context is lost. Start-phase will read the research plan, gaps, commonplace entries, and open assumptions, and brief you on what Phase [N+1] needs.
 
@@ -327,10 +327,10 @@ Only after the user is done reacting to the debrief, render the transition promp
 - **No bypassing.** If the user asks to skip the audit or move a failed draft to outputs manually, refuse. Explain that the audit gate exists to protect research quality and that fixing the issues is faster than dealing with unreliable findings downstream.
 - **No soft passes.** Do not downgrade a high-severity issue to moderate to make the draft pass. If a claim doesn't trace to a source, it's unsupported regardless of whether the claim "feels right."
 - **Recording a waiver is not re-auditing.** A valid `waive:` message is recorded the moment it arrives — draft Methodology & Limitations, audit report, gate-log — even when no audit is running, and even though the draft does not promote until the user re-invokes the audit. The "never auto-re-run" rule below governs the audit loop, not the record. Never let a waiver the user granted end the turn with no trace on disk.
-- **Re-audit after fixes.** When a draft is fixed after a failed audit, run the full audit again — do not spot-check only the previously flagged issues. Fixes can introduce new problems. Re-audit is always user-invoked — the user runs `/research:audit-claims <same-filepath>` after fixing the draft, and each invocation is treated as a fresh audit (full check, no shortcuts). The agent does not automatically re-run audits in a loop.
+- **Re-audit after fixes.** When a draft is fixed after a failed audit, run the full audit again — do not spot-check only the previously flagged issues. Fixes can introduce new problems. Re-audit is always user-invoked — the user runs `/research-audit-claims <same-filepath>` after fixing the draft, and each invocation is treated as a fresh audit (full check, no shortcuts). The agent does not automatically re-run audits in a loop.
 - **No confidence tier inflation.** Do not inflate confidence tiers. If a section relies on a single source, it is Low confidence regardless of how authoritative that source is. Single-source High confidence does not exist — triangulation requires multiple independent sources.
 - **Phase close is against the whole contract, never one file.** The deliverable manifest check (After Audit / If PASS step 2) is mandatory before any closeout. If the plan promises three synthesis outputs and one has been audited, the phase stays open — no debrief, no Active-phase advance, no "all phases complete." Record the partial progress in Next Action and stop.
-- **A passing audit that completes the deliverable manifest must advance STATE.md before the debrief.** Promotion, phase closeout (check off Verify, mark Phase N complete, advance Active phase to N+1, generate the new cycle checklist, reset Next Action) all happen in one atomic step before you present findings to the user. The debrief is for the user; the STATE.md advance is for the next session. The next session may start with `/clear` immediately followed by `/research:discover` (skipping `/research:start-phase` entirely) — if STATE.md still points at Phase N when that happens, discover will either error or silently re-discover a completed phase. If you cannot advance STATE.md cleanly — e.g., `research/research-plan.md` is missing Phase N+1 and Phase N was not marked as final, or the cycle checklist has unchecked steps you did not expect — stop, surface the discrepancy to the user, and do NOT leave STATE.md half-updated. Either the full closeout happens or none of it does.
+- **A passing audit that completes the deliverable manifest must advance STATE.md before the debrief.** Promotion, phase closeout (check off Verify, mark Phase N complete, advance Active phase to N+1, generate the new cycle checklist, reset Next Action) all happen in one atomic step before you present findings to the user. The debrief is for the user; the STATE.md advance is for the next session. The next session may start with `/clear` immediately followed by `/research-discover` (skipping `/research-start-phase` entirely) — if STATE.md still points at Phase N when that happens, discover will either error or silently re-discover a completed phase. If you cannot advance STATE.md cleanly — e.g., `research/research-plan.md` is missing Phase N+1 and Phase N was not marked as final, or the cycle checklist has unchecked steps you did not expect — stop, surface the discrepancy to the user, and do NOT leave STATE.md half-updated. Either the full closeout happens or none of it does.
 
 ## Common Failure Modes
 
@@ -348,7 +348,7 @@ Only after the user is done reacting to the debrief, render the transition promp
 | Override laundering — a commissioner override reaching the deliverable as if the evidence produced it | For every resolution the draft relies on, compare `user_resolution` to `suggested_resolution` in cross-reference.md — never trust the `user_override` boolean alone (a `confirm: side-A` against a side-B assessment may carry no flag). If the fields differ, verify the label survived into the draft (finding site + Methodology & Limitations). The internal record is not the disclosure — the reader of the output must see that the commissioner chose against the evidence assessment. |
 | Treating Methodology & Limitations as the writer's problem | Summarize-section writes the section; this audit gates on it (step 5b). A draft whose claims all trace but whose section is missing, boilerplate, or stamped with an adverse search that has no record does not promote. The section is part of the deliverable's evidence contract, not decoration. |
 | Closing a multi-deliverable phase on one audited file | The deliverable manifest check (If PASS step 2) reads the plan's promised output inventory and requires every deliverable to exist in `outputs/` with a passing audit before closeout. A synthesis phase promising executive summary + report + recommendations needs all three audited — auditing `00-executive-summary.md` alone leaves the phase open with Next Action pointing at the next deliverable. |
-| Silent phase closeout — promoting the draft and presenting the debrief but leaving STATE.md pointing at the completed phase | On PASS, execute the full closeout sequence in `After Audit / If PASS` step 3 before presenting the debrief. Every write — check off Verify, mark Phase N complete, advance Active phase to N+1, reset Cycle step, replace Current Phase Cycle with a fresh Phase N+1 checklist, reset per-phase source counters, rewrite Next Action — must land in STATE.md atomically. If any part cannot be completed (e.g., research-plan.md has no Phase N+1), stop and surface the discrepancy instead of partially updating. The next session may skip `/research:start-phase` and run `/research:discover` directly — STATE.md must be correct before the debrief, not after. |
+| Silent phase closeout — promoting the draft and presenting the debrief but leaving STATE.md pointing at the completed phase | On PASS, execute the full closeout sequence in `After Audit / If PASS` step 3 before presenting the debrief. Every write — check off Verify, mark Phase N complete, advance Active phase to N+1, reset Cycle step, replace Current Phase Cycle with a fresh Phase N+1 checklist, reset per-phase source counters, rewrite Next Action — must land in STATE.md atomically. If any part cannot be completed (e.g., research-plan.md has no Phase N+1), stop and surface the discrepancy instead of partially updating. The next session may skip `/research-start-phase` and run `/research-discover` directly — STATE.md must be correct before the debrief, not after. |
 | Leaving the completed phase's cycle checklist in Current Phase Cycle alongside the new one | `Current Phase Cycle` always reflects exactly one active phase. When advancing to Phase N+1, replace the Phase N checklist entirely — the completed record lives in `Completed Phases`, not in `Current Phase Cycle`. Two checklists in `Current Phase Cycle` is a bug, not a history feature. |
 | Listing issues without applying mechanical fixes — stopping after the report instead of editing the draft | On FAIL, the 4-step sequence is mandatory: classify → apply mechanical fixes → list changes → tell user to re-run. If a fix is mechanical (correct value knowable from sources), apply it with the Edit tool. Do not present fixes as suggestions — make the edits. |
 | Graph write blocking audit promotion — treating a claim-graph.json write failure as an audit failure | Graph write is supplementary infrastructure, not an evidence gate. If claim-graph.json cannot be written or parsed, log a WARNING in the audit report but continue to the pass/fail determination. The audit gate protects research quality; the graph is for downstream traceability (Phase 12). Never fail an audit or block promotion due to a graph write issue. |

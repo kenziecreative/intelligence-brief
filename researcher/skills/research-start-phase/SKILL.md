@@ -5,25 +5,25 @@ allowed-tools: Read, Grep, Glob, Edit, Write
 model: sonnet
 ---
 
-# /research:start-phase
+# /research-start-phase
 
 Prepare to begin the next research phase by gathering all relevant context.
 
 ## Current State
 
-!`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research:init first."`
+!`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research-init first."`
 
 ## Pre-check: Source Material Reconciliation (mandatory)
 
-Users sometimes drop files into `source-material/` mid-project. If an unprocessed drop is sitting there and you proceed to the next phase without integrating it, the phase framing will be wrong in the same way `/research:init` would have been wrong with an unread file at start.
+Users sometimes drop files into `source-material/` mid-project. If an unprocessed drop is sitting there and you proceed to the next phase without integrating it, the phase framing will be wrong in the same way `/research-init` would have been wrong with an unread file at start.
 
 1. **List `source-material/`** — enumerate every non-dotfile (ignore `.gitkeep`, `.DS_Store`, dotfiles).
 2. **Read `research/source-material-digest.md`** if it exists. Extract the filename list from the "Files Read" table.
 3. **Diff the two lists.** Before flagging any file as "new," cross-check it against the existing evidence base: search `research/sources/registry.md` for the filename and scan `research/notes/` for a source note whose URL/path field matches the file. If the file was already processed as a source in a prior phase (it has a registry row and a complete note), it is not actually new — the digest just wasn't updated when it was processed. In that case, silently add the file to the digest's "Files Read" table with read status "processed in Phase [N] — see research/notes/<note-filename>.md", do NOT prompt the user, and remove it from the "new files" list before continuing. Only files that are genuinely unprocessed (no registry entry, no note) reach the user prompt below.
-   - **New files present in `source-material/` but not in the digest:** stop the phase briefing. Tell the user: "I found N new file(s) in source-material/ that weren't present when /research:init ran: [list]. Before starting Phase [N], these need to be integrated. Options: (a) run /research:process-source on each (they will be added to research/notes/ and the digest will be updated), (b) I can read them now and extend the digest without creating source notes — meaning I will read each new file in full and append any new named entities, dates, credentials, stated facts, and assumptions to the corresponding sections of `research/source-material-digest.md`. The digest's "Files Read" table gains a new row for each with read status "full". I will NOT create source notes in `research/notes/`, so these files remain raw source material — they are NOT citable in drafts until `/research:process-source` is run on them later. Contradictions with existing digest entries will be flagged explicitly rather than silently overwritten. or (c) mark them out of scope with a reason. Which do you want?" Do not present the phase briefing until the user chooses and the chosen action completes. For **option (c)**, the user must provide a concrete one-line reason in the format `Out of scope because <reason>`. The reason is recorded verbatim in the "Out of Scope" section of `research/source-material-digest.md` alongside the filename and date. If the user's reason is empty, vague ("not needed", "don't care"), or refers only to user state rather than the file ("I don't want to deal with it"), re-ask with a concrete prompt: "Tell me specifically why this file is out of scope — e.g., wrong language, duplicate of another file, superseded by a newer version, outside the research subject's scope, or not relevant to any current phase. The reason will be recorded verbatim in the digest." Do not accept the out-of-scope mark until the reason is concrete enough to explain the decision to a future reader who wasn't in this conversation. After integration, re-invoke the research-integrity agent against the updated plan and digest to confirm the new facts are reflected.
+   - **New files present in `source-material/` but not in the digest:** stop the phase briefing. Tell the user: "I found N new file(s) in source-material/ that weren't present when /research-init ran: [list]. Before starting Phase [N], these need to be integrated. Options: (a) run /research-process-source on each (they will be added to research/notes/ and the digest will be updated), (b) I can read them now and extend the digest without creating source notes — meaning I will read each new file in full and append any new named entities, dates, credentials, stated facts, and assumptions to the corresponding sections of `research/source-material-digest.md`. The digest's "Files Read" table gains a new row for each with read status "full". I will NOT create source notes in `research/notes/`, so these files remain raw source material — they are NOT citable in drafts until `/research-process-source` is run on them later. Contradictions with existing digest entries will be flagged explicitly rather than silently overwritten. or (c) mark them out of scope with a reason. Which do you want?" Do not present the phase briefing until the user chooses and the chosen action completes. For **option (c)**, the user must provide a concrete one-line reason in the format `Out of scope because <reason>`. The reason is recorded verbatim in the "Out of Scope" section of `research/source-material-digest.md` alongside the filename and date. If the user's reason is empty, vague ("not needed", "don't care"), or refers only to user state rather than the file ("I don't want to deal with it"), re-ask with a concrete prompt: "Tell me specifically why this file is out of scope — e.g., wrong language, duplicate of another file, superseded by a newer version, outside the research subject's scope, or not relevant to any current phase. The reason will be recorded verbatim in the digest." Do not accept the out-of-scope mark until the reason is concrete enough to explain the decision to a future reader who wasn't in this conversation. After integration, re-invoke the research-integrity agent against the updated plan and digest to confirm the new facts are reflected.
    - **Files in the digest but missing from `source-material/`:** warn but do not block. "The digest references [filename] but it is no longer in source-material/. The user may have moved or deleted it — flag if the plan still depends on it."
    - **Lists match exactly:** proceed to the Process section.
-4. **If `research/source-material-digest.md` does not exist** but `source-material/` contains non-dotfiles: this is a project initialized before the digest convention existed, or init failed silently. Tell the user: "source-material/ contains files but there is no digest. I will read every file now and generate research/source-material-digest.md, then verify the existing plan against it using research-integrity. Proceed?" Wait for confirmation, then perform the same Step 2b/2c logic from `/research:init` (full read, structured digest), then run the integrity check against the existing plan.
+4. **If `research/source-material-digest.md` does not exist** but `source-material/` contains non-dotfiles: this is a project initialized before the digest convention existed, or init failed silently. Tell the user: "source-material/ contains files but there is no digest. I will read every file now and generate research/source-material-digest.md, then verify the existing plan against it using research-integrity. Proceed?" Wait for confirmation, then perform the same Step 2b/2c logic from `/research-init` (full read, structured digest), then run the integrity check against the existing plan.
 5. **If `source-material/` is empty AND no digest exists:** this is the common case for projects that rely entirely on discovery. Skip this pre-check entirely and proceed to the Process section.
 
 ## Process
@@ -46,7 +46,7 @@ Users sometimes drop files into `source-material/` mid-project. If an unprocesse
    - If `strategy.md` does not exist, fall back to reading the type-channel map at `${CLAUDE_PLUGIN_ROOT}/reference/discovery/type-channel-maps/{research-type}.md` (get the research type from `CLAUDE.md`). Check whether any Discovery Group's phase keywords match the current phase name. No match = synthesis phase.
    - Store the result (discovery vs. synthesis) for use in the transition prompt.
 
-7. **Record the discovery tier for this phase in STATE.md.** Read `research/reference/retrieval-log.json`. Filter entries to those whose `phase` field matches the current active phase. From those entries, compute the **highest tier number that actually returned results** (`tier` values 1, 2, or 3 — see `/research:discover` Step 2.i for the field definition). The highest tier is the one to record: a phase that ran Tier 1 successfully is "Tier 1," a phase whose Tier 1 failed and Tier 3 returned results is "Tier 3."
+7. **Record the discovery tier for this phase in STATE.md.** Read `research/reference/retrieval-log.json`. Filter entries to those whose `phase` field matches the current active phase. From those entries, compute the **highest tier number that actually returned results** (`tier` values 1, 2, or 3 — see `/research-discover` Step 2.i for the field definition). The highest tier is the one to record: a phase that ran Tier 1 successfully is "Tier 1," a phase whose Tier 1 failed and Tier 3 returned results is "Tier 3."
 
    - **If no retrieval-log entries match this phase yet:** record `no tier recorded — discovery hasn't run yet for this phase.`
    - **If retrieval-log.json doesn't exist or fails to parse:** skip this step. Do not block the briefing on a missing log.
@@ -86,7 +86,7 @@ Present a briefing for the phase:
 - Total questions: N | Direct coverage: N | Lopsided: N | Adjacent-only: N
 - [If lopsided flags exist] Questions with only 1 independent source: [list question text]
 - [If adjacent-only matches exist] Questions with only adjacent matches (not counted as covered): [list question text]
-- [If gaps.md does not exist] No gap check has been run yet. Run `/research:check-gaps` after processing sources.
+- [If gaps.md does not exist] No gap check has been run yet. Run `/research-check-gaps` after processing sources.
 
 **Open assumptions to revisit:**
 - [Assumption description] (from Phase [N]): [basis]. Look for evidence that [what would validate/challenge].
@@ -104,11 +104,11 @@ Then render the appropriate transition prompt based on whether this is a discove
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:discover` — Find candidate sources for Phase [N]'s questions using the type-channel map.
+**▶ NEXT:** `/research-discover` — Find candidate sources for Phase [N]'s questions using the type-channel map.
 
 **Also available:**
-- `/research:process-source <url-or-file>` — Skip discovery and process a specific source you already have.
-- `/research:progress` — See where you are in the overall project before deciding.
+- `/research-process-source <url-or-file>` — Skip discovery and process a specific source you already have.
+- `/research-progress` — See where you are in the overall project before deciding.
 
 **What to expect:** Discovery will surface a prioritized candidate list for this phase's channels. After you approve, processing runs sequentially with a mandatory cross-reference checkpoint every 5-8 sources.
 
@@ -118,12 +118,12 @@ Then render the appropriate transition prompt based on whether this is a discove
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:summarize-section` — This is a synthesis phase. No new source collection is needed — draft outputs from existing Phase 1–[N-1] findings.
+**▶ NEXT:** `/research-summarize-section` — This is a synthesis phase. No new source collection is needed — draft outputs from existing Phase 1–[N-1] findings.
 
 **Also available:**
-- `/research:check-gaps` — Verify coverage is adequate before drafting.
-- `/research:cross-ref` — Refresh cross-reference patterns before synthesis.
-- `/research:progress` — See where you are in the overall project before deciding.
+- `/research-check-gaps` — Verify coverage is adequate before drafting.
+- `/research-cross-ref` — Refresh cross-reference patterns before synthesis.
+- `/research-progress` — See where you are in the overall project before deciding.
 
 **What to expect:** Collect, Connect, and Assess are no-ops for synthesis phases (mark them complete when ready). The core work is Synthesize and Verify.
 

@@ -7,11 +7,11 @@ Use this at the end of a skill run when the agent is handing control back to the
 ```markdown
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:<command>` — <one-line description of what this does and why it's the right next step>
+**▶ NEXT:** `/research-<command>` — <one-line description of what this does and why it's the right next step>
 
 **Also available:**
-- `/research:<alt-1>` — <one-line description>
-- `/research:<alt-2>` — <one-line description>
+- `/research-<alt-1>` — <one-line description>
+- `/research-<alt-2>` — <one-line description>
 
 **What to expect:** <One to two sentences explaining what the next command will do, grounded in the research plan or current state. Tell the user what outputs they'll see and any gates or checkpoints they'll encounter. Substance, not time estimates.>
 
@@ -33,11 +33,11 @@ Use this at the end of a skill run when the agent is handing control back to the
 ```markdown
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:discover` — Find candidate sources for Phase 3's questions using the type-channel map.
+**▶ NEXT:** `/research-discover` — Find candidate sources for Phase 3's questions using the type-channel map.
 
 **Also available:**
-- `/research:process-source <url-or-file>` — Skip discovery and process a specific source you already have.
-- `/research:progress` — See where you are in the overall project before deciding.
+- `/research-process-source <url-or-file>` — Skip discovery and process a specific source you already have.
+- `/research-progress` — See where you are in the overall project before deciding.
 
 **What to expect:** Discovery will surface a prioritized candidate list for Phase 3's channels. After you approve, processing runs sequentially with a mandatory cross-reference checkpoint every 5-8 sources.
 
@@ -49,7 +49,7 @@ Use this at the end of a skill run when the agent is handing control back to the
 ```markdown
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:audit-claims research/drafts/03-programs-and-service-delivery.md` — Fact-check the draft against source notes before it moves to `outputs/`.
+**▶ NEXT:** `/research-audit-claims research/drafts/03-programs-and-service-delivery.md` — Fact-check the draft against source notes before it moves to `outputs/`.
 
 **What to expect:** Audit-claims traces every factual claim to its source note, checks for range narrowing and qualifier stripping, and either promotes the draft to `outputs/` or lists specific issues to fix. This is a hard gate — nothing reaches `outputs/` without passing.
 
@@ -61,11 +61,11 @@ Use this at the end of a skill run when the agent is handing control back to the
 ```markdown
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/clear` then `/research:start-phase` — Start Phase 4 with a fresh context window.
+**▶ NEXT:** `/clear` then `/research-start-phase` — Start Phase 4 with a fresh context window.
 
 **Also available:**
-- `/research:progress` — See the overall project dashboard before clearing.
-- `/research:check-gaps` — Confirm no unresolved gaps from Phase 3 should be carried forward.
+- `/research-progress` — See the overall project dashboard before clearing.
+- `/research-check-gaps` — Confirm no unresolved gaps from Phase 3 should be carried forward.
 
 **What to expect:** A fresh context window gives sharper analysis for the new phase. STATE.md and commonplace.md carry everything forward. Start-phase will read the research plan, gaps, commonplace entries, and open assumptions, and brief you on what Phase 4 needs.
 

@@ -16,14 +16,14 @@ Turns Claude Code / Cowork into an audited research partner: a phased plan groun
 
 ## Key mechanics
 
-- **Outputs gate.** Nothing reaches `research/outputs/` without passing `/research:audit-claims`. On Claude Code this is a `PreToolUse` hook that blocks Write/Edit/MultiEdit to `outputs/` unless an audit authorized the write within the last 120s (via a row in `research/audits/gate-log.md`). In Cowork, hooks don't run; the gate holds as a structural rule — `audit-claims` is the only skill that writes to `outputs/`.
+- **Outputs gate.** Nothing reaches `research/outputs/` without passing `/research-audit-claims`. On Claude Code this is a `PreToolUse` hook that blocks Write/Edit/MultiEdit to `outputs/` unless an audit authorized the write within the last 120s (via a row in `research/audits/gate-log.md`). In Cowork, hooks don't run; the gate holds as a structural rule — `audit-claims` is the only skill that writes to `outputs/`.
 - **3-tier discovery:** Tavily CLI → Firecrawl CLI → built-in WebSearch/WebFetch. Works with zero CLIs installed (built-ins are the floor). `retrieval-log.json` records the tier per run; a Tier-3 banner appears in candidate files when CLIs were unavailable.
 - **Integrity spine:** canonical figures registry (numbers can't drift across phases), a claim graph (claims as nodes with edges to sources/figures), and the integrity agent that runs after every write to catch fabrication, range-narrowing, and qualifier stripping.
 - State lives in `STATE.md`; phases are sequential and resumable across sessions.
 
 ## Surface differences (Claude Code vs Cowork)
 
-Hooks (the `outputs/` gate and `PreCompact`) and the `.claude/settings.json` pre-allow are Claude Code only; in Cowork the gate holds structurally and the plugin detects the surface automatically. Plan generation in `/research:init` runs inline on both surfaces — subagent delegation is an optional Claude Code optimization, not required.
+Hooks (the `outputs/` gate and `PreCompact`) and the `.claude/settings.json` pre-allow are Claude Code only; in Cowork the gate holds structurally and the plugin detects the surface automatically. Plan generation in `/research-init` runs inline on both surfaces — subagent delegation is an optional Claude Code optimization, not required.
 
 ## v1.4 notes
 
@@ -41,14 +41,14 @@ Init scaffolds `research/` and `source-material/` from scratch (rooted at `${CLA
   `plugin-validator` over the plugin to catch frontmatter/description regressions.
 - **Editing cautions specific to this plugin:**
   - The `outputs/` gate is the hard backstop — nothing reaches `research/outputs/` except
-    through `/research:audit-claims`. On Claude Code it's a `PreToolUse` hook keyed to a
+    through `/research-audit-claims`. On Claude Code it's a `PreToolUse` hook keyed to a
     recent `gate-log.md` row; in Cowork it holds structurally because `research-audit-claims`
     is the only skill that writes there. Don't add another writer to `outputs/`, and don't
     loosen the hook without preserving the structural rule.
   - Each command in `commands/research/` is a thin wrapper that delegates to its matching
     `skills/research-*` engine — change behavior in the **skill**, not the wrapper, and keep
     the wrapper's `description` and the skill's trigger description in sync.
-  - Plan generation in `/research:init` runs **inline** on both surfaces; subagent delegation
+  - Plan generation in `/research-init` runs **inline** on both surfaces; subagent delegation
     is a Claude Code optimization, not a requirement. Keep Cowork and Claude Code identical.
   - The integrity spine (canonical-figures registry, claim graph, `research-integrity` agent)
     is load-bearing anti-drift — it tests sourcing and consistency, not prose. Preserve the

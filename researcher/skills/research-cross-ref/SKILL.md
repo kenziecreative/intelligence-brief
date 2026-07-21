@@ -4,7 +4,7 @@ description: This skill should be used when the user asks to find patterns, agre
 model: opus
 ---
 
-# /research:cross-ref
+# /research-cross-ref
 
 Analyze all processed source notes for cross-cutting patterns.
 
@@ -46,7 +46,7 @@ Analyze all processed source notes for cross-cutting patterns.
 8. **Identify cross-cutting patterns** (convergence, gap clusters, temporal trends, source-type skew, outliers). When assessing pattern strength, apply shared-origin cluster adjustments: sources in the same cluster — confirmed or suspected — count as one data point, and unclear-origin sources add no corroboration credit.
 8a. **Read the exclusion ledger AND the unselected remainder.** Read `research/discovery/exclusions.md` (if it exists) and the phase candidates files at `research/discovery/*-candidates.md`; cross-check the candidates against `research/sources/registry.md` to find candidates that were neither processed nor formally excluded — the unselected remainder. Report both counts in the dashboard. When a convergence pattern exists on a question where an excluded OR unprocessed candidate's title or snippet suggested a dissenting view, note it beside the pattern: "Convergence on [question] should be read alongside the discovery record: [candidate] ([excluded: reason] / [discovered, never selected]) appeared to carry an opposing view." Report neutrally — the curation is the user's call; its visibility is this skill's job, and a candidate stranded by `top 5` is as invisible to the notes as one formally declined.
 9. **Regenerate `research/cross-reference.md`** using the template structure (Dashboard -> Contradictions -> Saturation Summary -> Shared-Origin Clusters -> pattern types). Carry forward existing contradiction resolutions if the contradiction still exists. Drop resolutions for contradictions that no longer exist in the data. Update the dashboard counts.
-10. **Update `research/STATE.md`** — set last cross-reference date to today and reset "Sources since last cross-reference" to 0. **After the edit, re-read STATE.md and confirm `Last cross-reference` is today's date and `Sources since last cross-reference` is 0.** If either field does not match, do not report cross-ref as complete — surface the write failure with the expected vs. actual values and stop. The next `/research:process-source` call will trust this counter to decide whether to block on the checkpoint; silent drift here produces either a premature or a skipped checkpoint.
+10. **Update `research/STATE.md`** — set last cross-reference date to today and reset "Sources since last cross-reference" to 0. **After the edit, re-read STATE.md and confirm `Last cross-reference` is today's date and `Sources since last cross-reference` is 0.** If either field does not match, do not report cross-ref as complete — surface the write failure with the expected vs. actual values and stop. The next `/research-process-source` call will trust this counter to decide whether to block on the checkpoint; silent drift here produces either a premature or a skipped checkpoint.
 
 ## Guardrails
 
@@ -116,8 +116,8 @@ If unresolved contradictions exist:
 **▶ NEXT:** Resolve the [N] unresolved contradiction(s) above — synthesis is blocked until core contradictions are confirmed.
 
 **Also available:**
-- `/research:check-gaps` — Check coverage after resolving contradictions.
-- `/research:phase-insight` — Get a full picture of phase strength before deciding next steps.
+- `/research-check-gaps` — Check coverage after resolving contradictions.
+- `/research-phase-insight` — Get a full picture of phase strength before deciding next steps.
 
 ───────────────────────────────────────────────────────────
 
@@ -125,11 +125,11 @@ If no blocking contradictions and coverage is converging:
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:check-gaps` — Confirm coverage for Phase [N] before synthesis.
+**▶ NEXT:** `/research-check-gaps` — Confirm coverage for Phase [N] before synthesis.
 
 **Also available:**
-- `/research:process-source <url>` — Process additional sources if any questions remain under-covered.
-- `/research:phase-insight` — Analyze phase strength in detail before deciding.
+- `/research-process-source <url>` — Process additional sources if any questions remain under-covered.
+- `/research-phase-insight` — Analyze phase strength in detail before deciding.
 
 ───────────────────────────────────────────────────────────
 
