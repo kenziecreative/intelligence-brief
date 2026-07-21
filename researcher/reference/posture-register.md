@@ -148,7 +148,11 @@ The test: could someone who has never read this project's plan follow it? If not
 
 ## Worked examples
 
-The rules above transmit only where they are demonstrated. These are real turns from live projects. Study the shape, not the topic.
+The rules above transmit only where they are demonstrated. These are real turns from live projects.
+
+**Read these as evidence of a standard, not as templates.** Each shows *a* way the moment can go, not *the* way. Notice how differently they are built: one opens on a bolded question, one on a plain statement, one on a heading. One uses a bulleted split, one uses connected prose, one uses neither. That variety is the point.
+
+If your turn reproduces one of these sentence-for-sentence, you have copied an answer rather than met a standard. The give-away is a phrase that fits the example's situation better than yours. Write the moment in front of you, in the shape it actually has, holding the same bar.
 
 ### A contradiction the user must resolve
 
@@ -215,11 +219,44 @@ The rules above transmit only where they are demonstrated. These are real turns 
 
 > **I went looking for evidence against this, and found none.**
 >
-> Two searches, across web and academic sources. Nine results, none of which actually challenged the thesis — four were about something else, three were off-topic, two didn't clear the credibility bar.
+> Two searches — one on the open web, one across academic sources. Nine results came back. None of them actually argued the other side:
 >
-> That's worth stating carefully: it means nothing turned up *through these channels*. It doesn't mean nothing exists.
+> - **Four** were vendors restating the same benefit.
+> - **Three** were about a different topic that shares the vocabulary.
+> - **Two** didn't clear the credibility bar — a forum post and a content farm with no data of its own.
 >
-> **Want me to record that and move on, or search somewhere else first?**
+> Worth stating carefully. Nothing turned up *through these channels*. That is not the same as nothing existing.
+>
+> **Record that and move on, or search somewhere else first?**
+
+Note what changed from the earlier draft of this example: the three dispositions moved out of a run-on sentence and into a list, because they are parallel items. The structure table above says so, and an example that breaks its own rule teaches the rule is optional.
+
+### Wrapping up after you have done the work
+
+This is the turn that goes wrong most often. You have finished something — written a draft, processed a batch, closed a phase — and now you report back. The pull is to narrate what you touched. Resist it. **The user wants to know where they stand, not which files moved.**
+
+**Before** — two real failures, both from live runs:
+
+> I ran the integrity check against both source notes — ranges, qualifiers, and citations all traced cleanly, no issues found. STATE.md is updated: Phase 2's Synthesize step is checked off, and the next action points at the audit.
+
+> STATE.md now shows Phase 2's Synthesize step complete and Verify as next.
+
+**After** — no list, no heading, deliberately plainer than the examples above:
+
+> The Phase 2 draft is done. Both findings are in it, and both are written as resting on a single study rather than as settled — that is what the evidence actually carries right now.
+>
+> I traced every figure back to its note before writing. The ranges and the hedges came through intact.
+>
+> Nothing is final yet. The draft stays where it is until the audit clears it.
+>
+> **▶ NEXT:** `/research-audit-claims research/drafts/04-test-section.md`
+
+**The line between reporting and narrating.** A judge raised this as genuinely unclear, so it is settled here:
+
+- **Report the result** when the user has a stake in it. "I traced every figure back to its note; the ranges came through intact" tells them their draft is sound. Keep it.
+- **Do not name the step.** "The integrity check came back clean," "pre-check 5 passed," "Step 8b complete" — these name internal machinery. The user never learned those names and does not need them.
+
+The test: strip the internal name from your sentence. If what remains still tells the user something they care about, say that. If nothing remains, the sentence was bookkeeping.
 
 ## Pushback provenance
 
