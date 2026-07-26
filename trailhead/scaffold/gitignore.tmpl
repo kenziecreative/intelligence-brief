@@ -1,0 +1,23 @@
+# TODO: add language/framework ignores once the stack is settled
+# (node_modules/, __pycache__/, target/, build/, dist/)
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Editors
+.idea/
+.vscode/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# trailhead — the receipt describes one machine's tree at one moment, so it is
+# per-machine. ratchet.json and verdicts/ are tracked: they are the shared memory that
+# makes "may not get worse" mean something across branches and machines.
+.gates/last-run.json
+.gates/pause

@@ -1,0 +1,96 @@
+# {{PROJECT_NAME}} — design contract
+
+<!-- trailhead v{{VERSION}} -->
+
+**Conformance is composition, not palette.** A page that applies the correct color and
+type tokens to a layout arrived at independently is *not* conformant. It will be
+internally consistent, it will pass every automated token check, and it will be lifeless.
+That exact outcome is why this file exists: a build with a pinned design system and a
+46KB token extraction shipped pages using none of the system's compositional patterns,
+and nothing in its specification would have failed it.
+
+So the mapping table below is a **precondition, not a record**. The row for a surface is
+written *before* the surface is built, naming the source pattern it is an application of.
+Filled in afterwards, it documents what happened rather than constraining what happens —
+and `scripts/checks/surface-mapping.mjs` flags a surface file newer than this contract
+for that reason.
+
+## 1. Source of truth
+
+**Visual source:** {{DESIGN_SOURCE}}
+
+<!-- Pin it. If it is a repository, record the commit. If it is a document or a set of
+     specimens, record which files and their hashes. "Re-review" should be a deliberate
+     act with a visible diff, not something that happens because a shared file changed. -->
+
+| Source | Pinned at | Authority over |
+|---|---|---|
+| | | |
+
+## 2. Precedence
+
+<!-- When two sources disagree, which wins. Put accessibility above every visual example
+     — an inaccessible specimen is a bug in the specimen. -->
+
+1. Accessibility requirements (always win over any visual example)
+2.
+
+## 3. Typefaces
+
+Every typeface named in a token must actually be served. A page rendering on a fallback
+stack while the design names a specific face is most of a visual gap on its own, and it
+is the failure most likely to be recorded as a minor follow-up and then never done.
+
+| Face | Role | Served from | Loaded? |
+|---|---|---|---|
+| | | | |
+
+## 4. Surface mapping
+
+One row per user-visible surface, written **before** the surface is built.
+
+| Surface | Governing source pattern | Notes |
+|---|---|---|
+| | | |
+
+## 5. Deviations
+
+<!-- Anything that departs from the source, with evidence, rationale, accessibility
+     impact, and who approved it. A deviation nobody wrote down becomes precedent. -->
+
+| Surface | Deviation | Rationale | Approved by |
+|---|---|---|---|
+| | | | |
+
+## 6. Human verdict
+
+Composition conformance cannot be automated, so it is a **named human review with a
+recorded verdict**, not an instruction to be careful. The reviewer writes
+`.gates/verdicts/design.md`:
+
+```
+---
+verdict: pass
+attested_by: <your name>
+attested_at: <today, ISO date>
+watch_mtime: <the number printed by `node scripts/gate.mjs --stage design`>
+artifact: <path to a rendered page beside its governing specimen>
+---
+
+<what you looked at and what you concluded>
+```
+
+Run `node scripts/gate.mjs --stage design` first — an unattested or stale stage prints the
+exact `watch_mtime` to use. Every field is checked:
+
+- `watch_mtime` must be a real, past timestamp. `Infinity` and future values are rejected,
+  because either one buys a verdict that never expires.
+- `artifact` must **match** the stage's `requires_artifact` glob, not merely exist. A
+  verdict citing `package.json` is not comparative design evidence.
+- The verdict goes `stale` the moment a watched file changes, automatically, with nobody
+  having to remember to invalidate it. That is what stops a sign-off obtained at
+  deliverable 8 from still reading green at deliverable 11.
+
+Evidence is **comparative**: the rendered page beside the specimen it claims to be an
+application of. Token linting and internal consistency are necessary and not sufficient —
+they are exactly what a conformant-but-generic page passes.

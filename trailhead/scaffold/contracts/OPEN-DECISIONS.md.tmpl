@@ -1,0 +1,40 @@
+# Open decisions — {{PROJECT_NAME}}
+
+Decisions this project has not made yet, each with a **trigger**: the moment it stops
+being cheap to leave open.
+
+This is not a to-do list and not a decision log. `DECISIONS.md` (or
+`.planning/decisions-archive.md`) records what was decided and why, after the fact. This
+file records what has **not** been decided, and makes the gate fail when a trigger fires
+while the row is still open.
+
+The point is not to decide early. Nobody knows most of these on day one, and pretending
+otherwise produces a guess dressed as a commitment. The point is that you are *asked* at
+the moment the answer gets expensive — instead of discovering the question six
+deliverables later, when changing your mind costs a subsystem.
+
+## How a row works
+
+| Field | Meaning |
+|---|---|
+| ID | `D-1`, `D-2`, … Stable; referenced from commits and the contract. |
+| Decision | The question, phrased so a one-line answer would close it. |
+| Status | `UNDECIDED`, `DECIDED`, or `DEFERRED`. |
+| Trigger | One or more globs, `deliverable:N`, or `always`. Comma-separated, backticks optional. |
+| Answer | The decision once made, or for `DEFERRED`, a dated reason and a review date. |
+
+`scripts/checks/decisions-due.mjs` fails when a row is `UNDECIDED` and any of its
+triggers matches a file that now exists. Closing a row means writing the answer and
+setting Status to `DECIDED` — then, if it is architectural, copying it into the contract.
+
+Write triggers **wider than feels necessary**. A trigger that never matches anything is
+a decision that will surprise you; the audit reports dead triggers for exactly that
+reason. A trigger that fires slightly early costs one conversation.
+
+## Decisions
+
+| ID | Decision | Status | Trigger | Answer |
+|---|---|---|---|---|
+{{OPEN_DECISION_ROWS}}
+
+<!-- trailhead v{{VERSION}} -->

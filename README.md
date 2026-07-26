@@ -20,6 +20,7 @@ Once a tool is installed, it shows up as commands and skills you can run in any 
 | Sage | 0.2.0 | Always know where a decision landed and who owes what, across a whole week of meetings | [guide](./sage/README.md) |
 | Strategist | 0.4.1 | Think a hard problem all the way through, and come out with a strategy you can defend | [guide](./strategist/README.md) |
 | Thinkers | 0.1.0 | Make sense of a confusing situation — what's really going on, where your own thinking might be off, and what to do | [guide](./thinkers/README.md) |
+| Trailhead | 0.1.0 | Start a project with checks that actually fail, so QA, linting, design, and deferred decisions can't quietly rot | [guide](./trailhead/README.md) |
 
 Each version mirrors that plugin's `plugin.json`, which is the source of truth for updates.
 
@@ -73,6 +74,12 @@ Each version mirrors that plugin's `plugin.json`, which is the source of truth f
 
 → **[Read the Thinkers guide](./thinkers/README.md)** for the five skills and the pattern library.
 
+### Trailhead
+
+**Start a project with its checks already installed, so the things that quietly rot fail loudly instead of drifting.** It comes out of one observation from a long build: every requirement that had a mechanical check held, and every requirement that existed only as prose drifted — while being complied with in letter. Eighteen QA specs, one of them ever run. `eslint-disable` comments in five files and no linter installed. A pinned design system applied as color tokens over layouts that ignored it. All written down; none of it able to fail. `/trailhead:init` asks four questions, then writes the contract, the running state, and a `scripts/gate.mjs` you can run from any terminal — Claude Code, Codex, Gemini CLI, or CI. Questions you can't answer yet don't get dropped; they become rows that fail the gate at the moment the decision stops being cheap. `/trailhead:audit` runs the same checks read-only against a repo you already have.
+
+→ **[Read the Trailhead guide](./trailhead/README.md)** for the seven gates and the staged posture.
+
 ## Install
 
 ### Claude Cowork (desktop app)
@@ -93,9 +100,10 @@ Each version mirrors that plugin's `plugin.json`, which is the source of truth f
 /plugin install sage@kenzie-creative
 /plugin install strategist@kenzie-creative
 /plugin install thinkers@kenzie-creative
+/plugin install trailhead@kenzie-creative
 ```
 
-Once a tool is installed, open the project where you want to use it and follow that tool's guide — for the brief, run `/intel-setup`; for research, run `/research:init`; for the meeting round-up, run `/sage:setup`; for a strategy, run `/strategist:init`; for goals, run `/goal-setting:init`; for photos, run `/photo-setup`. Thinkers needs no setup — just describe a situation or run `/thinkers:identify`.
+Once a tool is installed, open the project where you want to use it and follow that tool's guide — for the brief, run `/intel-setup`; for research, run `/research:init`; for the meeting round-up, run `/sage:setup`; for a strategy, run `/strategist:init`; for goals, run `/goal-setting:init`; for photos, run `/photo-setup`; for project gates, run `/trailhead:init` (or `/trailhead:audit` on a repo you already have). Thinkers needs no setup — just describe a situation or run `/thinkers:identify`.
 
 ## Updates
 
@@ -114,6 +122,7 @@ New versions arrive only when one is published — nothing changes under you.
 /plugin update sage
 /plugin update strategist
 /plugin update thinkers
+/plugin update trailhead
 /reload-plugins
 ```
 

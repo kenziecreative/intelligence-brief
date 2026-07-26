@@ -47,6 +47,11 @@
       "name": "thinkers",
       "source": "./thinkers",
       "description": "v0.1.0 — Make sense of a confusing situation: what's actually happening, whether your own thinking is off, and what to do about it. It names the bias, fallacy, persuasion or manipulation tactic, or strategic move at work from a 243-pattern library, carefully (it separates real gaslighting from an ordinary disagreement before handing you a heavy label). Five skills: identify, explain, practice, decide, spar. Talks like a counselor, not a textbook. Standalone."
+    },
+    {
+      "name": "trailhead",
+      "source": "./trailhead",
+      "description": "v0.1.0 — Start a project with its checks already installed, so the things that quietly rot fail loudly instead of drifting — QA specs that never run, a linter nobody added, a design system copied as colors instead of composition, an architecture decision nobody made until it got expensive. A short interview, then it writes the contract, the running-state file, and a gate script you can run from any terminal — Claude Code, Codex, Gemini CLI, or CI. Questions you can't answer yet become scheduled interrupts instead of forgotten assumptions. /trailhead:audit runs the same checks read-only against a repo you already have. Standalone."
     }
   ]
 }

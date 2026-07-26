@@ -20,6 +20,7 @@ Install: `/plugin marketplace add kenziecreative/kenzie-creative`, then `/plugin
 - **sage** (0.2.0) — meeting-transcript triage into a single living weekly round-up. *Standalone.*
 - **strategist** (0.4.1) — a seven-stage strategic-thinking loop over a 70-framework library, with a reasoning critic; outputs a working record plus a clean reader-facing brief. *Standalone.*
 - **thinkers** (0.1.0) — a reasoning counselor over a 243-pattern corpus (biases, fallacies, persuasion/manipulation tactics, bad-faith moves, strategies); five skills — identify, explain, practice, decide, spar — that name what's happening without over-applying high-stakes labels. *Standalone.*
+- **trailhead** (0.1.0) — a project initializer that installs repo-resident mechanical gates: a zero-dependency `scripts/gate.mjs` with seven checks (secrets, triggered open decisions, build, tests, QA coverage ratchet, status vocabulary, orphaned suppressions), a contract/running-state split, and multi-CLI agent context for Claude Code, Codex, and Gemini. Staged posture, so only irreversible failures block a prototype. `/trailhead:audit` runs the same checks read-only against an existing repo. *Standalone.*
 
 The marketplace also carries an internal **`eval/`** runtime-QA harness (not a published plugin — see "Evaluating plugins").
 

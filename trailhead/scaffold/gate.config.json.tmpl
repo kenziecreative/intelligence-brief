@@ -1,0 +1,79 @@
+{
+  "schema": "trailhead.gate.config/1",
+  "project": "{{PROJECT_NAME}}",
+
+  "_stage_level": "How far along this project is. Drives which failures block and which only report, via the rule 'gate what you cannot undo, report what you can'. prototype: only irreversible failures block. pilot: irreversible and costly block. production: everything blocks. Raising this is a decision — take it deliberately, and expect the run after to be red.",
+  "stage_level": "{{STAGE_LEVEL}}",
+
+  "state_file": ".planning/STATE.md",
+  "decisions_file": "contracts/OPEN-DECISIONS.md",
+  "design_contract": "contracts/design-system.md",
+  "contract_file": "contracts/CONTRACT.md",
+  "identity_file": "contracts/identity.md",
+  "contract_line_cap": {{CONTRACT_LINE_CAP}},
+  "qa_dir": ".qa",
+  "source_globs": {{SOURCE_GLOBS}},
+  "surface_globs": {{SURFACE_GLOBS}},
+
+  "_reversibility": "irreversible = cannot be taken back once it escapes (a committed credential, a destructive migration, an architecture decision with data written under it). costly = fixable at compounding price (unrun QA, failing tests, design drift). cheap = fixable at roughly constant price whenever you get to it (lint, formatting).",
+
+  "stages": [
+    {
+      "id": "secrets",
+      "title": "No credential material in the tree",
+      "type": "check",
+      "check": "secrets",
+      "reversibility": "irreversible"
+    },
+    {
+      "id": "decisions",
+      "title": "No decision is overdue",
+      "type": "check",
+      "check": "decisions-due",
+      "reversibility": "irreversible"
+    },
+    {
+      "id": "build",
+      "title": "The project builds",
+      "type": "command",
+      "run": {{BUILD_COMMAND}},
+      "reversibility": "costly"
+    },
+    {
+      "id": "unit",
+      "title": "Deterministic suite",
+      "type": "command",
+      "run": {{TEST_COMMAND}},
+      "reversibility": "costly"
+    },
+    {
+      "id": "qa",
+      "title": "QA specs have run against a real running instance",
+      "type": "check",
+      "check": "qa-ratchet",
+      "reversibility": "costly",
+      "optional_if_absent": ".qa"
+    },
+    {
+      "id": "status",
+      "title": "Status vocabulary, and the claims it is allowed to make",
+      "type": "check",
+      "check": "status-lint",
+      "reversibility": "costly"
+    },
+    {
+      "id": "contract",
+      "title": "The contract stays a contract",
+      "type": "check",
+      "check": "contract-lint",
+      "reversibility": "costly"
+    },
+    {
+      "id": "suppression",
+      "title": "Suppressions name a tool that is actually installed",
+      "type": "check",
+      "check": "suppression",
+      "reversibility": "cheap"
+    }
+  ]
+}
