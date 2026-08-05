@@ -31,7 +31,7 @@
     {
       "name": "researcher",
       "source": "./researcher",
-      "description": "v1.5.0 — Get research you can stand behind, not a confident summary that might be invented. Pick a topic and work through a phased plan together: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note — and every note to a declared source — before it reaches output. A research partner, not a summarizer. Standalone."
+      "description": "v1.6.0 — Get research you can stand behind, not a confident summary that might be invented. Pick a topic and work through a phased plan together: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note — and every note to a declared source — before it reaches output. A research partner, not a summarizer. Standalone."
     },
     {
       "name": "sage",
