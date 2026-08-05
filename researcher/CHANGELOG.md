@@ -2,6 +2,41 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.6.0] — 2026-08-05
+
+The workflow-ownership release. It fixes the two things that made the research assistant tiring to run over long, multi-day projects: it stopped to ask for input it didn't need, and it lost its place in the protocol after any deep conversation. Alongside that, a batch of correctness fixes and a readability pass on how the assistant talks.
+
+**Verification is staged and structural, said honestly.** The batch-flow behavior was exercised by a staged runner against the skills (no per-source hand-back, cross-ref auto-ran at the checkpoint, the re-anchor reflex fired after a mid-batch tangent, STATE stayed truthful), and the plugin passes validation and the drift lint. But **no real interactive project has run these skills end to end** — that live run is still the gold standard. The Cowork project-local-script path has strong indirect evidence but is not confirmed by a live Cowork run.
+
+**Upgrade note:** existing research projects must **re-init** to pick up the position helper (`research/bin/where-am-i.py`) and the CLAUDE.md doctrine pointers. Projects that don't re-init degrade correctly — the helper refuses to guess and defers to the maintained `Next Action` — but the re-anchor reflex won't be loaded.
+
+### Added
+
+- **Workflow-ownership doctrine + a position helper.** `reference/workflow-ownership.md` governs staying anchored to the protocol across long, interrupted work. `where-am-i.py` — installed into each project's `research/bin/` by init — computes the current position (phase, cycle step, next unprocessed source, counters) from the files, so after a deep tangent the agent re-anchors by reading the files instead of inferring the next step from the conversation. init adds a `## Workflow Ownership` CLAUDE.md pointer beside the posture one.
+- **A live batch ledger.** The candidates file now tracks disposition: `process-source` marks each processed candidate `[PROCESSED]` (a status the taxonomy already reserved but never wired), so "next source = first pending candidate" is derivable exactly rather than inferred. Notes gain a machine-readable `Source URL:` line as a stable identity.
+- **Plugin-level voice doctrine.** `posture-register.md` rewritten as a full voice/response doctrine with a worked-example gallery covering how to sound, when to grade a hunch, and what stays backstage.
+- **`Clarity` eval dimension** (`eval/targets/researcher/`, marketplace-internal). Scores whether a response is one-pass readable — with anchors for reread cost, undefined internal jargon, and over- versus under-formatting.
+
+### Changed
+
+- **The pipeline stops only when it needs you.** Once you approve a batch, a clean source completion is a status line, not a question; cross-reference and the gap check run automatically at their triggers with a one-line heads-up; the per-source hand-back that forced a "keep going" after every source is gone. The stop list is now explicit and short: which sources to process, source curation, a material contradiction, a waiver, a real access failure, a genuine strategic fork, and promotion to `outputs/`. Everything else proceeds.
+- **Contradictions carry a materiality threshold.** A disagreement whose resolution changes no finding is auto-resolved and reported in one line, with the losing value preserved on the record; only a material contradiction — one that would move a finding — stops for your call.
+- **Waiver scope.** A waiver covers every open finding on the claim it names. The agent no longer subdivides the commissioner's decision, leaving a draft blocked on a second violation of a claim the commissioner already chose to carry.
+- **Coverage adequacy weighs perspective, not just count.** Two sources from one vendor no longer clear the adequacy gate — they are one point of view, however many of them there are.
+- **Slash-command references corrected.** Every user-facing reference now points at the `/research-*` (hyphen) commands that actually resolve; the `/research:*` colon form could never resolve, since the plugin is named `researcher`, not `research`.
+
+### Fixed
+
+- **STATE.md stays truthful across a run.** cross-ref and check-gaps now write a fresh, specific `Next Action` instead of leaving it pointing at the step that just ran; the Collect/Connect/Assess cycle boxes have explicit owners and are reconciled to the coverage verdict (no more `Collect [x]` sitting next to a `Next Action` that says "go find more sources"); `process-source` keeps all three source counters in sync.
+- **Auto-re-audit, narrowed.** An audit that fails on citation-level fixes re-runs itself once; the moment a fix changes a figure, range, qualifier, or claim, the re-run is handed back so you see the change before it can promote.
+- **audit-claims no longer leaks its internal vocabulary.** The mechanical/judgment fix triage stays backstage; the user-facing wording names what changed, not which bucket it fell in.
+
+### Known limitations (unchanged or newly recorded)
+
+- **Not live-tested** (see the verification note above).
+- **The self-reported-flag determinism hazard** in the `audience-standard-waiver` scenario is unresolved: the same seeded standard reads two defensible ways across runs. It is a seeded-standard decision, not a code fix.
+- **The per-skill Register blocks remain.** The attempt to have the plugin-level voice doctrine fully replace them was not proven and is parked; the doctrine and the blocks currently both operate.
+
 ## [1.5.0] — 2026-07-12
 
 The convergence release: delivery-integrity, record-never-restrict, and honesty fixes from the 2026-07 blind review (9/9 findings citation-verified) and the convergence re-audit, plus the researcher eval target pack. Every behavioral change in this release is **SHIPPED-UNTESTED** per the marketplace's pattern-graduation rule — encoded from verified findings, not yet exercised in a live research project.
