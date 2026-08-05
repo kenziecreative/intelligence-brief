@@ -75,7 +75,7 @@ Assess research coverage against the research plan and identify what's missing.
    - [candidate title] — discovered [date], never selected for processing. [If the snippet suggested counter-evidence: "Appeared to carry an opposing view — this question's coverage was assessed without it."]
    ```
 
-8. **Update `research/STATE.md`** — set last gap check date to today.
+8. **Update `research/STATE.md`** — set last gap check date to today, **then update `Next Action` to the true next step** — the same command your context-sensitive ▶ NEXT block renders below (`/research-discover` or `/research-process-source <url>` if gaps remain; `/research-summarize-section` if coverage is adequate). Never leave `Next Action` pointing at the gap check that just ran: a session resuming after a clear reads this field, and a stale value sends it to the wrong step. If this gap check completed the phase's **Assess** cycle step, also check the `Assess` box in `Current Phase Cycle`. After the edit, re-read STATE.md and confirm the gap-check date is today and `Next Action` names the next step, not this one. These STATE writes are silent (posture rule 7).
 
 ## Guardrails
 
