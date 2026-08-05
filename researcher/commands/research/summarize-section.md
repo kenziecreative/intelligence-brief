@@ -6,4 +6,4 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Draft a research output section from processed source notes.
 
-Use the `research-summarize-section` skill and follow its steps exactly. It pulls claims and evidence from processed sources relevant to the requested section, drafts the synthesis under `research/drafts/`, and prepares it for the `/research:audit-claims` gate before promotion to `research/outputs/`.
+Use the `research-summarize-section` skill and follow its steps exactly. It pulls claims and evidence from processed sources relevant to the requested section, drafts the synthesis under `research/drafts/`, and prepares it for the `/research-audit-claims` gate before promotion to `research/outputs/`.

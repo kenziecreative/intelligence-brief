@@ -5,13 +5,13 @@ allowed-tools: Read, Grep, Glob
 model: sonnet
 ---
 
-# /research:progress
+# /research-progress
 
 Show the current state of the research project as a dashboard.
 
 ## Current State
 
-!`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research:init first."`
+!`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research-init first."`
 
 ## Process
 
@@ -22,9 +22,9 @@ Show the current state of the research project as a dashboard.
    - `hooks.PreToolUse` contains an entry whose `matcher` covers Write, Edit, and MultiEdit (the shipped form is the combined matcher `"Write|Edit|MultiEdit"` — a combined matcher passes this check) and whose command invokes `gate-outputs.sh` — failure name: "outputs gate hook missing from plugin hooks.json" — failure description: "this hook blocks unaudited Write/Edit/MultiEdit to research/outputs/ on Claude Code; in Cowork hooks don't run and the gate holds structurally (audit-claims is the only writer)"
    - `hooks.PreCompact` contains an entry invoking `state-staleness-check.sh` — failure name: "PreCompact staleness hook missing from plugin hooks.json" — failure description: "this hook warns when STATE.md is stale before context compacts"
 
-   **1b. Project pre-allow present** — Read `.claude/settings.json`. If it exists, confirm it parses as valid JSON and `permissions.allow` is an array (this is the pre-allow list `/research:init` writes so researcher's tools don't prompt per call — it does not carry hooks).
+   **1b. Project pre-allow present** — Read `.claude/settings.json`. If it exists, confirm it parses as valid JSON and `permissions.allow` is an array (this is the pre-allow list `/research-init` writes so researcher's tools don't prompt per call — it does not carry hooks).
    - Failure name: "project settings.json invalid or missing pre-allow"
-   - Failure description: "without the permissions.allow list from /research:init, Claude Code prompts on every tool call; the audit gate itself is unaffected (it ships in the plugin's hooks.json). Inert in Cowork."
+   - Failure description: "without the permissions.allow list from /research-init, Claude Code prompts on every tool call; the audit gate itself is unaffected (it ships in the plugin's hooks.json). Inert in Cowork."
    - If the file does not exist, report this same failure (init writes it); if running in Cowork, note it as informational rather than a failure.
 
    **1c. STATE.md structurally sound** — Read `research/STATE.md` and confirm it contains a `## Current Position` section with an `Active phase:` field and a `## Current Phase Cycle` section with a five-step checklist. (STATE.md has no YAML frontmatter — the init template never writes one; do not check for frontmatter.)
@@ -36,9 +36,9 @@ Show the current state of the research project as a dashboard.
    - Failure name: "[filename] missing from ${CLAUDE_PLUGIN_ROOT}/reference/"
    - Failure description: "reference files guide source assessment, evidence evaluation, and output formatting — missing files degrade research quality"
 
-   **1e. Discovery strategy present** — When `research/` directory exists (active research project), check for `research/discovery/strategy.md` (the canonical path written by `/research:init` Step 4).
+   **1e. Discovery strategy present** — When `research/` directory exists (active research project), check for `research/discovery/strategy.md` (the canonical path written by `/research-init` Step 4).
    - Failure name: "discovery strategy missing"
-   - Failure description: "a discovery strategy guides source finding — `/research:init` writes `research/discovery/strategy.md` and `/research:discover` reads it; without one, source selection is ad-hoc."
+   - Failure description: "a discovery strategy guides source finding — `/research-init` writes `research/discovery/strategy.md` and `/research-discover` reads it; without one, source selection is ad-hoc."
    - If no `research/` directory exists, this check passes silently
 
 2. **Read `research/STATE.md`** for current position, active phase, and completed phases.
@@ -68,7 +68,7 @@ When any checks fail, output a summary line plus only the failures (do not enume
 Infrastructure: [N]/5 checks passed
 
 - **outputs gate hook missing from plugin hooks.json** — this hook blocks unaudited Write/Edit/MultiEdit to research/outputs/ on Claude Code; in Cowork the gate holds structurally
-- **project settings.json invalid or missing pre-allow** — without the permissions.allow list from /research:init, Claude Code prompts on every tool call; the audit gate itself is unaffected
+- **project settings.json invalid or missing pre-allow** — without the permissions.allow list from /research-init, Claude Code prompts on every tool call; the audit gate itself is unaffected
 
 ---
 ```
@@ -82,9 +82,9 @@ Infrastructure: [N]/5 checks passed
 | ... | | | | | |
 
 **Audit column values:**
-- **Pass** — `/research:audit-claims` ran and passed; draft was promoted to `outputs/`.
-- **Fail** — `/research:audit-claims` ran and returned failures; draft is still in `drafts/` awaiting fixes.
-- **Pending** — a draft exists in `drafts/` for this phase but `/research:audit-claims` has not been run on it yet.
+- **Pass** — `/research-audit-claims` ran and passed; draft was promoted to `outputs/`.
+- **Fail** — `/research-audit-claims` ran and returned failures; draft is still in `drafts/` awaiting fixes.
+- **Pending** — a draft exists in `drafts/` for this phase but `/research-audit-claims` has not been run on it yet.
 - **—** — no draft exists for this phase yet (phase not yet at Synthesize step, or not started).
 
 **Source notes:** [N] total
@@ -96,7 +96,7 @@ Infrastructure: [N]/5 checks passed
 Read the `## Phase Tier Record` section from `research/STATE.md`. If the section exists, reproduce its table here verbatim — one row per phase that's been briefed. If the section is missing from STATE.md, print:
 
 ```
-No tier records yet — `/research:start-phase` writes a row per phase as it begins. Each row reflects the highest discovery tier that returned results for that phase (Tier 1 = Tavily, Tier 2 = Firecrawl, Tier 3 = built-in WebSearch).
+No tier records yet — `/research-start-phase` writes a row per phase as it begins. Each row reflects the highest discovery tier that returned results for that phase (Tier 1 = Tavily, Tier 2 = Firecrawl, Tier 3 = built-in WebSearch).
 ```
 
 Do not synthesize a table from `retrieval-log.json` directly — start-phase is the system of record for this data, and reading it twice from different sources risks drift.

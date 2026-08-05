@@ -1,13 +1,13 @@
 ---
 name: research-summarize-section
-description: This skill should be used when the user asks to draft, synthesize, or write up a section from the sources collected so far (e.g. "draft the phase 2 section", "synthesize what we have on pricing", "write up the findings"). Pulls claims and evidence from relevant processed sources into a draft under research/drafts/ and stages it for the /research:audit-claims gate — never writes straight to outputs/.
+description: This skill should be used when the user asks to draft, synthesize, or write up a section from the sources collected so far (e.g. "draft the phase 2 section", "synthesize what we have on pricing", "write up the findings"). Pulls claims and evidence from relevant processed sources into a draft under research/drafts/ and stages it for the /research-audit-claims gate — never writes straight to outputs/.
 argument-hint: "[section-name-or-phase-number]"
 model: opus
 ---
 
-# /research:summarize-section
+# /research-summarize-section
 
-Synthesize research notes into a draft output section for a specific phase or topic. Drafts are written to `research/drafts/` — NOT `research/outputs/`. Only `/research:audit-claims` can promote a draft to `outputs/`.
+Synthesize research notes into a draft output section for a specific phase or topic. Drafts are written to `research/drafts/` — NOT `research/outputs/`. Only `/research-audit-claims` can promote a draft to `outputs/`.
 
 ## Input
 The user will provide a section name or phase number to summarize.
@@ -15,8 +15,8 @@ The user will provide a section name or phase number to summarize.
 ## Pre-checks (mandatory)
 
 Before writing anything, verify:
-1. **`research/cross-reference.md`** has been updated within the last 5-8 sources. If it hasn't, stop and run `/research:cross-ref` first.
-2. **`research/gaps.md`** has been updated for this phase. If it hasn't, stop and run `/research:check-gaps` first.
+1. **`research/cross-reference.md`** has been updated within the last 5-8 sources. If it hasn't, stop and run `/research-cross-ref` first.
+2. **`research/gaps.md`** has been updated for this phase. If it hasn't, stop and run `/research-check-gaps` first.
 3. **`research/cross-reference.md` has no unresolved core contradictions.** Read the Contradictions section. If any contradiction classified as "core" (directly addresses a current phase question) has status "unresolved," stop and tell the user:
 
    ```
@@ -25,7 +25,7 @@ Before writing anything, verify:
    - [Contradiction description]: [Source A claim] vs. [Source B claim]
      Suggested resolution: [Claude's suggestion from cross-ref]
 
-   To proceed, resolve each contradiction by running /research:cross-ref and confirming or overriding the suggested resolution. Peripheral contradictions (flagged but not core) do not block synthesis.
+   To proceed, resolve each contradiction by running /research-cross-ref and confirming or overriding the suggested resolution. Peripheral contradictions (flagged but not core) do not block synthesis.
    ```
 
    Do not proceed until all core contradictions are resolved. Peripheral contradictions (those not directly addressing a current phase question) should be noted in the draft but do not block synthesis.
@@ -71,7 +71,7 @@ Before writing anything, verify:
    [Research type] requires either a credible challenging source or a documented adverse search before synthesis can proceed. This ensures the research stress-tests its thesis rather than just confirming it.
 
    Current sources all [support/validate] the position. To proceed:
-   1. Run /research:discover with terms like "[negating/challenging terms for the thesis]"
+   1. Run /research-discover with terms like "[negating/challenging terms for the thesis]"
    2. Look for sources from [suggest specific channels: academic databases, industry analysts, competing viewpoints]
    3. Process any source that presents counter-evidence — or, if the search genuinely comes back empty, tell me: I'll record the negative search in research/discovery/negative-searches.md, you acknowledge it, and synthesis proceeds with the output stamped "no credible counter-evidence found after documented search."
    ```
@@ -86,7 +86,7 @@ Before writing anything, verify:
    - Q: [question text] — 1 independent source ([source-note-filename])
    - Q: [question text] — 1 independent source ([source-note-filename])
 
-   These questions are supported by a single independent data point. Findings from these questions will be flagged with "single source suggests" language per guardrail 5. Consider running /research:discover to find additional independent sources before synthesis.
+   These questions are supported by a single independent data point. Findings from these questions will be flagged with "single source suggests" language per guardrail 5. Consider running /research-discover to find additional independent sources before synthesis.
    ```
 
    This is a **warning, not a gate** — synthesis proceeds after displaying the advisory. If no questions have lopsided coverage, skip the advisory silently.
@@ -99,7 +99,7 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
 2. **Read `research/reference/writing-standards.md`** for output formatting rules.
 3. **Read `research/reference/source-standards.md`** for citation and evidence rules.
 4. **Read all relevant files in `research/notes/`** that pertain to this section.
-5. **Read `research/cross-reference.md`** for patterns relevant to this section. Include resolved contradiction decisions in the draft — present the resolution with the reasoning, not just the winning side. The reader should see that a disagreement existed and how it was resolved. Note any peripheral unresolved contradictions in the draft as open questions that do not affect the section's core findings.
+5. **Read `research/cross-reference.md`** for patterns relevant to this section. Include resolved contradiction decisions in the draft — present the resolution with the reasoning, not just the winning side. The reader should see that a disagreement existed and how it was resolved. **Scale the treatment to what turned on it.** A contradiction the user adjudicated gets the resolution and its reasoning in the body. One marked `resolved (auto)` — immaterial, where either side produced the same finding — gets a single parenthetical or a footnote, not a paragraph: the record stays complete without inviting a board reader to weigh a discrepancy that changed nothing. Note any peripheral unresolved contradictions in the draft as open questions that do not affect the section's core findings.
 
    **Commissioner overrides are disclosed where they land.** A resolution is an override when its recorded `user_resolution` differs from its recorded `suggested_resolution` — check the two fields, not just the `user_override` boolean (the flag corroborates; the field comparison decides; a `confirm: side-A` against a side-B assessment is an override however it was typed). For every override, the draft must say so at the finding site, not just internally: state what the evidence assessment was, then the commissioner's resolution, explicitly labeled — e.g., "Cross-referencing assessed Source B as stronger (disclosed methodology, recency); the commissioner directed resolution toward Source A **[commissioner override]**. Confidence in this finding is reduced accordingly." Never present an overridden resolution as if the evidence produced it, and list every override again in the Methodology & Limitations section.
 6. **Read `research/gaps.md`** — if there are unresolved gaps for this phase, note them explicitly in the draft as open questions.
@@ -120,7 +120,7 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
      2. **Single-source findings:** list each finding resting on one independent source (or "none").
      3. **Commissioner overrides:** each `user_override=true` resolution, labeled, with the evidence assessment it overrode (or "none").
      4. **Counter-evidence status** (types with the counter-evidence gate): either the credible challenger(s) cited, or the adverse-search stamp from pre-check 5's documented-adverse-search exit.
-     5. **Waivers:** left as a placeholder line — `/research:audit-claims` inserts any commissioner waivers verbatim at audit time.
+     5. **Waivers:** left as a placeholder line — `/research-audit-claims` inserts any commissioner waivers verbatim at audit time.
 8a. **Log assumptions to `research/assumptions.md`.** While writing the draft, identify any judgment or finding that meets these criteria:
     - Based on a single source (already flagged with "single source suggests" per guardrail 5)
     - Inferred from indirect evidence rather than directly stated
@@ -196,7 +196,7 @@ Confirm the draft was written to `research/drafts/`, integrity-checked, and summ
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:audit-claims research/drafts/<filename>` — Fact-check the draft against source notes before it moves to `outputs/`.
+**▶ NEXT:** `/research-audit-claims research/drafts/<filename>` — Fact-check the draft against source notes before it moves to `outputs/`.
 
 **What to expect:** Audit-claims traces every factual claim to its source note, checks for range narrowing and qualifier stripping, and either promotes the draft to `outputs/` or lists specific issues to fix. This is a hard gate — nothing reaches `outputs/` without passing.
 

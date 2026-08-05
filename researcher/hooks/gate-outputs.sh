@@ -3,7 +3,7 @@
 #
 # Blocks Write/Edit/MultiEdit operations targeting ${CLAUDE_PROJECT_DIR}/research/outputs/
 # unless authorized by a recent (within 120s) "pass" entry in
-# ${CLAUDE_PROJECT_DIR}/research/audits/gate-log.md. /research:audit-claims
+# ${CLAUDE_PROJECT_DIR}/research/audits/gate-log.md. /research-audit-claims
 # writes that entry immediately before promoting a draft, so legitimate
 # promotions flow through; rogue writes (manual edits, other skills) bounce.
 #
@@ -52,13 +52,13 @@ block() {
 }
 
 if [ ! -f "$GATE_LOG" ]; then
-  block "Writes to research/outputs/ are restricted to /research:audit-claims promotions. No gate log found at $GATE_LOG. Run /research:audit-claims against the corresponding draft instead."
+  block "Writes to research/outputs/ are restricted to /research-audit-claims promotions. No gate log found at $GATE_LOG. Run /research-audit-claims against the corresponding draft instead."
 fi
 
 LAST_ROW="$(grep -E '^\| [0-9]{4}-[0-9]{2}-[0-9]{2}T' "$GATE_LOG" | tail -n 1)"
 
 if [ -z "$LAST_ROW" ]; then
-  block "Writes to research/outputs/ are restricted to /research:audit-claims promotions. Gate log has no promotion entries yet. Run /research:audit-claims against the corresponding draft instead."
+  block "Writes to research/outputs/ are restricted to /research-audit-claims promotions. Gate log has no promotion entries yet. Run /research-audit-claims against the corresponding draft instead."
 fi
 
 LAST_TS="$(printf '%s' "$LAST_ROW" | awk -F '\\| *' '{print $2}' | awk '{print $1}')"
@@ -66,24 +66,24 @@ LAST_RESULT="$(printf '%s' "$LAST_ROW" | awk -F '\\| *' '{print $4}' | awk '{pri
 LAST_FILE="$(printf '%s' "$LAST_ROW" | awk -F '\\| *' '{print $5}' | awk '{print $1}')"
 
 if [ "$LAST_RESULT" != "pass" ]; then
-  block "Most recent gate-log entry is not a pass result (got: '$LAST_RESULT'). Re-run /research:audit-claims."
+  block "Most recent gate-log entry is not a pass result (got: '$LAST_RESULT'). Re-run /research-audit-claims."
 fi
 
 REL_TARGET="${FILE_PATH#${PROJECT_DIR%/}/}"
 if [ "$LAST_FILE" != "$REL_TARGET" ] && [ "$LAST_FILE" != "$FILE_PATH" ]; then
-  block "Gate-log entry authorizes a write to '$LAST_FILE' but the current tool call targets '$REL_TARGET'. Promotion paths must match. Re-run /research:audit-claims on the correct draft."
+  block "Gate-log entry authorizes a write to '$LAST_FILE' but the current tool call targets '$REL_TARGET'. Promotion paths must match. Re-run /research-audit-claims on the correct draft."
 fi
 
 NOW_EPOCH="$(date -u +%s)"
 LAST_EPOCH="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$LAST_TS" +%s 2>/dev/null || date -u -d "$LAST_TS" +%s 2>/dev/null || echo 0)"
 
 if [ "$LAST_EPOCH" -eq 0 ]; then
-  block "Could not parse gate-log timestamp '$LAST_TS'. Re-run /research:audit-claims."
+  block "Could not parse gate-log timestamp '$LAST_TS'. Re-run /research-audit-claims."
 fi
 
 AGE=$((NOW_EPOCH - LAST_EPOCH))
 if [ "$AGE" -lt 0 ] || [ "$AGE" -gt 120 ]; then
-  block "Gate-log authorization is stale (${AGE}s old, limit 120s). The audit-claims promotion window has expired. Re-run /research:audit-claims on the draft."
+  block "Gate-log authorization is stale (${AGE}s old, limit 120s). The audit-claims promotion window has expired. Re-run /research-audit-claims on the draft."
 fi
 
 exit 0

@@ -5,13 +5,13 @@ allowed-tools: Read, Grep, Glob
 model: sonnet
 ---
 
-# /research:phase-insight
+# /research-phase-insight
 
 Analyze the current phase's research progress and identify what's strong and what needs more work.
 
 ## Current Context
 
-!`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research:init first."`
+!`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research-init first."`
 
 !`cat research/research-plan.md 2>/dev/null | head -5`
 
@@ -33,7 +33,7 @@ Analyze the current phase's research progress and identify what's strong and wha
 
 **Questions addressed:**
 
-Strength vocabulary is defined in `/research:check-gaps` — **Strong** = ≥2 independent Direct sources, **Thin** = exactly 1 independent Direct source (same condition as the Lopsided flag in gaps.md), **Unsupported** = 0 Direct sources. When Strength is Thin, always include `LOPSIDED` in the Notes column — they are the same condition under different labels. Contradictions go in the Notes column as `CONTRADICTION — <src-a> says X, <src-b> says Y; [resolved / unresolved]`.
+Strength vocabulary is defined in `/research-check-gaps` — **Strong** = ≥2 independent Direct sources, **Thin** = exactly 1 independent Direct source (same condition as the Lopsided flag in gaps.md), **Unsupported** = 0 Direct sources. When Strength is Thin, always include `LOPSIDED` in the Notes column — they are the same condition under different labels. Contradictions go in the Notes column as `CONTRADICTION — <src-a> says X, <src-b> says Y; [resolved / unresolved]`.
 
 | Question | Direct Sources | Independent | Adjacent | Strength | Notes |
 |----------|---------------|-------------|----------|----------|-------|
@@ -67,11 +67,11 @@ If the recommendation is unambiguous (clear next step with high confidence — e
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:<recommended-command>` — <why this is the right next step for this phase's current state>
+**▶ NEXT:** `/research-<recommended-command>` — <why this is the right next step for this phase's current state>
 
 **Also available:**
-- `/research:<alt-1>` — <when the user might want this instead>
-- `/research:<alt-2>` — <when the user might want this instead>
+- `/research-<alt-1>` — <when the user might want this instead>
+- `/research-<alt-2>` — <when the user might want this instead>
 
 **What to expect:** <What the recommended command will do given the phase's current coverage and any thin areas or lopsided flags identified above.>
 

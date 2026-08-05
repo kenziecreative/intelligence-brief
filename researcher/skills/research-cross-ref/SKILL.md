@@ -4,7 +4,7 @@ description: This skill should be used when the user asks to find patterns, agre
 model: opus
 ---
 
-# /research:cross-ref
+# /research-cross-ref
 
 Analyze all processed source notes for cross-cutting patterns.
 
@@ -21,6 +21,15 @@ Analyze all processed source notes for cross-cutting patterns.
    - Set resolution status: "unresolved" for new contradictions, carry forward "resolved: [decision]" for previously resolved ones that still exist in the data
    - **Resolution record schema (all four fields, always):** every resolved contradiction records `suggested_resolution` (the side the evidence assessment favored, with the reasoning), `user_resolution` (the commissioner's choice, verbatim), `rationale` (the commissioner's stated reason, if any), and `user_override` — which is **derived, never chosen**: it is `true` whenever `user_resolution` differs from `suggested_resolution`, in ANY form — `confirm:` of a side the assessment did not favor, `both`/`neither` when the assessment favored one side, or a `resolve:` free-text that departs from the suggestion. `confirm:` of the suggested side is the only path to `user_override=false`. The flag is arithmetic on the two recorded fields, not a property of which keyword the commissioner typed.
    - Classify as "core" (directly addresses a current phase question) or "peripheral" (relevant but not blocking)
+   - **Classify materiality — this decides whether the user is asked at all.** A contradiction is **immaterial** only when BOTH tests pass:
+     - **(a) Same-conclusion test.** Adopting either side leaves every finding this phase would write unchanged in substance — both values sit on the same side of every threshold, band, and qualifier the findings use. Write the finding sentence both ways and compare them. If the two sentences say the same thing, (a) passes.
+     - **(b) Clear-favorite test.** The evidence decisively favors one side — the minority value is outweighed by a majority that includes at least one independent source, or it traces to a different rendering of the same document whose canonical version carries the majority value.
+
+     Everything else is **material**, including any contradiction that would move a recommendation, cross a threshold, touch a kill-gate, or change a figure the user has already asked about. When the tests are arguable, it is material. Materiality is about consequence, not confidence: a contradiction can be easy to call and still be material if the finding turns on it.
+5a. **Resolve immaterial contradictions yourself; escalate only material ones.**
+   - **Immaterial:** adopt the favored side and write the full resolution record with `user_resolution: "auto — immaterial, not escalated"`, `user_override: false`, and the minority value preserved verbatim so nothing is erased. Status is `resolved (auto)`; it never blocks synthesis. Report it in **one line** among the findings, as an observation rather than a decision: "One figure disagrees across two renderings of the same card (1.0 vs 2.1). I've gone with 2.1 — three sources including the independent one — and kept the other on the record. It doesn't move any finding either way." Do not open a decision prompt, do not lay out both sides at length, and do not ask for a `confirm:`.
+   - **Material:** do not resolve it. Present both sides, give the suggested resolution with its reasoning, mark it `unresolved`, and block synthesis on it until the user confirms per guardrail 6.
+   - **Either way the record is complete.** An auto-resolution is visible, not silent: it appears in the contradictions table marked `resolved (auto)` with both values intact. If the user reopens one, revert it to `unresolved` and take their answer through the normal resolution record.
 6. **Detect shared-origin clusters (XREF-03).** Read the origin chain field from each source note. Group sources that cite the same original study, dataset, report, or primary source. For each cluster:
    - Name the shared origin (original study/report title, author, date)
    - List the processed sources that trace to it
@@ -46,16 +55,16 @@ Analyze all processed source notes for cross-cutting patterns.
 8. **Identify cross-cutting patterns** (convergence, gap clusters, temporal trends, source-type skew, outliers). When assessing pattern strength, apply shared-origin cluster adjustments: sources in the same cluster — confirmed or suspected — count as one data point, and unclear-origin sources add no corroboration credit.
 8a. **Read the exclusion ledger AND the unselected remainder.** Read `research/discovery/exclusions.md` (if it exists) and the phase candidates files at `research/discovery/*-candidates.md`; cross-check the candidates against `research/sources/registry.md` to find candidates that were neither processed nor formally excluded — the unselected remainder. Report both counts in the dashboard. When a convergence pattern exists on a question where an excluded OR unprocessed candidate's title or snippet suggested a dissenting view, note it beside the pattern: "Convergence on [question] should be read alongside the discovery record: [candidate] ([excluded: reason] / [discovered, never selected]) appeared to carry an opposing view." Report neutrally — the curation is the user's call; its visibility is this skill's job, and a candidate stranded by `top 5` is as invisible to the notes as one formally declined.
 9. **Regenerate `research/cross-reference.md`** using the template structure (Dashboard -> Contradictions -> Saturation Summary -> Shared-Origin Clusters -> pattern types). Carry forward existing contradiction resolutions if the contradiction still exists. Drop resolutions for contradictions that no longer exist in the data. Update the dashboard counts.
-10. **Update `research/STATE.md`** — set last cross-reference date to today and reset "Sources since last cross-reference" to 0. **After the edit, re-read STATE.md and confirm `Last cross-reference` is today's date and `Sources since last cross-reference` is 0.** If either field does not match, do not report cross-ref as complete — surface the write failure with the expected vs. actual values and stop. The next `/research:process-source` call will trust this counter to decide whether to block on the checkpoint; silent drift here produces either a premature or a skipped checkpoint.
+10. **Update `research/STATE.md`** — set last cross-reference date to today and reset "Sources since last cross-reference" to 0. **Then update `Next Action` to the true next step** — the same command your context-sensitive ▶ NEXT block renders below (resume processing the batch, run `/research-check-gaps`, or resolve an unresolved contradiction). Never leave `Next Action` pointing at the cross-ref that just ran: a session resuming after a clear reads this field to know what to do, and a stale value sends it to the wrong step. If this cross-ref completed the phase's **Connect** cycle step — the approved batch is fully processed and no more sources are queued — also check the `Connect` box in `Current Phase Cycle`. **After the edit, re-read STATE.md and confirm `Last cross-reference` is today's date, `Sources since last cross-reference` is 0, and `Next Action` names the next step, not this one.** If any field does not match, do not report cross-ref as complete — surface the write failure with the expected vs. actual values and stop. These STATE writes are silent (posture rule 7); the next `/research-process-source` call trusts the counter, and a resume trusts `Next Action`.
 
 ## Guardrails
 
 1. Report patterns only when two or more independent sources support them. A pattern from one source is a claim, not a pattern.
-2. When sources contradict each other, present both sides with source citations. Do not resolve the contradiction by picking the more recent or more authoritative source.
+2. When sources contradict each other **materially**, present both sides with source citations. Do not resolve a material contradiction by picking the more recent or more authoritative source. This guardrail governs material contradictions only — immaterial ones (both tests in step 5) are resolved in place per step 5a and reported in one line. That is not cherry-picking: the losing value stays in the record verbatim, and the user is told which value was adopted and why.
 3. Do not force thematic connections. If sources cover different aspects of the topic without overlapping, say "no cross-cutting patterns found for [theme]" rather than inventing a connection.
 4. Weight patterns by source independence. Three blog posts citing the same original study are one data point, not convergence. Independence is never assumed: origin_chain establishes it only when it affirmatively identifies distinct origins. "Origin unclear" means independence unknown — no corroboration credit, and shared-wording/shared-figure matches trigger a suspected cluster at Echo level.
 5. Date-stamp patterns. A pattern supported by sources from 2019 and contradicted by a 2024 source is a temporal shift, not a contradiction.
-6. When logging contradictions, present both sides with specific source citations. Include Claude's suggested resolution with explicit reasoning (recency, methodology, credibility tier), but mark it as a suggestion — the user must confirm resolution before synthesis can proceed on affected questions. **Confirmation format:** a valid confirmation is either `confirm: <side-A | side-B | both | neither>` (accepting or overriding the suggestion with a specific side) or `resolve: <free-text>` (a custom resolution, recorded verbatim). Either way the full resolution record schema from step 5 is written — `suggested_resolution`, `user_resolution`, `rationale`, and the DERIVED `user_override` (true whenever the commissioner's resolution differs from the suggestion, regardless of which keyword carried it — `confirm: side-A` against a side-B assessment is an override exactly as much as free-text is). Any other response — including implicit agreement by moving forward, lukewarm affirmatives like "sure" without a side specified, or deferrals — is treated as still-unresolved; re-surface the contradiction and re-ask. Do not infer user agreement from silence or from the user starting the next command.
+6. **This guardrail applies to material contradictions.** (Immaterial ones never reach it — step 5a resolves and reports them.) When logging a material contradiction, present both sides with specific source citations. Include Claude's suggested resolution with explicit reasoning (recency, methodology, credibility tier), but mark it as a suggestion — the user must confirm resolution before synthesis can proceed on affected questions. **Confirmation format:** a valid confirmation is either `confirm: <side-A | side-B | both | neither>` (accepting or overriding the suggestion with a specific side) or `resolve: <free-text>` (a custom resolution, recorded verbatim). Either way the full resolution record schema from step 5 is written — `suggested_resolution`, `user_resolution`, `rationale`, and the DERIVED `user_override` (true whenever the commissioner's resolution differs from the suggestion, regardless of which keyword carried it — `confirm: side-A` against a side-B assessment is an override exactly as much as free-text is). Any other response — including implicit agreement by moving forward, lukewarm affirmatives like "sure" without a side specified, or deferrals — is treated as still-unresolved; re-surface the contradiction and re-ask. Do not infer user agreement from silence or from the user starting the next command.
 7. Shared-origin clusters collapse to one data point for pattern strength. Three blog posts citing the same study are Echo level, not Convergence. This applies retroactively to all existing patterns when shared-origin clusters are detected.
 8. Saturation signals are informational, not blocking. Display the signal and suggest focusing discovery on under-covered questions, but do not prevent the user from processing more sources.
 9. Regenerate cross-reference.md from scratch on every run for consistency. The only state carried forward is resolved contradiction decisions.
@@ -72,7 +81,8 @@ Analyze all processed source notes for cross-cutting patterns.
 | Treating shared-origin sources as independent corroboration | Check origin chain fields. If two sources cite the same study, they are one data point. Label as Echo in pattern strength. |
 | Assuming independence because no shared origin was recorded | "Origin unclear" is not "independent." Apply the shared-wording/shared-figure heuristics — near-identical phrasing, the same uncommon figure with identical rounding, the same unattributed quote — and demote matches to a suspected cluster at Echo level. False convergence from a hidden common origin is exactly what this step exists to catch. |
 | Reporting convergence while dissenting candidates sit in the exclusion ledger | Read exclusions.md every run. Convergence built on a curated evidence base is reported WITH the curation visible — note excluded candidates that appeared to dissent, neutrally, beside the pattern. |
-| Resolving contradictions without user confirmation | Log contradictions with a suggested resolution, but mark as "unresolved" until the user explicitly confirms. Synthesis is blocked on unresolved core contradictions. |
+| Resolving a **material** contradiction without user confirmation | Log material contradictions with a suggested resolution, but mark as "unresolved" until the user explicitly confirms. Synthesis is blocked on unresolved core contradictions. Apply step 5's two tests honestly — a contradiction that would move a finding is material no matter how obvious the answer looks. |
+| Escalating an **immaterial** contradiction to the user | Run step 5's materiality tests before opening any decision prompt. Handing the user a choice whose two branches produce the identical finding spends their attention on bookkeeping and teaches them the gate is noise. If you find yourself about to write "it doesn't change the conclusion either way" in a prompt asking them to choose, the tests already told you not to ask — adopt the favored side, keep the other value on the record, and say so in one line. |
 | Letting the confirmation keyword decide the override flag | `confirm: side-A` against a side-B assessment is an override — the same override as free-text, wearing politer syntax. `user_override` is derived by comparing `user_resolution` to `suggested_resolution`; it is never inferred from which keyword the commissioner used. A resolution record missing either field cannot be marked resolved. |
 | Saturation contradicting pattern strength | Step 6 and step 7 read the same sources; if step 6 called a cluster Echo, step 7 must not count its members as mutually confirming. Compute saturation over independent origin clusters only — a file that says "Echo, one data point" in one section and "100% confirmatory, evidence converging" in another has issued contradictory judgments. |
 | Reporting raw saturation % without actionable guidance | Every saturation signal must include direction: "saturated — consider synthesis" or "under-covered — prioritize discovery here." A number alone is not useful. |
@@ -89,7 +99,8 @@ Analyze all processed source notes for cross-cutting patterns.
 
 | Signal | Count |
 |--------|-------|
-| Contradictions (unresolved) | N |
+| Contradictions (unresolved — material, awaiting you) | N |
+| Contradictions (auto-resolved — immaterial, on the record) | N |
 | Contradictions (total) | N |
 | Shared-origin clusters (confirmed) | N |
 | Shared-origin clusters (suspected — wording/figure heuristics) | N |
@@ -105,7 +116,7 @@ Analyze all processed source notes for cross-cutting patterns.
 
 [Contradictions detail, saturation per-question, cluster list, pattern list follow below]
 
-Summarize new patterns found since the last cross-reference. Report: number of contradictions found (unresolved/total), saturation status (aggregate % and any per-question advisories), shared-origin clusters detected. Highlight any contradictions that block synthesis and any questions that are under-covered. If aggregate saturation advisory is triggered, suggest the user consider moving saturated questions to synthesis.
+Summarize new patterns found since the last cross-reference. Report: number of contradictions found (unresolved/auto-resolved/total — auto-resolved ones get one line each, not a decision prompt), saturation status (aggregate % and any per-question advisories), shared-origin clusters detected. Highlight any contradictions that block synthesis and any questions that are under-covered. If aggregate saturation advisory is triggered, suggest the user consider moving saturated questions to synthesis.
 
 **Context-sensitive next-action block (per D-08):**
 
@@ -116,8 +127,8 @@ If unresolved contradictions exist:
 **▶ NEXT:** Resolve the [N] unresolved contradiction(s) above — synthesis is blocked until core contradictions are confirmed.
 
 **Also available:**
-- `/research:check-gaps` — Check coverage after resolving contradictions.
-- `/research:phase-insight` — Get a full picture of phase strength before deciding next steps.
+- `/research-check-gaps` — Check coverage after resolving contradictions.
+- `/research-phase-insight` — Get a full picture of phase strength before deciding next steps.
 
 ───────────────────────────────────────────────────────────
 
@@ -125,11 +136,11 @@ If no blocking contradictions and coverage is converging:
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research:check-gaps` — Confirm coverage for Phase [N] before synthesis.
+**▶ NEXT:** `/research-check-gaps` — Confirm coverage for Phase [N] before synthesis.
 
 **Also available:**
-- `/research:process-source <url>` — Process additional sources if any questions remain under-covered.
-- `/research:phase-insight` — Analyze phase strength in detail before deciding.
+- `/research-process-source <url>` — Process additional sources if any questions remain under-covered.
+- `/research-phase-insight` — Analyze phase strength in detail before deciding.
 
 ───────────────────────────────────────────────────────────
 

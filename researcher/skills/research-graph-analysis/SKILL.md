@@ -5,13 +5,13 @@ allowed-tools: Read, Grep, Glob
 model: sonnet
 ---
 
-# /research:graph-analysis
+# /research-graph-analysis
 
 Analyze the claim graph as a decision-support tool. This is not research output — it tells you how much to trust what the research found, where the evidence is fragile, and where targeted follow-up would have the biggest impact.
 
 ## Process
 
-1. **Read `research/reference/claim-graph.json`.** If the file does not exist, is empty, or contains `{"claims": []}`, report: "No claims in graph yet — run `/research:audit-claims` on at least one phase first." and stop.
+1. **Read `research/reference/claim-graph.json`.** If the file does not exist, is empty, or contains `{"claims": []}`, report: "No claims in graph yet — run `/research-audit-claims` on at least one phase first." and stop.
 
 2. **Read `CLAUDE.md`** to get the `research-type` field (for type-specific framing in step 6).
 
@@ -98,9 +98,9 @@ If the research type is not recognized, skip this section.
 
 End with a `▶ NEXT:` block (format defined in `${CLAUDE_PLUGIN_ROOT}/reference/prompt-templates-runtime.md`). Context-sensitive:
 
-- **If Fragile Foundations is non-empty:** recommend `/research:discover` — targeted discovery to close the fragile claims
-- **If all buckets look healthy:** recommend `/research:progress` — full project dashboard
-- **If graph is sparse (< 10 claims):** note that more phases need to complete before the analysis is meaningful, recommend `/research:audit-claims` on the next draft
+- **If Fragile Foundations is non-empty:** recommend `/research-discover` — targeted discovery to close the fragile claims
+- **If all buckets look healthy:** recommend `/research-progress` — full project dashboard
+- **If graph is sparse (< 10 claims):** note that more phases need to complete before the analysis is meaningful, recommend `/research-audit-claims` on the next draft
 
 ## Guardrails
 

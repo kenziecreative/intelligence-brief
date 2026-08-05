@@ -44,7 +44,7 @@ You don't need to be technical. You need [Claude Code](https://docs.anthropic.co
 
 ## v1.5 Highlights
 
-- **Your evidence standard is now enforced, not just recorded.** The audience answer you give at init is compiled into `research/reference/evidence-standard.md`, and `/research:audit-claims` fails any claim that violates it — promotable only under a named waiver whose rationale appears verbatim in the output's Methodology & Limitations.
+- **Your evidence standard is now enforced, not just recorded.** The audience answer you give at init is compiled into `research/reference/evidence-standard.md`, and `/research-audit-claims` fails any claim that violates it — promotable only under a named waiver whose rationale appears verbatim in the output's Methodology & Limitations.
 - **Phases close against the whole contract.** A phase that promises three deliverables needs all three audited before it's marked complete — one audited executive summary no longer closes a synthesis phase.
 - **Source exclusions leave a trace.** Candidates you decline during discovery are recorded (with your reason) in an exclusion ledger that gap analysis and cross-referencing read — your curation is always honored, and always visible.
 - **The counter-evidence gate has an honest exit.** When genuine search finds no opposition, a documented negative search plus your acknowledgment satisfies the gate and stamps the output — "named, searched, none found" is a recorded outcome, not a dead end.
@@ -56,9 +56,9 @@ You don't need to be technical. You need [Claude Code](https://docs.anthropic.co
 
 ## v1.4 Highlights
 
-- **Init creates a fresh project from scratch.** `/research:init` scaffolds `research/` and `source-material/` using the Write tool, rooted at `${CLAUDE_PROJECT_DIR}`. You can run it in any fresh folder.
-- **Hook gate on `outputs/`.** A PreToolUse hook blocks Write/Edit/MultiEdit operations targeting `research/outputs/` unless `/research:audit-claims` has authorized the write within the last 120 seconds via a row in `research/audits/gate-log.md`. Claude Code only; structural-rule-only in Cowork.
-- **Per-phase discovery tier recording.** `retrieval-log.json` entries carry a `tier` field (1 = Tavily, 2 = Firecrawl, 3 = built-in). `/research:start-phase` writes a `## Phase Tier Record` table to STATE.md. `/research:progress` surfaces it. A Tier-3 banner appears in candidate files when CLIs were unavailable for the run.
+- **Init creates a fresh project from scratch.** `/research-init` scaffolds `research/` and `source-material/` using the Write tool, rooted at `${CLAUDE_PROJECT_DIR}`. You can run it in any fresh folder.
+- **Hook gate on `outputs/`.** A PreToolUse hook blocks Write/Edit/MultiEdit operations targeting `research/outputs/` unless `/research-audit-claims` has authorized the write within the last 120 seconds via a row in `research/audits/gate-log.md`. Claude Code only; structural-rule-only in Cowork.
+- **Per-phase discovery tier recording.** `retrieval-log.json` entries carry a `tier` field (1 = Tavily, 2 = Firecrawl, 3 = built-in). `/research-start-phase` writes a `## Phase Tier Record` table to STATE.md. `/research-progress` surfaces it. A Tier-3 banner appears in candidate files when CLIs were unavailable for the run.
 - **Inline-first plan generation.** Init's Step 4 runs in the main agent's context by default, no subagent. Plan generation now works the same way on Claude Code and Cowork. Subagent delegation is an opt-in Claude Code optimization.
 
 ---
@@ -97,7 +97,7 @@ Researcher is built on [Claude Code](https://docs.anthropic.com/en/docs/claude-c
 
 The process follows a strict cycle for each phase:
 
-1. **Collect.** Start with `/research:discover` to find candidate sources across multiple channels, then process the best ones with `/research:process-source`
+1. **Collect.** Start with `/research-discover` to find candidate sources across multiple channels, then process the best ones with `/research-process-source`
 2. **Connect.** Cross-reference across all sources to find patterns
 3. **Assess.** Check coverage gaps before moving on
 4. **Synthesize.** Draft a section from the evidence
@@ -167,7 +167,7 @@ The system uses a 3-tier fallback chain: Tavily CLI (primary), Firecrawl CLI (se
 
 ### Recommended: Auto mode (Claude Code)
 
-A full Phase 1 cycle triggers 10 to 20 Bash permission prompts in default-prompt mode — mostly during `/research:init`'s preliminary web research and `/research:discover`'s per-channel queries. The plugin pre-allows its tools via `.claude/settings.json` written at init time, but some compound shell operations still prompt.
+A full Phase 1 cycle triggers 10 to 20 Bash permission prompts in default-prompt mode — mostly during `/research-init`'s preliminary web research and `/research-discover`'s per-channel queries. The plugin pre-allows its tools via `.claude/settings.json` written at init time, but some compound shell operations still prompt.
 
 Run Claude Code in Auto mode for the smoothest experience. Toggle with `/auto` or set it as your default in settings. Researcher's writes are gated by the plugin itself (the `outputs/` hook gate is the load-bearing guardrail, not the per-prompt confirmations), so the practical risk surface stays the same.
 
@@ -177,9 +177,9 @@ Claude Cowork has its own permission model — Auto mode is not a Cowork concept
 
 Researcher runs on both surfaces and the core workflow is identical. A few mechanics differ:
 
-- **Hook gate on `research/outputs/`** is a Claude Code PreToolUse hook. In Cowork, hooks don't run; the gate is enforced as a structural workflow rule — `/research:audit-claims` is the only skill that writes to `outputs/`, and the discipline holds because no other skill targets that path. Same outcome, different enforcement.
+- **Hook gate on `research/outputs/`** is a Claude Code PreToolUse hook. In Cowork, hooks don't run; the gate is enforced as a structural workflow rule — `/research-audit-claims` is the only skill that writes to `outputs/`, and the discipline holds because no other skill targets that path. Same outcome, different enforcement.
 - **`.claude/settings.json` pre-allow merge** that init writes is a Claude Code permission file. Cowork ignores it and applies its own permission model. Nothing breaks; Cowork users just won't see the same prompt-suppression benefit.
-- **Plan generation in `/research:init` Step 4** runs inline in the main agent's context on both surfaces. On Claude Code only, you may optionally delegate it to a fresh subagent for sharper analysis on long source-material reads. Cowork stays inline.
+- **Plan generation in `/research-init` Step 4** runs inline in the main agent's context on both surfaces. On Claude Code only, you may optionally delegate it to a fresh subagent for sharper analysis on long source-material reads. Cowork stays inline.
 - **`PreCompact` hook** that warns when state hasn't been saved before context compresses is Claude Code only. Cowork has its own compaction model.
 
 If you're using Cowork, none of this requires configuration. The plugin detects the surface and behaves correctly.
@@ -189,10 +189,10 @@ If you're using Cowork, none of this requires configuration. The plugin detects 
 Open the project folder where you want the research to live, then run:
 
 ```
-/research:init
+/research-init
 ```
 
-You can `/research:init` in any fresh folder. As of v1.4, init creates `research/` and `source-material/` from scratch — nothing needs to exist beforehand. If a `research/STATE.md` is already there from a prior init run, init will refuse and tell you how to start over. The plugin lives in one place; each research project gets its own folder with its own state. Updates to the plugin reach every existing project the next time you open it.
+You can `/research-init` in any fresh folder. As of v1.4, init creates `research/` and `source-material/` from scratch — nothing needs to exist beforehand. If a `research/STATE.md` is already there from a prior init run, init will refuse and tell you how to start over. The plugin lives in one place; each research project gets its own folder with its own state. Updates to the plugin reach every existing project the next time you open it.
 
 ---
 
@@ -200,23 +200,23 @@ You can `/research:init` in any fresh folder. As of v1.4, init creates `research
 
 | Command | What It Does |
 |---------|-------------|
-| `/research:init` | Start a new research project |
-| `/research:discover` | Find candidate sources across multiple channels based on research type |
-| `/research:process-source` | Process a URL or file into a structured research note |
-| `/research:cross-ref` | Find patterns across all processed source notes |
-| `/research:check-gaps` | Map coverage against the research plan, identify holes |
-| `/research:summarize-section` | Synthesize notes into a draft section |
-| `/research:audit-claims` | Fact-check a draft against source notes; promote to output if it passes |
-| `/research:start-phase` | Get a briefing before starting the next phase |
-| `/research:phase-insight` | See which questions are well-covered vs. thin in the current phase |
-| `/research:progress` | Project dashboard: phase status, source counts, next action |
-| `/research:graph-analysis` | Analyze the claim graph for load-bearing claims, fragile foundations, and cheapest confidence upgrades |
+| `/research-init` | Start a new research project |
+| `/research-discover` | Find candidate sources across multiple channels based on research type |
+| `/research-process-source` | Process a URL or file into a structured research note |
+| `/research-cross-ref` | Find patterns across all processed source notes |
+| `/research-check-gaps` | Map coverage against the research plan, identify holes |
+| `/research-summarize-section` | Synthesize notes into a draft section |
+| `/research-audit-claims` | Fact-check a draft against source notes; promote to output if it passes |
+| `/research-start-phase` | Get a briefing before starting the next phase |
+| `/research-phase-insight` | See which questions are well-covered vs. thin in the current phase |
+| `/research-progress` | Project dashboard: phase status, source counts, next action |
+| `/research-graph-analysis` | Analyze the claim graph for load-bearing claims, fragile foundations, and cheapest confidence upgrades |
 
 ---
 
 ## External APIs Used by Discovery
 
-The `/research:discover` command calls several APIs to find sources across different channels. The system degrades gracefully if any are unavailable. It tries the next tier and reports what happened.
+The `/research-discover` command calls several APIs to find sources across different channels. The system degrades gracefully if any are unavailable. It tries the next tier and reports what happened.
 
 | API | What It Does | Who Should Know |
 |-----|-------------|----------------|
@@ -239,7 +239,7 @@ All CLI and HTTP API calls are made via Bash in the terminal. You can see exactl
 
 **Canonical figures registry.** Every number cited across phases is registered in a single source of truth. When a figure is carried forward, it must match the canonical value exactly. Numbers don't drift.
 
-**Claim graph.** Every factual claim extracted during audit is recorded as a node with edges to its source notes and canonical figures. When a figure is revised, the system traces all downstream claims that depend on it and flags the drift before you proceed. Run `/research:graph-analysis` at any point to see what the graph reveals about your research: which claims are load-bearing, where the evidence is fragile, which single-source claims are one source away from a confidence upgrade, and where multiple independent sources converge. The analysis is tailored to your research type.
+**Claim graph.** Every factual claim extracted during audit is recorded as a node with edges to its source notes and canonical figures. When a figure is revised, the system traces all downstream claims that depend on it and flags the drift before you proceed. Run `/research-graph-analysis` at any point to see what the graph reveals about your research: which claims are load-bearing, where the evidence is fragile, which single-source claims are one source away from a confidence upgrade, and where multiple independent sources converge. The analysis is tailored to your research type.
 
 **Research integrity agent.** Runs automatically after every write. Catches fabricated data, range narrowing (source says "1-3x", output says "2-3x"), qualifier stripping, internal inconsistencies, and cross-phase drift.
 
@@ -255,7 +255,7 @@ All CLI and HTTP API calls are made via Bash in the terminal. You can see exactl
 
 **Independence-aware gap analysis.** Coverage isn't measured by source count. The system classifies each source's relevance as Direct, Adjacent, or Contradicts. Three blog posts citing the same study count as one data point — and sources whose origin can't be established count as independence-unknown, never as corroboration. Only independent Direct sources move the coverage needle.
 
-**Gate to outputs.** Nothing reaches the final output directory without passing `/research:audit-claims` — this is enforced by structural workflow rules; a hard hook backstop is added in v1.4.
+**Gate to outputs.** Nothing reaches the final output directory without passing `/research-audit-claims` — this is enforced by structural workflow rules; a hard hook backstop is added in v1.4.
 
 ---
 

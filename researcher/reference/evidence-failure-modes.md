@@ -4,13 +4,13 @@ Catalog of how evidence degrades during AI-assisted research. Use this as a chec
 
 ## 1. Source Skimming
 
-**What it is:** Engaging with a user-provided document at the surface level — filename, first paragraph, or a one-line summary from the verbal description — instead of reading the full content. The most common trigger is the user dropping a document into `source-material/` before running `/research:init`, where the init skill saves the file but never reads it, so the research plan is written from a partial mental model of the source.
+**What it is:** Engaging with a user-provided document at the surface level — filename, first paragraph, or a one-line summary from the verbal description — instead of reading the full content. The most common trigger is the user dropping a document into `source-material/` before running `/research-init`, where the init skill saves the file but never reads it, so the research plan is written from a partial mental model of the source.
 
 **Why it happens:** The verbal description the user gives at the start of a project feels like "the topic," and the file feels like "supporting material." In practice, the file usually contains the specific facts (named entities, dates, credentials, stated assumptions) that determine whether the plan's framing is right. When a plan-generation subagent is handed a verbal description and an unread file path, it will write phases that match the description and never touch the file.
 
 **How to detect:** For every file in `source-material/`, verify its facts appear in either (a) the research plan's Research Subject, Assumptions section, or phase questions, or (b) an explicit Out of Scope list with a reason. If a named entity, date, credential, or stated assumption exists in the file but nowhere in the plan, the file was skimmed. This check is automated in the research-integrity agent's "Source Material Coverage" check — run it after plan generation and after any new source-material drop.
 
-**Structural prevention:** `/research:init` Step 2 reads every source-material file in full and produces `research/source-material-digest.md`. The plan generator receives both the digest and the raw file paths and is required to re-read each file. After plan generation, research-integrity cross-checks the plan against the digest. `/research:start-phase` reconciles `source-material/` against the digest before every phase transition. `/research:process-source` updates the digest when processing a file from `source-material/`.
+**Structural prevention:** `/research-init` Step 2 reads every source-material file in full and produces `research/source-material-digest.md`. The plan generator receives both the digest and the raw file paths and is required to re-read each file. After plan generation, research-integrity cross-checks the plan against the digest. `/research-start-phase` reconciles `source-material/` against the digest before every phase transition. `/research-process-source` updates the digest when processing a file from `source-material/`.
 
 ## 2. Qualifier Stripping
 
