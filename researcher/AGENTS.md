@@ -14,6 +14,12 @@ Turns Claude Code / Cowork into an audited research partner: a phased plan groun
 - `reference/` — read-only knowledge base: root guides, templates, and per-type discovery playbooks + channel maps (11 research types).
 - `hooks/` — Claude Code hooks (the `outputs/` gate and the `PreCompact` save warning).
 
+**End-to-end operating model:** `dev/researcher/ARCHITECTURE.md` is the source-of-truth map —
+the pipeline, decision/state ownership, the state model, the judgment map, the role/expertise
+split, cross-cutting invariants, and known unreconciled seams. Read it before non-trivial
+changes; update it in the same change when a boundary, judgment home, principle, or seam moves.
+It is authoritative on relationships and principles, subordinate to the skills on mechanics.
+
 ## Key mechanics
 
 - **Outputs gate.** Nothing reaches `research/outputs/` without passing `/research-audit-claims`. On Claude Code this is a `PreToolUse` hook that blocks Write/Edit/MultiEdit to `outputs/` unless an audit authorized the write within the last 120s (via a row in `research/audits/gate-log.md`). In Cowork, hooks don't run; the gate holds as a structural rule — `audit-claims` is the only skill that writes to `outputs/`.
