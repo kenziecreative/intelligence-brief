@@ -145,7 +145,7 @@ Note: "Not Started" questions are discovery targets — run /research-discover t
 
 **Context-sensitive next-action block:**
 
-If gaps exist (Not Started, Lopsided, Addressed-but-unbalanced, or Evidence Against questions):
+If discoverable gaps exist (Not Started, Lopsided, or Addressed-but-unbalanced questions). **`Evidence Against` is not a discoverable gap** — active counter-evidence is not resolved by finding more sources, so it never triggers this discovery branch on its own (it routes to synthesis below). If a discoverable gap AND an `Evidence Against` question are both open, render this block for the discoverable gap and name the `Evidence Against` question(s) as a synthesis task to address when the draft is written, not a discovery target:
 
 ───────────────────────────────────────────────────────────
 
@@ -154,6 +154,18 @@ If gaps exist (Not Started, Lopsided, Addressed-but-unbalanced, or Evidence Agai
 **Also available:**
 - `/research-phase-insight` — Review which questions are thin vs. strong before deciding.
 - `/research-cross-ref` — Re-run cross-reference if sources have been added since the last run.
+
+───────────────────────────────────────────────────────────
+
+If the only open items are `Evidence Against` questions (no Not Started, Lopsided, or Addressed-but-unbalanced gaps remain):
+
+───────────────────────────────────────────────────────────
+
+**▶ NEXT:** `/research-summarize-section` — The discoverable questions are covered; the open items are `Evidence Against` (active counter-evidence). More sources will not resolve these — the commissioner addresses the contradiction in the draft. Name each `Evidence Against` question so synthesis confronts it rather than smoothing it into consensus.
+
+**Also available:**
+- `/research-phase-insight` — Review the contradicting evidence per question before drafting.
+- `/research-cross-ref` — Confirm the contradiction is current before synthesis.
 
 ───────────────────────────────────────────────────────────
 

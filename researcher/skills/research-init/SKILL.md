@@ -510,7 +510,7 @@ Do not create files outside this structure for research artifacts. Working files
 | Progress | `/research-progress` | Shows project dashboard with phase status |
 | Discover Sources | `/research-discover` | Finds candidate sources for the current phase using type-aware multi-channel discovery |
 
-**Integrity agent:** `research-integrity` — runs automatically after writing any source note, draft, or synthesis. Watches for fabricated data, range narrowing, qualifier stripping, cross-phase drift, unsourced claims.
+**Integrity agent:** `research-integrity` — runs automatically after `/research-summarize-section` writes a draft, and when `/research-init` or `/research-start-phase` integrate source material. It watches for fabricated data, range narrowing, qualifier stripping, cross-phase drift, and unsourced claims. It is **not** auto-run after every source note — invoke it manually on a note if you want a note-level check.
 
 5. **Workflow:**
 
@@ -597,7 +597,7 @@ This is a long-running project. Clear context between research phases — each p
 
 9. **Commonplace Book:**
 
-Research Agent maintains `research/commonplace.md` as a running record of observations worth preserving across context clears. This is NOT a research output, NOT a source note, NOT a draft, and NOT part of any audit or gate. Nothing reads it except the user. It exists so the user can come back later and find observations the agent made in the moment.
+Research Agent maintains `research/commonplace.md` as a running record of observations worth preserving across context clears. This is NOT a research output, NOT a source note, NOT a draft, and NOT part of any audit or gate. It is never read by synthesis or the audit gate; the one skill that reads it is `/research-start-phase`, which re-adopts recent Working Read entries at phase start so the in-flight thinking survives a context clear (not just the position). It also exists so the user can come back later and find observations the agent made in the moment.
 
 **Append to `research/commonplace.md` at the end of any turn in which your response contained any of the following:**
 
@@ -833,7 +833,7 @@ This file IS:
 
 Entries are appended automatically by the agent when it produces an observation worth preserving. Each entry is dated and tagged with the phase it was produced during. The agent should append before ending a turn in which capture-worthy content was produced — including before recommending a context clear.
 
-The file is private to the user. It does not affect research outputs, audits, or synthesis. It exists so the user can come back later and find what was observed in the moment.
+The file does not affect research outputs, audits, or synthesis. The one skill that reads it is `/research-start-phase`, which re-adopts recent Working Read entries at phase start so in-flight thinking survives a context clear. It also exists so the user can come back later and find what was observed in the moment.
 
 ---
 ```
