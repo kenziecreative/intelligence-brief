@@ -2,6 +2,25 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.7.0] — 2026-08-05
+
+The audit-battery release. The claim audit now runs a fixed, enumerated check battery on every pass instead of an improvised set — which stops the "one draft audited three times" pattern — plus three fixes to places where a skill's own generated docs contradicted what the skill does.
+
+**Why the battery.** Diagnosed from a live 9-phase project (15 audit reports): the audit's pass criteria were exact, but its check *procedure* was a list of questions, so the auditor ran a different set of checks each pass — figures on pass one, structure on pass two, quotations on pass three — and kept discovering defects that were there all along. Enumerating the battery (the same checks, every pass, each reported) collapses the serial re-discovery into one pass.
+
+**Verification is structural, said honestly.** The plugin passes validation and the drift lint. The eval golden set is single-turn and cannot exercise a multi-pass audit, so the battery's real proof is a live audit run — not yet done.
+
+**Upgrade note:** the battery and the routing fix are skill-level and apply as soon as you update the plugin — no re-init needed. The two documentation fixes live in the project scaffold, so they only affect newly initialized projects; existing projects are unaffected in behavior.
+
+### Added
+
+- **An enumerated audit check battery (B1–B12).** `research-audit-claims` now runs a fixed battery in full on every pass — first audit and every re-audit — each item reported in a new `Checks run this pass` section. New checks: quotation integrity with a self-sourced-quote flag (catches the research quoting its own prose back as a citation), derived-figure labelling, section cross-reference resolution, **plan-requirement conformance** (the only check that finds *absent* required content, since an unwritten component has no claim to trace), constructed-bracket, and internal-table consistency (a summary claim that is false by its own table). Canonical-figure matching now checks units and qualifiers, not just value; the regression sweep now re-scans the whole document.
+- **A fix-hygiene rule.** A mechanical fix may not split a sentence or orphan the clause it interrupts; if the only clean insertion point would, the fix is a judgment call and is handed back.
+
+### Fixed
+
+- **Three contradictions between skills and their own generated docs.** The scaffold claimed the integrity agent runs automatically after every source note (it runs on drafts and source-material integration, not per note); it claimed nothing reads `commonplace.md` except the user (`/research-start-phase` reads it to re-adopt in-flight thinking across a context clear); and `/research-check-gaps` routed `Evidence Against` questions to discovery, though more sources cannot resolve a contradiction — they now route to synthesis, where the commissioner addresses it in the draft.
+
 ## [1.6.0] — 2026-08-05
 
 The workflow-ownership release. It fixes the two things that made the research assistant tiring to run over long, multi-day projects: it stopped to ask for input it didn't need, and it lost its place in the protocol after any deep conversation. Alongside that, a batch of correctness fixes and a readability pass on how the assistant talks.
