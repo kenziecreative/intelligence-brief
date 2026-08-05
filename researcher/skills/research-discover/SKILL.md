@@ -327,8 +327,8 @@ Top candidates for this phase (in priority order):
 3. {Title} — {source} — {credibility tier} — {why it's high priority for this phase}
 ...
 
-Want me to start processing these? After 5-8 sources I'll pause for
-cross-referencing.
+Want me to start processing these? I'll cross-reference automatically after
+5-8 sources and keep going — you'll only hear from me if something needs your call.
 
 Valid responses:
   - `yes` or `all`           — process every candidate in priority order
@@ -368,46 +368,34 @@ Once the user gives an unambiguous choice, begin processing sources sequentially
 A one-line status per completed source is the right cadence (`✓ Source 39: AccessU 2022 Sponsors page — ACCESSIBLE, 6 findings, 0 contradictions`). The user does not want a progress bar; they want to see the work happening and to be able to interrupt at any point.
 
 ```
-Pausing after {N} sources to cross-reference before continuing.
+That's {N} sources — cross-referencing before I go on.
 
 What we've processed so far:
   {1-line summary per processed source — title and what it contributed}
-
-Why pause now: Cross-referencing at this point lets us spot patterns, contradictions,
-and gaps while the data is fresh — so remaining sources can fill holes instead of
-piling on what we already know.
-
-Want me to run cross-referencing now? ({M} candidates remaining after this.)
 ```
 
-If the user approves, run `/research-cross-ref`, then resume processing the remaining candidates with the same pause cadence.
+Then run `/research-cross-ref` and continue the batch — do not ask permission. Cross-ref at the checkpoint is analysis whose answer is always yes; running it is not a decision the user makes (see the stop list in `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`). What cross-ref *finds* may be a stop — a material contradiction hands control back — but the run itself proceeds. After it completes, resume processing the remaining candidates.
 
 If the user wants to skip a source during processing, skip it and move to the next — and append it to `research/discovery/exclusions.md` with a one-line reason (ask; record `no reason given` if declined). The skip is always honored; the record is never optional.
 
 If the user wants to review the full candidates file first or pick specific sources, respect that — show them the file path and let them direct which sources to process.
 
-### Decision points: always recommend, don't just list options
+### Decision points: proceed on the predictable, confirm only the genuine forks
 
-When presenting a choice to the user (process another source, move to gap assessment, run cross-ref, etc.), **state your recommendation and reasoning first**, then ask for confirmation. You have the context — use it.
+Not every choice is a stop. Split them (full stop list: `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`):
 
-Bad (options without opinion):
+**Predictable step — recommend in one line and proceed.** Running cross-ref at the checkpoint, moving to the gap check at end of batch, continuing to the next approved source. The answer is always yes and you can know the next step from the files, so acting is not skipping a decision — it's driving. Say what you're doing, do it. Do not end on "Sound good?"
+
+**Genuine fork — recommend with reasoning, then let the user decide.** A choice where the user's answer changes what happens and you could not have known it from the files: whether to chase a weak last candidate versus stop, whether a surfaced gap warrants different sources, whether a material contradiction resolves one way or the other. Here you state your recommendation and reasoning first — you have the context, use it — then hand it over.
+
+Good (a genuine fork — the recommendation carries, the decision is the user's):
 ```
-Want me to process the last source, or move to gap assessment?
-```
-
-Good (recommendation with reasoning):
-```
-I'd recommend skipping the last candidate (topstartups.io broader data) — we already
-have strong startup-specific salary data from the earlier topstartups.io source, and
-the 7 sources processed give solid coverage across all three research questions.
-
-My recommendation: move to gap assessment (/research-check-gaps) to confirm coverage
-before writing. If gaps surface, we can circle back to remaining candidates.
-
-Sound good?
+I'd skip the last candidate (topstartups.io broader data) — we already have strong
+startup-specific salary data from the earlier topstartups.io source, and the 7 processed
+give solid coverage across all three questions. Moving to the gap check unless you want it.
 ```
 
-Apply this pattern at every pause point — cross-ref checkpoints, end-of-candidates, and any mid-processing decision. The user can always override, but the agent should have an opinion.
+The test is the same one everywhere: **would the user's answer change what happens, and could you not have known it from the files?** If no, proceed. If yes, that's a fork — recommend and hand it over.
 
 ---
 
@@ -564,14 +552,17 @@ Fallback chain (per regulatory.md):
 
 Once the user has approved a batch of candidates for processing, you drive the workflow forward. You may pause ONLY at these points:
 
-1. **Mandatory cross-ref checkpoint.** When "Sources since last cross-reference" in STATE.md reaches 5 (or whatever interval the project has configured, typically 5–8). Stop and run `/research-cross-ref` before processing the next source. This is the only scheduled pause.
-2. **Real access failure.** A source cannot be fetched — domain block, paywall, 403, rendering issue, extraction returned stub content. Present the options defined in `process-source` step 1 and wait for the user.
-3. **Genuine strategic decision surfaces.** Something the user needs to decide because it changes the approach: a gap analysis result that suggests the phase needs different sources, a contradiction that needs resolution before more processing is useful, a discovery that the candidate list is wrong for the phase. These are rare.
-4. **End of the approved candidate list.** You finished the batch. Report what was processed, surface the cross-ref or gap-check status, and ask the user what's next.
+**First, what is NOT a pause: analysis running.** The cross-ref checkpoint (counter hits 5) and the end-of-batch gap check are not pauses — they run automatically, with a one-line heads-up, because their answer is always yes. What they *find* can be a pause (below); the run itself never is. Do not ask permission to cross-reference or to check gaps.
+
+You hand control back to the user only for:
+
+1. **Real access failure.** A source cannot be fetched — domain block, paywall, 403, rendering issue, extraction returned stub content. Present the options defined in `process-source` step 1 and wait for the user.
+2. **A material contradiction, or a genuine strategic fork.** A contradiction the (now-automatic) cross-ref surfaces that would move a finding; a gap result that says the phase needs different sources; a discovery that the candidate list is wrong for the phase. The analysis runs on its own — but when it turns up one of these, that is a real decision, and it stops. These are rare and load-bearing.
+3. **End of the approved batch.** You finished the last approved candidate. Do not simply ask "what's next" — run the gap check and present what it found (a real gap is a fork, per point 2), then let the user direct from there.
 
 A successful source completion — "processed, note written, no issues" — is NOT a pause point. A one-line status line is fine. An "OK to continue?" prompt is not.
 
-If you catch yourself wanting to ask "should I keep going?" after a clean source, the answer is yes. You were already told yes when the batch was approved.
+If you catch yourself wanting to ask "should I keep going?" after a clean source, the answer is yes. You were already told yes when the batch was approved. (Full stop list: `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`.)
 
 ---
 
@@ -586,7 +577,7 @@ If you catch yourself wanting to ask "should I keep going?" after a clean source
 | Querying channels not relevant to the research type | Pre-check step 4 reads the type-channel map first. Only execute channels in the matched Discovery Group — never execute all 6 channels by default. |
 | Overwriting prior discovery work on re-run | Pre-check step 7 checks for existing candidates file. If it exists, append with timestamp separator and deduplicate by URL. Never overwrite. |
 | Processing sources without user approval | Guardrail 2: present prioritized candidates and ask the user before processing. Once approved, process sequentially — but the transition from discovery to processing requires explicit user approval. |
-| Accountability avoidance — asking "should I continue?" after every clean source completion | Once the user approved the batch, you were told yes. Re-asking between successful sources is friction without value — it hands the steering wheel back to the user instead of holding the workflow. A clean source completion is a status line, not a decision point. Pause only at the points listed in "Legitimate Pause Points" — cross-ref checkpoint, real access failure, strategic decision, end of batch. Nothing else. |
+| Accountability avoidance — asking "should I continue?" after every clean source completion, or "should I cross-ref now?" at the checkpoint | Once the user approved the batch, you were told yes. Re-asking between successful sources, or asking permission to run cross-ref/gap-check, is friction without value — it hands the steering wheel back instead of holding the workflow. Cross-ref and the gap check run automatically (one-line heads-up, no permission); a clean source completion is a status line. Pause only at the real stops — a real access failure, a material contradiction or strategic fork the analysis surfaces, or the end of the approved batch. Nothing else. |
 | Silent channel failure with no status reporting | Print per-channel status lines during execution. Include all channels in summary table with explicit status — even channels that were skipped or errored. |
 | Exceeding API rate limits | Follow rate limits from playbooks: EDGAR max 5 req/s, OpenAlex 10 req/s with mailto (1 req/s without), Tavily and Firecrawl usage is credit-based. Space Bash curl calls with brief pauses if running multiple EDGAR queries. |
 | Missing User-Agent for SEC EDGAR | Guardrail 4: always include `User-Agent: ResearchAgent (contact@example.com)`. The value is defined in regulatory.md. |

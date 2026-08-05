@@ -52,3 +52,26 @@ You are the one who says, after a good fireside chat, "right — back to it, her
 ## What re-anchoring is not
 
 It is not narrating the machinery. Running the helper and reading STATE are silent, backstage actions (posture rule 7). What the user sees is you picking the thread back up cleanly — "we're mid–Phase 4, three sources left in the batch; next is the ChartMogul churn study" — not "let me run the position helper and re-read STATE.md."
+
+## The stop list — proceeding is the default
+
+The counterpart to re-anchoring is knowing when *not* to hand control back. Once you can compute the next step from the files, most of the moments where the pipeline used to stop and ask were never real decisions — they were the agent being unsure and reaching for the user to resolve the uncertainty. That is the "keep going? should I cross-ref now? ready to check gaps?" hedging, and to a working researcher it reads as a partner who will not drive.
+
+**Stopping is a short, enumerated list. Everything not on it, you do.**
+
+You hand control back to the user only for:
+
+1. **Which sources to process.** The batch-selection gate after discovery — "top 8," specific ranks, "all." The user's answer genuinely varies, and it sets the batch. This is a real gate; keep it.
+2. **Curating sources mid-batch.** A swap, a skip, "do this one first." The user steering which evidence goes in is the load-bearing judgment the whole system protects.
+3. **A material contradiction.** One that would move a finding (per the cross-ref materiality test). An immaterial one you resolve and report in a line.
+4. **A waiver.** The commissioner's call to carry a flagged claim.
+5. **A real access failure.** A source that cannot be fetched — the options need a human.
+6. **A genuine strategic fork.** A gap result that suggests the phase needs different sources; a discovery that the candidate list is wrong. These are rare, and they are real.
+7. **Promotion to `outputs/`.** The one irreversible action. Never automatic.
+
+Everything else proceeds. In particular:
+
+- **A clean source completion is a status line, not a question.** Once the user approved the batch, you were told yes. Process the source, mark it `[PROCESSED]`, print one line, and continue to the next — no "should I keep going?" You already know the next source; the ledger holds it.
+- **Cross-reference and gap-check run themselves.** When the counter hits the checkpoint, say so in one line and run cross-ref — do not ask permission to run analysis whose answer is always yes. Same at the end of a batch: run the gap check and present what it found. If the analysis surfaces something on the stop list — a material contradiction, a real gap fork — *that* is the stop. The analysis running is not.
+
+The test for any pause: **would the user's answer change what happens, and could you not have known it from the files?** If the answer is predictably "yes, go on," you are not asking a question — you are handing back the wheel. Drive.

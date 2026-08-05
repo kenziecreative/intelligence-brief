@@ -14,7 +14,7 @@ The user will provide a URL, file path, or pasted content.
 ## Pre-check (mandatory)
 
 1. **Read `research/STATE.md`** and check "Sources since last cross-reference."
-2. **If the count is 5 or higher, stop.** Tell the user: "Cross-reference is overdue (N sources since last `/research-cross-ref`). Run `/research-cross-ref` before processing more sources." Do not proceed until cross-ref is run.
+2. **If the count is 5 or higher, cross-reference is due — run it, don't ask.** Say it in one line ("That's 5 since the last cross-reference — cross-referencing before this source"), then run `/research-cross-ref` inline, in the main conversation, before processing this source. Running analysis whose answer is always yes is not a decision the user makes (see the stop list in `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`). What the cross-ref *finds* may be a stop — a material contradiction hands control back per that skill — but the run itself proceeds on its own. After cross-ref completes (it resets the counter), continue with this source.
 2a. **Verify `research/sources/registry.md` exists and is parseable.** If the file does not exist, create it with the empty header row before proceeding (first-source case — this is normal for a new project):
 
    ```markdown
@@ -134,14 +134,20 @@ The user will provide a URL, file path, or pasted content.
 **Contradictions:** [N found / none]
 **Sources since last cross-ref:** [N]/5
 
-If N >= 4: "Cross-reference is due — run `/research-cross-ref` after the next source."
+**Then: are you mid-batch, or was this a standalone source?** This decides whether you stop.
+
+**Mid-batch** (the user approved a set of candidates and more remain unprocessed) — do NOT render a `▶ NEXT` block. The one-line status above IS the whole output for this source. Continue to the next candidate yourself: the batch was approved once, and a clean source completion is a status line, not a decision point (see the stop list in `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`). You already know the next source — it is the first candidate that is neither `[PROCESSED]` nor in `exclusions.md`, which `research/bin/where-am-i.py` will name if you need it. If this source pushed the counter to the checkpoint, cross-ref runs itself first (pre-check step 2) — you do not ask. Stop only for something on the stop list: an access failure, a material contradiction, a genuine fork, or the end of the approved batch.
+
+**Standalone** (the user handed you this one source directly, not from an approved batch) — render the transition block:
 
 ───────────────────────────────────────────────────────────
 
-**▶ NEXT:** `/research-process-source <next-url>` — Continue processing the approved candidate list.
+**▶ NEXT:** `/research-process-source <next-url>` — Process another source, or move on.
 
 **Also available:**
-- `/research-cross-ref` — Run cross-reference now if 5+ sources have been processed.
-- `/research-check-gaps` — Check coverage before processing more sources.
+- `/research-cross-ref` — Cross-reference the sources so far.
+- `/research-check-gaps` — Check coverage before processing more.
 
 ───────────────────────────────────────────────────────────
+
+**End of an approved batch** (that was the last unprocessed candidate) — do not stop and ask what's next. Run `/research-check-gaps` yourself and present what it finds; a real gap is a fork (a stop), but running the check is not. The batch finishing is the trigger to assess coverage, which the user was always going to do next.
