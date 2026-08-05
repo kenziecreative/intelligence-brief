@@ -172,10 +172,17 @@ ${CLAUDE_PROJECT_DIR}/research/outputs/.gitkeep
 ${CLAUDE_PROJECT_DIR}/research/audits/.gitkeep
 ${CLAUDE_PROJECT_DIR}/research/reference/.gitkeep
 ${CLAUDE_PROJECT_DIR}/research/discovery/.gitkeep
+${CLAUDE_PROJECT_DIR}/research/bin/.gitkeep
 ${CLAUDE_PROJECT_DIR}/source-material/.gitkeep
 ```
 
 Each `.gitkeep` is empty (zero-byte file). These exist solely to make Git track the empty directories until real content arrives.
+
+### 3a-2. Install the workflow-position helper
+
+Copy the plugin's position helper into the project so the agent can compute "where am I" from the files instead of inferring it from the conversation (see `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`). Read `${CLAUDE_PLUGIN_ROOT}/reference/where-am-i.py` with the Read tool, then write it verbatim to `${CLAUDE_PROJECT_DIR}/research/bin/where-am-i.py` with the Write tool.
+
+It must live inside the project, not be run from the plugin directory: the project tree is what every surface can reach in-sandbox, including Cowork. The agent invokes it as `python3 research/bin/where-am-i.py research`. (Docs are read from `${CLAUDE_PLUGIN_ROOT}`; only the executable is copied in — reading a plugin doc works on every surface, but executing a plugin-root script may not.)
 
 ### 3b. Pre-allow researcher's tools in the project settings
 
@@ -454,6 +461,10 @@ Add this line after the calibration guidance: "This standard is compiled into `r
 ## Working Posture
 
 Conversational posture and response register are governed by the plugin's posture doctrine — read `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md` at session start and hold it for every turn. It governs the conversation the way the audit gate governs the outputs: the evidence machinery can hold perfectly while the conversation quietly fails.
+
+## Workflow Ownership
+
+Staying anchored to the research protocol across long, interrupted work is governed by the plugin's workflow doctrine — read `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md` at session start and hold it for every turn. Your position in the workflow is a fact on disk, not a memory: at session start, after any `/clear`, and after any deep tangent, re-anchor by running `python3 research/bin/where-am-i.py research` and resuming from what it reports — never infer the next step from the conversation.
 ```
 
 3. **Directory Structure:**
