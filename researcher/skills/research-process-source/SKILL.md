@@ -150,4 +150,4 @@ The user will provide a URL, file path, or pasted content.
 
 ───────────────────────────────────────────────────────────
 
-**End of an approved batch** (that was the last unprocessed candidate) — do not stop and ask what's next. Run `/research-check-gaps` yourself and present what it finds; a real gap is a fork (a stop), but running the check is not. The batch finishing is the trigger to assess coverage, which the user was always going to do next.
+**End of an approved batch** (that was the last unprocessed candidate) — do not stop and ask what's next. Run `/research-check-gaps` yourself and present what it finds; a real gap is a fork (a stop), but running the check is not. The batch finishing is the trigger to assess coverage, which the user was always going to do next. Do **not** check the `Collect` box here: the batch finishing gathers sources, but whether that is *enough* is the gap check's call — it owns the `Collect` state (adequate → checks it and advances the cycle; gaps → keeps it open and routes back to discovery).
