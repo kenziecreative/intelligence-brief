@@ -1,0 +1,9 @@
+{
+ "schema_version": "1.0",
+ "protocols": {
+  "1": {
+   "validator_sha256": "42d5f4223de75c204e3c96e2ec145a83a9899440f322c20618bc397180c3f6aa",
+   "schema_version": "1.0"
+  }
+ }
+}

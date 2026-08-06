@@ -296,6 +296,34 @@ blind spots; those are noted.
 
 ---
 
-*This map is the base for precise adjustment. Seam 0 and the Layer 4 judgment gaps (with the
-corrected fixes above) are the immediate next design chapter; the specialist-bench decisions
-(Layer 5) ride with them.*
+## Layer 9 — The corpus-level credibility gate (W7, mid-build)
+
+Corpus-level failures (completion criteria unmet, conclusions exceeding evidence, cross-phase
+reversals) are invisible to every per-claim gate above — a real project closed all-green and
+was not decision-ready. W7 adds an independent adversarial corpus review as a hard completion
+gate. Design: `dev/researcher/W7-corpus-review-design.md` (v3.1). Build status by stage:
+
+- **Stage 2 — contract spine: shipped, not wired.** The plugin now carries
+  `reference/corpus-review-protocol.md` (the frozen protocol v1: manifest/hash identities
+  with STATE split out of the corpus hash, receipt + ledger + completion-record schemas, the
+  four-op STATE transition and completion sentinels, trust contract, verdict logic, exit
+  codes), `reference/validate-corpus-review.py` (manifest / gate / transition /
+  check-completion + an embedded 35-case deterministic fixture battery),
+  `reference/review-protocol-contract.json` (the shipped trust anchor: expected validator
+  hash per protocol version), and templates for the project marker and the canonical
+  completion-criteria file. **No skill invokes any of this yet** — no behavior has changed;
+  gate blocking switches on only after the stage-3 corpus-scale fixtures pass (design §8).
+- **Stages 3–5 [proposed]:** runner skill + fixed review brief + Tier-2 `corpus-reviewer`
+  agent (dual samplers, union gate); closeout refactor + side doors + sentinel-as-claim
+  readers; live proof on the remediated engine corpus, then release.
+
+Ownership once wired (stage 3+): the **runner** is the only writer of review artifacts; the
+**validator** owns the completion verdict and the allowed STATE transition; reviewers are
+read-only samplers. Until then these rows stay out of the Layer 2/3 ownership tables — the
+tables describe enforced behavior, and stage 2 enforces nothing.
+
+---
+
+*This map is the base for precise adjustment. W7 (Layer 9) is the active build chapter; Seam 0
+and the Layer 4 judgment gaps (with the corrected fixes above) are the next design chapter
+after it; the specialist-bench decisions (Layer 5) ride with them.*
