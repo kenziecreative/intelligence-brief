@@ -1,113 +1,115 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-05 · **Session focus:** W7 stage 2 (the corpus-review contract
-spine) built, Codex-hardened, and committed on branch `researcher-w7`. Schemas frozen.
+**Last updated:** 2026-08-05 · **Session focus:** W7 stage 3 (reviewer implementation)
+built, Codex-hardened, and committed on branch `researcher-w7`. Corpus-scale goldens
+authored but **not yet run** — their pass is the stage-4 switch-on precondition.
 
 ## Where things stand
 
-- **researcher (1.7.0 released; W7 mid-build on branch `researcher-w7`)** — Stage 2 of the
-  W7 credibility gate is **done** at `a1b00e2`: the frozen protocol v1
-  (`researcher/reference/corpus-review-protocol.md` — now normative over the design doc on
-  mechanics), `reference/validate-corpus-review.py` (manifest / gate / transition /
-  check-completion / hash-self + 64-case embedded `--self-test`, all green),
-  `reference/review-protocol-contract.json` (trust anchor), and the marker +
-  completion-criteria templates. **Nothing is wired** — no skill invokes the validator; gate
-  blocking switches on only after stage-3 corpus-scale fixtures pass. No version bump yet;
-  release is stage 5.
-- **The map** — `dev/researcher/ARCHITECTURE.md` gained **Layer 9** (W7 build status:
-  stage 2 shipped-not-wired; stages 3–5 [proposed]). Keep syncing per its freshness rule.
-- **The design** — `dev/researcher/W7-corpus-review-design.md` §10 marks stages 1–2 done.
-  The shipped protocol spec supersedes it on mechanics; changes to frozen schemas from here
-  are a protocol version bump, not a patch.
-- **Other plugins** — unchanged (blueprint 0.3.0, goal-setting 0.2.1, intelligence-briefing
-  0.3.0, photo-generator 1.2.0, sage 0.2.0, strategist 0.4.1, thinkers 0.1.0).
+- **researcher (1.7.0 released; W7 mid-build on branch `researcher-w7`)** — Stage 3 is
+  **built** at `7135d13`: `skills/research-review-corpus/` + `commands/research/
+  review-corpus.md` (the runner — only writer of review artifacts; four-inputs coldness;
+  exclusive-create publishes, report before receipt; failed attempts as `.failed.json` in
+  both run kinds; fail-closed disclosure preflight), `reference/corpus-review-brief.md`
+  (spike base + C15 + required-evidence + frozen receipt deltas + read-nothing-outside-
+  the-manifest), `agents/corpus-reviewer.md` (Tier 2, opus, cold). Validator gained the
+  **additive `validate-receipt` mode** (runner preflight; battery 64→69; contract
+  regenerated — spec call recorded in protocol §9 as stage-3 additive). Corpus-scale
+  fixtures live in the eval pack: `eval/targets/researcher/fixtures/corpus-a` (known-bad,
+  7 seeded classes) and `corpus-b` (clean) — **neutral names on purpose** (blind-runner
+  leak defense); expectations live only in judge surfaces (coverage.md,
+  expected_behavior). Two golden `review-corpus` scenarios + Credibility Gate rubric
+  dimension + deterministic `review_receipt_validates` gate (new generic `command_exit0`
+  gate type in `eval/lib/run-gates.mjs`). Gate blocking still off; nothing calls the
+  validator at closeout yet.
+- **Codex stage-3 review** (fix-first: 5 blockers / 5 majors, all applied): clean fixture
+  made genuinely clean (2-source pricing, falsifiability section, Deskly dispositioned in
+  the consumption surface); eval coldness leak fixed via neutral fixture ids + adapter
+  honesty note (in-context Tier-2 play proves the mechanical seam, not coldness — stage 5
+  owns that); unavailable planned tier → failed attempt in both run kinds; validator
+  malformed-shape crash → exit 14; new CLI flags scoped to their mode; exclusive-create
+  artifact publishing; substantive-disclosure preflight; deterministic receipt gate; doc
+  status claims softened to built-pending-proof.
+- **The map** — `dev/researcher/ARCHITECTURE.md` Layer 9 updated (stage 3 built /
+  proof pending; stages 4–5 proposed). Design §10.3 marked built-pending-proof.
+- **Other plugins** — unchanged (blueprint 0.3.0, goal-setting 0.2.1,
+  intelligence-briefing 0.3.0, photo-generator 1.2.0, sage 0.2.0, strategist 0.4.1,
+  thinkers 0.1.0).
 
 ## Done this session
 
-- `a1b00e2` (branch `researcher-w7`) feat: W7 stage 2 contract spine — protocol spec,
-  validator + 64 fixtures, trust contract, templates; ARCHITECTURE Layer 9; design §10
-  stage-2 done marker.
-- **Second Codex adversarial review of the built spine** (fix-first: 9 blockers / 4 majors /
-  2 minors) — all applied before the freeze. The load-bearing fixes: `check-completion` now
-  re-derives the completion claim (record schema + seals + full receipt revalidation +
-  closure recomputation), completion **seals** give post-close immutability for receipts and
-  ledgers, C1 dispositions bind to material findings / waiver records, verdict asymmetry is
-  enforced both directions, set-id/tier identity bindings, plan↔canonical `criteria-drift`
-  check (exit 24), ledger value validation (cited rejections; class-matching exceptions),
-  transition scoped to the final phase's own checklist with Collect–Synthesize
-  preconditions and an interruption-resumable `--apply`.
-- Verification green after final edits: `--self-test` 64/64; `claude plugin validate`
-  (plugin + marketplace); `check-version-prefix` all agree.
+- `7135d13` (branch `researcher-w7`) feat: W7 stage 3 — runner skill + command, brief,
+  Tier-2 agent, validate-receipt mode (+5 self-test cases), corpus-scale fixtures +
+  scenarios + rubric dimension + receipt gate; all Codex findings applied pre-commit.
+- Verification green after final edits: `--self-test` 69/69; contract hash regenerated
+  and matching; both `claude plugin validate` runs; `check-version-prefix`; both fixture
+  manifests build cleanly; scenarios.jsonl parses; run-gates syntax + live gate test
+  (seeded receipt → `review_receipt_validates` OK).
+- Proven seam (dry-run): brief-schema reviewer result → runner step-8 merge →
+  `validate-receipt` exit 0 against `corpus-a`.
 
 ## In flight / uncommitted
 
-None. Working tree clean at `a1b00e2` on `researcher-w7`.
+STATE.md update only (this file). Working tree otherwise clean at `7135d13`.
 
 ## Next steps (in order)
 
-1. **W7 stage 3 — reviewer implementation + proof** (design §10.3, build contract §§2,3,7):
-   `skills/research-review-corpus/` runner + `commands/research/review-corpus.md`;
-   `reference/corpus-review-brief.md` from the spike base (`dev/researcher/spike/
-   review-brief.md`, already validated on both engines — add C15, required-evidence fields,
-   and the receipt-schema deltas frozen in protocol §3: coverage_outcome, criteria
-   dispositions with finding_ids/record, waivability advisory); `agents/corpus-reviewer.md`
-   (Tier 2); corpus-scale fixtures (known-bad + clean mini-corpora in the eval pack). The
-   runner must satisfy protocol §2 (never overwrite; failed attempts as `.failed.json`;
-   exactly four inputs to reviewers) and owns the disclosure-presence preflight (§4.2 note).
+1. **Run the two corpus-scale goldens** (`/eval-run --target researcher`, scenarios
+   `adv-review-corpus-a` + `rep-review-corpus-b`) — stage 3's proof half. Expect
+   iteration discipline (fresh iteration-N). A red golden here blocks stage 4.
 2. **W7 stage 4 — gate wiring** (design §6/§9): audit-claims closeout refactor (three
    stages), side doors, sentinel readers call `check-completion` and *report* it (Bash in
    skill + command frontmatter), init/re-init install (validator + marker + STATE header
-   line + criteria file + reviews/ scaffold; pre-allow `Bash(codex:*)`, `Bash(python3:*)`).
-3. **W7 stage 5 — live proof + release**: dual-tier review of the remediated engine corpus;
-   validator against the pre-remediation snapshot must block; Cowork path; Codex review of
-   the whole change; five surfaces + CHANGELOG + tag; merge `researcher-w7`.
+   line + criteria file + reviews/ scaffold; pre-allow `Bash(codex:*)`,
+   `Bash(python3:*)`); tools-guide.md Codex section rides here.
+3. **W7 stage 5 — live proof + release**: dual-tier review of the remediated engine
+   corpus; validator against the pre-remediation snapshot must block; Cowork path; Codex
+   review of the whole change; five surfaces + CHANGELOG + tag; merge `researcher-w7`.
 4. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`): W6a/b → W2 →
-   W3 → W1 → rest. Chips pending: audit-register cleanup (`task_73dee9b0`), Evidence-Against
-   eval golden (`task_c631be46` — do early, protects W2).
+   W3 → W1 → rest. Chips pending: audit-register cleanup (`task_73dee9b0`),
+   Evidence-Against eval golden (`task_c631be46` — do early, protects W2).
 
 ## Open questions / decisions pending
 
-- None blocking stage 3. Two recorded spec calls Kelsey may want to eyeball (both in
-  protocol §2.4/§4.1 with rationale): post-close **seals** instead of receipt
-  content-addressing/ledger hash-chaining (pre-close mutation assigned to the disclosed
-  manual-tamper class); `rejected-with-record` closes a finding when cited (design §5's
-  compressed sentence omitted it; §4 + spike lesson 6 require it).
+- **Spec call for Kelsey to eyeball:** the frozen protocol gained an *additive* validator
+  mode at stage 3 (`validate-receipt`, protocol §9 table + §10 battery note). Rationale:
+  protocol §2 requires the runner to treat incomplete reviewer results as failed
+  attempts, and the skills are forbidden from re-implementing contract rules — the mode
+  is the only way to satisfy both. No schema or verdict-logic change; self-tested.
+- Stage-2 spec calls unchanged (seals vs content-addressing; rejected-with-record as a
+  closure path — protocol §2.4/§4.1).
 
 ## Session knowledge worth keeping
 
-- **Work lives on branch `researcher-w7`** (stages 3–5 continue there; merge at stage-5
-  release). STATE.md commits ride the branch for now.
-- **Contract-hash sync rule:** any edit to `reference/validate-corpus-review.py` requires
-  regenerating `reference/review-protocol-contract.json` from
-  `python3 researcher/reference/validate-corpus-review.py hash-self` — the self-test's
-  valid-close fixtures pass either way (they synthesize their own contract), so the checker
-  for this is the shipped contract itself; add it to the release loop while W7 is open.
-- **Golden manifest hash** (`GOLDEN_CORPUS_HASH` in the validator's self-test) freezes the
-  canonicalization contract. If a change breaks that fixture, every fielded receipt is
-  orphaned: that's a protocol version bump, not a patch.
-- **Codex stage-2 review artifacts** were scratchpad-only (session temp dir; gone after
-  cleanup). All 15 findings are dispositioned: applied in the spine, or recorded as stage-3+
-  scope in protocol §10's explicit deferral list (runner refuse-to-overwrite, disclosure
-  preflight, Cowork/no-hooks path, sentinel readers reporting). Re-run brief recipe if ever
-  needed: point Codex at design v3.1 + the five shipped files, fix-first framing, last
+- **Work lives on branch `researcher-w7`** (stages 4–5 continue there; merge at stage-5
+  release). STATE.md commits ride the branch.
+- **Contract-hash sync rule** unchanged: any validator edit → regenerate
+  `review-protocol-contract.json` from `hash-self`; the shipped contract is the checker.
+- **Golden manifest hash** (`GOLDEN_CORPUS_HASH`) still freezes canonicalization; a break
+  is a protocol version bump.
+- **Codex from background Bash needs `< /dev/null`** — without it, `codex exec` dies
+  instantly (exit 1, empty streams) in detached runs. This run: ~9 min, clean exit;
+  review artifacts in the session scratchpad (gone after cleanup); re-run recipe: point
+  Codex at protocol + design §§2,3,7 + the stage artifacts, fix-first framing, last
   fenced JSON block.
-- Codex gotchas unchanged from last session (`--skip-git-repo-check`, `-s read-only`,
-  capture to file, 11–25m runs). This run: 22m, clean exit.
-- Engine corpus states for stage-3/5 fixtures and live proof (unchanged): repo
+- **Eval blind-runner surfaces:** the runner sees entry/setup/user_messages + adapter.md
+  — so fixture names, adapter prose, and working-dir names must never encode expected
+  outcomes; judge-only truth lives in coverage.md/rubric/expected_behavior/seed_notes.
+- Engine corpus states for stage-5 live proof (unchanged): repo
   `~/Projects/_shared/helloalice-research`, project
   `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated `93ec4fc`+;
   snapshot via `git archive`.
 - Stale seed in eval pack (`adv-override-disclosure`, old-form `/research:audit-claims`)
-  still pending a sweep when next touching the pack.
+  still pending a sweep; adapter.md also carries old-form `/research:init` mentions —
+  sweep together when next touching the pack.
 
 ## How to resume
 
-1. Read `AGENTS.md` (orientation), then this file. Confirm you're on branch
-   `researcher-w7`.
-2. For stage 3: read `researcher/reference/corpus-review-protocol.md` **first** (the frozen
-   contract the runner/agent/brief must satisfy), then design §§2,3,7 for intent, then
-   `dev/researcher/spike/review-brief.md` + `SPIKE-RESULTS.md` for the brief base and
-   measured reviewer behavior.
+1. Read `AGENTS.md` (orientation), then this file. Confirm branch `researcher-w7`.
+2. For the golden run: `eval/AGENTS.md` + `eval/reference/iteration-discipline.md`, then
+   `/eval-run --target researcher`. For stage 4: protocol §§6, 8, 9 first (frozen
+   contract), then design §6/§9, then `skills/research-audit-claims/SKILL.md` (the
+   closeout being refactored).
 3. Build discipline (standing): one change at a time; Codex-review before ship; eval
-   regression on changed skills; sync `ARCHITECTURE.md` in the same change; release = five
-   surfaces + CHANGELOG + checker + validate + tag `researcher-v<X.Y.Z>`.
+   regression on changed skills; sync `ARCHITECTURE.md` in the same change; release =
+   five surfaces + CHANGELOG + checker + validate + tag `researcher-v<X.Y.Z>`.
