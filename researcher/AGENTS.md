@@ -29,7 +29,7 @@ It is authoritative on relationships and principles, subordinate to the skills o
 
 ## Surface differences (Claude Code vs Cowork)
 
-Hooks (the `outputs/` gate and `PreCompact`) and the `.claude/settings.json` pre-allow are Claude Code only; in Cowork the gate holds structurally and the plugin detects the surface automatically. Plan generation in `/research-init` runs inline on both surfaces — subagent delegation is an optional Claude Code optimization, not required.
+Hooks (the `outputs/` gate and `PreCompact`) and the `.claude/settings.json` pre-allow are Claude Code only; in Cowork the gate holds structurally and the plugin detects the surface automatically. Plan generation in `/research-init` runs inline on all surfaces — full stop.
 
 ## v1.4 notes
 
@@ -54,8 +54,8 @@ Init scaffolds `research/` and `source-material/` from scratch (rooted at `${CLA
   - Each command in `commands/research/` is a thin wrapper that delegates to its matching
     `skills/research-*` engine — change behavior in the **skill**, not the wrapper, and keep
     the wrapper's `description` and the skill's trigger description in sync.
-  - Plan generation in `/research-init` runs **inline** on both surfaces; subagent delegation
-    is a Claude Code optimization, not a requirement. Keep Cowork and Claude Code identical.
+  - Plan generation in `/research-init` runs **inline** on all surfaces — never delegated to a
+    subagent. Keep Cowork and Claude Code identical.
   - The integrity spine (canonical-figures registry, claim graph, `research-integrity` agent)
     is load-bearing anti-drift — it tests sourcing and consistency, not prose. Preserve the
     registry and the post-write integrity pass; numbers must not drift across phases.

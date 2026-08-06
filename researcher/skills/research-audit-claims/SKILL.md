@@ -2,12 +2,15 @@
 name: research-audit-claims
 description: This skill should be used when the user asks to audit, fact-check, or verify the claims in a research draft before it ships, or to promote a draft to outputs (e.g. "audit this draft", "fact-check phase 2", "can this go to outputs"). Walks every claim against its cited source notes and, if it passes, logs the gate row and promotes the draft from research/drafts/ to research/outputs/.
 argument-hint: "[filepath]"
-model: opus
 ---
 
 # /research-audit-claims
 
 Audit a research draft for unsupported claims. If the audit passes, promote the draft from `research/drafts/` to `research/outputs/`. If it fails, the draft stays in `drafts/` until issues are fixed and the audit is re-run.
+
+**What this audit is for:** `outputs/` is the trusted tier — what reaches it is what the commissioner will act on. The audit's outcome is decision-readiness: every claim in a promoted output is one the commissioner can stand behind, traced to its evidence, at the confidence the evidence earns. Accuracy of representation is the bar; the audit never grades whether the research's conclusions are *right*, only whether they are honestly evidenced.
+
+**Severity, defined once:** **High** — the finding, uncorrected, could mislead a decision: an unsupported or misrepresented claim, a wrong or drifted figure, a hidden override or identity exposure, a missing required component, a false statement about the draft's own contents, an unwaived standard violation. **Moderate** — the claim's substance is supportable but its precision or context degraded: a narrowed range, a dropped qualifier, a cross-document inconsistency. **Low** — the record is imperfect but the reader is not misled: a missing attribution for a supportable claim, stale-but-flagged data. Classes without a listed severity take the severity this definition assigns to their effect; borderline cases take the higher severity.
 
 ## Input
 The user will provide a filepath to audit (should be a file in `research/drafts/`).
@@ -159,7 +162,6 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
 9. **Write audit report to `research/audits/<basename>-audit.md`**, where `<basename>` is the draft's filename with its `.md` extension stripped — `research/drafts/04-test-section.md` audits to `research/audits/04-test-section-audit.md`, not `04-test-section.md-audit.md`. Include: scorecard, pass/fail determination, findings table, list of claims that need correction, the confidence tier table (section name, tier, rationale) from step 8a, and a **`## Checks run this pass`** section listing every battery item B1–B12 with its result (`run — clean` or `run — N findings`; `n/a (first pass)` for B12 on a first audit). This section is what makes a skipped check visible at the time rather than three passes later, and lets a reader see that this pass ran the same battery as the last.
 
-   **After writing, verify the write succeeded.** Re-read the file path you just wrote and confirm it exists and contains the scorecard, findings table, and confidence tier table sections. If the read fails or any of those sections is missing, do not report "audit report written" — surface the write failure to the user with the exact path that failed, and do not advance to the pass/fail step until the write is confirmed.
 
 ## Pass/Fail Criteria
 
@@ -370,13 +372,13 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
   4. **Re-audit immediately only if every finding was citation-level. Otherwise hand the re-run back.**
 
      - **Every finding was citation-level** → re-audit now, in this same turn. Return to step 1 and run the audit **in full, from the top** — not a spot-check of the lines you just touched. The reason re-audit exists is that fixes can introduce new problems, so a partial re-check would defeat it. Report the fresh audit's verdict as this run's outcome: PASS runs the promotion sequence, FAIL reports per this branch.
-       - **Exactly one auto-re-audit per invocation.** If the second full audit also fails, stop and hand the re-run to the user, however the new findings classify. Two automated laps that both fail means the fixes are not converging, and a third will not change that.
+       - **Exactly one auto-re-audit per invocation.** If the second full audit also fails, stop and hand the re-run to the user, however the new findings classify. Two automated laps that both fail means the fixes are not converging; the re-run belongs to the user.
        - **Report both laps.** Say what the first audit found, what you fixed, and what the fresh audit concluded. Never present a second-lap PASS as though the draft passed clean the first time — the audit report and the debrief both record that fixes were required.
      - **Any substantive fix, or any judgment finding** → do not re-audit. Apply the fixes (step 2), then hand the re-run back so the user sees what moved before it can promote. Say only what is true of this audit:
-       Name what you fixed and what is left in plain terms, never which internal bucket each fell into (see "What stays backstage" — the citation-level/substantive/judgment triage is yours, not the user's vocabulary). Where a fix changed what the draft says, show the before → after so the user is reviewing the change, not taking your word that it was minor:
-       - Everything was settled from the notes, but something the reader would call a fact moved → "I've fixed these from the notes — [what changed]. Since that changes what the draft claims, take a look and re-run `/research-audit-claims <filepath>` to promote it."
-       - Some settled from the notes, some still need a decision → "I fixed what the notes settled — [what changed]. What's left needs your call — re-run `/research-audit-claims <filepath>` once you've decided."
-       - Nothing was settled from the notes (every finding is a judgment call — an audience-standard violation always is) → do NOT claim fixes were applied. End with: "Nothing here I can settle from the notes — these need your decision. Re-run `/research-audit-claims <filepath>` once they're resolved."
+       Name what you fixed and what is left in plain terms, never which internal bucket each fell into (see "What stays backstage" — the citation-level/substantive/judgment triage is yours, not the user's vocabulary). Where a fix changed what the draft says, show the before → after so the user is reviewing the change, not taking your word that it was minor. The turn — in your own words, matched to which of these is true — must convey:
+       - When fixes were applied and something the reader would call a fact moved: what changed, that it changes what the draft claims (so it deserves their look), and that re-running `/research-audit-claims <filepath>` is what promotes it.
+       - When some findings were fixed and others need a decision: what was settled from the notes, what remains theirs to decide, and the re-run instruction.
+       - When nothing could be settled from the notes (every finding a judgment call — an audience-standard violation always is): do NOT claim fixes were applied; say these need their decision, and give the re-run instruction.
 
      If the user's next message is a waiver rather than a re-run, follow "Waiver Arriving Between Audits" below: record it, then hand the re-run back to them. A waiver is a judgment resolution, so it never triggers the automatic lap.
 
@@ -418,7 +420,7 @@ When a `waive:` message arrives outside an audit run:
 
    After writing, re-read each of the three files and confirm the waiver text landed. If any write failed, say which one, with the path — do not report the waiver as recorded.
 
-4. **Confirm, and hand the re-run back.** Tell the user what was recorded and where, which findings it clears, which remain open, and that the draft has not moved. Then stop: `Recorded. Re-run /research-audit-claims <filepath> to verify the draft against the standing waiver.` Do not re-run the audit, do not promote, do not touch STATE.md. The next audit reads the waiver at step 4b and will not fail the draft on the waived finding.
+4. **Confirm, and hand the re-run back.** In your own words, the closing turn must convey: what was recorded and where it lives in the deliverable, which findings the waiver clears and which remain open, that the draft has not moved, and that re-running `/research-audit-claims <filepath>` verifies it against the standing waiver. Then stop. Do not re-run the audit, do not promote, do not touch STATE.md. The next audit reads the waiver at step 4b and will not fail the draft on the waived finding.
 
 ## Adjudicating Corpus-Review Findings (the ledger writes)
 
@@ -561,7 +563,7 @@ Only after the user is done reacting to the debrief, render the transition promp
 **Register (read `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md` — this is rule 7 applied to this skill, and it governs the FAIL turn as much as the PASS turn).** The audit's *findings* are the product; the audit's *plumbing* is not. Say the verdict, the findings, what changed in the draft, and what the user has to decide. Say nothing about the pipeline that got you there.
 
 Backstage, always — never spoken:
-- **Write verification.** You re-read every file you wrote; that is mandatory and silent. Never say "verified," "confirmed on disk," "all three writes re-read," or "(verified after write)."
+- **Write verification.** Where a step requires verifying a write (machine-parsed files, the waiver's three loci), do it silently. Never say "verified," "confirmed on disk," "all three writes re-read," or "(verified after write)."
 - **Internal step names and numbers.** No "step 4b," no "the M&L structural check," no "the FAIL sequence."
 - **Gate activation state.** Not "the standard gate is inactive for this project." Say the substance: "there's no audience evidence standard recorded for this project, so nothing here was checked against one."
 - **The mechanical/judgment taxonomy.** That split is how you decide what to fix; it is not vocabulary the user was taught. Say what you fixed and what needs their call, not which internal bucket each fell into.

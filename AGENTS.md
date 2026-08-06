@@ -16,7 +16,7 @@ Install: `/plugin marketplace add kenziecreative/kenzie-creative`, then `/plugin
 - **goal-setting** (0.2.1) — a business goal-setting method in two arcs: a six-stage Setup Arc + a five-cadence Ongoing Arc over a Markdown `goals/` state dir, with a three-goal-rule hard cap, an operating heartbeat (overdue routing, closeout gate, operated mitigations), immutable goal history, and a goal-formulation critic with memory. *Standalone.*
 - **intelligence-briefing** (0.3.0) — a daily/weekly environmental brief that triages the outside world into a self-contained HTML brief. *Triage-stream.*
 - **photo-generator** (1.2.0) — a guided photography director: plain-language scene → physics-aware Nano Banana Pro prompt (camera, lens, lighting, grade from a bundled reference library), optionally rendered via the Gemini API; batch, variations, and a refinement loop. *Standalone.*
-- **researcher** (1.8.0) — a structured, audited research system with a completion credibility gate (independent adversarial corpus review). *Standalone.*
+- **researcher** (1.9.0) — a structured, audited research system with a completion credibility gate (independent adversarial corpus review). *Standalone.*
 - **sage** (0.2.0) — meeting-transcript triage into a single living weekly round-up. *Standalone.*
 - **strategist** (0.4.1) — a seven-stage strategic-thinking loop over a 70-framework library, with a reasoning critic; outputs a working record plus a clean reader-facing brief. *Standalone.*
 - **thinkers** (0.1.0) — a reasoning counselor over a 243-pattern corpus (biases, fallacies, persuasion/manipulation tactics, bad-faith moves, strategies); five skills — identify, explain, practice, decide, spar — that name what's happening without over-applying high-stakes labels. *Standalone.*
@@ -78,6 +78,23 @@ It grades whether the plugin *behaved* well, never whether its recommendation wa
 Details and how to add a target: `eval/README.md` and `eval/AGENTS.md`. (Note: the
 `eval-runner`/`eval-judge` agents live in `.claude/agents/` and need a session reload to
 register after they're first added.)
+
+## Upskilling plugins (internal)
+
+A third QA lens, complementing authoring and runtime QA: **is a plugin's instruction set
+holding the model back?** The **`/upskill`** skill (`.claude/skills/upskill/`) audits the
+full reachable surface — instruction text (skills + their references, nested commands,
+agents, shipped agent templates, script-embedded prompts) *and* execution settings
+(`model:` pins, `allowed-tools`, hooks) — and sorts every instruction by source: intent,
+method, safety/governance, external contract (kept), or capability workaround (cut, or
+moved to deterministic mechanism). Key disciplines: **method is intent** — a plugin's
+deliberate stages and gates are the product, not scaffolding — and **seams matter** — a
+rule cut in one surface but mirrored in another isn't cut. Surface audits are the unit;
+a plugin verdict requires every surface plus an integration pass. Audit-only by default,
+writing `dev/<plugin>/constraint-audit.md` (per-surface sections, provenance header);
+applying rewrites is always plugin-scoped through the release loop, with a *baselined*
+`/eval-run` — a post-edit red golden is triaged for cause, never auto-blamed on the
+rewrite. Run it periodically as models improve.
 
 ## Cowork-safe HTML (for plugins that render HTML)
 

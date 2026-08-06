@@ -1,8 +1,7 @@
 ---
 name: research-discover
 description: This skill should be used when the user asks to find or discover sources for the current research phase (e.g. "find sources", "discover sources for this phase", "go find material on this"). Runs the phase's type-aware discovery channels through the 3-tier stack (Tavily, Firecrawl, built-in web), records the tier reached, and writes a reviewable candidate list — never auto-feeding process-source. Accepts an optional --channel filter.
-allowed-tools: [Bash, WebSearch, Read, Grep, Glob]
-model: sonnet
+allowed-tools: [Bash, WebSearch, Read, Grep, Glob, Write, Edit]
 ---
 
 # /research-discover
@@ -328,7 +327,7 @@ Top candidates for this phase (in priority order):
 ...
 
 Want me to start processing these? I'll cross-reference automatically after
-5-8 sources and keep going — you'll only hear from me if something needs your call.
+5 sources and keep going — you'll only hear from me if something needs your call.
 
 Valid responses:
   - `yes` or `all`           — process every candidate in priority order
@@ -353,7 +352,7 @@ Candidates the user explicitly declined during discovery or processing, with rea
 
 Ask once, briefly: "Quick reason for the skips? One line is fine — it goes in the exclusion ledger so gap analysis can see what was left out and why." Accept one reason covering all skips or per-candidate reasons; if the user declines to give one, record `no reason given`. Never argue with an exclusion and never require a "good" reason — the user's sovereignty over source selection is absolute; the ledger records it, nothing restricts it. Two boundaries on scope: candidates merely not yet selected (`top 5` leaves the rest unprocessed) are NOT exclusions — they remain in the candidates file as unprocessed; and a `no`/`review first` response is a deferral, not an exclusion.
 
-Once the user gives an unambiguous choice, begin processing sources sequentially using `/research-process-source` for each URL — **in the main conversation, as the main agent**. Track the count — after processing 5-8 sources, pause and present the cross-reference checkpoint:
+Once the user gives an unambiguous choice, begin processing sources sequentially using `/research-process-source` for each URL — **in the main conversation, as the main agent**. Track the count — the checkpoint triggers at 5 sources (the counter in `research/STATE.md`, enforced by `/research-process-source`'s pre-check and `research/bin/where-am-i.py`); pause there and present the cross-reference checkpoint:
 
 **Do not delegate source processing to a subagent.** Do not spawn the Agent tool to "run the batch in parallel," "work through the queue," or "process sources while I handle something else." Each `process-source` call reads, extracts, writes a note, updates `research/sources/registry.md`, increments the cross-reference counter in `research/STATE.md`, and may surface a contradiction or access failure the user needs to see. All of that has to land in the main agent's context — not a subagent's window that returns a summary 15 minutes later — so that:
 

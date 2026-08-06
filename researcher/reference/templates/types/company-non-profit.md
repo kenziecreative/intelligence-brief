@@ -40,7 +40,7 @@
 - Do not access proprietary databases unless the user provides credentials. 990 data is public and should be the financial foundation.
 - Flag the difference between program spending claims and independently verified impact.
 
-**Phase Pattern:** 8-10 phases (mission → leadership → programs → impact → financials (990) → funding → partnerships → capacity → risks → synthesis).
+**Typical shape (non-binding):** 8-10 phases (mission → leadership → programs → impact → financials (990) → funding → partnerships → capacity → risks → synthesis).
 
 **Success Criteria:**
 1. Financial analysis is grounded in 990 filings with at least 3 years of data when available

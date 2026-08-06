@@ -2,6 +2,51 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.9.0] — 2026-08-06
+
+The headroom release. A full constraint audit (/upskill) of every instruction surface
+sorted each rule by source — intent, method, contract, or capability workaround — and
+removed only the last kind. The plugin's gates, evidence disciplines, and voice rules
+are untouched; what's gone is the scaffolding that assumed a weaker model.
+
+### Changed
+- **All model pins removed** (ten skills, two agents). Every surface now runs on the
+  session's model instead of overriding it; receipts and audit artifacts continue to
+  record what actually ran.
+- **`/research-init` rebuilt around your research challenge.** Instead of choosing from
+  an 11-type menu, describe what you need to find out — init infers an internal research
+  profile (types are routing metadata now), derives phases from the work rather than
+  numeric type quotas, and proposes the plan for your review. Synthesis phases promise
+  exactly the deliverables you commissioned — no mandated report trio. The
+  audience-calibration anchors and the full context-management guidance are retained.
+- **Scripted turns became content contracts.** Where skills used to dictate exact
+  sentences (audit FAIL turns, waiver confirmations, the review runner's closing lines),
+  they now state what a turn must convey and leave the words to the model — with the
+  eval pack holding the substance floor. The register doctrine now covers
+  summarize-section's output (the one surface the original register fix missed).
+- Cross-reference checkpoint is uniformly **5 sources** everywhere, owned by the
+  counter mechanism.
+- Accepted gaps now have a home: acknowledge a gap once and `/research-check-gaps`
+  records it (your words, dated) and stops re-flagging it as actionable while keeping
+  it visible.
+- The claim audit states its purpose (decision-readiness) and carries explicit
+  High/Moderate/Low severity definitions.
+- Trigger-text accuracy sweep: six wrapper/description pairs corrected (wrong
+  filenames, a claimed write the skill never performs, missing tool declarations).
+
+### Removed
+- Blanket re-read-after-write rituals (incident-backed verifications — machine-parsed
+  JSON checks, the waiver's three-loci confirmation — remain).
+- The expert-persona line in the integrity agent; the plan-generation subagent option
+  (plan generation is inline on all surfaces).
+
+### Verified
+- Regression net: six goldens green (three multi-sampled 3×), two contract smokes, all
+  deterministic gates passing; judges reported no substance drift and, in places,
+  measurable improvement over the scripted forms. Full record in the eval pack's
+  iteration-20 scorecards. `/research-init` has no runtime eval scenario yet — its
+  rebuild ships behaviorally unverified pending one.
+
 ## [1.8.0] — 2026-08-06
 
 The credibility-gate release (W7). A completed project used to be whatever STATE.md said it
@@ -19,7 +64,7 @@ conversation — owns the completion verdict.
 - `reference/corpus-review-protocol.md` (frozen protocol v1) and
   `reference/validate-corpus-review.py` — canonical corpus manifest and hashes, receipt and
   ledger schemas, commissioner exceptions with validator-owned waivability, the exact
-  allowed STATE transition, post-close seals, distinct exit codes, and a 71-case embedded
+  allowed STATE transition, post-close seals, distinct exit codes, and a 74-case embedded
   self-test. The shipped trust contract pins the validator's hash.
 - Project completion now runs through the validator: `audit-claims`' final-phase closeout is
   a three-stage sequence (read-only preflight, gate verdict, `transition --apply` as the

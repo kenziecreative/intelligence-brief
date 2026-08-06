@@ -40,7 +40,7 @@
 - Counterpoints are not threats — they're opportunities. Addressing the strongest objection to your thesis makes you more credible, not less.
 - Do not over-research. Presentation research should be focused and efficient. If a point requires more than 3-5 sources to validate, it's either well-established (and you have what you need) or too contested (and you need to reframe the point).
 
-**Phase Pattern:** 5-8 phases, adapted by the plan generator based on how many claim clusters the user provides and the presentation context. Typical structure:
+**Typical shape (non-binding):** 5 to 8 phases, adapted by the plan generator based on how many claim clusters the user provides and the presentation context. Typical structure:
 - Phase 1: Nugget inventory — catalog all existing points, claims, and ideas the user has. Identify which need evidence, which need sharpening, and which might not survive scrutiny.
 - Phase 2: Audience and context research — who's in the room, what's the event, what's the format, what do they already know, what will they resist?
 - Phase 3-5: Evidence gathering — one phase per major claim cluster. Validate each point, find supporting data, identify the strongest examples.

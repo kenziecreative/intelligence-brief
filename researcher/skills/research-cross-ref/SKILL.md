@@ -1,7 +1,6 @@
 ---
 name: research-cross-ref
-description: This skill should be used when the user asks to find patterns, agreements, or contradictions across already-processed sources (e.g. "what patterns are emerging", "do my sources agree", "cross-reference the notes"). Scans every processed note for repeated claims, contradictions, supporting clusters, and outliers, and updates research/cross-references.md.
-model: opus
+description: This skill should be used when the user asks to find patterns, agreements, or contradictions across already-processed sources (e.g. "what patterns are emerging", "do my sources agree", "cross-reference the notes"). Scans every processed note for repeated claims, contradictions, supporting clusters, and outliers, and updates research/cross-reference.md.
 ---
 
 # /research-cross-ref

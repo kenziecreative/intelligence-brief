@@ -39,7 +39,7 @@ Use this at the end of a skill run when the agent is handing control back to the
 - `/research-process-source <url-or-file>` — Skip discovery and process a specific source you already have.
 - `/research-progress` — See where you are in the overall project before deciding.
 
-**What to expect:** Discovery will surface a prioritized candidate list for Phase 3's channels. After you approve, processing runs sequentially with a mandatory cross-reference checkpoint every 5-8 sources.
+**What to expect:** Discovery will surface a prioritized candidate list for Phase 3's channels. After you approve, processing runs sequentially with a mandatory cross-reference checkpoint every 5 sources.
 
 ───────────────────────────────────────────────────────────
 ```

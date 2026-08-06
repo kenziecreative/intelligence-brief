@@ -36,7 +36,7 @@
 - Distinguish painkillers from vitamins. Tag every PAIN finding as 🔥 Painkiller or 💊 Vitamin based on emotional intensity and solution-seeking behavior. Do not present vitamins as urgent opportunities. A vivid complaint is not the same as a problem someone would pay to solve.
 - The tier system is about focus, not importance. Tier 4 (ignore) is as valuable as Tier 1 (primary focus). Knowing what not to pursue enables focus on what matters. Be explicit about what to ignore and why.
 
-**Phase Pattern:** 6-8 phases, adapted by the plan generator based on audience complexity and community landscape. Typical structure:
+**Typical shape (non-binding):** 6-8 phases, adapted by the plan generator based on audience complexity and community landscape. Typical structure:
 - Phase 1: Audience definition and watering hole mapping (who are they, where do they gather, platform-by-platform inventory with notes on what each platform reveals)
 - Phase 2: Multi-source observation and labeling (systematic reading across communities, tagging every observation as PAIN/DELIGHT/RECOMMENDATION/QUESTION/JARGON, capturing exact quotes with source links)
 - Phase 3: Pain analysis and painkiller/vitamin classification (group pains by theme, classify each as painkiller or vitamin, identify workaround patterns that signal unmet demand)

@@ -1,6 +1,6 @@
 ---
 name: research-process-source
-description: This skill should be used when the user gives a URL, PDF, or document and asks to process, ingest, or take notes on it (e.g. "process this source", "add this URL to my research", "take notes on this PDF"). Ingests the source, extracts claims with evidence-quality tags, registers it in the source registry, and writes a per-source note under research/sources/.
+description: This skill should be used when the user gives a URL, PDF, or document and asks to process, ingest, or take notes on it (e.g. "process this source", "add this URL to my research", "take notes on this PDF"). Ingests the source, extracts claims with evidence-quality tags, registers it in the source registry, and writes a per-source note under research/notes/.
 argument-hint: "[url-or-file-path]"
 ---
 

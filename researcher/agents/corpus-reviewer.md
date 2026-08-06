@@ -22,7 +22,6 @@ description: |
   assistant: "Dispatching the corpus-reviewer agent as the sole sampler; its receipt will record the single-sampler composition so the close is visible, never silent."
   <commentary>Tier 2 is a real sampler in its own right, not a degraded fallback — the spike measured strongly complementary recall.</commentary>
   </example>
-model: opus
 color: red
 tools:
   - Read

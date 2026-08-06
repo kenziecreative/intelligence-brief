@@ -37,7 +37,7 @@
 - Do not over-index on marketing claims. Verify features through documentation, reviews, or direct testing when possible.
 - If competitive intelligence requires product access or insider knowledge, flag it in `gaps.md`.
 
-**Phase Pattern:** 6-8 phases (market definition → competitors → features → positioning → pricing → trends → white space → synthesis).
+**Typical shape (non-binding):** 6-8 phases (market definition → competitors → features → positioning → pricing → trends → white space → synthesis).
 
 **Success Criteria:**
 1. Every identified competitor has been profiled with verified data

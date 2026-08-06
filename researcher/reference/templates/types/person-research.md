@@ -42,7 +42,7 @@
 - If the person has a thin public footprint, say so. Do not fill gaps with inference. A short report with clearly marked gaps is more valuable than a long report padded with speculation.
 - This is research, not opposition research. The goal is an accurate picture, not a case for or against the person.
 
-**Phase Pattern:** 6-10 phases, adapted by the plan generator based on the person's public profile depth and the reason for research. Typical structure:
+**Typical shape (non-binding):** 6-10 phases, adapted by the plan generator based on the person's public profile depth and the reason for research. Typical structure:
 - Phase 1: Career arc and identity (establish the timeline, roles, companies, transitions)
 - Phase 2: Expertise validation (published work, patents, demonstrated outcomes, peer recognition)
 - Phase 3: Track record deep dive (what did they actually do at each major role? outcomes vs. claims)

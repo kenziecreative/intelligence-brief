@@ -2,7 +2,6 @@
 name: research-summarize-section
 description: This skill should be used when the user asks to draft, synthesize, or write up a section from the sources collected so far (e.g. "draft the phase 2 section", "synthesize what we have on pricing", "write up the findings"). Pulls claims and evidence from relevant processed sources into a draft under research/drafts/ and stages it for the /research-audit-claims gate — never writes straight to outputs/.
 argument-hint: "[section-name-or-phase-number]"
-model: opus
 ---
 
 # /research-summarize-section
@@ -15,7 +14,7 @@ The user will provide a section name or phase number to summarize.
 ## Pre-checks (mandatory)
 
 Before writing anything, verify:
-1. **`research/cross-reference.md`** has been updated within the last 5-8 sources. If it hasn't, stop and run `/research-cross-ref` first.
+1. **`research/cross-reference.md`** has been updated within the last 5 sources (the checkpoint counter in STATE.md). If it hasn't, stop and run `/research-cross-ref` first.
 2. **`research/gaps.md`** has been updated for this phase. If it hasn't, stop and run `/research-check-gaps` first.
 3. **`research/cross-reference.md` has no unresolved core contradictions.** Read the Contradictions section. If any contradiction classified as "core" (directly addresses a current phase question) has status "unresolved," stop and tell the user:
 
@@ -192,7 +191,16 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
 
 ## Output
 
-Confirm the draft was written to `research/drafts/`, integrity-checked, and summarize the key findings. Then render the transition prompt (format defined in `${CLAUDE_PLUGIN_ROOT}/reference/prompt-templates-runtime.md`):
+**Register (read `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md` — it governs this
+turn).** The findings are the product; the pipeline is not. Present what the draft
+establishes — the key findings, in the analyst's own words, at the confidence the
+evidence earns — and what needs the user's attention (open assumptions logged, lopsided
+sections, the counter-evidence status). Say nothing about the machinery: not the file
+path written, not that the integrity check ran, not which steps executed — a reader
+should learn what the research found, not what the process did. (The draft's location
+and the audit gate are already carried by the transition prompt below.)
+
+Then render the transition prompt (format defined in `${CLAUDE_PLUGIN_ROOT}/reference/prompt-templates-runtime.md`):
 
 ───────────────────────────────────────────────────────────
 

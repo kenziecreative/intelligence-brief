@@ -1,7 +1,6 @@
 ---
 name: research-check-gaps
 description: This skill should be used when the user asks where the research is thin, what's missing, or what to chase next across the whole project (e.g. "where are the gaps", "what's not covered yet", "what should I research next"). Walks every phase, cross-references questions against processed sources, and updates research/gaps.md with covered, thin, and unaddressed areas.
-model: opus
 ---
 
 # /research-check-gaps
@@ -75,6 +74,23 @@ Assess research coverage against the research plan and identify what's missing.
    - [candidate title] — discovered [date], never selected for processing. [If the snippet suggested counter-evidence: "Appeared to carry an opposing view — this question's coverage was assessed without it."]
    ```
 
+7b. **Accepted gaps — record the acknowledgment, stop re-flagging.** A gap is
+   *accepted* when the commissioner has explicitly acknowledged carrying it (in
+   conversation now, or on a prior run). Acceptance is recorded where the gap lives, in
+   `research/gaps.md`, as a disposition line under the gap:
+
+   ```
+   Accepted (commissioner, YYYY-MM-DD): "<their words — never yours>"
+   ```
+
+   From then on this skill reports the gap in its own short **Accepted gaps** list —
+   visible, with its recorded reason, never silently dropped — but stops counting it as
+   actionable: it does not block a coverage-adequate verdict and is not re-surfaced as
+   an open hole every run. Acceptance is per-gap and lapses if the gap materially widens
+   (new questions land in its area) — then it returns to open with a note saying why.
+   Never author the acceptance rationale, and never treat "documented" as "accepted":
+   only the commissioner's recorded acknowledgment moves a gap to this list.
+
 8. **Update `research/STATE.md`** — set last gap check date to today, **then update `Next Action` to the true next step** — the same command your context-sensitive ▶ NEXT block renders below (`/research-discover` or `/research-process-source <url>` if gaps remain; `/research-summarize-section` if coverage is adequate). Never leave `Next Action` pointing at the gap check that just ran: a session resuming after a clear reads this field, and a stale value sends it to the wrong step. **Reconcile the cycle state to the coverage verdict — the gap check owns this, and nothing else marks `Collect` done.** The batch finishing gathers sources; whether that is *enough* is this skill's call, so it owns the `Collect` box.
    - **Coverage adequate** (every question clears both tests): the phase's evidence gathering is complete. Ensure `Collect`, `Connect`, and `Assess` are all checked in `Current Phase Cycle`, and set `Cycle step` to `Synthesize (4 of 5)`.
    - **Gaps remain:** the phase is still gathering — it cannot be past Collect. Ensure `Collect` and `Assess` are *unchecked*, and set `Cycle step` to `Collect (1 of 5)`.
@@ -101,7 +117,8 @@ Assess research coverage against the research plan and identify what's missing.
 |---|---|
 | Declaring coverage when sources only tangentially mention a question | For each question, identify the specific claim or data point in the source note that answers it. If you cannot point to a specific passage, the question is not addressed. |
 | Confusing quantity of sources with quality of coverage | Three sources that all repeat the same press release provide one data point, not three. Count independent evidence, not source count. |
-| Marking a phase complete when gaps are documented but unresolved | "Documented gap" is not "acceptable gap." A gap is acceptable only when the user has explicitly acknowledged it or no public sources exist after a thorough search. |
+| Marking a phase complete when gaps are documented but unresolved | "Documented gap" is not "acceptable gap." A gap is acceptable only when the user has explicitly acknowledged it (recorded per step 7b) or no public sources exist after a thorough search. |
+| Re-flagging a gap the commissioner already accepted — or silently dropping it | An accepted gap (step 7b) moves to the Accepted gaps list: reported with its recorded rationale every run, never counted as an open hole, never invisible. Re-litigating it wastes the commissioner's attention; hiding it erases their decision. |
 | Missing thin coverage on critical questions | Flag any question answered by only one source. Single-source coverage on a phase's central question is a gap, not partial coverage. |
 | Inflating coverage with Adjacent matches | Adjacent sources address related topics, not the specific question. A question about "AWS market share" with 3 sources about "cloud market size" has 0 Direct sources — coverage is Not Started, not Complete. |
 | Counting non-independent sources as separate evidence | Check origin_chain for each source. Three articles citing the same Gartner report are one independent data point, not three. Use the independence map. |

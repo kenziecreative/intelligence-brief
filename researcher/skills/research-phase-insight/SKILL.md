@@ -2,7 +2,6 @@
 name: research-phase-insight
 description: This skill should be used when the user asks how the current phase is going — which questions are answered, which are thin, what's emerging (e.g. "how's this phase looking", "which questions are still weak", "what's coming together"). Reads the active phase's questions, scans processed sources for coverage, and reports strong, thin, and unaddressed questions plus emerging patterns.
 allowed-tools: Read, Grep, Glob
-model: sonnet
 ---
 
 # /research-phase-insight

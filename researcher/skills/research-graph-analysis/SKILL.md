@@ -2,7 +2,6 @@
 name: research-graph-analysis
 description: This skill should be used when the user asks how much to trust the research, which claims are load-bearing, or where the evidence is weakest (e.g. "what's the research resting on", "where is my evidence fragile", "cheapest way to raise confidence"). Analyzes the claim graph for load-bearing claims, fragile foundations, and the cheapest evidence upgrades — decision support, not output.
 allowed-tools: Read, Grep, Glob
-model: sonnet
 ---
 
 # /research-graph-analysis

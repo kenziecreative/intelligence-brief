@@ -67,9 +67,11 @@ Arguments (both optional):
   lives in scratch, outside the project, where it cannot read as a partial adoption).
   Tell the user, in one sentence, that this project has not adopted review protocol v1,
   the review will still run and produce receipts, and the completion gate cannot consume
-  them until the project adopts (`/research-init upgrade`). If the surface cannot execute
-  the scratch copy either, stop with that finding: adoption is the prerequisite, and
-  `/research-init upgrade` is the remedy.
+  them until the project adopts (`/research-init upgrade`). **That sentence carries no
+  mechanics** — no file paths, no marker or STATE-line names, no mention of where the
+  validator ran from; the fallback plumbing is backstage like all other machinery. If
+  the surface cannot execute the scratch copy either, stop with that finding: adoption
+  is the prerequisite, and `/research-init upgrade` is the remedy.
 - Run the validator's `--self-test` once. If it does not end green, stop: the validator is
   damaged; report the failure and do not review.
 - `research/STATE.md` must exist (its absence is a manifest error — this is not a research
@@ -295,24 +297,31 @@ vocabulary, in this order:
   and any `insufficient-coverage` or notably partial checks named plainly. **A check that
   did not apply is named to the user with its reason** — never absorbed into "everything
   was checked" or "nothing was skipped," which overstates coverage in the exact sentence
-  asserting honesty. Internal vocabulary stays internal — say "the reviewer couldn't see
-  enough to assess X," not `insufficient-coverage`; say "the study-design check didn't
-  apply — this corpus proposes none," not "C7 n/a."
+  asserting honesty. Concretely: words like "full coverage," "complete," or "nothing it
+  couldn't assess" are permitted **only when every single check ran with complete
+  coverage**; the moment any check is n/a or partial, the coverage line must say so and
+  why ("one check — instrument validity — didn't apply: this corpus proposes no study"),
+  in the same breath as the rest. Internal vocabulary stays internal — say "the reviewer
+  couldn't see enough to assess X," not `insufficient-coverage`; say "the study-design
+  check didn't apply — this corpus proposes none," not "C7 n/a."
 - **Failed attempts**, if any, with their cause and what would fix a re-run.
 - **What happens next — always, findings or none.** Short sentences; two ideas, both
-  mandatory in substance:
+  mandatory in substance — and both **unconditional**: a clean run still states the
+  closure paths in brief and still names the two classes no exception can ever cover;
+  "nothing needs adjudication" describes the findings, it does not waive the close:
   1. *Closure paths:* a material finding blocks the completion gate until it is fixed
      (which changes the corpus, so a fresh review follows), rejected with a cited record
      in the resolution ledger, or accepted by the commissioner as a recorded exception —
      and a missing promised deliverable or a real internal contradiction can never be
      excepted.
-  2. *The ready sentence — never omitted, never paraphrased into gate-framing:* "One
-     sampler's ready earns nothing by itself — the gate opens only on valid receipts
-     plus zero open material findings." On a clean run this is how the reader knows
-     `ready` did not just open the gate; skipping it, or replacing it with "nothing
-     blocks the gate," fails this skill. The same rule covers the whole turn: no
-     sentence anywhere in it asserts the gate's state ("nothing here blocks anything,"
-     "the gate would pass") — the gate speaks only through the validator.
+  2. *The ready rule — never omitted:* the turn must convey, in your own words, that
+     one sampler's `ready` earns nothing by itself — the gate opens only on valid
+     receipts plus zero open material findings, and its verdict belongs to the
+     validator. On a clean run this is how the reader knows `ready` did not just open
+     the gate. The semantic half is absolute for the whole turn: no sentence anywhere
+     in it may assert the gate's state ("nothing blocks the gate," "nothing here blocks
+     anything," "the gate would pass") — that inversion is the observed failure this
+     rule exists to prevent, whatever the wording.
 
 Backstage, never narrated: the scratch staging, candidate assembly, validator invocations
 and exit codes, identity computation, existence checks, write verification. Onstage: the
