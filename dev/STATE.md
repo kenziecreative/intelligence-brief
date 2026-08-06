@@ -1,9 +1,10 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-06 · **Session focus:** W7 stages 3 AND 4 built, proven, and
-committed on branch `researcher-w7`. Stage 3's corpus-scale goldens green (iterations
-10–18); stage 4 (gate wiring) Codex-hardened with the audit-golden regression green
-(iteration 19). Next: stage 5 (live proof + release).
+**Last updated:** 2026-08-06 · **Session focus:** W7 COMPLETE. Stage 5 shipped:
+live dual-tier proof on the engine corpus (pre-remediation blocked exit 12; remediated
+set → gate exit 15 with the 8-finding union), whole-change Codex integration review
+applied (3 blockers/4 majors/2 minors), released as **researcher v1.8.0**, merged to
+main, tagged `researcher-v1.8.0`. NOT yet pushed — that's Kelsey's keystroke.
 
 ## Where things stand
 
@@ -43,7 +44,19 @@ None. Working tree clean at `562bcbd`.
 
 ## Next steps (in order)
 
-1. **W7 stage 5 — live proof + release:** dual-tier review (`/research-review-corpus
+0. **Push** (Kelsey): `git push origin main researcher-v1.8.0` publishes v1.8.0 to the
+   marketplace. Also Cowork-side verification of the review/closeout surfaces (build
+   model: each surface tested by the tool that sees it) — structural checks done here
+   (no hook dependencies; plain python3), live Cowork pass still open.
+0a. **Kelsey's engine corpus has 8 open material findings** from the live dual-tier
+   review (t1: 6 — incl. OD-6 ownership contradiction, $29 floor-vs-top residue,
+   WTP-spec rule conflict; t2: 2 — stale 05a scope-limitation paragraph, 11:353
+   floor-of-class reintroduction; full receipts/reports in the session scratchpad's
+   live-run/ + live-remediated/research/reviews/, which are SESSION-TEMPORARY — the
+   durable record is this list + the readout). To act on them properly: in the real
+   repo, `/research-init upgrade` then `/research-review-corpus final`, then adjudicate
+   via the new ledger procedure in audit-claims.
+1. **(retired) W7 stage 5 — done:** dual-tier review (`/research-review-corpus
    final`, t1+t2) of the remediated engine corpus (repo
    `~/Projects/_shared/helloalice-research`, project
    `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated
