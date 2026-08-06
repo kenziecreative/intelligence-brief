@@ -1,115 +1,113 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-05 · **Session focus:** researcher v1.7.0 shipped (audit battery +
-fixes); operating-model map built + adversarially hardened; the full post-1.7.0 plan approved;
-W7 (corpus-review credibility gate) designed to a build contract via Codex review loop + a
-live vertical spike.
+**Last updated:** 2026-08-05 · **Session focus:** W7 stage 2 (the corpus-review contract
+spine) built, Codex-hardened, and committed on branch `researcher-w7`. Schemas frozen.
 
 ## Where things stand
 
-- **researcher (1.7.0)** — shipped, tagged `researcher-v1.7.0`, on main. This release: the
-  enumerated audit check battery B1–B12 (stops serial audit re-discovery; diagnosed from a
-  live 9-phase project), three doc/routing contradiction fixes, fix-hygiene rule. Ship-gate:
-  3/3 audit-entry goldens PASS across 7 sampled runs (eval iteration-9), 0 gate failures.
-  Battery's *positive* proof (collapsing multi-pass audits) still needs a live audit — watch
-  opportunistically, not a gate.
-- **The map** — `dev/researcher/ARCHITECTURE.md` (v2): the plugin's end-to-end operating
-  model. Corrected after an adversarial Codex review; behavioral claims labeled
-  enforced/observed/inferred/proposed; Seam 0 (note fidelity) added. **Keep it in sync with
-  every researcher change — same-change updates, per its own freshness rule.**
-- **The plan** — approved, in `~/.claude/plans/shimmying-sauteeing-storm.md`: two tiers
-  (T1 per-claim seams W1–W5; T2 corpus-level W6–W7), sequenced W7 → W6a/b → W2 → W3 → W1 →
-  rest. Driven by a Codex corpus review of the completed engine-vs-harness pricing project
-  that found it not decision-ready despite all gates green.
-- **W7 (active workstream)** — designed to a build contract:
-  `dev/researcher/W7-corpus-review-design.md` **v3.1**. Lineage: v1 → Codex "rethink" → v2 →
-  Codex "rethink again" → **vertical spike** (both reviewer tiers ran the fixed 14-check brief
-  against the real known-bad engine corpus snapshot; both produced parseable receipts,
-  not-ready verdicts, strongly complementary findings — see `dev/researcher/spike/`) → v3 →
-  Codex targeted verification "fix-first" (3 spec defects) → v3.1 with fixes applied.
-  **Stage 1 (spike) done. Next: stage 2, the contract spine.**
-- **Other plugins** — unchanged this session (blueprint 0.3.0, goal-setting 0.2.1,
-  intelligence-briefing 0.3.0, photo-generator 1.2.0, sage 0.2.0, strategist 0.4.1,
-  thinkers 0.1.0).
+- **researcher (1.7.0 released; W7 mid-build on branch `researcher-w7`)** — Stage 2 of the
+  W7 credibility gate is **done** at `a1b00e2`: the frozen protocol v1
+  (`researcher/reference/corpus-review-protocol.md` — now normative over the design doc on
+  mechanics), `reference/validate-corpus-review.py` (manifest / gate / transition /
+  check-completion / hash-self + 64-case embedded `--self-test`, all green),
+  `reference/review-protocol-contract.json` (trust anchor), and the marker +
+  completion-criteria templates. **Nothing is wired** — no skill invokes the validator; gate
+  blocking switches on only after stage-3 corpus-scale fixtures pass. No version bump yet;
+  release is stage 5.
+- **The map** — `dev/researcher/ARCHITECTURE.md` gained **Layer 9** (W7 build status:
+  stage 2 shipped-not-wired; stages 3–5 [proposed]). Keep syncing per its freshness rule.
+- **The design** — `dev/researcher/W7-corpus-review-design.md` §10 marks stages 1–2 done.
+  The shipped protocol spec supersedes it on mechanics; changes to frozen schemas from here
+  are a protocol version bump, not a patch.
+- **Other plugins** — unchanged (blueprint 0.3.0, goal-setting 0.2.1, intelligence-briefing
+  0.3.0, photo-generator 1.2.0, sage 0.2.0, strategist 0.4.1, thinkers 0.1.0).
 
 ## Done this session
 
-- `f60fc5c` fix(researcher): three doc/routing contradictions (integrity promise;
-  commonplace reader; Evidence-Against → synthesis).
-- `5e8d803` feat(researcher): audit check battery B1–B12.
-- `d5a8212` docs: ARCHITECTURE.md map + AGENTS pointer.
-- `23e2d00` release 1.7.0 (five surfaces synced, CHANGELOG, checker green) → merged, tagged,
-  pushed. Branch `researcher-fixes` pruned after merge.
-- Eval iteration-9 (audit goldens, regression scope): all PASS. Scorecard:
-  `eval/targets/researcher/_eval/iteration-9/scores.md` (gitignored, local only).
-- `4e3cf15` docs: W7 design v3.1 + spike artifacts.
-- Branch hygiene (session start): `researcher-tweaks` deleted local+remote after 1.6.0 merge;
-  `convergence/researcher` + `convergence/strategist` branches AND their build worktrees
-  removed (clean, merged); `convergence/goal-setting` retained (10 unmerged commits).
-- **Process adopted:** Codex CLI as adversarial reviewer inside our own build loop
-  (design-review before build; change-review before ship). It caught real defects at every
-  application: 2 reversed write-owners in the map, 4+4 design blockers, 3 spec defects.
-- Session model switched to Fable 5 mid-session (Kelsey).
+- `a1b00e2` (branch `researcher-w7`) feat: W7 stage 2 contract spine — protocol spec,
+  validator + 64 fixtures, trust contract, templates; ARCHITECTURE Layer 9; design §10
+  stage-2 done marker.
+- **Second Codex adversarial review of the built spine** (fix-first: 9 blockers / 4 majors /
+  2 minors) — all applied before the freeze. The load-bearing fixes: `check-completion` now
+  re-derives the completion claim (record schema + seals + full receipt revalidation +
+  closure recomputation), completion **seals** give post-close immutability for receipts and
+  ledgers, C1 dispositions bind to material findings / waiver records, verdict asymmetry is
+  enforced both directions, set-id/tier identity bindings, plan↔canonical `criteria-drift`
+  check (exit 24), ledger value validation (cited rejections; class-matching exceptions),
+  transition scoped to the final phase's own checklist with Collect–Synthesize
+  preconditions and an interruption-resumable `--apply`.
+- Verification green after final edits: `--self-test` 64/64; `claude plugin validate`
+  (plugin + marketplace); `check-version-prefix` all agree.
 
 ## In flight / uncommitted
 
-None. Working tree clean at `4e3cf15`.
+None. Working tree clean at `a1b00e2` on `researcher-w7`.
 
 ## Next steps (in order)
 
-1. **W7 stage 2 — the contract spine.** Build per `dev/researcher/W7-corpus-review-design.md`
-   §§1,4,5 (v3.1): canonical manifest/hash spec (STATE excluded from `decision_corpus_hash`;
-   separate `state_hash` + pre/post comparison rules), receipt + resolution-ledger +
-   exceptions-ledger schemas, protocol contract (expected validator hash shipped in plugin;
-   STATE-resident discriminator), `validate-corpus-review.py` + its deterministic fixtures
-   (§8 list). Schema freezes only at stage end. No gate wiring yet.
-2. **W7 stages 3–5** per the design: runner + brief (base text:
-   `dev/researcher/spike/review-brief.md`, already validated on both engines) + Tier-2 agent +
-   corpus-scale fixtures; then gate wiring (closeout refactor, side doors, sentinel readers,
-   permissions — §9 touch list is complete); then live proof against the remediated engine
-   corpus + release. Codex-review the built change before ship; sync ARCHITECTURE.md in the
-   same change.
-3. **Then the plan's queue:** W6a/b remainder → W2 (saturation/stop) → W3 (significance at
-   synthesis) → W1 (note fidelity) → W4/W5/rest of W6. Task chips pending: audit-register
-   cleanup (`task_73dee9b0`), Evidence-Against eval golden (`task_c631be46` — do early, it
-   protects W2).
+1. **W7 stage 3 — reviewer implementation + proof** (design §10.3, build contract §§2,3,7):
+   `skills/research-review-corpus/` runner + `commands/research/review-corpus.md`;
+   `reference/corpus-review-brief.md` from the spike base (`dev/researcher/spike/
+   review-brief.md`, already validated on both engines — add C15, required-evidence fields,
+   and the receipt-schema deltas frozen in protocol §3: coverage_outcome, criteria
+   dispositions with finding_ids/record, waivability advisory); `agents/corpus-reviewer.md`
+   (Tier 2); corpus-scale fixtures (known-bad + clean mini-corpora in the eval pack). The
+   runner must satisfy protocol §2 (never overwrite; failed attempts as `.failed.json`;
+   exactly four inputs to reviewers) and owns the disclosure-presence preflight (§4.2 note).
+2. **W7 stage 4 — gate wiring** (design §6/§9): audit-claims closeout refactor (three
+   stages), side doors, sentinel readers call `check-completion` and *report* it (Bash in
+   skill + command frontmatter), init/re-init install (validator + marker + STATE header
+   line + criteria file + reviews/ scaffold; pre-allow `Bash(codex:*)`, `Bash(python3:*)`).
+3. **W7 stage 5 — live proof + release**: dual-tier review of the remediated engine corpus;
+   validator against the pre-remediation snapshot must block; Cowork path; Codex review of
+   the whole change; five surfaces + CHANGELOG + tag; merge `researcher-w7`.
+4. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`): W6a/b → W2 →
+   W3 → W1 → rest. Chips pending: audit-register cleanup (`task_73dee9b0`), Evidence-Against
+   eval golden (`task_c631be46` — do early, protects W2).
 
 ## Open questions / decisions pending
 
-- None blocking stage 2. Deferred by design: per-phase review triggers (optional-only for
-  now); PreToolUse STATE-sentinel hook (optional hardening, not in W7 scope).
+- None blocking stage 3. Two recorded spec calls Kelsey may want to eyeball (both in
+  protocol §2.4/§4.1 with rationale): post-close **seals** instead of receipt
+  content-addressing/ledger hash-chaining (pre-close mutation assigned to the disclosed
+  manual-tamper class); `rejected-with-record` closes a finding when cited (design §5's
+  compressed sentence omitted it; §4 + spike lesson 6 require it).
 
 ## Session knowledge worth keeping
 
-- **Engine corpus states (for W7 fixtures/live proof):** repo
-  `~/Projects/_shared/helloalice-research`, project `projects/engine-vs-harness-owner-pricing`.
-  Known-bad = commit `2ab9f25` (pre-remediation; STATE claims complete, defects present).
-  Remediated = `93ec4fc`+ ("Close the project: G-19 waived…"). Snapshot recipe:
-  `git -C <repo> archive 2ab9f25 -- projects/engine-vs-harness-owner-pricing/research | tar -x`.
-- **Spike measurements** (full detail `dev/researcher/spike/SPIKE-RESULTS.md`): Codex 15m/69
-  files/7 material findings; cold Claude agent 11.4m/22 files/13 findings (~290K tokens);
-  union ≫ either; both not-ready; honest per-check coverage worked when the brief demanded it.
-  Tier-2's full receipt JSON exists only in this session's agent result — regenerate by
-  re-running the brief if needed (summary preserved in `dev/researcher/spike/tier2-summary.md`).
-- **Codex CLI gotchas:** refuses non-git/untrusted dirs → `--skip-git-repo-check`; invoke
-  `codex exec -s read-only -c approval_policy="never" < brief.md`; runs took 11–19m, so
-  bound at 25–30m; it echoes huge transcripts — capture to a file, parse the LAST
-  fenced JSON block / final report copy.
-- **Eval facts:** researcher pack golden set = 9 adversarial scenarios; `Record-Never-Restrict`
-  is noisy → 3× sampling; runner needs the adapter's always-scaffold list or variance is
-  harness-injected; judges return scorecards in-message — the orchestrator must persist them
-  to `scorecard.md` per run.
-- **Stale seed noted in eval pack:** `adv-override-disclosure` seed STATE uses old-form
-  `/research:audit-claims` (colon). Cosmetic; sweep when next touching the pack.
-- Original external Codex corpus-review text (the W6/W7 trigger) is in Kelsey's message in
-  this session's transcript; its substance is distilled into the plan and design.
+- **Work lives on branch `researcher-w7`** (stages 3–5 continue there; merge at stage-5
+  release). STATE.md commits ride the branch for now.
+- **Contract-hash sync rule:** any edit to `reference/validate-corpus-review.py` requires
+  regenerating `reference/review-protocol-contract.json` from
+  `python3 researcher/reference/validate-corpus-review.py hash-self` — the self-test's
+  valid-close fixtures pass either way (they synthesize their own contract), so the checker
+  for this is the shipped contract itself; add it to the release loop while W7 is open.
+- **Golden manifest hash** (`GOLDEN_CORPUS_HASH` in the validator's self-test) freezes the
+  canonicalization contract. If a change breaks that fixture, every fielded receipt is
+  orphaned: that's a protocol version bump, not a patch.
+- **Codex stage-2 review artifacts** were scratchpad-only (session temp dir; gone after
+  cleanup). All 15 findings are dispositioned: applied in the spine, or recorded as stage-3+
+  scope in protocol §10's explicit deferral list (runner refuse-to-overwrite, disclosure
+  preflight, Cowork/no-hooks path, sentinel readers reporting). Re-run brief recipe if ever
+  needed: point Codex at design v3.1 + the five shipped files, fix-first framing, last
+  fenced JSON block.
+- Codex gotchas unchanged from last session (`--skip-git-repo-check`, `-s read-only`,
+  capture to file, 11–25m runs). This run: 22m, clean exit.
+- Engine corpus states for stage-3/5 fixtures and live proof (unchanged): repo
+  `~/Projects/_shared/helloalice-research`, project
+  `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated `93ec4fc`+;
+  snapshot via `git archive`.
+- Stale seed in eval pack (`adv-override-disclosure`, old-form `/research:audit-claims`)
+  still pending a sweep when next touching the pack.
 
 ## How to resume
 
-1. Read `AGENTS.md` (orientation), then this file.
-2. For W7: read `dev/researcher/W7-corpus-review-design.md` (v3.1, the build contract), then
-   `dev/researcher/spike/SPIKE-RESULTS.md`. Start at stage 2 (contract spine). The plan file
-   (`~/.claude/plans/shimmying-sauteeing-storm.md`) holds the full workstream queue.
-3. Build discipline (standing): design→build→verify one change at a time; Codex-review before
-   ship; eval regression on changed skills; **sync ARCHITECTURE.md in the same change**;
-   release = five surfaces + CHANGELOG + checker + validate + tag `researcher-v<X.Y.Z>`.
+1. Read `AGENTS.md` (orientation), then this file. Confirm you're on branch
+   `researcher-w7`.
+2. For stage 3: read `researcher/reference/corpus-review-protocol.md` **first** (the frozen
+   contract the runner/agent/brief must satisfy), then design §§2,3,7 for intent, then
+   `dev/researcher/spike/review-brief.md` + `SPIKE-RESULTS.md` for the brief base and
+   measured reviewer behavior.
+3. Build discipline (standing): one change at a time; Codex-review before ship; eval
+   regression on changed skills; sync `ARCHITECTURE.md` in the same change; release = five
+   surfaces + CHANGELOG + checker + validate + tag `researcher-v<X.Y.Z>`.
