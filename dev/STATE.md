@@ -1,10 +1,16 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-06 · **Session focus:** W7 COMPLETE. Stage 5 shipped:
-live dual-tier proof on the engine corpus (pre-remediation blocked exit 12; remediated
-set → gate exit 15 with the 8-finding union), whole-change Codex integration review
-applied (3 blockers/4 majors/2 minors), released as **researcher v1.8.0**, merged to
-main, tagged `researcher-v1.8.0`. NOT yet pushed — that's Kelsey's keystroke.
+**Last updated:** 2026-08-06 · **Session focus:** W7 shipped (v1.8.0, pushed) AND the
+full /upskill constraint audit of researcher ran and applied — released as **researcher
+v1.9.0** ("the headroom release"), committed + tagged on main at `84aa8cb`. NOT yet
+pushed. Audit + ten author decisions + apply record: `dev/researcher/constraint-audit.md`.
+Regression: eval iteration-20 green (6/6 goldens, 3 multi-sampled; no substance drift;
+two same-iteration reds were the apply's own second-order effects, fixed + verified).
+Key outcomes: all model pins removed; init rebuilt challenge-first (daft promoted w/ 9
+amendments; /clear regime KEPT per Kelsey override); scripted turns → content
+contracts; cadence=5; accepted-gaps convention; drift sweep. **init ships behaviorally
+unverified — no eval scenario exists (wanted).** Standing directive in memory: apply
+upskill thinking to all future authoring (W6a/b next, authored under it).
 
 ## Where things stand
 
