@@ -192,7 +192,9 @@ Open the project folder where you want the research to live, then run:
 /research-init
 ```
 
-You can `/research-init` in any fresh folder. As of v1.4, init creates `research/` and `source-material/` from scratch — nothing needs to exist beforehand. If a `research/STATE.md` is already there from a prior init run, init will refuse and tell you how to start over. The plugin lives in one place; each research project gets its own folder with its own state. Updates to the plugin reach every existing project the next time you open it.
+You can `/research-init` in any fresh folder. As of v1.4, init creates `research/` and `source-material/` from scratch — nothing needs to exist beforehand. If a `research/STATE.md` is already there from a prior init run, init will refuse and tell you how to start over. The plugin lives in one place; each research project gets its own folder with its own state.
+
+**What updates automatically, and what doesn't.** Updating the plugin updates its *skills and reference docs* for every project the next time you open it. Two things live inside each project and do **not** update on their own: the installed validator (`research/bin/validate-corpus-review.py`) and the review-protocol marker. New projects (v1.8.0+) get them at init. **Existing projects keep their pre-gate behavior — completion closes with a visible "no credibility gate" notice — until you adopt the gate with `/research-init upgrade`**, which installs the validator, marker, and criteria scaffolding without touching any of your research content. Any final review receipts that predate adoption become stale by adoption itself (the corpus identity changes); a fresh `/research-review-corpus final` runs after upgrading.
 
 ---
 
@@ -211,6 +213,7 @@ You can `/research-init` in any fresh folder. As of v1.4, init creates `research
 | `/research-phase-insight` | See which questions are well-covered vs. thin in the current phase |
 | `/research-progress` | Project dashboard: phase status, source counts, next action |
 | `/research-graph-analysis` | Analyze the claim graph for load-bearing claims, fragile foundations, and cheapest confidence upgrades |
+| `/research-review-corpus` | Run the independent adversarial corpus review — one or both reviewer tiers read the whole corpus against your success criteria; project completion gates on it (`final` runs both tiers and feeds the completion gate; `on-demand` is a mid-project health check) |
 
 ---
 

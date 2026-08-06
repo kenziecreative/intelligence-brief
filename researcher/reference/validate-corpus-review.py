@@ -514,6 +514,10 @@ def validate_receipt(receipt, filename, criteria, citable_paths):
     if not (isinstance(tiers_planned, list) and tiers_planned
             and set(tiers_planned) <= TIERS):
         problems.append("review_set_plan.tiers_planned must be a non-empty subset of t1/t2")
+    elif receipt.get("run_kind") == "final-closeout" and set(tiers_planned) != TIERS:
+        problems.append("a final-closeout set always plans both tiers — single-sampler "
+                        "composition is recorded via failed attempts, never by planning "
+                        "one tier")
 
     reviewer = receipt.get("reviewer") or {}
     for field in ("tier", "engine", "engine_version", "sampler_label", "fallback_chain"):
@@ -695,6 +699,16 @@ def validate_receipt(receipt, filename, criteria, citable_paths):
                     problems.append("criterion %s: waiver record path %s is not in the "
                                     "reviewed corpus" % (cid_, rm.group(1)))
     elif mode == "legacy-prose":
+        if binding.get("path") != PLAN_REL:
+            problems.append("legacy-prose criteria_binding.path must be %s" % PLAN_REL)
+        if binding.get("criteria") != []:
+            problems.append("legacy-prose criteria must be [] — prose criteria are "
+                            "enumerated in the reviewer's analysis, never as structured "
+                            "dispositions")
+        c1 = seen.get("C1") or {}
+        if c1.get("status") != "run":
+            problems.append("legacy-prose C1 must be run — a corpus with a research plan "
+                            "always has completion criteria to assess; n/a is a dodge")
         if coverage.get("C1") == "complete":
             problems.append("legacy-prose C1 coverage can be at best partial — never "
                             "presented as equivalent to structured criteria")
@@ -2207,6 +2221,53 @@ def run_self_test():
         expect(code, E_USAGE, "--receipt outside validate-receipt")
     case("--receipt/--filename rejected outside validate-receipt (additive-mode scope)",
          t_vr_flags_scoped)
+
+    # -- legacy-prose + final-plan tightening (whole-change review) --------
+    def _legacyize(root):
+        os.remove(os.path.join(root, CRITERIA_REL))
+        plan_sha = sha256_file(os.path.join(root, PLAN_REL))
+
+        def mutate(r):
+            r["criteria_mode"] = "legacy-prose"
+            r["criteria_binding"] = {"path": PLAN_REL, "sha256": plan_sha, "criteria": []}
+            for c in r["checks"]:
+                if c["id"] == "C1":
+                    c["coverage_outcome"] = "partial"
+        return mutate
+
+    def t_legacy_valid():
+        tmp, root, plugin = fresh()
+        _fixture_receipt(root, mutate=_legacyize(root))
+        expect(_gate_code(root, plugin), E_OK)
+        shutil.rmtree(tmp)
+    case("legacy-prose receipt with plan binding + partial C1 passes", t_legacy_valid)
+
+    def t_legacy_c1_na():
+        tmp, root, plugin = fresh()
+        base = _legacyize(root)
+
+        def mutate(r):
+            base(r)
+            for c in r["checks"]:
+                if c["id"] == "C1":
+                    c["status"] = "n/a"
+                    c["coverage_outcome"] = "not-applicable"
+        _fixture_receipt(root, mutate=mutate)
+        expect(_gate_code(root, plugin), E_INCOMPLETE_RECEIPT)
+        shutil.rmtree(tmp)
+    case("legacy-prose C1 marked n/a -> incomplete-receipt (a dodge, not coverage)",
+         t_legacy_c1_na)
+
+    def t_final_single_tier_plan():
+        tmp, root, plugin = fresh()
+
+        def mutate(r):
+            r["review_set_plan"] = {"tiers_planned": ["t1"]}
+        _fixture_receipt(root, mutate=mutate)
+        expect(_gate_code(root, plugin), E_INCOMPLETE_RECEIPT)
+        shutil.rmtree(tmp)
+    case("final-closeout plan naming one tier -> incomplete-receipt (final plans both)",
+         t_final_single_tier_plan)
 
     # -- manifest battery --------------------------------------------------
     def t_determinism():

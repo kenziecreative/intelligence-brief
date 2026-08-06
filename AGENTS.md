@@ -16,7 +16,7 @@ Install: `/plugin marketplace add kenziecreative/kenzie-creative`, then `/plugin
 - **goal-setting** (0.2.1) — a business goal-setting method in two arcs: a six-stage Setup Arc + a five-cadence Ongoing Arc over a Markdown `goals/` state dir, with a three-goal-rule hard cap, an operating heartbeat (overdue routing, closeout gate, operated mitigations), immutable goal history, and a goal-formulation critic with memory. *Standalone.*
 - **intelligence-briefing** (0.3.0) — a daily/weekly environmental brief that triages the outside world into a self-contained HTML brief. *Triage-stream.*
 - **photo-generator** (1.2.0) — a guided photography director: plain-language scene → physics-aware Nano Banana Pro prompt (camera, lens, lighting, grade from a bundled reference library), optionally rendered via the Gemini API; batch, variations, and a refinement loop. *Standalone.*
-- **researcher** (1.7.0) — a structured, audited research system. *Standalone.*
+- **researcher** (1.8.0) — a structured, audited research system with a completion credibility gate (independent adversarial corpus review). *Standalone.*
 - **sage** (0.2.0) — meeting-transcript triage into a single living weekly round-up. *Standalone.*
 - **strategist** (0.4.1) — a seven-stage strategic-thinking loop over a 70-framework library, with a reasoning critic; outputs a working record plus a clean reader-facing brief. *Standalone.*
 - **thinkers** (0.1.0) — a reasoning counselor over a 243-pattern corpus (biases, fallacies, persuasion/manipulation tactics, bad-faith moves, strategies); five skills — identify, explain, practice, decide, spar — that name what's happening without over-applying high-stakes labels. *Standalone.*

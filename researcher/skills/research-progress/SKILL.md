@@ -60,7 +60,14 @@ Show the current state of the research project as a dashboard.
    - **22 (stale-or-invalid-completion):** report prominently: the completion claim is
      **stale or unbacked** — the corpus or STATE changed after close, or the record
      doesn't support the sentinel. Show the validator's reasons verbatim. The project
-     is NOT validly complete, whatever STATE says.
+     is NOT validly complete, whatever STATE says. The remedy is the **documented manual
+     repair** (the validator refuses to run a new transition while a completion record
+     and sentinel coexist): the commissioner removes
+     `research/reviews/completion.json` and reverts the sentinel/closeout lines in
+     STATE by hand, records why in `research/notes-to-self.md`, and the project then
+     reads as open — after which a fresh `/research-review-corpus final` and closeout
+     can run. Never suggest editing sealed receipts or ledgers, and never perform the
+     repair yourself from this read-only skill.
    - **23 (closed-unreviewed):** report it as an **administrative archive — not
      decision-ready** (never as a completed, validated project).
    - **21 (not-closed):** no sentinel actually present — proceed normally.

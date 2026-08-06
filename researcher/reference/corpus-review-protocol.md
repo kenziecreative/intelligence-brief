@@ -591,8 +591,9 @@ manifest failure) are skipped, not guessed.
 ## 10. The deterministic fixture battery (`--self-test`)
 
 Embedded, hermetic (temp dirs, synthetic plugin root, the running script as the
-installed-validator fixture), no network, no clock dependence beyond "now". 69 cases
-(64 at the stage-2 freeze; +5 additive `validate-receipt` cases at stage 3):
+installed-validator fixture), no network, no clock dependence beyond "now". 74 cases
+(64 at the stage-2 freeze; +5 additive `validate-receipt` cases at stage 3; +2 archive
+drift cases and +3 legacy-prose/final-plan tightening cases at stages 4–5):
 
 - **Gate:** valid close passes · no-review · stale-hash (corpus and STATE edits after
   receipt) · incomplete receipt (missing check) · truncated receipt · open material finding ·

@@ -22,9 +22,12 @@ Arguments (both optional):
   consumes) or `on-demand` (a mid-project health check). Default: `on-demand`.
 - **Tiers** — `t1` (Codex CLI, independent cross-family sampler), `t2` (the
   `corpus-reviewer` agent, isolated same-family sampler), or `both`. Default: `both`.
-  A `final` run always plans both tiers — the gate operates on the union of the set, and
-  a tier that turns out to be unavailable is recorded, never silently dropped. Only an
-  `on-demand` run may be single-tier by choice.
+  **Tier selection is `on-demand`-only.** A `final` run always plans both tiers — the
+  gate operates on the union of the set, the validator rejects a final receipt planning
+  fewer, and a tier that turns out to be unavailable is recorded as a failed attempt,
+  never silently dropped. If the user passes `final` with a tier selector, say the
+  selector doesn't apply to final runs (both are planned; an unavailable one becomes a
+  visible failed attempt) and proceed with both.
 
 ## Ground rules (before any step)
 
@@ -58,11 +61,15 @@ Arguments (both optional):
 ### 1. Locate the machinery and check preconditions
 
 - **Validator:** prefer the installed copy at `research/bin/validate-corpus-review.py`. If
-  it is absent, use the plugin copy at
-  `${CLAUDE_PLUGIN_ROOT}/reference/validate-corpus-review.py` and tell the user, in one
-  sentence, that this project has not adopted review protocol v1 (no marker/validator
-  installed), the review will still run and produce receipts, and the completion gate
-  cannot consume them until the project is re-initialized onto the protocol.
+  it is absent, copy `${CLAUDE_PLUGIN_ROOT}/reference/validate-corpus-review.py` into the
+  scratch run directory and run it from there (reading a plugin file works on every
+  surface; *executing* one in place may not — Cowork included — so the runnable copy
+  lives in scratch, outside the project, where it cannot read as a partial adoption).
+  Tell the user, in one sentence, that this project has not adopted review protocol v1,
+  the review will still run and produce receipts, and the completion gate cannot consume
+  them until the project adopts (`/research-init upgrade`). If the surface cannot execute
+  the scratch copy either, stop with that finding: adoption is the prerequisite, and
+  `/research-init upgrade` is the remedy.
 - Run the validator's `--self-test` once. If it does not end green, stop: the validator is
   damaged; report the failure and do not review.
 - `research/STATE.md` must exist (its absence is a manifest error — this is not a research
@@ -151,8 +158,11 @@ streams to files — the run outlives any foreground tool window:
 
 ```
 cd <scratch> && codex exec -s read-only --skip-git-repo-check "<the prompt>" \
-  > t1.out 2> t1.err &
+  < /dev/null > t1.out 2> t1.err &
 ```
+
+(`< /dev/null` is load-bearing: a detached `codex exec` with an open stdin can exit
+immediately with empty output — see the tools guide.)
 
 Poll for completion; if it is still running at 1800s, kill it and record a timeout. When it
 exits, record `ended_at`, `duration_seconds`, and the exit status.
@@ -211,9 +221,11 @@ reviewer returned:
   `criteria_binding.path` + `criteria_binding.sha256` (the criteria file and its SHA-256;
   in legacy mode the path is `research/research-plan.md`).
 - Reviewer-owned, copied verbatim from its JSON: `verdict`, `checks`, `findings`, and the
-  `criteria` array (into `criteria_binding.criteria`; `[]` in legacy mode). Do not repair,
-  reword, re-severity, or drop anything the reviewer returned — a result that needs
-  repair is a failed attempt, not raw material.
+  `criteria` array (into `criteria_binding.criteria`; `[]` in legacy mode). The
+  reviewer's `review_coverage` summary (files opened vs manifest) goes into the
+  **report header**, never the receipt — the receipt's `corpus` block is runner-owned.
+  Do not repair, reword, re-severity, or drop anything the reviewer returned — a result
+  that needs repair is a failed attempt, not raw material.
 
 Then validate through the one implementation:
 

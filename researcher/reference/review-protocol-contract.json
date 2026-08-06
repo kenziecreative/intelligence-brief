@@ -2,7 +2,7 @@
  "protocols": {
   "1": {
    "schema_version": "1.0",
-   "validator_sha256": "0e237ce3954a2a8820b9ae738d23153200a699c635337936a42f2c2fd9cf9a3a"
+   "validator_sha256": "0cf2c76011789e0c07c91a6cca85da80a51b4d6c27adfb1ff57c18bda318a1dd"
   }
  },
  "schema_version": "1.0"

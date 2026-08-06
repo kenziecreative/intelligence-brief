@@ -420,6 +420,63 @@ When a `waive:` message arrives outside an audit run:
 
 4. **Confirm, and hand the re-run back.** Tell the user what was recorded and where, which findings it clears, which remain open, and that the draft has not moved. Then stop: `Recorded. Re-run /research-audit-claims <filepath> to verify the draft against the standing waiver.` Do not re-run the audit, do not promote, do not touch STATE.md. The next audit reads the waiver at step 4b and will not fail the draft on the waived finding.
 
+## Adjudicating Corpus-Review Findings (the ledger writes)
+
+Corpus-review findings (from `/research-review-corpus`) close through two append-only
+ledgers, and **this skill is where the commissioner's adjudication gets recorded** — the
+review runner never adjudicates, and no other skill writes these files. Adjudication
+happens when the commissioner, looking at an open finding, gives one of two decisions in
+conversation:
+
+1. **"That finding is factually wrong — here's why."** Append to
+   `research/reviews/resolutions.md`, exactly this grammar (the validator parses it;
+   malformed entries block the gate):
+
+   ```markdown
+   ## R-<next-seq>: <short action title>
+   - Refs: <review_id>/<finding_id>
+   - Action: rejected-with-record
+   - Date: YYYY-MM-DD
+   - Closure evidence: <why the finding is factually wrong, with at least one
+     <path>:<line> citation resolving to a corpus file — an uncited rejection does not
+     close the finding>
+   ```
+
+   The refutation must actually cite the corpus; "we disagree" closes nothing. A
+   `reconciled` entry uses the same grammar with `Action: reconciled` and names what
+   changed where — but record it knowing the validator will still demand a **fresh
+   review** (the fix changed the corpus, so the old set is stale by construction; a
+   reconciliation can never close a finding against the current set).
+
+2. **"I accept that risk."** First check the sequencing rule: the exception must be
+   disclosed in each affected deliverable's Methodology & Limitations **before** the
+   final review runs — write that disclosure now (substantive language: the risk and its
+   decision impact, not a bare pointer), tell the commissioner the corpus changed, and
+   only then append to `research/reviews/exceptions.md`:
+
+   ```markdown
+   ## E-<next-seq>
+   - Refs: <review_id>/<finding_id>
+   - Class: <the finding's class>
+   - Commissioner rationale (verbatim): "<their words — never yours; re-ask if they
+     give none>"
+   - Decision impact and risk accepted: <...>
+   - Binds to decision_corpus_hash: <the full current corpus hash from the validator's
+     manifest mode>
+   - Affected deliverables: <paths>
+   - Date: YYYY-MM-DD
+   ```
+
+   Say plainly what the validator will enforce: the exception expires the moment the
+   corpus changes, and a `deliverable-missing` or `internal-contradiction` finding can
+   never be covered by one (waivability is validator-owned; the commissioner deciding to
+   accept it does not make it acceptable).
+
+Both ledgers are **append-only**: entries are never edited or deleted; a correction is a
+new entry. Never author a rationale, never batch-adjudicate findings the commissioner
+did not individually address, and never write a ledger entry from your own judgment —
+these files exist to record *their* decisions.
+
 ## Phase Debrief (after pass)
 
 When a phase's audit passes, do NOT just say "Audit passed" and recommend clearing context. Present a comprehensive debrief of what the phase established. Read the promoted output file and present:

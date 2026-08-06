@@ -138,6 +138,7 @@ inverts per scenario. Grow the gate set as the pack matures.
 | --- | --- | --- |
 | `state_active_phase` | `research/STATE.md` contains `Active phase:` | State Integrity |
 | `draft_methodology_section` | the conventional draft contains `## Methodology & Limitations` (synthesize entries only) | Traceability |
+| `review_receipt_validates` | (`review-corpus` entries only) discovers the run's receipt and invokes the real validator's `validate-receipt` on it — the mechanical half of Credibility Gate; a runner-reported boolean is never trusted | Credibility Gate |
 
 Plus `content_lint` checks: no `[TODO]`/`[TBD]`/`[placeholder]` tokens in the
 conventional draft or promoted output (→ Traceability), both optional-file.

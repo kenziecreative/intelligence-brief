@@ -9,7 +9,7 @@ Turns Claude Code / Cowork into an audited research partner: a phased plan groun
 
 ## Structure
 
-- `commands/research/` — 12 command SKILLs: `init`, `discover`, `process-source`, `cross-ref`, `check-gaps`, `summarize-section`, `audit-claims`, `start-phase`, `phase-insight`, `progress`, `graph-analysis`, `review-corpus` (W7 — the corpus credibility review runner; built at stage 3, corpus-scale proof pending, closeout gating wires in at W7 stage 4).
+- `commands/research/` — 12 command SKILLs: `init`, `discover`, `process-source`, `cross-ref`, `check-gaps`, `summarize-section`, `audit-claims`, `start-phase`, `phase-insight`, `progress`, `graph-analysis`, `review-corpus` (W7 — the corpus credibility review runner; corpus-scale goldens green, closeout gating wired: the final phase closes only through the validator).
 - `agents/research-integrity.md` — the integrity-checking subagent (no web dependencies); `agents/corpus-reviewer.md` — the Tier-2 corpus reviewer (cold, read-only; dispatched only by the review runner).
 - `reference/` — read-only knowledge base: root guides, templates, and per-type discovery playbooks + channel maps (11 research types).
 - `hooks/` — Claude Code hooks (the `outputs/` gate and the `PreCompact` save warning).

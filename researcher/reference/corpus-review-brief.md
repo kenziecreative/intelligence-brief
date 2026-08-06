@@ -189,7 +189,7 @@ this shape:
 ```json
 {
   "verdict": "ready | not-ready",
-  "corpus": { "files_in_manifest": 0, "files_opened": 0 },
+  "review_coverage": { "files_in_manifest": 0, "files_opened": 0 },
   "criteria": [
     { "id": "SC-1", "disposition": "met" },
     { "id": "SC-2", "disposition": "unmet", "finding_ids": ["F-001"] },

@@ -31,8 +31,11 @@ say so, name the repair as re-init, and do not start a phase.) Route on the exit
   `/research-progress` for the dashboard. Stop.
 - **22 (stale-or-invalid-completion):** surface it prominently: STATE claims completion
   but the claim is stale or unbacked (show the validator's reasons). Do not start a
-  phase on top of a broken completion — the user resolves it first (typically a fresh
-  `/research-review-corpus final` or ledger adjudication). Stop.
+  phase on top of a broken completion — the user resolves it first via the documented
+  manual repair: remove `research/reviews/completion.json`, revert the
+  sentinel/closeout lines in STATE by hand, record why in `research/notes-to-self.md`;
+  the project then reads as open and a fresh final review can run. Never edit sealed
+  receipts or ledgers, and never perform the repair for them. Stop.
 - **23 (closed-unreviewed):** the project is an administrative archive — not
   decision-ready and not active. **Do not start a phase, with or without confirmation**
   — the protocol defines no reopen transition, so a conversational yes cannot write
