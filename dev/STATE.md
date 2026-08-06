@@ -1,120 +1,94 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-05 · **Session focus:** W7 stage 3 (reviewer implementation)
-built, Codex-hardened, and committed on branch `researcher-w7`. Corpus-scale goldens
-authored but **not yet run** — their pass is the stage-4 switch-on precondition.
+**Last updated:** 2026-08-06 · **Session focus:** W7 stages 3 AND 4 built, proven, and
+committed on branch `researcher-w7`. Stage 3's corpus-scale goldens green (iterations
+10–18); stage 4 (gate wiring) Codex-hardened with the audit-golden regression green
+(iteration 19). Next: stage 5 (live proof + release).
 
 ## Where things stand
 
-- **researcher (1.7.0 released; W7 mid-build on branch `researcher-w7`)** — Stage 3 is
-  **built** at `7135d13`: `skills/research-review-corpus/` + `commands/research/
-  review-corpus.md` (the runner — only writer of review artifacts; four-inputs coldness;
-  exclusive-create publishes, report before receipt; failed attempts as `.failed.json` in
-  both run kinds; fail-closed disclosure preflight), `reference/corpus-review-brief.md`
-  (spike base + C15 + required-evidence + frozen receipt deltas + read-nothing-outside-
-  the-manifest), `agents/corpus-reviewer.md` (Tier 2, opus, cold). Validator gained the
-  **additive `validate-receipt` mode** (runner preflight; battery 64→69; contract
-  regenerated — spec call recorded in protocol §9 as stage-3 additive). Corpus-scale
-  fixtures live in the eval pack: `eval/targets/researcher/fixtures/corpus-a` (known-bad,
-  7 seeded classes) and `corpus-b` (clean) — **neutral names on purpose** (blind-runner
-  leak defense); expectations live only in judge surfaces (coverage.md,
-  expected_behavior). Two golden `review-corpus` scenarios + Credibility Gate rubric
-  dimension + deterministic `review_receipt_validates` gate (new generic `command_exit0`
-  gate type in `eval/lib/run-gates.mjs`). Gate blocking still off; nothing calls the
-  validator at closeout yet.
-- **Codex stage-3 review** (fix-first: 5 blockers / 5 majors, all applied): clean fixture
-  made genuinely clean (2-source pricing, falsifiability section, Deskly dispositioned in
-  the consumption surface); eval coldness leak fixed via neutral fixture ids + adapter
-  honesty note (in-context Tier-2 play proves the mechanical seam, not coldness — stage 5
-  owns that); unavailable planned tier → failed attempt in both run kinds; validator
-  malformed-shape crash → exit 14; new CLI flags scoped to their mode; exclusive-create
-  artifact publishing; substantive-disclosure preflight; deterministic receipt gate; doc
-  status claims softened to built-pending-proof.
-- **The map** — `dev/researcher/ARCHITECTURE.md` Layer 9 updated (stage 3 built /
-  proof pending; stages 4–5 proposed). Design §10.3 marked built-pending-proof.
-- **Other plugins** — unchanged (blueprint 0.3.0, goal-setting 0.2.1,
-  intelligence-briefing 0.3.0, photo-generator 1.2.0, sage 0.2.0, strategist 0.4.1,
-  thinkers 0.1.0).
+- **researcher (1.7.0 released; W7 on branch `researcher-w7`, stages 3–4 done)** —
+  Commits this arc: `7135d13` (stage 3 build) → `2a630bf` (stage-3 hardening from the
+  golden campaign) → `562bcbd` (stage 4 gate wiring). The credibility gate is now
+  **wired**: audit-claims' final closeout is the validator-owned three-stage sequence
+  (with a mutation-free closeout-only re-entry), side doors are closed, sentinel readers
+  validate completion claims (verdict outranks STATE text), and init installs/adopts the
+  full protocol kit (`/research-init upgrade` for existing projects). Validator battery
+  **71/71**, contract hash current. No version bump yet — release is stage 5.
+- **Eval record:** iterations 10–18 = the corpus-scale golden campaign (both goldens
+  judged PASS; every red a true positive — 6 fixture defects, 1 register deficiency, 3
+  phrasing gaps). Iteration 19 = audit-entry regression, all three goldens PASS
+  multi-sampled, zero stage-4 leakage. New harness pieces: `command_exit0` gate type in
+  `eval/lib/run-gates.mjs`, `review_receipt_validates` gate, Credibility Gate rubric
+  dimension, fixtures `corpus-a`/`corpus-b` (neutral names — blind-runner leak defense).
+- **The map** — ARCHITECTURE Layer 9 current (stages 3–4 built/proven; stage 5
+  proposed); Layer 2 gained the runner/validator ownership rows.
+- **Other plugins** — unchanged.
 
 ## Done this session
 
-- `7135d13` (branch `researcher-w7`) feat: W7 stage 3 — runner skill + command, brief,
-  Tier-2 agent, validate-receipt mode (+5 self-test cases), corpus-scale fixtures +
-  scenarios + rubric dimension + receipt gate; all Codex findings applied pre-commit.
-- Verification green after final edits: `--self-test` 69/69; contract hash regenerated
-  and matching; both `claude plugin validate` runs; `check-version-prefix`; both fixture
-  manifests build cleanly; scenarios.jsonl parses; run-gates syntax + live gate test
-  (seeded receipt → `review_receipt_validates` OK).
-- Proven seam (dry-run): brief-schema reviewer result → runner step-8 merge →
-  `validate-receipt` exit 0 against `corpus-a`.
+- Stage 3: runner skill + command, brief (C15 + required-evidence + frozen deltas),
+  Tier-2 agent, additive `validate-receipt` mode, corpus-scale fixtures + scenarios +
+  rubric dimension + deterministic receipt gate; two Codex fix-first reviews applied
+  (stage 3: 5 blockers/5 majors; stage 4: 4 blockers/5 majors/1 minor).
+- Stage 4: three-stage closeout, side doors, sentinel readers, init kit + adoption path,
+  tools-guide Codex section, workflow-ownership stop item, validator archive
+  drift-check (battery 69→71).
+- Verification green at every step: self-test 71/71, contract hash matches, plugin
+  validate ×2, check-version-prefix, golden set green (see `_eval/iteration-19/scores.md`).
 
 ## In flight / uncommitted
 
-STATE.md update only (this file). Working tree otherwise clean at `7135d13`.
+None. Working tree clean at `562bcbd`.
 
 ## Next steps (in order)
 
-1. **Run the two corpus-scale goldens** (`/eval-run --target researcher`, scenarios
-   `adv-review-corpus-a` + `rep-review-corpus-b`) — stage 3's proof half. Expect
-   iteration discipline (fresh iteration-N). A red golden here blocks stage 4.
-2. **W7 stage 4 — gate wiring** (design §6/§9): audit-claims closeout refactor (three
-   stages), side doors, sentinel readers call `check-completion` and *report* it (Bash in
-   skill + command frontmatter), init/re-init install (validator + marker + STATE header
-   line + criteria file + reviews/ scaffold; pre-allow `Bash(codex:*)`,
-   `Bash(python3:*)`); tools-guide.md Codex section rides here.
-3. **W7 stage 5 — live proof + release**: dual-tier review of the remediated engine
-   corpus; validator against the pre-remediation snapshot must block; Cowork path; Codex
-   review of the whole change; five surfaces + CHANGELOG + tag; merge `researcher-w7`.
-4. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`): W6a/b → W2 →
-   W3 → W1 → rest. Chips pending: audit-register cleanup (`task_73dee9b0`),
-   Evidence-Against eval golden (`task_c631be46` — do early, protects W2).
+1. **W7 stage 5 — live proof + release:** dual-tier review (`/research-review-corpus
+   final`, t1+t2) of the remediated engine corpus (repo
+   `~/Projects/_shared/helloalice-research`, project
+   `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated
+   `93ec4fc`+; snapshot via `git archive`); the validator against the pre-remediation
+   snapshot must block; Cowork path test; Codex review of the whole W7 change; five
+   version surfaces + CHANGELOG + tag `researcher-v1.8.0` (or as decided); merge
+   `researcher-w7`.
+2. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`, program-status
+   block current): W6a/b → W2 → W3 → W1 → rest. Chips pending: audit-register cleanup
+   (`task_73dee9b0`), Evidence-Against golden (`task_c631be46`), FAIL-branch durable
+   manifest (`task_d6b356eb`, new this session).
 
 ## Open questions / decisions pending
 
-- **Spec call for Kelsey to eyeball:** the frozen protocol gained an *additive* validator
-  mode at stage 3 (`validate-receipt`, protocol §9 table + §10 battery note). Rationale:
-  protocol §2 requires the runner to treat incomplete reviewer results as failed
-  attempts, and the skills are forbidden from re-implementing contract rules — the mode
-  is the only way to satisfy both. No schema or verdict-logic change; self-tested.
-- Stage-2 spec calls unchanged (seals vs content-addressing; rejected-with-record as a
-  closure path — protocol §2.4/§4.1).
+- **Spec calls for Kelsey to eyeball** (all recorded in-protocol with rationale):
+  additive `validate-receipt` mode (§9, stage 3); archive drift-check tightening of
+  `check-completion` (stage 4 — spec-compliance reading of §1.4/§6.4); rubric kept
+  strict on clean-run gate-semantics close (skill emits it unconditionally).
+- Eval-harness follow-ups (non-blocking, from iteration 19): runner scenario-extractor
+  must project only entry/setup/user_messages (one runner accidentally printed
+  judge-only fields; judge adjudicated the capture clean); No-Tics rubric question
+  (within-turn vs cross-turn recurrence); assorted surface-for-decision items in
+  `_eval/iteration-19/scores.md`.
 
 ## Session knowledge worth keeping
 
-- **Work lives on branch `researcher-w7`** (stages 4–5 continue there; merge at stage-5
-  release). STATE.md commits ride the branch.
-- **Contract-hash sync rule** unchanged: any validator edit → regenerate
-  `review-protocol-contract.json` from `hash-self`; the shipped contract is the checker.
-- **Golden manifest hash** (`GOLDEN_CORPUS_HASH`) still freezes canonicalization; a break
-  is a protocol version bump.
-- **Codex from background Bash needs `< /dev/null`** — without it, `codex exec` dies
-  instantly (exit 1, empty streams) in detached runs. This run: ~9 min, clean exit;
-  review artifacts in the session scratchpad (gone after cleanup); re-run recipe: point
-  Codex at protocol + design §§2,3,7 + the stage artifacts, fix-first framing, last
-  fenced JSON block.
-- **Eval blind-runner surfaces:** the runner sees entry/setup/user_messages + adapter.md
-  — so fixture names, adapter prose, and working-dir names must never encode expected
-  outcomes; judge-only truth lives in coverage.md/rubric/expected_behavior/seed_notes.
-- Engine corpus states for stage-5 live proof (unchanged): repo
-  `~/Projects/_shared/helloalice-research`, project
-  `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated `93ec4fc`+;
-  snapshot via `git archive`.
-- Stale seed in eval pack (`adv-override-disclosure`, old-form `/research:audit-claims`)
-  still pending a sweep; adapter.md also carries old-form `/research:init` mentions —
-  sweep together when next touching the pack.
+- **Branch `researcher-w7`** until stage-5 release; STATE.md commits ride it.
+- **Contract-hash sync rule** unchanged (validator edit → regenerate contract from
+  `hash-self`).
+- **Codex background gotchas:** always `< /dev/null`; if a large argv prompt dies
+  instantly (exit 1, empty streams) while tiny prompts work, feed the prompt via stdin
+  (`codex exec ... "Follow the instructions on stdin." < prompt.md`).
+- **Eval blind-runner surfaces:** fixture names, adapter prose, and dir names must not
+  encode expected outcomes; judge-only truth lives in coverage.md / rubric /
+  expected_behavior / seed_notes. Sampler variance is real: a clean corpus must be
+  *actually* clean, not clean-on-one-roll — the seven-repair corpus-b saga (iterations
+  10–17) is the case study.
+- **Multi-sample rule bites:** goldens whose critical dimensions are noisy run 3×,
+  worst sample decides — iteration 19 honored it (waiver + override 3×, manifest 1×).
 
 ## How to resume
 
-1. Read `AGENTS.md` (orientation), then this file. Confirm branch `researcher-w7`.
-2. For the golden run: `eval/AGENTS.md` + `eval/reference/iteration-discipline.md`, then
-   `/eval-run --target researcher`. For stage 4: protocol §§6, 8, 9 first (frozen
-   contract), then design §6/§9, then `skills/research-audit-claims/SKILL.md` (the
-   closeout being refactored).
+1. Read `AGENTS.md`, then this file. Confirm branch `researcher-w7`.
+2. For stage 5: protocol §§6, 8, 9 + the runner skill's `final` mode; engine-corpus
+   coordinates above; release ritual in researcher/AGENTS.md ("Maintaining this
+   plugin"); update the plan file's program-status block at every stage move.
 3. Build discipline (standing): one change at a time; Codex-review before ship; eval
-   regression on changed skills; sync `ARCHITECTURE.md` in the same change; release =
-   five surfaces + CHANGELOG + checker + validate + tag `researcher-v<X.Y.Z>`.
-4. **Program-status block (standing):** the master plan
-   `~/.claude/plans/shimmying-sauteeing-storm.md` now opens with a "Program status"
-   table — the W1–W7 program-level view Kelsey reads to see where everything stands.
-   Update it (and its Last-updated date) whenever a workstream or W7 stage moves, in the
-   same session, alongside this file.
+   regression on changed skills; sync ARCHITECTURE in the same change.
