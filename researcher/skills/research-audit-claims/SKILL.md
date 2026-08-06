@@ -204,11 +204,19 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      - **All promised deliverables exist and are audited:** the phase's contract is met — proceed to step 3 (phase closeout).
      - **Any promised deliverable is missing or unaudited:** do NOT close the phase. Leave the phase active in STATE.md with Synthesize/Verify unchecked (the cycle is not done until the whole inventory is), and rewrite `Next Action` to the next concrete step, e.g.: `Run /research-summarize-section <next-deliverable> for Phase N — 2 of 3 promised deliverables remain: <list>.` Tell the user exactly which deliverables remain and confirm the one just promoted. Do not present the phase debrief — the debrief marks phase completion, and the phase is not complete. Stop here.
 
-     One audited executive summary does not close a synthesis phase that promised a report and recommendations. The final-phase branch in step 3 is subject to the same rule: "all phases complete" cannot be declared while any promised deliverable of the final phase is missing or unaudited.
+     One audited executive summary does not close a synthesis phase that promised a report and recommendations. The final-phase branch in step 3 is subject to the same rule — and further: on a protocol-adopted project, "all phases complete" is never declared by this skill at all. The validated corpus-review closeout (final phase branch, stages 1–3) is the only path, and its STATE write belongs to the validator.
 
   3. **Close out the phase in `research/STATE.md`.** A passing audit that completes the phase's deliverable manifest (step 2) is the end of the current phase's cycle. STATE.md must be advanced *before* the debrief so that any subsequent `/clear` leaves the project in a correct state — the user may jump straight to `/research-discover` on resume without running `/research-start-phase`, and `discover`'s pre-check depends on "Active phase" already pointing at Phase N+1.
 
-     Perform all of the following writes in a single STATE.md update:
+     **Branch before any write.** Read `research/research-plan.md` first and determine
+     whether Phase N is the plan's final phase. If it is, perform **none** of the manual
+     STATE writes below — go directly to the **Final phase branch** (the corpus-review
+     closeout): on a protocol-adopted project the validator performs every completion
+     write, Verify check-off included; on a legacy project the branch's exit-10 path
+     performs the coherent pre-protocol transition (Verify check-off, phase completion,
+     the legacy completion fields) as one write, with the visible no-credibility-gate
+     notice. Only for a **non-final** phase, perform all of the following writes in a
+     single STATE.md update:
      - **Check off Verify.** In `Current Phase Cycle → Phase N`, change `- [ ] **Verify** …` to `- [x] **Verify** …`. Confirm all five steps (Collect, Connect, Assess, Synthesize, Verify) are now checked. If any earlier step is still unchecked, **verify artifacts before prompting the user.** For each unchecked step, check whether the expected artifact exists and is current:
        - **Collect:** Phase N source notes exist in `research/notes/` (grep for `phase: N` or check filenames) AND corresponding entries exist in `research/sources/registry.md`.
        - **Connect:** `research/cross-reference.md` contains Phase N cross-reference data (check for Phase N heading or entries citing Phase N sources).
@@ -218,6 +226,8 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
        If the artifacts confirm the step was completed (the expected files exist with Phase N content), this is a checkbox-only discrepancy caused by a context clear — silently mark the step checked and continue the closeout. Log one line per reconciled step: "Reconciled [Step]: artifacts confirm completion (e.g., 10 Phase N notes in registry, cross-reference.md updated YYYY-MM-DD)."
 
        Only prompt the user when **artifacts are missing or ambiguous** — e.g., no Phase N notes exist, cross-reference.md has no Phase N data, or gaps.md doesn't cover Phase N. In that case, present three named options: **(a) cancel the closeout and re-run the missing cycle step** (the user goes back to run the relevant skill for whichever step lacks artifacts, then re-invokes audit-claims); **(b) authorize marking the step checked anyway** (the user confirms the step was completed through means not reflected in the standard artifacts); **(c) abort the audit promotion entirely and leave the draft in drafts/** (the audit report is still written, but the draft is not promoted and STATE.md is not advanced). Wait for the user to pick one. Do not proceed until they do, and do not leave STATE.md half-updated.
+
+       **Option (b) does not exist for the final phase.** When Phase N is the final phase, a conversational confirmation cannot authorize anything the cold corpus reviewer will never see: the authorization must be a written commissioner directive in `research/notes-to-self.md` (their words, dated). Offer (a), (c), and "(b-final) record a commissioner directive in notes-to-self.md, then re-invoke" — and note that the directive changes the corpus, so the final review runs (or re-runs) after it.
      - **Mark the phase complete in Completed Phases.** Change `- [ ] Phase N: [Name]` to `- [x] Phase N: [Name] — COMPLETE [YYYY-MM-DD]`.
      - **Read `research/research-plan.md`** to determine Phase N+1's name. If Phase N was the final phase in the plan, skip to the "final phase" branch below.
      - **Advance `Active phase`** in `Current Position` from `N — [Phase N Name]` to `N+1 — [Phase N+1 Name]`.
@@ -246,11 +256,96 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
 
        `Next Action` must be a concrete command the user can execute after a fresh session load, not a phase-level description.
 
-     **Final phase branch.** If Phase N was the final phase in the research plan — and ONLY if the step 2 manifest confirmed every deliverable the final phase promises exists in `research/outputs/` with a passing audit:
-     - Set `Active phase: — all phases complete`.
-     - Set `Cycle step: — all cycles complete`.
-     - Do NOT generate a new Current Phase Cycle block — remove it or replace it with `*(No active phase — all phases complete.)*`.
-     - Update `Next Action` to: `Run /research-progress to review the full project dashboard. Consider running /research-check-gaps one final time to confirm no unresolved items before wrap-up.`
+     **Final phase branch — the corpus-review closeout.** If Phase N was the final phase
+     in the research plan, the project's completion is **not yours to declare**. Do not
+     check off the final phase in Completed Phases, do not set any completion sentinel,
+     do not touch Active phase or Next Action by hand. The final phase's Verify box and
+     the whole-project completion belong to the validated closeout below — three strict
+     stages, each terminal for the invocation when it fails.
+
+     **Closeout-only invocations (no corpus mutation).** When audit-claims is invoked on
+     a final phase whose deliverable manifest is *already complete* — every promised
+     final-phase output already in `research/outputs/` with a passing audit on file, and
+     no pending draft was given to audit — this is a closeout resumption (the normal
+     state after "run `/research-review-corpus final`, then re-invoke"). **Skip the
+     audit entirely: no battery, no audit-report write, no claim-graph write, no draft
+     edits — zero writes to any in-scope file** — because any write changes the corpus
+     hash and orphans the review receipts the gate is about to consume. Run only the
+     three closeout stages below. (This is also why the exit-12 remedy works: the review
+     runs against the finished corpus, and the closeout re-entry touches nothing.)
+
+     First, locate the validator: the installed copy at
+     `research/bin/validate-corpus-review.py`, or — only if none is installed — the
+     plugin copy at `${CLAUDE_PLUGIN_ROOT}/reference/validate-corpus-review.py` (used
+     solely to *classify* the project below; an un-adopted project never hard-gates).
+
+     **Closeout stage 1 — read-only preflight, terminal for this invocation.** The
+     deliverable manifest (step 2) and the cycle-artifact reconciliation are *checks
+     only* here. Any discrepancy — a missing deliverable, an unaudited output, an
+     unchecked earlier cycle step whose artifacts don't confirm completion — ends the
+     turn with the named remedy. **There is no conversational authorization at final
+     closeout:** the (b) "authorize anyway" option does not exist on this branch.
+     Authorizing a missing cycle artifact requires a written commissioner directive in
+     `research/notes-to-self.md` (their words, dated); once written, the corpus has
+     changed — so the preflight reruns on a later invocation and any existing final
+     review is stale by construction. Nothing conversation-only can affect what a cold
+     reviewer sees.
+
+     **Closeout stage 2 — the validator's verdict.** Run the validator's `--self-test`
+     (it must end green — a damaged validator blocks), then
+     `python3 <validator> gate --json --root .`. Route on the exit code, reporting the
+     validator's own named reason — never a bare "blocked":
+     - **valid (0):** proceed to stage 3.
+     - **no-marker (10):** this project predates review protocol v1. Take the legacy
+       path: perform the pre-protocol completion writes (set `Active phase: — all
+       phases complete`, `Cycle step: — all cycles complete`, replace the cycle block
+       with `*(No active phase — all phases complete.)*`, point Next Action at
+       `/research-progress`) and say, visibly, in the completion report: "This project
+       has no credibility gate — it was initialized before review protocol v1. Its
+       completion is unvalidated. To adopt the gate, re-run `/research-init` and ask
+       for the review-protocol upgrade." Never write the validated completion sentinel
+       on a legacy project.
+     - **no-review (12):** the final corpus review has not run (or produced no valid
+       receipt). End the turn: "Run `/research-review-corpus final` — the completion
+       gate needs a final review set." Failed attempts on record mean the reviewers are
+       unavailable; the terminal option for an unreviewable project is the
+       administrative archive (`transition --apply --closed-unreviewed --reason "…"`),
+       which is never described as decision-ready.
+     - **open-material-findings (15):** report each open finding and its closure paths
+       (reconcile → corpus changes → fresh review; cited rejection in the resolution
+       ledger; commissioner exception — never for a missing deliverable or an internal
+       contradiction). End the turn.
+     - **stale-hash (13):** the corpus changed since the reviewed snapshot — a fresh
+       `/research-review-corpus final` run is needed. End the turn.
+     - **Anything else** (validator-mismatch, criteria-drift, manifest or ledger
+       errors): report the validator's reasons and the repair it names (most commonly
+       "repair via re-init"). End the turn.
+     - **Legacy-vs-damage note:** partial protocol state (a STATE discriminator line
+       without a marker, or vice versa) is exit 11, not 10 — it fails closed. Only a
+       clean exit 10 takes the legacy path.
+
+     **Closeout stage 3 — one atomic write, the validator's.** Run
+     `python3 <validator> transition --apply --root .`. The validator re-runs the gate,
+     writes `research/reviews/completion.json`, and performs the exact four-op STATE
+     transition itself — you never hand-edit STATE at final close. Route its exit
+     explicitly, reporting the validator's own reasons:
+     - **0:** done — report the recorded `review_set_id` and proceed to the debrief with
+       the completion framed as: validated closeout, frozen corpus, any corpus change
+       from here invalidates the completion.
+     - **13 (stale-hash):** the corpus or STATE changed between the stage-2 gate and the
+       apply (the TOCTOU guard). If nothing should have changed, re-run stage 3 once; a
+       second 13 means something is writing to the corpus — stop and report.
+     - **19 (state-format):** STATE's structure cannot support the four-op transition
+       (the validator's reasons name what's wrong — a missing section, an ambiguous
+       checklist). The repair is a *structural* hand-edit of STATE to the documented
+       format — never a completion write — then re-run from stage 2.
+     - **Interrupted/resumable half-apply** (a prior run wrote `completion.json` but not
+       STATE): just run `transition --apply` again — the validator resumes
+       deterministically. This is the only case where an immediate automatic retry is
+       the documented remedy.
+     - **Any other non-zero** (11/12/14/15/16/17/18/20/24): the gate re-run found
+       something new — report the named reason and its stage-2 remedy, and end the
+       turn. Never fall back to a manual STATE write because the apply refused.
 
   4. **Append backstage tasks for the next phase.** Before the debrief, append to `research/reference/backstage-tasks.md` (create with its header if absent) any private prep items this phase surfaced for future work — a figure that looked shaky and deserves a re-check, a suspected shared-origin cluster to trace, a source type the next phase should prioritize. These are the agent's own homework, not user-facing actions: `/research-start-phase` reads and works through them silently at the next phase start. Do not narrate this write to the user or read the list aloud — if an item is worth the user's attention, it belongs in the debrief instead. If nothing warrants an entry, write nothing.
 
@@ -375,6 +470,7 @@ Only after the user is done reacting to the debrief, render the transition promp
   - **The loop is bounded at one automatic lap per invocation.** The agent never re-audits repeatedly, and never re-audits to work around a judgment finding.
 - **No confidence tier inflation.** Do not inflate confidence tiers. If a section relies on a single source, it is Low confidence regardless of how authoritative that source is. Single-source High confidence does not exist — triangulation requires multiple independent sources.
 - **Phase close is against the whole contract, never one file.** The deliverable manifest check (After Audit / If PASS step 2) is mandatory before any closeout. If the plan promises three synthesis outputs and one has been audited, the phase stays open — no debrief, no Active-phase advance, no "all phases complete." Record the partial progress in Next Action and stop.
+- **The final phase closes only through the validator.** On a protocol-adopted project, this skill never writes a completion sentinel, never checks off the final phase, and never hand-edits STATE at final close — the corpus-review closeout's stage 3 (`transition --apply`) performs the one atomic write. A blocked gate is reported with the validator's own named reason and the turn ends; the remedy is the user's next move (run the final review, adjudicate a finding, or record a directive), never a workaround. On a legacy project (clean no-marker), the pre-protocol writes are allowed but the completion report must carry the visible "no credibility gate" notice.
 - **A passing audit that completes the deliverable manifest must advance STATE.md before the debrief.** Promotion, phase closeout (check off Verify, mark Phase N complete, advance Active phase to N+1, generate the new cycle checklist, reset Next Action) all happen in one atomic step before you present findings to the user. The debrief is for the user; the STATE.md advance is for the next session. The next session may start with `/clear` immediately followed by `/research-discover` (skipping `/research-start-phase` entirely) — if STATE.md still points at Phase N when that happens, discover will either error or silently re-discover a completed phase. If you cannot advance STATE.md cleanly — e.g., `research/research-plan.md` is missing Phase N+1 and Phase N was not marked as final, or the cycle checklist has unchecked steps you did not expect — stop, surface the discrepancy to the user, and do NOT leave STATE.md half-updated. Either the full closeout happens or none of it does.
 
 ## Common Failure Modes
@@ -396,6 +492,7 @@ Only after the user is done reacting to the debrief, render the transition promp
 | Override laundering — a commissioner override reaching the deliverable as if the evidence produced it | For every resolution the draft relies on, compare `user_resolution` to `suggested_resolution` in cross-reference.md — never trust the `user_override` boolean alone (a `confirm: side-A` against a side-B assessment may carry no flag). If the fields differ, verify the label survived into the draft (finding site + Methodology & Limitations). The internal record is not the disclosure — the reader of the output must see that the commissioner chose against the evidence assessment. |
 | Treating Methodology & Limitations as the writer's problem | Summarize-section writes the section; this audit gates on it (step 5b). A draft whose claims all trace but whose section is missing, boilerplate, or stamped with an adverse search that has no record does not promote. The section is part of the deliverable's evidence contract, not decoration. |
 | Closing a multi-deliverable phase on one audited file | The deliverable manifest check (If PASS step 2) reads the plan's promised output inventory and requires every deliverable to exist in `outputs/` with a passing audit before closeout. A synthesis phase promising executive summary + report + recommendations needs all three audited — auditing `00-executive-summary.md` alone leaves the phase open with Next Action pointing at the next deliverable. |
+| Declaring the final phase complete without the validator — writing the sentinel by hand, or treating a reviewer's `ready` as the gate opening | The final-phase branch runs the three-stage closeout: preflight (checks only, no conversational authorization), the validator's gate verdict routed by exit code, and `transition --apply` as the only STATE writer. A missing final review is exit 12 with the `/research-review-corpus final` remedy — not a reason to fall back to manual completion. |
 | Silent phase closeout — promoting the draft and presenting the debrief but leaving STATE.md pointing at the completed phase | On PASS, execute the full closeout sequence in `After Audit / If PASS` step 3 before presenting the debrief. Every write — check off Verify, mark Phase N complete, advance Active phase to N+1, reset Cycle step, replace Current Phase Cycle with a fresh Phase N+1 checklist, reset per-phase source counters, rewrite Next Action — must land in STATE.md atomically. If any part cannot be completed (e.g., research-plan.md has no Phase N+1), stop and surface the discrepancy instead of partially updating. The next session may skip `/research-start-phase` and run `/research-discover` directly — STATE.md must be correct before the debrief, not after. |
 | Leaving the completed phase's cycle checklist in Current Phase Cycle alongside the new one | `Current Phase Cycle` always reflects exactly one active phase. When advancing to Phase N+1, replace the Phase N checklist entirely — the completed record lives in `Completed Phases`, not in `Current Phase Cycle`. Two checklists in `Current Phase Cycle` is a bug, not a history feature. |
 | Listing issues without applying mechanical fixes — stopping after the report instead of editing the draft | On FAIL, the 4-step sequence is mandatory: classify → apply mechanical fixes → list changes → tell user to re-run. If a fix is mechanical (correct value knowable from sources), apply it with the Edit tool. Do not present fixes as suggestions — make the edits. |

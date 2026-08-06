@@ -22,7 +22,7 @@ I didn't want to take it on faith. I wanted a system where I could trace every c
 
 So I built a system that enforces the discipline. Claude does the heavy lifting (finding sources, processing documents, cross-referencing findings, drafting sections) but the system makes sure it does the work honestly. Sources are structured and registered. Figures are canonical. Drafts are audited before they ship. An integrity agent watches every write for fabrication, drift, and qualifier stripping.
 
-The complexity is in the system, not in your workflow. What you see: eleven commands that guide you through a structured research cycle. What's behind them: source credibility assessment, independence-aware gap analysis, contradiction detection, cross-phase figure tracking, and a workflow gate — with a PreToolUse hook backstop on Claude Code — that prevents unaudited content from reaching the output directory.
+The complexity is in the system, not in your workflow. What you see: twelve commands that guide you through a structured research cycle. What's behind them: source credibility assessment, independence-aware gap analysis, contradiction detection, cross-phase figure tracking, a workflow gate — with a PreToolUse hook backstop on Claude Code — that prevents unaudited content from reaching the output directory, and an independent adversarial corpus review that gates project completion on the whole evidence base, not just per-claim checks.
 
 — **Kelsey**
 

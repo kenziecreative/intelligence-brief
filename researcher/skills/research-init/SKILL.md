@@ -14,7 +14,11 @@ You are scaffolding a new research project. This skill creates the research infr
 Init only runs against fresh project directories. Before asking the user any questions, check whether `${CLAUDE_PROJECT_DIR}/research/STATE.md` exists.
 
 - **If `STATE.md` does not exist:** proceed to Step 1.
-- **If `STATE.md` exists:** stop. Print:
+- **If `STATE.md` exists AND the user asked for the review-protocol upgrade** (the
+  invocation or their message says "upgrade", "adopt the review protocol", "add the
+  credibility gate", or equivalent): run the **protocol-adoption path** below — it
+  installs the credibility-gate kit onto the existing project and touches nothing else.
+- **If `STATE.md` exists** otherwise: stop. Print:
 
   > There's already a research project here (`research/STATE.md` exists). Init only runs on fresh directories.
   >
@@ -23,8 +27,54 @@ Init only runs against fresh project directories. Before asking the user any que
   > - `rm -rf research source-material` (discards it), then re-run `/research-init`.
   >
   > To check the status of the existing project instead, run `/research-progress`.
+  > To add the completion credibility gate to this existing project, run `/research-init upgrade`.
 
   Do not modify any files. Do not ask questions. Exit the skill.
+
+### Step 0b: Protocol-adoption path (existing projects only)
+
+Adoption installs review protocol v1 onto a live project **without touching any research
+content** — no plan regeneration, no note or output edits, no STATE position changes
+beyond the header line. **Never conclude "already adopted" from file presence alone** —
+presence proves nothing about validity. A project only counts as adopted after the
+step-5 verification below passes; anything short of that (missing pieces, a drifted
+validator hash, a duplicated STATE line, an unparseable marker) is damage, and the
+remedy is the same: (re)install the invalid pieces from the plugin's current copies and
+verify again. Existing `research/reviews/` artifacts (receipts, reports, ledgers) are
+immutable — never edit, move, or delete them during adoption.
+
+1. **Install the validator + marker + reviews/ scaffold** exactly as Step 3a-3 (and
+   write `research/reviews/.gitkeep` if the directory is missing).
+2. **Add the STATE discriminator.** Edit `research/STATE.md`: insert the line
+   `Review protocol: v1` in the header block (after the `# Research State` title, before
+   the first `##` heading). Exactly one such line; nothing else in STATE changes.
+3. **Completion criteria.** Read the plan's Success Criteria section:
+   - If it already carries `**SC-N**` stable IDs, write
+     `research/reference/completion-criteria.md` from them (template header + exact IDs).
+   - If it is prose (pre-protocol plan), offer the user two options: (a) assign stable
+     IDs now — rewrite the plan's criteria lines as `- **SC-N** — <same text>` (text
+     unchanged, IDs added; this is the only content edit adoption may make, and only
+     with the user's yes) and write the canonical file to match; or (b) keep prose —
+     the project runs in `legacy-prose` criteria mode: honest, explicitly weaker C1
+     coverage, no canonical file written. Record their choice in
+     `research/notes-to-self.md`.
+4. **Pre-allow.** Merge `Bash(python3:*)` and `Bash(codex:*)` into
+   `.claude/settings.json` per Step 3b's additive-merge rules.
+5. **Verify.** First `python3 research/bin/validate-corpus-review.py --self-test` (must
+   end green), then `python3 research/bin/validate-corpus-review.py gate --root .
+   --json`, and check the STATE header carries exactly one `Review protocol: v1` line.
+   Acceptable gate exits, each with its honest report:
+   - **12 (`no-review`)** — the normal adoption result: protocol intact, no review yet.
+   - **13 (`stale-hash`)** — expected **when the project carries pre-adoption review
+     receipts**: adding the STATE discriminator changed the state hash, so any existing
+     final review is stale *by adoption itself*. This is not an install failure — the
+     receipts stay on disk untouched (immutable), and the report says plainly: a fresh
+     `/research-review-corpus final` run is required before the gate can pass.
+   - **10/11** — the install is partial or drifted: fix the named pieces and re-verify.
+   - **24** — criteria drift between plan and canonical file: fix and re-verify.
+   Then report: the gate is live, project completion now requires
+   `/research-review-corpus final` plus the validator's verdict, and existing phase work
+   is untouched.
 
 ---
 
@@ -173,6 +223,7 @@ ${CLAUDE_PROJECT_DIR}/research/audits/.gitkeep
 ${CLAUDE_PROJECT_DIR}/research/reference/.gitkeep
 ${CLAUDE_PROJECT_DIR}/research/discovery/.gitkeep
 ${CLAUDE_PROJECT_DIR}/research/bin/.gitkeep
+${CLAUDE_PROJECT_DIR}/research/reviews/.gitkeep
 ${CLAUDE_PROJECT_DIR}/source-material/.gitkeep
 ```
 
@@ -183,6 +234,27 @@ Each `.gitkeep` is empty (zero-byte file). These exist solely to make Git track 
 Copy the plugin's position helper into the project so the agent can compute "where am I" from the files instead of inferring it from the conversation (see `${CLAUDE_PLUGIN_ROOT}/reference/workflow-ownership.md`). Read `${CLAUDE_PLUGIN_ROOT}/reference/where-am-i.py` with the Read tool, then write it verbatim to `${CLAUDE_PROJECT_DIR}/research/bin/where-am-i.py` with the Write tool.
 
 It must live inside the project, not be run from the plugin directory: the project tree is what every surface can reach in-sandbox, including Cowork. The agent invokes it as `python3 research/bin/where-am-i.py research`. (Docs are read from `${CLAUDE_PLUGIN_ROOT}`; only the executable is copied in — reading a plugin doc works on every surface, but executing a plugin-root script may not.)
+
+### 3a-3. Install the review-protocol kit (the credibility gate)
+
+The project adopts **review protocol v1** — project completion gates on an independent
+adversarial corpus review, computed by a deterministic validator. Install its three
+pieces (the STATE template in Step 5 carries the fourth, the `Review protocol: v1`
+header line — all four travel together; a partial install is protocol damage that fails
+closed):
+
+1. **The validator.** Read `${CLAUDE_PLUGIN_ROOT}/reference/validate-corpus-review.py`
+   and Write it **verbatim** to
+   `${CLAUDE_PROJECT_DIR}/research/bin/validate-corpus-review.py`. Byte-exact matters:
+   the closeout compares this installed copy's SHA-256 against the plugin's shipped
+   trust contract, and any drift fails closed.
+2. **The marker.** Read `${CLAUDE_PLUGIN_ROOT}/reference/templates/review-protocol.json`,
+   set `"adopted"` to today's date (`YYYY-MM-DD`), and Write it to
+   `${CLAUDE_PROJECT_DIR}/research/reference/review-protocol.json`. It is a version pin,
+   never an authority.
+3. **Sanity run.** `python3 research/bin/validate-corpus-review.py --self-test` must end
+   green. If it does not, stop and report — do not scaffold a project onto a damaged
+   validator.
 
 ### 3b. Pre-allow researcher's tools in the project settings
 
@@ -204,7 +276,9 @@ Write or merge `${CLAUDE_PROJECT_DIR}/.claude/settings.json` to pre-allow the to
       "Bash(tvly:*)",
       "Bash(npx:*)",
       "Bash(ls:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(python3:*)",
+      "Bash(codex:*)"
     ]
   }
 }
@@ -353,10 +427,21 @@ Remove lines that don't apply to this research type. Add assumptions specific to
 
 ## Success Criteria
 
-This research is done when:
-1. [Criterion]
+Generated from reference/completion-criteria.md (the canonical stable-ID list — the
+corpus-review gate rejects ID drift between the two):
+
+- **SC-1** — [Criterion — specific and checkable; a criterion that cannot fail is not a criterion]
+- **SC-2** — [Criterion]
 ...
 ```
+
+**Success-criteria rules (the credibility gate reads these):** every criterion carries a
+stable ID `**SC-N**` in exactly that bold form; the set here must match
+`research/reference/completion-criteria.md` exactly — same IDs, no more, no fewer.
+Never bold-format any *other* hyphenated identifier in the plan (a `**A-1**` or
+`**KPI-2**` token would read as a criterion ID to the validator and register as drift);
+plain text for those. Criteria are checkable outcomes ("every output passed its claim
+audit"), never activities ("do research on X").
 
 **Subject Identity Rules — Non-Negotiable:**
 
@@ -509,6 +594,7 @@ Do not create files outside this structure for research artifacts. Working files
 | Graph Analysis | `/research-graph-analysis` | Analyzes the claim graph for load-bearing claims, fragile foundations, and cheapest confidence upgrades |
 | Progress | `/research-progress` | Shows project dashboard with phase status |
 | Discover Sources | `/research-discover` | Finds candidate sources for the current phase using type-aware multi-channel discovery |
+| Review Corpus | `/research-review-corpus` | Runs the independent adversarial corpus review (the credibility gate's review run); project completion requires a passing final review set |
 
 **Integrity agent:** `research-integrity` — runs automatically after `/research-summarize-section` writes a draft, and when `/research-init` or `/research-start-phase` integrate source material. It watches for fabricated data, range narrowing, qualifier stripping, cross-phase drift, and unsourced claims. It is **not** auto-run after every source note — invoke it manually on a note if you want a note-level check.
 
@@ -536,6 +622,7 @@ Read the research plan in `research/research-plan.md` before starting. It define
 - **`/research-cross-ref` is mandatory after every 5-8 new sources.** Before processing a 9th source without a cross-reference, stop and run `/research-cross-ref` first. `research/cross-reference.md` must reflect current patterns at all times.
 - **`/research-check-gaps` is mandatory before starting a new phase.** Do not begin Phase N+1 until `/research-check-gaps` has confirmed coverage status for Phase N. If gaps remain, fill them or document them explicitly in `research/gaps.md` with a reason they're acceptable.
 - **Phase completion requires all five steps.** A phase is not complete until: sources collected for this phase, cross-reference is current, gaps are assessed, draft is written, and audit has passed. STATE.md should not mark a phase complete until all five are done.
+- **The final phase — and the project — close only through the credibility gate.** This project carries review protocol v1: project completion requires an independent adversarial corpus review (`/research-review-corpus final`) plus the validator's gate verdict, and the completion write is performed by the validator (`research/bin/validate-corpus-review.py`), never by hand. No skill, and no conversation, can mark the project complete without a valid review set and zero open material findings. Manual completion instructions in this file apply to non-final phases only.
 - **Canonical figures registry is the source of truth for cross-phase numbers.** When citing a number from a previous phase, check `research/reference/canonical-figures.json` first. If registered, use the canonical value. If not registered and this is a cross-phase citation, register it before using it. Never copy numbers from STATE.md summaries or conversation memory.
 - **Never skip, fold, reorder, or merge phases without explicit user approval.** If `/research-check-gaps` reveals a phase has insufficient source coverage, tell the user and present options: (1) collect more sources to fill the gaps, (2) skip the phase with the user's explicit approval, or (3) fold the phase's questions into another phase with the user's explicit approval. Do not make this decision yourself. Do not record a phase-skip in STATE.md without the user confirming it on screen first.
 - **Running `/research-discover` at the start of each phase is recommended but not mandatory.** It surfaces the highest-value sources for the current phase's questions via multi-channel discovery. Sources can still be found manually and processed with `/research-process-source`.
@@ -663,6 +750,8 @@ Use this template, customized with data from the generated research plan:
 ```markdown
 # Research State
 
+Review protocol: v1
+
 **Phases are sequential. Complete the current phase's full cycle before starting the next. Do not batch work across phases.**
 
 ## Current Position
@@ -681,7 +770,7 @@ Each phase must complete all five steps in order. Check off each step as it is c
 - [ ] **Synthesize** — `/research-summarize-section` run, draft in `drafts/`, integrity checked
 - [ ] **Verify** — `/research-audit-claims` passed, output promoted to `outputs/`
 
-When all five are checked, mark this phase complete below, update "Active phase" to the next phase, and generate a new cycle checklist for that phase.
+When all five are checked, mark this phase complete below, update "Active phase" to the next phase, and generate a new cycle checklist for that phase. **Exception — the final phase:** never mark the final phase complete or write any completion sentinel by hand. The project closes only through the validated corpus-review closeout in `/research-audit-claims` (the validator performs the completion write after the independent corpus review passes).
 
 ## Completed Phases
 [Generate a checklist from the research plan phases, e.g.:]
@@ -808,6 +897,15 @@ Not a user-facing to-do list, not part of any gate. If an item needs the user's 
 ---
 ```
 
+- Write `${CLAUDE_PROJECT_DIR}/research/reference/completion-criteria.md` — the
+  **canonical** completion-criteria file the corpus-review gate binds to. Read
+  `${CLAUDE_PLUGIN_ROOT}/reference/templates/completion-criteria.md` for the header and
+  rules, then replace the placeholder criterion lines with the exact criteria from the
+  research plan's Success Criteria section — same `**SC-N**` IDs, same order, same text,
+  unchecked boxes. The plan section was *generated from* this set; after writing both,
+  confirm the ID sets agree exactly (the validator's `criteria-drift` check blocks the
+  gate on any mismatch, in either direction).
+
 - Write `${CLAUDE_PROJECT_DIR}/research/reference/claim-graph.json` with initial content `{"claims": []}` — this is the claim graph registry, populated by `/research-audit-claims` during each phase's Verify step.
 
 - Write `${CLAUDE_PROJECT_DIR}/research/reference/retrieval-log.json` with initial content `{"entries": []}` — this is the retrieval log registry, populated by `/research-discover` after each discovery run.
@@ -861,10 +959,15 @@ Before reporting to the user, verify the scaffolding is complete:
    - `reference/evidence-standard.md`
    - `reference/backstage-tasks.md`
    - `reference/retrieval-log.json`
+   - `reference/completion-criteria.md`
+   - `reference/review-protocol.json`
+   - `bin/validate-corpus-review.py`
+   - `reviews/` (directory exists, `.gitkeep` only)
    - `discovery/strategy.md`
    - `source-material-digest.md` (only required if `source-material/` contains non-dotfiles; skip otherwise)
-2. **Read `${CLAUDE_PROJECT_DIR}/CLAUDE.md`** — confirm it references the eleven skills with `/research-*` qualified names and the correct finding tags for the selected research type.
-3. **Read `${CLAUDE_PROJECT_DIR}/research/STATE.md`** — confirm the phase checklist matches the research plan and the Phase 1 cycle checklist is present with all five steps unchecked.
+2. **Read `${CLAUDE_PROJECT_DIR}/CLAUDE.md`** — confirm it references the twelve skills with `/research-*` qualified names and the correct finding tags for the selected research type.
+3. **Read `${CLAUDE_PROJECT_DIR}/research/STATE.md`** — confirm the phase checklist matches the research plan, the Phase 1 cycle checklist is present with all five steps unchecked, and the header block (before the first `##`) carries exactly one `Review protocol: v1` line.
+3a. **Run the protocol gate sanity check:** `python3 research/bin/validate-corpus-review.py gate --root . --json` must exit **12** (`no-review`) — the correct state for a freshly adopted project (protocol intact, no review yet). Exit 10 or 11 means the kit install is partial (marker, STATE line, or validator missing/drifted) — fix it before reporting; exit 24 means the plan and the canonical criteria file disagree on SC IDs — fix the drift before reporting.
 4. **Verify source material is reflected in the plan.** If `${CLAUDE_PROJECT_DIR}/research/source-material-digest.md` exists, invoke the research-integrity agent with both `${CLAUDE_PROJECT_DIR}/research/research-plan.md` and the digest and ask it to run the "Source Material Coverage" check (check 8 in the agent's documentation). If the agent reports any UNPROCESSED SOURCE MATERIAL FACT or PLAN-DIGEST CONTRADICTION findings, stop, present them to the user, and ask whether to (a) regenerate the plan with the missing facts included, (b) add the facts to the digest's Out of Scope section with a reason and re-run the check, or (c) accept the plan as-is and document the decision in `${CLAUDE_PROJECT_DIR}/research/notes-to-self.md`. Do not proceed to Step 7 until the user chooses. If no digest exists, skip this sub-step.
 If anything is missing, create it before proceeding. If the CLAUDE.md references incorrect skill names or has mismatched finding tags, fix it.
 
@@ -874,7 +977,8 @@ Tell the user what was created. Include:
 - The research type selected
 - The finding tags for this project type
 - **The phase table.** Render every phase from the research plan as a markdown table with these three columns: `#`, `Phase`, `Expected Outcome`. One row per phase — do not collapse, summarize as an arrow chain, or report only the count. Pull each phase's expected outcome from the synthesis line / output description in `research/research-plan.md` and condense it to one sentence that names what the phase will produce or settle. The synthesis phase is a row like every other phase. This table is mandatory — if you find yourself writing "Phases: N — A → B → C" instead of a table, stop and render the table.
-- The eleven research skills available: `/research-init`, `/research-discover`, `/research-process-source`, `/research-cross-ref`, `/research-check-gaps`, `/research-summarize-section`, `/research-audit-claims`, `/research-start-phase`, `/research-phase-insight`, `/research-progress`, `/research-graph-analysis`
+- The twelve research skills available: `/research-init`, `/research-discover`, `/research-process-source`, `/research-cross-ref`, `/research-check-gaps`, `/research-summarize-section`, `/research-audit-claims`, `/research-start-phase`, `/research-phase-insight`, `/research-progress`, `/research-graph-analysis`, `/research-review-corpus`
+- One line on the credibility gate: project completion now requires an independent adversarial corpus review — `/research-review-corpus final` at the end, with the validator owning the completion verdict.
 ───────────────────────────────────────────────────────────
 
 **▶ NEXT:** `/research-discover` — Find candidate sources for Phase 1's questions using the type-channel map.

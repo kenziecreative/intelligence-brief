@@ -90,8 +90,10 @@ noted.
 | **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date) |
 | **summarize-section** (Synthesize) | **synthesis / "so what"**, qualifier+range preservation, **counter-evidence gate**, assumption logging, methodology section, runs integrity | `drafts/`, `assumptions.md`, `negative-searches.md`, STATE (draft pending) |
 | **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B12** (v2: track 2), confidence tiers, deliverable manifest, waivers, **phase closeout** | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`) |
-| phase-insight / graph-analysis / progress | read-only decision-support | nothing |
+| phase-insight / graph-analysis / progress | read-only decision-support (progress + start-phase also *validate completion claims* via `check-completion` — verdict outranks STATE text) | nothing |
 | **research-integrity** (agent) | independent provenance/consistency/drift check | **registers cross-phase figures in `canonical-figures.json`** (v2 correction); *reads and surfaces* drift warnings — it does **not** write them |
+| **review-corpus** (runner, W7) | reviewer orchestration, execution metadata, four-inputs coldness, disclosure preflight | **sole writer of `research/reviews/`** pre-close: receipts + reports (immutable), `.failed.json` attempts. Reviewers write nothing. |
+| **validator** (`research/bin/validate-corpus-review.py`, W7) | **the completion verdict** (gate), the allowed STATE transition, post-close validation | `completion.json` + the four-op final STATE transition (`transition --apply`) — the only writer of project completion on adopted projects |
 
 Boundaries worth stating because they are load-bearing:
 - **discover never crosses into process-source's territory** (never writes notes/registry). The
@@ -332,14 +334,38 @@ gate. Design: `dev/researcher/W7-corpus-review-design.md` (v3.1). Build status b
   yet been run** — stage 3's proof half completes when they pass, which is also the
   stage-4 switch-on precondition; nothing invokes the gate at closeout yet, and cold
   reviewer behavior is proven only by the stage-5 live dual-tier run.
-- **Stages 4–5 [proposed]:** closeout refactor + side doors + sentinel-as-claim readers +
-  init/re-init install; live proof on the remediated engine corpus, then release.
+- **Stage 3 proof: complete.** The corpus-scale golden campaign (eval iterations 10–18)
+  closed with both goldens judged PASS — known-bad `corpus-a` at iteration 10
+  (Credibility Gate 3, 7/7 seeded-class recall) and clean `corpus-b` at iteration 18
+  (Credibility Gate 3, zero material findings). Every intermediate red was a true
+  positive (six fixture authoring defects, one runner-register deficiency, three
+  turn-phrasing gaps — all fixed). The stage-4 switch-on precondition is met.
+- **Stage 4 — gate wiring: built.** `audit-claims`' final-phase closeout is now the
+  three-stage validated closeout (read-only preflight with no conversational
+  authorization; validator gate verdict routed by exit code, legacy exit-10 path keeps
+  pre-W7 behavior with a visible no-credibility-gate notice; STATE written only via
+  `transition --apply`, every apply exit routed) with a mutation-free closeout-only
+  re-entry (a completed final manifest skips the audit entirely, so the reviewed corpus
+  is never touched between review and close). Side doors closed: init's STATE/CLAUDE
+  templates scope manual completion to non-final phases; discover's inconsistency menu
+  drops manual advance for the final phase. Sentinel readers (`progress`,
+  `start-phase`) treat completion as a claim — `check-completion` runs and its verdict
+  outranks STATE text (progress's phase table carries an explicit 22/23 override;
+  start-phase refuses phases on closed projects, with no conversational reopen of
+  archives). `init` installs the protocol kit (validator → `research/bin/`, marker,
+  STATE discriminator, SC-ID'd criteria + canonical file, reviews/ scaffold, pre-allow
+  additions) and gained a verify-not-presence adoption path (`/research-init upgrade`)
+  for existing projects, including the pre-adoption-receipts staleness case. The
+  validator gained archive drift-checking (closed-unreviewed + corpus/STATE drift →
+  stale, never a quiet archive; battery 69→71). Codex-hardened (fix-first: 4 blockers /
+  5 majors / 1 minor, all applied). Audit-entry golden regression run post-refactor
+  (iteration 19).
+- **Stage 5 [proposed]:** live proof on the remediated engine corpus, Cowork path, five
+  release surfaces + CHANGELOG + tag, merge.
 
-Ownership (enforced from stage 3): the **runner** is the only writer of review artifacts;
-reviewers are read-only samplers. The **validator** owns the completion verdict and the
-allowed STATE transition — enforced at stage 4 when the closeout starts calling it. These
-rows stay out of the Layer 2/3 ownership tables until the wiring lands — the tables
-describe enforced behavior.
+Ownership (now enforced): the **runner** is the only writer of review artifacts;
+reviewers are read-only samplers; the **validator** owns the completion verdict and the
+allowed STATE transition, and the closeout calls it (see the Layer 2 rows).
 
 ---
 

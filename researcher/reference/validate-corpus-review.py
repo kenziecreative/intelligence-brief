@@ -1373,9 +1373,29 @@ def run_check_completion(root, plugin_root):
                 problems.append("unsealed file %s appeared in reviews/ after close" % name)
 
     if unreviewed:
-        if record is not None and record.get("closed_state") != "closed-unreviewed":
-            problems.append("STATE says closed-unreviewed but completion.json says %r"
-                            % record.get("closed_state"))
+        if record is not None:
+            if record.get("closed_state") != "closed-unreviewed":
+                problems.append("STATE says closed-unreviewed but completion.json says %r"
+                                % record.get("closed_state"))
+            # The archive is still a post-close claim (spec §1.4/§6.4): the record's
+            # hashes must describe what is on disk. Drift after archiving is a stale
+            # completion, never reported as a quiet archive.
+            for field in ("decision_corpus_hash", "postclose_state_hash"):
+                v = record.get(field)
+                if not (isinstance(v, str) and HASH_RE.match(v)):
+                    problems.append("completion.json %s is missing or malformed" % field)
+            try:
+                manifest = build_manifest(root)
+                if (HASH_RE.match(record.get("decision_corpus_hash") or "") and
+                        record["decision_corpus_hash"] != manifest["decision_corpus_hash"]):
+                    problems.append("decision corpus changed after the archive — the "
+                                    "record no longer describes what is on disk")
+                if (HASH_RE.match(record.get("postclose_state_hash") or "") and
+                        record["postclose_state_hash"] != manifest["state_hash"]):
+                    problems.append("STATE changed after the archive — content outside "
+                                    "the allowed transition")
+            except Failure as exc:
+                problems.extend(exc.reasons)
         if problems:
             raise Failure(E_STALE_COMPLETION, problems)
         raise Failure(E_CLOSED_UNREVIEWED,
@@ -2421,6 +2441,28 @@ def run_self_test():
         shutil.rmtree(tmp)
     case("closed-unreviewed reported distinctly, never decision-ready",
          t_closed_unreviewed)
+
+    def t_archive_corpus_drift():
+        tmp, root, plugin = fresh()
+        run_transition(root, plugin, apply=True, closed_unreviewed=True,
+                       reason="both reviewer tiers permanently unavailable")
+        with open(os.path.join(root, "research/outputs/01-findings.md"), "a") as f:
+            f.write("\nEdited after the archive.\n")
+        expect(_check_code(root, plugin), E_STALE_COMPLETION)
+        shutil.rmtree(tmp)
+    case("closed-unreviewed + corpus drift -> stale/invalid, never a quiet archive",
+         t_archive_corpus_drift)
+
+    def t_archive_state_drift():
+        tmp, root, plugin = fresh()
+        run_transition(root, plugin, apply=True, closed_unreviewed=True,
+                       reason="both reviewer tiers permanently unavailable")
+        with open(os.path.join(root, STATE_REL), "a") as f:
+            f.write("\n- New work resumed after archive.\n")
+        expect(_check_code(root, plugin), E_STALE_COMPLETION)
+        shutil.rmtree(tmp)
+    case("closed-unreviewed + STATE edit -> stale/invalid completion",
+         t_archive_state_drift)
 
     def t_not_closed():
         tmp, root, plugin = fresh()
