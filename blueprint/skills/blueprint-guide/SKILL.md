@@ -1,6 +1,6 @@
 ---
 name: blueprint-guide
-description: This skill should be used when the user asks how Blueprint works, where to start, which mode to use, what the difference between discovery and capture is, or what they should document first (e.g. "how does blueprint work", "where do I start", "quick or deep?", "what should I capture first", "what can this do"), or runs /blueprint:guide. Explains the three jobs — discover, quick capture, deep capture — and routes the user to the right entry point based on whether they can already name a process.
+description: This skill should be used when the user asks how Blueprint works, where to start, which mode to use, what the difference between discovery, design, and capture is, or what they should document first (e.g. "how does blueprint work", "where do I start", "quick or deep?", "what should I capture first", "what can this do"), or runs /blueprint:guide. Explains the four jobs — discover, design, quick capture, deep capture — and routes the user to the right entry point based on whether they can name the process and whether they already run it.
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 

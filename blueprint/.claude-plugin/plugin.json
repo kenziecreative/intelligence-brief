@@ -1,7 +1,7 @@
 {
   "name": "blueprint",
-  "version": "0.3.0",
-  "description": "v0.3.0 — Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down — triggers, data movement, decision criteria, exceptions, approval authority — then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own. Part of the Kenzie Creative marketplace.",
+  "version": "0.3.1",
+  "description": "v0.3.1 — Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down — triggers, data movement, decision criteria, exceptions, approval authority — then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone; runs on its own. Part of the Kenzie Creative marketplace.",
   "author": {
     "name": "Kelsey Ruger",
     "url": "https://github.com/kenziecreative"

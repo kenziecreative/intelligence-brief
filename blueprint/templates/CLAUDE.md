@@ -7,6 +7,6 @@
 
 ## Configuration
 
-- blueprints_dir: blueprints/    # where /blueprint:capture writes finished Blueprints (relative to project root)
+- blueprints_dir: blueprints/    # where Blueprint writes its outputs — captured and designed Blueprints, and the Process Inventory (relative to project root)
 <!-- Defaults to blueprints/ in the working directory if this file is absent. Nothing else
      about the plugin's behavior is configurable. -->

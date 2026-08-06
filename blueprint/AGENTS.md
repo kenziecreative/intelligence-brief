@@ -8,13 +8,15 @@ self-contained. (Current version lives in `plugin.json` and `CHANGELOG.md`.)
 
 ## What it is
 
-A process extraction interviewer with a discovery front-door. Three jobs, three
+A process extraction interviewer with a discovery front-door. Four jobs, four
 skills/commands: **discover** finds recurring work the operator can't yet name and lists it
-in a thin Process Inventory; **capture** (quick or deep) turns one named process into a
-structured Process Blueprint that a human, workflow, or AI agent could execute against — with
-explicit per-step autonomy ratings (Automate / Monitor / Human) marking where automation is
-safe and where a human must stay in the loop; **guide** orients the user to the right entry
-point. The funnel is discover → capture; guide points people into it. "Correct" capture
+in a thin Process Inventory; **capture** (quick or deep) turns one named process the operator
+*already runs* into a structured Process Blueprint that a human, workflow, or AI agent could
+execute against — with explicit per-step autonomy ratings (Automate / Monitor / Human) marking
+where automation is safe and where a human must stay in the loop; **design** models a process
+the operator *doesn't yet run*, proposing an intended flow grounded only in their real
+constraints and nearest analog; **guide** orients the user to the right entry point. The funnel
+is discover → design (net-new) or capture (already run); guide points people into it. "Correct" capture
 output is a Blueprint whose steps carry intent and observable success criteria, whose judgment
 calls have explicit criteria, and whose gaps are flagged rather than invented. The target is
 not "document the task" but "model the work as a system." Discovery's correct output is a thin

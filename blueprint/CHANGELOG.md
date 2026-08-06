@@ -3,6 +3,22 @@
 All notable changes to the Blueprint plugin. Per-plugin semver; tags are plugin-scoped
 (`blueprint-vX.Y.Z`).
 
+## 0.3.1 — 2026-08-06
+
+Documentation correctness only; no behavior change. A `/upskill` constraint audit of all four
+surfaces found no capability constraints to cut — the interview rules, non-invention discipline,
+and validation gates all sort as intent — but it did find wording the 0.3.0 design release left
+behind.
+
+- **The guide surfaces say four jobs again.** `/blueprint:guide`'s body already explained design,
+  but its skill description and the command's description still advertised "the three jobs
+  (discover, quick capture, deep capture)" and routed on one question. Both now name all four and
+  route on the two that actually decide it: can you name the process, and do you already run it.
+  The skill description is a triggering surface, so the stale copy was user-visible.
+- **`templates/CLAUDE.md` describes `blueprints_dir` accurately** — discover writes the Process
+  Inventory there and design writes designed Blueprints there, not just capture.
+- **`AGENTS.md` "What it is" covers design**, including the discover → design *or* capture funnel.
+
 ## 0.3.0 — 2026-07-23
 
 Adds a fourth job — **design** — for a process that doesn't exist yet. Capture's whole discipline
