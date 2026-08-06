@@ -113,3 +113,8 @@ STATE.md update only (this file). Working tree otherwise clean at `7135d13`.
 3. Build discipline (standing): one change at a time; Codex-review before ship; eval
    regression on changed skills; sync `ARCHITECTURE.md` in the same change; release =
    five surfaces + CHANGELOG + checker + validate + tag `researcher-v<X.Y.Z>`.
+4. **Program-status block (standing):** the master plan
+   `~/.claude/plans/shimmying-sauteeing-storm.md` now opens with a "Program status"
+   table — the W1–W7 program-level view Kelsey reads to see where everything stands.
+   Update it (and its Last-updated date) whenever a workstream or W7 stage moves, in the
+   same session, alongside this file.
