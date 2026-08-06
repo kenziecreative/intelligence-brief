@@ -1,5 +1,5 @@
 ---
-name: environmental-briefing-agent
+name: environmental-briefing
 description: This skill should be used when the user asks to run an environmental brief — a triaged scan of the outside world (news, industry movement, research, policy, science) that surfaces the few items worth attention and ignores the rest — for a deployment configured in CLAUDE.md (e.g. "run the daily brief", "what's happening in my world", "environmental scan", or a scheduled run). Reads the deployment's relevance context, zones, evidence bar, cadence, and paths from CLAUDE.md; reads the ledger to report motion not repetition; classifies items by epistemic type and sourcing; and writes a dated brief.
 allowed-tools: Read, Write, Edit, WebSearch, WebFetch
 ---
@@ -25,6 +25,7 @@ Before doing anything, read CLAUDE.md and load these values. They are the deploy
 - **Zones** — the fixed set (see ZONES); the same lenses apply across roles. The relevance context, not zone editing, is what tailors them. Per-zone in/out examples are derived from the relevance context at setup.
 - **Evidence bar** — a named bar (`situational` / `decision` / `shareable` / `strict`) or the two gates set directly. Default: `decision`. See EVIDENCE BAR.
 - **Cadence** — interval and timezone. Default: daily, in the user's timezone (timezone must resolve to a real value).
+- **Grace window** — how far back before the previous run's close to reach when recovering items a skipped run missed. Default: 6 hours. See CADENCE.
 - **Length budget** — max items per zone, max lead items, overall length. Default: 5 per zone, 3 lead, a two-minute read.
 - **Held beliefs** *(optional)* — enables the disconfirming slot. Default: empty.
 - **Paths** — briefs directory and ledger file. Default: `./briefs/` and `./ledger.json`.
@@ -228,7 +229,7 @@ Structure: a JSON object with an `entries` array. Each entry:
 ## CADENCE
 
 - The configured interval means items published since the previous successful run.
-- Apply a short grace window before the previous run's close to catch items that broke just before it or were missed if a run was skipped. An item already in the ledger is still suppressed; the grace window recovers missed items, it does not re-surface reported ones. (This matters here: scheduled runs catch up after being skipped, so a run may cover more than one nominal interval.)
+- Apply the configured grace window before the previous run's close to catch items that broke just before it or were missed if a run was skipped. An item already in the ledger is still suppressed; the grace window recovers missed items, it does not re-surface reported ones. (This matters here: scheduled runs catch up after being skipped, so a run may cover more than one nominal interval.)
 - If no previous run exists, use the last 24 hours (or one interval).
 - Prefer original publication or update date over scrape date when deciding whether an item falls in the window.
 - Use the configured timezone.

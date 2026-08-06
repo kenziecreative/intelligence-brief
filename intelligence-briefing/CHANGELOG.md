@@ -4,6 +4,21 @@ All notable changes to the Intelligence Briefing plugin. Per-plugin semver; tags
 plugin-scoped (`intelligence-briefing-vX.Y.Z`). Entries below 0.3.0 are reconstructed from
 git history; the plugin's pre-marketplace iterations moved quickly, so early dates cluster.
 
+## 0.3.1 — 2026-08-06
+
+Two seam fixes from the `/upskill` constraint audit (`dev/intelligence-briefing/constraint-audit.md`),
+which found no capability constraints to cut. Behavior is unchanged; both edits close gaps
+where two surfaces described the same thing differently.
+
+- **Skill name aligned.** The skill's frontmatter `name` was `environmental-briefing-agent`
+  while the directory and both commands referred to `environmental-briefing`. Now consistent
+  everywhere.
+- **Grace window named in the skill's config list.** `templates/CLAUDE.md` shipped a 6-hour
+  grace window as a user-editable field, but the skill's CONFIGURATION block never listed it
+  and CADENCE called it only "a short grace window" — so the skill alone couldn't tell it was
+  configured rather than judged. CONFIGURATION now carries it with its default, and CADENCE
+  reads the configured value.
+
 ## 0.3.0 — 2026-06-07
 
 Refocused to the **external scan only** and folded into the Kenzie Creative marketplace.
