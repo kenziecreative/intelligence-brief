@@ -9,7 +9,7 @@ surfaces the risks, the commissioner owns the response.
 |---|---|---|
 | Seat growth past 50 changes Helpdock tier pricing (assumption A-1) | research/assumptions.md | Accepted; re-price trigger to be placed on the contract calendar. |
 | Migration lock-in (top regret factor, 38% of switchers) | note-analyst-roundup.md | To be mitigated: export path verified during the trial window before signature. |
-| Implementation overruns the 3-week median | note-helpdock.md | Accepted; the quarter plan will carry a 5-week buffer. |
+| Implementation overruns the vendor-reported 3-week median (single source) | note-helpdock.md | Accepted; the quarter plan will carry a 5-week buffer. |
 | No customer-reference interviews conducted | research/gaps.md | Accepted for a 24-seat commitment; revisit at 50 seats. |
 | Migration-tooling depth not assessed | research/gaps.md | Accepted for a 24-seat commitment; revisited at 50 seats. |
 

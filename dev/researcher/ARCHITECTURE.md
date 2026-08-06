@@ -86,10 +86,10 @@ noted.
 | **start-phase** | phase-entry briefing, carryover (assumptions/commonplace/gaps/backstage), source-material reconciliation | Phase Tier Record row; backstage check-offs; **`source-material-digest.md`** (created/updated during reconciliation — v2 correction) |
 | **discover** (Collect) | channel selection, query construction, candidate prioritization, **batch cadence + auto cross-ref**, exclusion recording | `discovery/*-candidates.md`, `exclusions.md`, `retrieval-log.json` |
 | **process-source** (Collect) | per-source note, **credibility assessment**, contradiction flagging, counter increments, candidate `[PROCESSED]` marking | `notes/`, `registry.md`, candidate tags, **STATE counters**, source-material-digest |
-| **cross-ref** (Connect) | **contradiction materiality**, **shared-origin/echo detection (triangulation)**, **saturation signals (advisory)**, pattern ID | `cross-reference.md`, resets counter, checks **Connect** box, backstage-tasks, Next Action |
-| **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date) |
-| **summarize-section** (Synthesize) | **synthesis / "so what"**, qualifier+range preservation, **counter-evidence gate**, assumption logging, methodology section, runs integrity | `drafts/`, `assumptions.md`, `negative-searches.md`, STATE (draft pending) |
-| **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B12** (v2: track 2), confidence tiers, deliverable manifest, waivers, **phase closeout** | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`) |
+| **cross-ref** (Connect) | **contradiction materiality**, **shared-origin/echo detection (triangulation)**, **saturation signals (advisory)**, pattern ID | `cross-reference.md`, resets counter, checks **Connect** box, backstage-tasks, Next Action, **`decision-ledger.md` `resolution` entries** (material resolutions only, at resolution time — W6b) |
+| **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date), **`decision-ledger.md` `acceptance` entries** (first acceptance only — W6b) |
+| **summarize-section** (Synthesize) | **synthesis / "so what"**, qualifier+range preservation, **counter-evidence gate**, assumption logging, methodology section, runs integrity; **reads the decision ledger pre-draft** (conformance-by-default — W6b) | `drafts/`, `assumptions.md`, `negative-searches.md`, STATE (draft pending) |
+| **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B13** (v2: track 2; B13 disposition conformance — W6b), confidence tiers, deliverable manifest, waivers, **phase closeout** incl. the **criteria preflight** (W6a: SC self-assessment at final-close stage 1, hard stop on plain unmet) and the **advisory criteria trajectory** in phase debriefs | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`), **`decision-ledger.md` `correction` + `directive` entries** (frame corrections at fix time; commissioner directives at (b-final) — W6b) |
 | phase-insight / graph-analysis / progress | read-only decision-support (progress + start-phase also *validate completion claims* via `check-completion` — verdict outranks STATE text) | nothing |
 | **research-integrity** (agent) | independent provenance/consistency/drift check | **registers cross-phase figures in `canonical-figures.json`** (v2 correction); *reads and surfaces* drift warnings — it does **not** write them |
 | **review-corpus** (runner, W7) | reviewer orchestration, execution metadata, four-inputs coldness, disclosure preflight | **sole writer of `research/reviews/`** pre-close: receipts + reports (immutable), `.failed.json` attempts. Reviewers write nothing. |
@@ -124,6 +124,7 @@ Phase Cycle (5-step checklist), Completed Phases, Key Decisions, Sources Process
 | `drafts/` → `outputs/` + `audits/` | synthesis → audited output + reports | durable |
 | `reference/canonical-figures.json` | cross-phase figure registry (written by **integrity**) | durable |
 | `reference/claim-graph.json` | claim nodes + drift warnings (written by **audit**) | durable |
+| `reference/decision-ledger.md` | **append-only disposition record** (corrections/resolutions/acceptances/directives; each class written by its owning skill at decision time; supersession by new entry, never edit; enforced by B13; in the reviewed corpus manifest) | durable — the anchor for records whose working views regenerate |
 | `reference/retrieval-log.json` | discovery audit trail | durable |
 | `reference/evidence-standard.md` | compiled audience rules, enforced at audit | durable |
 | `reference/backstage-tasks.md` | agent's private prep queue (worked at phase start) | disposable |
@@ -298,7 +299,21 @@ blind spots; those are noted.
 
 ---
 
-## Layer 9 — The corpus-level credibility gate (W7, mid-build)
+## Layer 9 — The corpus-level credibility gate (W7 shipped v1.8.0; W6a/b prevention layer shipped alongside it in v1.10.0)
+
+**W6a/b (the prevention half).** W7 is mitigation — the authority that says no at final
+close. W6a/b make it rare that it has to: the **criteria preflight** (final-close stage 1
+self-assesses every SC with evidence pointers; plain unmet = hard stop before a reviewer
+run is spent; accepted-unmet requires the commissioner's recorded words), the **advisory
+criteria trajectory** in every phase debrief (nobody meets the criteria for the first
+time at final close), the **settled-framing guard** (a qualified record — waivers,
+accepted gaps, sub-headline confidence tiers — never reads unqualified, at phase or
+project close), and the **decision ledger** + **B13** (durable append-only disposition
+record; silent cross-phase reversal is a high-severity audit finding at every audit, not
+a hope that the final reviewer notices). Design + fork record:
+`dev/researcher/w6ab-design.md`.
+
+**W7 build record (stages, all complete):**
 
 Corpus-level failures (completion criteria unmet, conclusions exceeding evidence, cross-phase
 reversals) are invisible to every per-claim gate above — a real project closed all-green and
@@ -369,6 +384,7 @@ allowed STATE transition, and the closeout calls it (see the Layer 2 rows).
 
 ---
 
-*This map is the base for precise adjustment. W7 (Layer 9) is the active build chapter; Seam 0
-and the Layer 4 judgment gaps (with the corrected fixes above) are the next design chapter
-after it; the specialist-bench decisions (Layer 5) ride with them.*
+*This map is the base for precise adjustment. W7 and W6a/b (Layer 9) are shipped; W2
+(saturation→stop routing, Seam 1) and W3 (conclusion-vs-brief, Seam 2) are the next build
+chapters; Seam 0 and the remaining Layer 4 judgment gaps follow; the specialist-bench
+decisions (Layer 5) ride with them.*

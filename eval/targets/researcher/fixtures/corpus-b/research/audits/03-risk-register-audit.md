@@ -13,4 +13,4 @@ Section confidence tiers:
   and the commissioner's recorded dispositions.
 
 ## Checks run this pass
-B1–B11 run — clean. B12 n/a (first pass).
+B1–B13 run — clean. B12 n/a (first pass); B13 run — clean (ledger conformant).

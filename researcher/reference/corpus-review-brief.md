@@ -91,8 +91,13 @@ required-evidence bar is an assertion, not a finding.
 - **C3 Cross-phase consistency** (`cross-phase-consistency`). Sample every load-bearing
   figure/disposition that crosses phases: does any later output silently reverse an earlier
   recorded disposition or reintroduce a correction an audit removed? FAIL on silent reversal.
-  *Required evidence: both sides of the reversal — the earlier recorded disposition and the
-  later contradicting use, each file:line.*
+  When the corpus carries `research/reference/decision-ledger.md` (an append-only record of
+  audit corrections, contradiction resolutions, accepted gaps, and commissioner directives —
+  supersession by new entry, never edit), use it as the primary record of dispositions and
+  check outputs against the latest entry in each supersession chain; its absence on older
+  projects is not a finding, and it supplements — never replaces — your own sweep of the
+  outputs and audits. *Required evidence: both sides of the reversal — the earlier recorded
+  disposition and the later contradicting use, each file:line.*
 - **C4 Status coherence** (`status-coherence`). Collect every blocker/dependency/status claim
   across outputs and STATE. Is there one authoritative picture? FAIL on contradictory status
   claims. *Required evidence: each contradicting status claim, file:line.*
