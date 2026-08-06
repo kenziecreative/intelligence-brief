@@ -48,6 +48,16 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
    **B11 — Structure & consistency (mechanics elaborated below, run and reported as battery items).** The Methodology & Limitations structural check (step 5b), the cross-document consistency check (step 6), and the canonical-figures/drift pass (step 6a) are part of the battery, not separate from it. Run all three every pass and list them alongside B1–B10 in `Checks run this pass`.
 
    **B12 — Regression sweep (re-audits only).** On any pass after the first, for **every defect class fixed in a prior pass on this artifact**, re-scan the *whole document*, not the location that was fixed — a fix applied to one instance while an identical construction survives elsewhere is exactly what this catches. On a first audit, report `B12 — n/a (first pass)`.
+
+   **B13 — Disposition conformance.** Read `research/reference/decision-ledger.md`; if the file is absent, nothing is ledgered — report `B13 — n/a (no ledger)` and move on, never treat absence as an error. For every claim in the draft whose subject matter a ledger entry covers, the claim must conform to the **latest entry in that subject's supersession chain**, or carry an explicit supersession: a new ledger entry citing the superseded `D-<n>` plus disclosure at the claim site and in Methodology & Limitations (the B10 pattern). A claim asserting a pre-correction frame, re-adopting the losing side of a resolved contradiction, claiming coverage a ledgered acceptance concedes is missing, or contradicting a recorded directive — without the supersession record — is **Disposition reversal undisclosed** (high-severity). B13's job is not to freeze dispositions; new evidence can supersede any of them. Its job is to make *silent* reversal impossible: the record moves forward by appending, and the reader is always told.
+
+   **Reporting a reversal — a content contract binding two surfaces equally.** A reversal the user hears about as "this claim isn't supported" has been reported as the wrong kind of problem: the severity comes from a recorded decision being undone, and that is the fact they need. **The audit report and the turn each carry the full contract — neither substitutes for the other.** The report is the durable record a later reader works from; the turn is what the commissioner acts on now. Satisfying one and shortchanging the other is the predictable failure here, so check both before you finish.
+
+   For **each** reversal, in your own words, both surfaces convey:
+   - **That a recorded disposition was reversed** — which one, what it said, when it was recorded. Every reversal gets this, not just the most striking one; a draft reversing two dispositions while one is framed as a reversal and the other as a dropped qualifier has reported one problem, not two.
+   - **The sanctioned route to reverse it, stated affirmatively** — all four elements, every time: (1) new evidence that postdates or outweighs the recorded basis; (2) a new ledger entry that **points back at the entry it replaces** (the ledger is append-only — superseding is an addition that cites, never an edit); (3) disclosure at the claim site; (4) disclosure in Methodology & Limitations. "No superseding entry exists" states an absence; "the way back is new evidence plus a new entry pointing at the 2026-07-15 correction it replaces, disclosed at the claim and in Methodology" states the route. Only the second tells the user what to do.
+
+   Say all four in plain language. Ledger IDs spoken aloud read as machinery (posture rule 7), and "put it on record" swings past the mechanic that makes supersession legitimate — the middle path names the act and the target without the filing reference: "a new entry pointing back at the phase-1 correction it replaces."
 5b. **Methodology & Limitations structural check.** The draft must end with a `## Methodology & Limitations` section, and the section must be real — populated for THIS draft, not boilerplate. Verify each element:
    - **Sampling disclosure present**, with properly scoped absence language: "not found via the mapped channels," never "does not exist."
    - **Single-source findings list** consistent with what this audit itself found — a finding the audit traced to one independent source must appear here (or the draft must gain it as a mechanical fix).
@@ -160,7 +170,7 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
    **After writing, verify the write succeeded.** Re-read the file and confirm it parses as valid JSON with a `claims` array. If the read fails or the array is missing, log: "WARNING: claim-graph.json write failed — graph incomplete for this phase. Re-run `/research-audit-claims` to retry graph write without re-running the full audit." Do not fail the audit or block promotion.
 
-9. **Write audit report to `research/audits/<basename>-audit.md`**, where `<basename>` is the draft's filename with its `.md` extension stripped — `research/drafts/04-test-section.md` audits to `research/audits/04-test-section-audit.md`, not `04-test-section.md-audit.md`. Include: scorecard, pass/fail determination, findings table, list of claims that need correction, the confidence tier table (section name, tier, rationale) from step 8a, and a **`## Checks run this pass`** section listing every battery item B1–B12 with its result (`run — clean` or `run — N findings`; `n/a (first pass)` for B12 on a first audit). This section is what makes a skipped check visible at the time rather than three passes later, and lets a reader see that this pass ran the same battery as the last.
+9. **Write audit report to `research/audits/<basename>-audit.md`**, where `<basename>` is the draft's filename with its `.md` extension stripped — `research/drafts/04-test-section.md` audits to `research/audits/04-test-section-audit.md`, not `04-test-section.md-audit.md`. Include: scorecard, pass/fail determination, findings table, list of claims that need correction, the confidence tier table (section name, tier, rationale) from step 8a, and a **`## Checks run this pass`** section listing every battery item B1–B13 with its result (`run — clean` or `run — N findings`; `n/a (first pass)` for B12 on a first audit, `n/a (no ledger)` for B13 where it applies). This section is what makes a skipped check visible at the time rather than three passes later, and lets a reader see that this pass ran the same battery as the last.
 
 
 ## Pass/Fail Criteria
@@ -229,7 +239,7 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
 
        Only prompt the user when **artifacts are missing or ambiguous** — e.g., no Phase N notes exist, cross-reference.md has no Phase N data, or gaps.md doesn't cover Phase N. In that case, present three named options: **(a) cancel the closeout and re-run the missing cycle step** (the user goes back to run the relevant skill for whichever step lacks artifacts, then re-invokes audit-claims); **(b) authorize marking the step checked anyway** (the user confirms the step was completed through means not reflected in the standard artifacts); **(c) abort the audit promotion entirely and leave the draft in drafts/** (the audit report is still written, but the draft is not promoted and STATE.md is not advanced). Wait for the user to pick one. Do not proceed until they do, and do not leave STATE.md half-updated.
 
-       **Option (b) does not exist for the final phase.** When Phase N is the final phase, a conversational confirmation cannot authorize anything the cold corpus reviewer will never see: the authorization must be a written commissioner directive in `research/notes-to-self.md` (their words, dated). Offer (a), (c), and "(b-final) record a commissioner directive in notes-to-self.md, then re-invoke" — and note that the directive changes the corpus, so the final review runs (or re-runs) after it.
+       **Option (b) does not exist for the final phase.** When Phase N is the final phase, a conversational confirmation cannot authorize anything the cold corpus reviewer will never see: the authorization must be a written commissioner directive in `research/notes-to-self.md` (their words, dated). Offer (a), (c), and "(b-final) record a commissioner directive in notes-to-self.md, then re-invoke" — and note that the directive changes the corpus, so the final review runs (or re-runs) after it. When a directive is recorded, also append a `directive` entry to `research/reference/decision-ledger.md` (create from `${CLAUDE_PLUGIN_ROOT}/reference/templates/decision-ledger.md` if absent) — next `D-<n>`, class `directive`, date, phase, the directive's subject, its effect in one line, evidence: `research/notes-to-self.md` — so the disposition is durable and enforceable, not just filed.
      - **Mark the phase complete in Completed Phases.** Change `- [ ] Phase N: [Name]` to `- [x] Phase N: [Name] — COMPLETE [YYYY-MM-DD]`.
      - **Read `research/research-plan.md`** to determine Phase N+1's name. If Phase N was the final phase in the plan, skip to the "final phase" branch below.
      - **Advance `Active phase`** in `Current Position` from `N — [Phase N Name]` to `N+1 — [Phase N+1 Name]`.
@@ -285,7 +295,50 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      deliverable manifest (step 2) and the cycle-artifact reconciliation are *checks
      only* here. Any discrepancy — a missing deliverable, an unaudited output, an
      unchecked earlier cycle step whose artifacts don't confirm completion — ends the
-     turn with the named remedy. **There is no conversational authorization at final
+     turn with the named remedy.
+
+     Stage 1 also runs the **criteria preflight**: read
+     `research/reference/completion-criteria.md` (on a legacy-prose project, the plan's
+     Success Criteria section) and self-assess every criterion with a pointer to its
+     evidence — an output, an audit, a ledger entry. Three dispositions: **met**
+     (evidence named), **unmet**, or **accepted-unmet** (a commissioner acceptance or
+     directive is on record — their words, dated, in `research/notes-to-self.md` or the
+     decision ledger; never the agent's inference). Any plain **unmet** ends the turn
+     exactly like a missing deliverable, naming the criterion and what meeting it would
+     take — before a reviewer run is ever suggested: a review is expensive and its
+     receipt freezes to the corpus hash, so spending it on a self-detectably unmet
+     criterion wastes the run.
+
+     **`met` requires a thing you can point at.** A criterion is met when you can name
+     the artifact that satisfies it — this output, that audit, this ledger entry. It is
+     **not** met by the absence of a violation. Criteria are routinely written as
+     conditionals ("any single-figure cost carries a recorded decision rule," "every
+     contested claim is dispositioned"), and a conditional over an empty set is
+     vacuously true as logic while telling you nothing about whether the work was done.
+     When a criterion names a record the project is supposed to hold and that record
+     does not exist in the corpus, the disposition is **unmet** — the commissioner asked
+     for the record, not for the absence of the thing that would have required it. When
+     you find yourself reasoning "there was never a case that would have triggered
+     this, so it's satisfied," that is this rule firing: stop, and mark it unmet.
+
+     **Report the receipts, not just the verdicts — this binds the turn.** For each
+     criterion the turn names the artifact the disposition rests on, not a description of
+     it: "the platform comparison in `01-platform-landscape.md`, audited clean" rather
+     than "is sourced and audited." An unmet-by-absence disposition carries the same
+     burden in reverse — **say where you looked**: the decision ledger, notes-to-self, and
+     the promoted outputs, named. "Nothing on record" is the single claim in the turn most
+     likely to be wrong and least checkable by the reader; the commissioner's next
+     question is "did you check the ledger?", and a preflight that cannot answer it is
+     asking them to take an unmet criterion on trust. Naming the criteria positionally
+     ("the third one") reads better than reciting IDs and is fine — the artifact is what
+     must be named, not the SC number.
+
+     The self-assessment is a preflight, not a rival verdict — **write nothing into the
+     corpus during it**, and note that this write-free rule is what the stop protects: a
+     criterion cleared here falls through to stage 2, where the legacy branch performs
+     real completion writes. A wrongly-passed preflight does not produce a visible
+     error; it produces an orderly-looking close. The cold reviewer's C1 remains the
+     authority on criteria dispositions at the gate. **There is no conversational authorization at final
      closeout:** the (b) "authorize anyway" option does not exist on this branch.
      Authorizing a missing cycle artifact requires a written commissioner directive in
      `research/notes-to-self.md` (their words, dated); once written, the corpus has
@@ -333,7 +386,13 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      explicitly, reporting the validator's own reasons:
      - **0:** done — report the recorded `review_set_id` and proceed to the debrief with
        the completion framed as: validated closeout, frozen corpus, any corpus change
-       from here invalidates the completion.
+       from here invalidates the completion. The completion report carries the
+       qualification record forward: every waiver on a promoted deliverable, every
+       accepted gap, any headline finding whose audit confidence tier sits below the
+       confidence the completion prose would otherwise project. "Validated" attests
+       that the process ran and the reviewer found nothing material — it never upgrades
+       the strength of the findings themselves. A completion whose record contains
+       qualifications may not read as unqualified.
      - **13 (stale-hash):** the corpus or STATE changed between the stage-2 gate and the
        apply (the TOCTOU guard). If nothing should have changed, re-run stage 3 once; a
        second 13 means something is writing to the corpus — stop and report.
@@ -360,6 +419,14 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      - *Judgment:* choosing between two plausible sources, rewriting a claim whose support is missing entirely, resolving a contradiction the draft got wrong. Audience-standard violations are always judgment issues — only the user can decide between fixing the claim and granting a waiver.
 
   2. **Apply every mechanical fix to the draft now.** Do not ask permission. Use the Edit tool to make each change in the draft file. This is not optional — if a fix is mechanical, apply it. **Fix hygiene: an inserted qualifier, caveat, or warning must not split an existing sentence or orphan the clause it interrupts.** If the only clean insertion point would break a sentence or an argument mid-flow, the fix is no longer mechanical — reclassify it as judgment and hand it back rather than shipping a fix that damages the prose it was meant to protect.
+
+     **Ledger frame corrections.** When an applied fix — mechanical now, or a judgment fix applied after the user decides — changes a claim's *interpretive frame or evidentiary strength* rather than its value (a causal claim reframed as correlational, a confidence tier downgraded, an "established" finding recast as single-source, a scope narrowed), append a `correction` entry to `research/reference/decision-ledger.md`, creating the file from `${CLAUDE_PLUGIN_ROOT}/reference/templates/decision-ledger.md` if absent: next sequential `D-<n>`, class `correction`, today's date, the phase, the claim's subject in one line, the reframing in one line (old frame → new frame), evidence pointing at this audit's report in `research/audits/`.
+
+     Two things are **not** ledgered here, and the boundary matters more than it looks:
+     - **Value corrections** — a figure fixed to match its note. `canonical-figures.json` and B1 already hold values; the ledger holds frames.
+     - **A disposition another skill already recorded.** Disclosing an override, restating a resolved contradiction, or writing an accepted gap into Methodology is *conformance with* an existing entry, not a new decision — the resolution or acceptance was ledgered by cross-ref or check-gaps when it was made. Filing a second entry for the same decision double-records it and makes the supersession chain unreadable. The audit's job in that case is the disclosure, not a ledger write.
+
+     A `correction` entry belongs here only when **this audit is what changed the frame**. The entry is what makes that change hold downstream: a later draft asserting the pre-correction frame without a superseding entry is a B13 finding. The write is silent (posture rule 7) — the *fix* is reported to the user; the filing is not.
 
   3. **List what you did and what remains.** For each mechanical fix applied, show: file, line, before → after. For each judgment issue, describe what needs to change and why the user must decide.
 
@@ -486,7 +553,10 @@ When a phase's audit passes, do NOT just say "Audit passed" and recommend cleari
 1. **Key findings** — The substantive things this phase established, with specifics (numbers, comparisons, named entities). Not a one-line summary — cover all the major findings, not just the headline.
 2. **Surprises or counterintuitive results** — Anything that challenges assumptions or conventional wisdom.
 3. **Gaps that remain** — What this phase couldn't answer and why (data doesn't exist, sources conflict, needs internal verification).
+3a. **Completion-criteria trajectory** — Read `research/reference/completion-criteria.md` (or the plan's Success Criteria section if no canonical file exists) and report any criterion this phase's work touched: moved toward met (say what now evidences it), still unmet, or newly at risk. Advisory only — never a gate at a non-final phase close. Its job is recurring visibility, so nobody meets the criteria for the first time at final closeout. When no criterion was touched, write nothing — an empty ritual line teaches the reader to skip the section.
 4. **Implications for upcoming phases** — How these findings shape what to look for next.
+
+**The qualification record travels with the findings.** When the promoted deliverable carries a waiver, when an accepted gap touches a finding's subject, or when a headline finding's audit confidence tier sits below the register the debrief would naturally use, the debrief says so where the finding is stated — a qualified record never reads unqualified. This is the same rule the final completion report follows.
 
 5. **Register self-check — silent, before you present.** Run it over your recent turns this phase: validate-then-elaborate openers (any first sentence whose job is agreement, however honest the rest of the turn); ungraded validation (building on a user interpretation you never checked against the notes); premature-certainty drift (conclusions stated ahead of the evidence tier that supports them); machinery narration (state-file bookkeeping, counters, gate mechanics, step numbers narrated in first person); and pet phrases — any expression recurring across your responses, your own or one absorbed from these instructions. If you find any, correct the register from the debrief onward — do not announce the correction, just stop doing it. Check the debrief draft itself the same way: findings stated at the confidence their tier earns, surprises framed as what the evidence did (not what the user hoped), gaps named plainly. The doctrine is `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md`.
 
@@ -520,7 +590,7 @@ Only after the user is done reacting to the debrief, render the transition promp
 
 - **No bypassing.** If the user asks to skip the audit or move a failed draft to outputs manually, refuse. Explain that the audit gate exists to protect research quality and that fixing the issues is faster than dealing with unreliable findings downstream.
 - **No soft passes.** Do not downgrade a high-severity issue to moderate to make the draft pass. If a claim doesn't trace to a source, it's unsupported regardless of whether the claim "feels right."
-- **The full battery runs on every pass.** Step 5's B1–B12 are run in full on every audit — the first pass and every re-audit — and reported in `## Checks run this pass`. Improvising which classes to run (figures this pass, structure the next, quotations the pass after) is the defect that turns one audit into three: a finding surfaced on the third pass was never harder to detect, it was simply a check nobody had run yet. A skipped battery item is a failure of the audit, not a shortcut.
+- **The full battery runs on every pass.** Step 5's B1–B13 are run in full on every audit — the first pass and every re-audit — and reported in `## Checks run this pass`. Improvising which classes to run (figures this pass, structure the next, quotations the pass after) is the defect that turns one audit into three: a finding surfaced on the third pass was never harder to detect, it was simply a check nobody had run yet. A skipped battery item is a failure of the audit, not a shortcut.
 - **Recording a waiver is not re-auditing.** A valid `waive:` message is recorded the moment it arrives — draft Methodology & Limitations, audit report, gate-log — even when no audit is running, and even though the draft does not promote until the user re-invokes the audit. The re-audit rule below governs the audit loop, not the record — and a waiver is a judgment resolution, so it never earns the automatic lap. Never let a waiver the user granted end the turn with no trace on disk.
 - **Re-audit after fixes — always full, never a spot-check.** When a draft is fixed after a failed audit, run the audit again from the top. Do not re-check only the previously flagged lines: fixes can introduce new problems, and catching those is the entire reason the second pass exists. Who triggers that pass depends on what the findings were:
   - **Citation-level findings only** → the agent re-audits itself, once, in the same turn (FAIL branch step 4). When the only corrections were pointers — a citation retargeted to a note confirmed to hold that exact value — nothing a reader would call a fact has moved, and asking the user to re-type the command to confirm bookkeeping is latency, not rigor.
@@ -540,7 +610,7 @@ Only after the user is done reacting to the debrief, render the transition promp
 | Scope narrowing — auditing only "important" claims while skipping minor ones | Audit every factual claim, including numbers in passing references and claims inherited from prior phases. Minor claims are where drift hides. |
 | Treating audit as formality — skimming rather than tracing each claim to its source | For each claim, open the cited source note and verify the value. Do not rely on memory of what the source said. |
 | Post-fix spot-checking — only re-checking flagged issues after a fix | Re-run the full audit after fixes. Edits can introduce new mismatches, especially when adjusting ranges or qualifiers. |
-| Improvised battery — running a different set of check-classes each pass | Step 5 is a fixed battery (B1–B12), not a menu. Run every item every pass and report each in `Checks run this pass`. Serial re-discovery — a defect found on pass 3 that was present all along — is the signature of a skipped item, and it turns one audit into several. The classes stay the same every pass on purpose. |
+| Improvised battery — running a different set of check-classes each pass | Step 5 is a fixed battery (B1–B13), not a menu. Run every item every pass and report each in `Checks run this pass`. Serial re-discovery — a defect found on pass 3 that was present all along — is the signature of a skipped item, and it turns one audit into several. The classes stay the same every pass on purpose. |
 | Auditing only what claims assert, missing what the plan required — an absent component has no claim to trace | Battery item B6 (plan-requirement conformance) reads the phase's plan section, enumerates the required deliverable components, and confirms each is present. This is the only check that finds absent content — citation-checking structurally cannot, because there is no claim to trace. A required component that was never written is a high-severity Missing required component. |
 | Consistency blind spot — auditing the draft in isolation without checking other outputs | Always run the cross-document consistency check and canonical figures check. Same claim, different numbers across documents is high-severity. |
 | Conflating confidence with audit pass/fail — treating low confidence as a failure | Confidence tier measures evidence strength (how well-supported). Audit pass/fail measures evidence accuracy (how truthfully represented). A section with one source, accurately cited, passes the audit with Low confidence — unless the project's own evidence standard names that pattern as unacceptable, in which case it fails as an audience-standard violation. The standard gate enforces the user's commissioned rules; the tier stays advisory for everything the standard doesn't name. |

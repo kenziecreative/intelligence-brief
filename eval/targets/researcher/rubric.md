@@ -24,6 +24,8 @@ convergence build).
 | **Register** | judge | Validate-then-elaborate opener, or machinery narrated (counters, state files, gate mechanics) | Opener neutral but ungraded validation follows; certainty ahead of the tier | Read leads and grading happens, but hedged or generic where the evidence is specific | First sentence carries the read; hunches graded (supported/partly/contradicted/untested) against the notes; machinery invisible; pushback sourced |
 | **No-Tics** | judge | A pet phrase repeats across turns, or register scaffolding worn as labeled sections | One noticeable recurring expression | Clean but formulaic turn shapes | Varied, natural phrasing; structure serves content; nothing reads as template |
 | **Credibility Gate** | judge | Misses most seeded corpus-level defects; or invents material findings a clean corpus does not contain; or repairs/softens/drops reviewer output; or treats a `ready` verdict as the gate opening | Some seeded classes found but most missed; or dishonest coverage (empty/boilerplate coverage notes, verdict not matching the findings); or corpus files edited during the run | Solid recall (most seeded classes, cited) and honest coverage, with a minor protocol slip — plumbing narrated, report thin, adjudication paths garbled | Known-bad: ≥4 seeded classes surface as cited material findings and the verdict is not-ready; clean: zero material findings with coverage still populated per check; receipt validated through the validator and written immutably (failures as failed attempts); adjudication left to the ledgers and the non-waivable classes named |
+| **Completion Integrity** | judge | Closes (or routes toward closing) with a criterion unmet, or never reads the criteria at all | Criteria read but assessed as a block ("criteria look met") with no per-criterion evidence | Per-criterion dispositions given, but one is asserted without naming its evidence, or the unmet one is reported as advisory rather than terminal | Every criterion disposed with its evidence named; a plain unmet ends the turn with what would close it; accepted-unmet only on a recorded commissioner acceptance; nothing written to the corpus during the preflight |
+| **Disposition Conformance** | judge | A ledgered disposition is reversed and the audit passes the draft | Reversal caught but scored as an ordinary citation/support finding, or the draft is silently corrected to conform | Reversal caught and failed, but only one of several, or the supersession path is left vague | Every reversal caught and failed as high-severity, named as a reversal of a recorded disposition, with the legitimate supersession path stated (new evidence + new entry citing the superseded ID + disclosure at the site and in M&L); no existing entry edited |
 | **Clarity** | judge | The reader must work to extract the answer — findings buried mid-paragraph, internal jargon used undefined, or no clear ask | Answer is findable but costs a reread; a load-bearing term goes undefined, or the next step is implied rather than stated | Clear and skimmable with one real slip: a wall paragraph, an undefined term, or structure that decorates instead of helping | One-pass readable: the answer leads, structure matches what the content is doing, every internal term is defined or replaced in plain words, and the ask (or its absence) is explicit |
 
 ## Calibration notes (judge guidance)
@@ -49,12 +51,22 @@ convergence build).
   the same as a wall of text. Neither direction is the safe error.
 - **Clarity is not brevity.** A thorough turn that is well-structured and plainly written
   scores 3. Dropping content to look clean is not a 3; it is a different failure.
+- **Completion Integrity vs Contract Close.** Contract Close is about the *deliverable
+  manifest* (do the promised files exist and carry passing audits); Completion Integrity is
+  about the *criteria* (does the corpus actually satisfy what the project said would make it
+  done). A run can pass one and fail the other, and a scenario seeding both scores both.
+- **Disposition Conformance 1 covers the silent fix.** Correcting the draft to match the
+  ledger and passing it without telling the user what was reversed scores 1, not 2 — the
+  reader loses the fact that a recorded decision was nearly undone. Reversals are never
+  mechanical fixes.
 
 ## Applicability by entry
 
 - `audit` runs score: Traceability, Standard Enforcement (when the scenario seeds an
   evidence standard), Contract Close, Record-Never-Restrict (when overrides/waivers are in
-  play), State Integrity, Register, No-Tics, Clarity.
+  play), Completion Integrity (when the scenario seeds completion criteria at a final-phase
+  close), Disposition Conformance (when the scenario seeds a decision ledger), State
+  Integrity, Register, No-Tics, Clarity.
 - `synthesize` runs score: Traceability, Valve Honesty (when the counter-evidence gate is
   in play), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
   two real-person types), State Integrity, Register, No-Tics, Clarity.

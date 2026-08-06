@@ -2,6 +2,79 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.10.0] — 2026-08-06
+
+**W6a/b — the prevention layer.** W7 (v1.8.0) built the authority that refuses completion
+at the end. This release makes it rare that it has to, and closes the one thing an
+end-of-project review structurally cannot reach: nothing checked the project's own
+completion criteria until the very end, and nothing stopped a later phase from quietly
+undoing a decision an earlier one recorded.
+
+### Added
+
+- **Decision ledger** (`research/reference/decision-ledger.md`) — an append-only record of
+  the dispositions later work must honor: audit frame corrections, contradiction
+  resolutions, accepted gaps, and commissioner directives. Each class is written by the
+  skill that owns the decision, at the moment it is made. Supersession is a new entry
+  citing the one it replaces; entries are never edited or deleted. Installed by
+  `/research-init` on new projects, and created from the template on first use by any
+  writing skill on projects that predate it — absence is never an error.
+
+  Before this, every disposition lived somewhere that regenerates. Contradiction
+  resolutions survived only while the contradiction did; accepted gaps survived by being
+  re-recorded; audit corrections had no structured record at all. Enforcement against
+  records that can silently vanish is not enforcement.
+
+- **B13 — Disposition conformance**, in the audit battery. A claim that asserts a
+  pre-correction frame, re-adopts the losing side of a resolved contradiction, claims
+  coverage a ledgered acceptance concedes is missing, or contradicts a recorded directive
+  — without a superseding record — is **Disposition reversal undisclosed** (high
+  severity). The point is not to freeze decisions: new evidence can supersede any of them.
+  The point is that reversing one silently becomes impossible. Reports name the reversal as
+  a reversal and state the route to a legitimate supersession, on both the audit report and
+  the turn.
+
+- **Criteria preflight at final close.** Before a corpus review is ever suggested, the
+  closeout self-assesses every `SC-N` with the artifact its disposition rests on. A plain
+  unmet criterion ends the turn; an unmet-by-absence disposition says where it looked.
+  Accepted-unmet requires the commissioner's recorded words, never the agent's inference,
+  and a criterion naming a record the project should hold is unmet when the record is
+  absent — a conditional over an empty set is not satisfaction.
+
+- **Criteria trajectory in phase debriefs** (advisory) — any criterion this phase's work
+  touched, so nobody meets the criteria for the first time at final close.
+
+- **Settled-framing guard** at phase and project close: waivers, accepted gaps, and
+  headline findings whose audit tier sits below the presented confidence travel with the
+  report. "Validated" attests that the process ran, never that the findings are stronger
+  than their evidence.
+
+### Changed
+
+- `research-summarize-section` reads the decision ledger before drafting, so conformance is
+  the default rather than an audit catch.
+- The adverse-search exit now presents its record as a record: attributed to the retrieval
+  log, dated in the turn, with staleness stated and a re-run offered. A month-old logged
+  search narrated as work just performed asks the commissioner to accept the wrong thing —
+  recency is what decides whether "none found" still holds.
+- After a commissioner resolves a contradiction, the turn states what was recorded and any
+  forward consequence, and stops. Restating the case for the rejected side is argument
+  wearing disclosure's clothes.
+- `corpus-review-brief.md`: C3 reads the decision ledger as the primary disposition record
+  when present, supplementing rather than replacing the reviewer's own sweep. Additive; no
+  protocol version change.
+
+### Verified
+
+Eval iterations 21–23. Iteration 21 ran 16 captures and found **four red goldens** — two of
+them these new mechanisms — and every fix that followed was to *how a result is reported*,
+not to a detection mechanism. All four are green at iteration 23, including a
+post-decision-re-argument defect open since iteration 4. Validator battery 74/74; contract
+hash unchanged; deterministic gates clean throughout.
+
+Known, recorded, not fixed here: the deterministic gate set cannot see a STATE write during
+a write-free preflight, nor cycle-step/checkbox incoherence. Both are harness work.
+
 ## [1.9.0] — 2026-08-06
 
 The headroom release. A full constraint audit (/upskill) of every instruction surface

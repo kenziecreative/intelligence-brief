@@ -670,6 +670,8 @@ research/
 ├── reference/                # Protocol and standards reference files
 │   ├── canonical-figures.json # Single source of truth for cross-phase numbers
 │   ├── claim-graph.json       # Claim graph registry, written by /research-audit-claims
+│   ├── completion-criteria.md # Canonical SC-N criteria — the completion gate binds to these
+│   ├── decision-ledger.md     # Append-only disposition record — audits enforce it downstream
 │   ├── evidence-standard.md   # Commissioned evidence rules — enforced at the audit gate
 │   ├── backstage-tasks.md     # Agent's private prep queue (read at phase start)
 │   └── retrieval-log.json     # Retrieval log registry, written by /research-discover
@@ -727,6 +729,7 @@ Read the research plan in `research/research-plan.md` before starting. It define
 - **Phase completion requires all five steps.** A phase is not complete until: sources collected for this phase, cross-reference is current, gaps are assessed, draft is written, and audit has passed. STATE.md should not mark a phase complete until all five are done.
 - **The final phase — and the project — close only through the credibility gate.** This project carries review protocol v1: project completion requires an independent adversarial corpus review (`/research-review-corpus final`) plus the validator's gate verdict, and the completion write is performed by the validator (`research/bin/validate-corpus-review.py`), never by hand. No skill, and no conversation, can mark the project complete without a valid review set and zero open material findings. Manual completion instructions in this file apply to non-final phases only.
 - **Canonical figures registry is the source of truth for cross-phase numbers.** When citing a number from a previous phase, check `research/reference/canonical-figures.json` first. If registered, use the canonical value. If not registered and this is a cross-phase citation, register it before using it. Never copy numbers from STATE.md summaries or conversation memory.
+- **The decision ledger is the durable record of dispositions.** `research/reference/decision-ledger.md` is append-only: audit corrections, contradiction resolutions, accepted gaps, and commissioner directives are recorded there by the skills that own them, at decision time. Later work must honor a ledgered disposition or supersede it with a new entry citing the old ID and new evidence — a silent reversal is a high-severity audit finding. Never edit or delete an entry.
 - **Never skip, fold, reorder, or merge phases without explicit user approval.** If `/research-check-gaps` reveals a phase has insufficient source coverage, tell the user and present options: (1) collect more sources to fill the gaps, (2) skip the phase with the user's explicit approval, or (3) fold the phase's questions into another phase with the user's explicit approval. Do not make this decision yourself. Do not record a phase-skip in STATE.md without the user confirming it on screen first.
 - **Running `/research-discover` at the start of each phase is recommended but not mandatory.** It surfaces the highest-value sources for the current phase's questions via multi-channel discovery. Sources can still be found manually and processed with `/research-process-source`.
 
@@ -1010,6 +1013,8 @@ Not a user-facing to-do list, not part of any gate. If an item needs the user's 
   confirm the ID sets agree exactly (the validator's `criteria-drift` check blocks the
   gate on any mismatch, in either direction).
 
+- Read `${CLAUDE_PLUGIN_ROOT}/reference/templates/decision-ledger.md` → Write **verbatim** to `${CLAUDE_PROJECT_DIR}/research/reference/decision-ledger.md` — the append-only disposition record. Entries are appended later by the skills that own each decision class; init installs only the header and grammar. (On projects that predate this file, the writing skills create it from the same template on first use — absence is never an error.)
+
 - Write `${CLAUDE_PROJECT_DIR}/research/reference/claim-graph.json` with initial content `{"claims": []}` — this is the claim graph registry, populated by `/research-audit-claims` during each phase's Verify step.
 
 - Write `${CLAUDE_PROJECT_DIR}/research/reference/retrieval-log.json` with initial content `{"entries": []}` — this is the retrieval log registry, populated by `/research-discover` after each discovery run.
@@ -1064,6 +1069,7 @@ Before reporting to the user, verify the scaffolding is complete:
    - `reference/backstage-tasks.md`
    - `reference/retrieval-log.json`
    - `reference/completion-criteria.md`
+   - `reference/decision-ledger.md`
    - `reference/review-protocol.json`
    - `bin/validate-corpus-review.py`
    - `reviews/` (directory exists, `.gitkeep` only)

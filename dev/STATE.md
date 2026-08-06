@@ -1,16 +1,20 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-06 · **Session focus:** W7 shipped (v1.8.0, pushed) AND the
-full /upskill constraint audit of researcher ran and applied — released as **researcher
-v1.9.0** ("the headroom release"), committed + tagged on main at `84aa8cb`. NOT yet
-pushed. Audit + ten author decisions + apply record: `dev/researcher/constraint-audit.md`.
-Regression: eval iteration-20 green (6/6 goldens, 3 multi-sampled; no substance drift;
-two same-iteration reds were the apply's own second-order effects, fixed + verified).
-Key outcomes: all model pins removed; init rebuilt challenge-first (daft promoted w/ 9
-amendments; /clear regime KEPT per Kelsey override); scripted turns → content
-contracts; cadence=5; accepted-gaps convention; drift sweep. **init ships behaviorally
-unverified — no eval scenario exists (wanted).** Standing directive in memory: apply
-upskill thinking to all future authoring (W6a/b next, authored under it).
+**Last updated:** 2026-08-06 · **Session focus:** W6a/b COMPLETE — the prevention layer
+for the credibility gate. Released as **researcher v1.10.0**, committed + tagged on
+`researcher-w6ab`. NOT pushed, and NOT merged to main — that's Kelsey's call. Design +
+fork record: `dev/researcher/w6ab-design.md` (all 4 forks resolved per recommendation).
+Shipped: append-only decision ledger with per-skill writers; B13 disposition conformance;
+criteria preflight (hard stop, evidence-named); advisory criteria trajectory; settled-framing
+guard. Regression: iterations 21→23. **Iteration 21 found 4 red goldens** (2 of them the new
+mechanisms); all 4 green by iteration 23, incl. a post-decision-re-argument defect open since
+iteration 4. **The durable lesson: every fix in 22 and 23 was to how a result is REPORTED,
+not to a detection mechanism — and both reporting failures traced to instruction wording.
+Specifying a rule for an internal step does not bind the turn; saying a contract "binds the
+turn, not just the report" de-emphasised the report into neglect. State two-surface contracts
+symmetrically; enumerate multi-part routes.** Open harness debt (logged, not done): no gate
+sees a STATE write during a write-free preflight, none sees cycle-step/checkbox incoherence,
+and one capture editorialized a turn upward and distorted its score.
 
 ## Where things stand
 

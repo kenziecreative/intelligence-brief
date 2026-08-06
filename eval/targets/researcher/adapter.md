@@ -21,7 +21,7 @@ in-repo: `PLUGIN_ROOT` is the repo-root `researcher/` directory, resolved by `/e
 - `<root>/agents/research-integrity.md` — when a skill invokes the integrity agent, the
   runner plays it by reading the agent file and producing exactly the findings it would
 
-`/research:init` and `/research:discover` are not run per-scenario: init is interactive
+`/research-init` and `/research-discover` are not run per-scenario: init is interactive
 scaffolding, and discover reaches the live web. The runner establishes prior state
 directly from the scenario's `setup` block, which is faster and fully controlled.
 
@@ -73,6 +73,10 @@ turn. Setup keys:
   adverse-search entries for valve scenarios).
 - `setup.registry` → `research/sources/registry.md`.
 - `setup.drafts` → map of filename → markdown; write into `research/drafts/`.
+- `setup.outputs` → map of filename → markdown; write into `research/outputs/` (already-promoted deliverables, for closeout scenarios).
+- `setup.audits` → map of filename → markdown; write into `research/audits/` (the passing audit reports those outputs carry).
+- `setup.completion_criteria` → `research/reference/completion-criteria.md` (the canonical SC-N list the closeout preflight reads).
+- `setup.decision_ledger` → `research/reference/decision-ledger.md` (the append-only disposition record B13 enforces). **Seed it only when the scenario calls for it** — its absence is a supported project state, not a scaffolding gap, and B13 reports `n/a (no ledger)` there.
 - `setup.source_files` → map of filename → content; write into `source-material/`.
 - Always scaffold empty `research/outputs/`, `research/audits/gate-log.md` (header only,
   from the init template), `research/reference/canonical-figures.json` (`{"figures": {}}`
@@ -87,7 +91,7 @@ turn. Setup keys:
   unless `setup.registry` seeds it. `check-gaps` step 5a reads it unconditionally to compute
   candidate dispositions.
 - **Always scaffold the project `CLAUDE.md` with its `## Working Posture` section** — the
-  pointer `/research:init` writes:
+  pointer `/research-init` writes:
 
   ```markdown
   ## Working Posture

@@ -91,6 +91,20 @@ Assess research coverage against the research plan and identify what's missing.
    Never author the acceptance rationale, and never treat "documented" as "accepted":
    only the commissioner's recorded acknowledgment moves a gap to this list.
 
+   **Ledger the acceptance (durable record).** The first time a gap is accepted — the
+   acknowledgment arrives in conversation now, not carried from a prior run — also
+   append an `acceptance` entry to `research/reference/decision-ledger.md` (create the
+   file from `${CLAUDE_PLUGIN_ROOT}/reference/templates/decision-ledger.md` if absent):
+   next sequential `D-<n>`, class `acceptance`, today's date, the current phase, the
+   gap's subject in one line, the disposition carrying the commissioner's quoted words,
+   evidence pointing at `research/gaps.md`. The regenerated `gaps.md` is the working
+   view; the ledger entry is the durable anchor — if a regeneration ever loses the
+   acceptance line, restore it *from the ledger*, never from memory. When an acceptance
+   lapses because the gap materially widened, that is not an edit to the old entry
+   (the ledger is append-only, and the widened gap is a new situation the old
+   acceptance never covered) — the gap simply returns to open, and a fresh acceptance,
+   if granted, gets a fresh entry. This write is silent (posture rule 7).
+
 8. **Update `research/STATE.md`** — set last gap check date to today, **then update `Next Action` to the true next step** — the same command your context-sensitive ▶ NEXT block renders below (`/research-discover` or `/research-process-source <url>` if gaps remain; `/research-summarize-section` if coverage is adequate). Never leave `Next Action` pointing at the gap check that just ran: a session resuming after a clear reads this field, and a stale value sends it to the wrong step. **Reconcile the cycle state to the coverage verdict — the gap check owns this, and nothing else marks `Collect` done.** The batch finishing gathers sources; whether that is *enough* is this skill's call, so it owns the `Collect` box.
    - **Coverage adequate** (every question clears both tests): the phase's evidence gathering is complete. Ensure `Collect`, `Connect`, and `Assess` are all checked in `Current Phase Cycle`, and set `Cycle step` to `Synthesize (4 of 5)`.
    - **Gaps remain:** the phase is still gathering — it cannot be past Collect. Ensure `Collect` and `Assess` are *unchecked*, and set `Cycle step` to `Collect (1 of 5)`.
