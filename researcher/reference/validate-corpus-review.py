@@ -8,6 +8,10 @@ readers ask it whether a completion claim is still backed by receipts.
 
 Modes:
   manifest          build and print the canonical manifest (+ the two hashes)
+  validate-receipt  validate a candidate receipt document (--receipt PATH, --filename
+                    NAME) against the frozen schema and the current corpus, before the
+                    runner writes it into reviews/ — an incomplete reviewer result
+                    becomes a failed attempt, never a receipt
   gate              full pre-close verdict (exit codes below)
   transition        compute the allowed STATE transition; --apply re-runs the gate, then
                     writes completion.json + STATE (resumable if interrupted between the
@@ -1004,6 +1008,69 @@ def run_gate(root, plugin_root):
                   if c in _GATE_PRECEDENCE else len(_GATE_PRECEDENCE))
         raise Failure(top, all_reasons)
     return result
+
+
+def run_validate_receipt(root, receipt_path, filename=None):
+    """Runner preflight (spec §2, runner duty 4): validate one candidate receipt document
+    against the frozen schema and the current corpus, before it is written into
+    research/reviews/. Additive mode (stage 3) — no schema or verdict-logic change; the
+    runner uses it so an unparseable or incomplete reviewer result becomes a failed
+    attempt, never a receipt, without re-implementing any §3 rule.
+
+    `filename` is the intended `<review_id>.receipt.json` name (default: the candidate
+    file's basename) — the candidate lives outside reviews/, so identity bindings are
+    checked against the name it would be written under."""
+    manifest = build_manifest(root)
+    criteria = criteria_context(root)
+    filename = filename or os.path.basename(receipt_path)
+    try:
+        receipt = json.loads(read_text(receipt_path))
+    except OSError as exc:
+        raise Failure(E_USAGE, "cannot read candidate receipt %s: %s" % (receipt_path, exc))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        raise Failure(E_INCOMPLETE_RECEIPT,
+                      "candidate is unparseable JSON (truncated or corrupt — a failed "
+                      "attempt, never a receipt)")
+    if not isinstance(receipt, dict):
+        raise Failure(E_INCOMPLETE_RECEIPT,
+                      "candidate is not a JSON object — a failed attempt, never a receipt")
+    try:
+        problems, coverage, material, insufficient = validate_receipt(
+            receipt, filename, criteria, manifest_paths(manifest))
+    except (TypeError, AttributeError) as exc:
+        # A parseable candidate whose members have the wrong shapes (a string where a
+        # finding object belongs, a list where a block belongs) is an incomplete reviewer
+        # result — the runner records it as a failed attempt, never an internal error.
+        # Scoped to this additive mode only; gate behavior is untouched.
+        raise Failure(E_INCOMPLETE_RECEIPT,
+                      "candidate receipt is structurally malformed (%r) — a failed "
+                      "attempt, never a receipt" % exc)
+    if problems:
+        raise Failure(E_INCOMPLETE_RECEIPT, problems)
+    corpus = receipt["corpus"]
+    stale = []
+    if corpus["decision_corpus_hash"] != manifest["decision_corpus_hash"]:
+        stale.append("decision_corpus_hash %s… != current %s… — the corpus changed "
+                     "since (or during) the review"
+                     % (corpus["decision_corpus_hash"][:12],
+                        manifest["decision_corpus_hash"][:12]))
+    if corpus["preclose_state_hash"] != manifest["state_hash"]:
+        stale.append("preclose_state_hash does not match current STATE")
+    if stale:
+        raise Failure(E_STALE_HASH, stale)
+    return {
+        "status": "valid",
+        "filename": filename,
+        "review_id": receipt["review_id"],
+        "review_set_id": receipt["review_set_id"],
+        "run_kind": receipt["run_kind"],
+        "tier": receipt["reviewer"]["tier"],
+        "verdict_recorded": receipt["verdict"],
+        "material_findings": len(material),
+        "insufficient_coverage_checks": insufficient,
+        "coverage": coverage,
+        "note": "document-level validity only — the gate verdict is `gate`'s job",
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -2048,6 +2115,79 @@ def run_self_test():
         shutil.rmtree(tmp)
     case("gate accumulates reasons across independent categories", t_all_reasons)
 
+    # -- validate-receipt (runner preflight) battery -----------------------
+    def _vr_code(root, cand, name):
+        try:
+            run_validate_receipt(root, cand, name)
+            return E_OK
+        except Failure as exc:
+            return exc.code
+
+    def _candidate(tmp, root, mutate=None):
+        """A candidate receipt document staged outside reviews/ (the runner's shape)."""
+        receipt = _fixture_receipt(root, mutate=mutate)
+        rid = receipt["review_id"]
+        for suffix in (".receipt.json", ".report.md"):
+            os.remove(os.path.join(root, REVIEWS_REL, rid + suffix))
+        cand = os.path.join(tmp, "candidate.json")
+        _write(cand, receipt)
+        return cand, rid + ".receipt.json"
+
+    def t_vr_valid():
+        tmp, root, _ = fresh()
+        cand, name = _candidate(tmp, root)
+        result = run_validate_receipt(root, cand, name)
+        assert result["status"] == "valid", result
+        assert result["material_findings"] == 0
+        shutil.rmtree(tmp)
+    case("validate-receipt: valid candidate passes outside reviews/", t_vr_valid)
+
+    def t_vr_incomplete():
+        tmp, root, _ = fresh()
+
+        def drop_c15(r):
+            r["checks"] = [c for c in r["checks"] if c["id"] != "C15"]
+        cand, name = _candidate(tmp, root, mutate=drop_c15)
+        expect(_vr_code(root, cand, name), E_INCOMPLETE_RECEIPT)
+        shutil.rmtree(tmp)
+    case("validate-receipt: missing check -> incomplete-receipt (failed attempt)",
+         t_vr_incomplete)
+
+    def t_vr_stale():
+        tmp, root, _ = fresh()
+        cand, name = _candidate(tmp, root)
+        with open(os.path.join(root, "research/outputs/01-findings.md"), "a") as f:
+            f.write("\nEdited while the reviewer ran.\n")
+        expect(_vr_code(root, cand, name), E_STALE_HASH)
+        shutil.rmtree(tmp)
+    case("validate-receipt: corpus changed during review -> stale-hash", t_vr_stale)
+
+    def t_vr_malformed_shapes():
+        tmp, root, _ = fresh()
+
+        def string_finding(r):
+            r["findings"] = ["not-an-object"]
+        cand, name = _candidate(tmp, root, mutate=string_finding)
+        expect(_vr_code(root, cand, name), E_INCOMPLETE_RECEIPT, "string finding")
+        _write(cand, ["not", "an", "object"])
+        expect(_vr_code(root, cand, name), E_INCOMPLETE_RECEIPT, "non-object candidate")
+        shutil.rmtree(tmp)
+    case("validate-receipt: malformed member shapes -> incomplete-receipt, never a crash",
+         t_vr_malformed_shapes)
+
+    def t_vr_flags_scoped():
+        code = None
+        import io
+        from contextlib import redirect_stderr
+        try:
+            with redirect_stderr(io.StringIO()):
+                main(["manifest", "--receipt", "/nonexistent"])
+        except SystemExit as exc:
+            code = exc.code
+        expect(code, E_USAGE, "--receipt outside validate-receipt")
+    case("--receipt/--filename rejected outside validate-receipt (additive-mode scope)",
+         t_vr_flags_scoped)
+
     # -- manifest battery --------------------------------------------------
     def t_determinism():
         tmp, root, _ = fresh()
@@ -2333,13 +2473,19 @@ def main(argv=None):
 
     parser = argparse.ArgumentParser(prog="validate-corpus-review",
                                      description=__doc__.splitlines()[0])
-    parser.add_argument("mode", choices=["manifest", "gate", "transition",
-                                         "check-completion", "hash-self", "self-test"])
+    parser.add_argument("mode", choices=["manifest", "validate-receipt", "gate",
+                                         "transition", "check-completion", "hash-self",
+                                         "self-test"])
     parser.add_argument("--root", default=".", help="project root (default .)")
     parser.add_argument("--plugin-root", default=os.environ.get("CLAUDE_PLUGIN_ROOT"),
                         help="plugin root holding the trust contract "
                              "(default $CLAUDE_PLUGIN_ROOT)")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument("--receipt", help="validate-receipt: path to the candidate "
+                                          "receipt document (outside reviews/)")
+    parser.add_argument("--filename", help="validate-receipt: the intended "
+                                           "<review_id>.receipt.json name (default: the "
+                                           "candidate file's basename)")
     parser.add_argument("--apply", action="store_true",
                         help="transition: write completion.json + STATE (default: dry-run)")
     parser.add_argument("--closed-unreviewed", action="store_true",
@@ -2347,6 +2493,8 @@ def main(argv=None):
     parser.add_argument("--reason", help="transition --closed-unreviewed: why no review "
                                          "was obtainable")
     args = parser.parse_args(argv)
+    if args.mode != "validate-receipt" and (args.receipt or args.filename):
+        parser.error("--receipt/--filename are valid only with validate-receipt")
     root = os.path.abspath(args.root)
 
     try:
@@ -2358,6 +2506,11 @@ def main(argv=None):
         if args.mode == "manifest":
             manifest = build_manifest(root)
             print(json.dumps(manifest, indent=1, sort_keys=True))
+            return E_OK
+        if args.mode == "validate-receipt":
+            if not args.receipt:
+                parser.error("validate-receipt requires --receipt PATH")
+            _emit(run_validate_receipt(root, args.receipt, args.filename), args.json)
             return E_OK
         if args.mode == "gate":
             _emit(run_gate(root, args.plugin_root), args.json)

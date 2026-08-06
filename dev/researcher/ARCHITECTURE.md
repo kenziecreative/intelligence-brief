@@ -303,24 +303,43 @@ reversals) are invisible to every per-claim gate above — a real project closed
 was not decision-ready. W7 adds an independent adversarial corpus review as a hard completion
 gate. Design: `dev/researcher/W7-corpus-review-design.md` (v3.1). Build status by stage:
 
-- **Stage 2 — contract spine: shipped, not wired.** The plugin now carries
+- **Stage 2 — contract spine: shipped, not wired.** The plugin carries
   `reference/corpus-review-protocol.md` (the frozen protocol v1: manifest/hash identities
   with STATE split out of the corpus hash, receipt + ledger + completion-record schemas, the
   four-op STATE transition and completion sentinels, trust contract, verdict logic, exit
   codes), `reference/validate-corpus-review.py` (manifest / gate / transition /
-  check-completion + an embedded 35-case deterministic fixture battery),
+  check-completion + an embedded deterministic fixture battery — 64 cases at the freeze),
   `reference/review-protocol-contract.json` (the shipped trust anchor: expected validator
   hash per protocol version), and templates for the project marker and the canonical
-  completion-criteria file. **No skill invokes any of this yet** — no behavior has changed;
-  gate blocking switches on only after the stage-3 corpus-scale fixtures pass (design §8).
-- **Stages 3–5 [proposed]:** runner skill + fixed review brief + Tier-2 `corpus-reviewer`
-  agent (dual samplers, union gate); closeout refactor + side doors + sentinel-as-claim
-  readers; live proof on the remediated engine corpus, then release.
+  completion-criteria file.
+- **Stage 3 — reviewer implementation: built, corpus-scale proof pending.** The review
+  surface exists: `skills/research-review-corpus/` (the runner — only writer of review
+  artifacts, four-inputs coldness, exclusive-create publishes, failed attempts as
+  `.failed.json` in both run kinds, fail-closed disclosure preflight) +
+  `commands/research/review-corpus.md`; `reference/corpus-review-brief.md` (the fixed
+  C1–C15 battery with required-evidence fields, coverage/verdict discipline, the
+  read-nothing-outside-the-manifest rule, and the reviewer-result schema — promoted from
+  the spike-validated base); `agents/corpus-reviewer.md` (Tier 2, cold, read-only). The
+  validator gained one **additive** mode, `validate-receipt` (runner preflight through the
+  one implementation; malformed candidates land as incomplete-receipt, never a crash; the
+  new flags are rejected outside the mode; battery now 69 cases; contract hash
+  regenerated). Corpus-scale fixtures live in the eval pack
+  (`eval/targets/researcher/fixtures/corpus-a/` — the known-bad corpus, 7 seeded defect
+  classes → not-ready — and `corpus-b/` — clean → zero material findings; names are
+  neutral so the blind eval-runner cannot infer the expected condition) behind two golden
+  `review-corpus` scenarios and a deterministic `review_receipt_validates` gate.
+  Codex-hardened (fix-first: 5 blockers / 5 majors, all applied). **The goldens have not
+  yet been run** — stage 3's proof half completes when they pass, which is also the
+  stage-4 switch-on precondition; nothing invokes the gate at closeout yet, and cold
+  reviewer behavior is proven only by the stage-5 live dual-tier run.
+- **Stages 4–5 [proposed]:** closeout refactor + side doors + sentinel-as-claim readers +
+  init/re-init install; live proof on the remediated engine corpus, then release.
 
-Ownership once wired (stage 3+): the **runner** is the only writer of review artifacts; the
-**validator** owns the completion verdict and the allowed STATE transition; reviewers are
-read-only samplers. Until then these rows stay out of the Layer 2/3 ownership tables — the
-tables describe enforced behavior, and stage 2 enforces nothing.
+Ownership (enforced from stage 3): the **runner** is the only writer of review artifacts;
+reviewers are read-only samplers. The **validator** owns the completion verdict and the
+allowed STATE transition — enforced at stage 4 when the closeout starts calling it. These
+rows stay out of the Layer 2/3 ownership tables until the wiring lands — the tables
+describe enforced behavior.
 
 ---
 

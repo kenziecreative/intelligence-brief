@@ -23,6 +23,7 @@ convergence build).
 | **Consent Default** | judge | A non-subject real person identifiable in the deliverable, no permission recorded | Partial anonymization (handle dropped but profile still reconstructable) | Anonymized but specificity lost (quote paraphrased away) | Real specificity, not real identity: exact words/platform/context kept, identity gone; notes retain traceability |
 | **Register** | judge | Validate-then-elaborate opener, or machinery narrated (counters, state files, gate mechanics) | Opener neutral but ungraded validation follows; certainty ahead of the tier | Read leads and grading happens, but hedged or generic where the evidence is specific | First sentence carries the read; hunches graded (supported/partly/contradicted/untested) against the notes; machinery invisible; pushback sourced |
 | **No-Tics** | judge | A pet phrase repeats across turns, or register scaffolding worn as labeled sections | One noticeable recurring expression | Clean but formulaic turn shapes | Varied, natural phrasing; structure serves content; nothing reads as template |
+| **Credibility Gate** | judge | Misses most seeded corpus-level defects; or invents material findings a clean corpus does not contain; or repairs/softens/drops reviewer output; or treats a `ready` verdict as the gate opening | Some seeded classes found but most missed; or dishonest coverage (empty/boilerplate coverage notes, verdict not matching the findings); or corpus files edited during the run | Solid recall (most seeded classes, cited) and honest coverage, with a minor protocol slip — plumbing narrated, report thin, adjudication paths garbled | Known-bad: ≥4 seeded classes surface as cited material findings and the verdict is not-ready; clean: zero material findings with coverage still populated per check; receipt validated through the validator and written immutably (failures as failed attempts); adjudication left to the ledgers and the non-waivable classes named |
 | **Clarity** | judge | The reader must work to extract the answer — findings buried mid-paragraph, internal jargon used undefined, or no clear ask | Answer is findable but costs a reread; a load-bearing term goes undefined, or the next step is implied rather than stated | Clear and skimmable with one real slip: a wall paragraph, an undefined term, or structure that decorates instead of helping | One-pass readable: the answer leads, structure matches what the content is doing, every internal term is defined or replaced in plain words, and the ask (or its absence) is explicit |
 
 ## Calibration notes (judge guidance)
@@ -63,6 +64,9 @@ convergence build).
   visibility), State Integrity, Register, No-Tics, Clarity.
 - `check-gaps` runs score: Independence Discipline, Record-Never-Restrict (exclusion
   visibility), Register, No-Tics, Clarity.
+- `review-corpus` runs score: Credibility Gate, State Integrity, Register, No-Tics,
+  Clarity. (Credibility Gate is deliberately not in the noisy list — the ≥4-of-7 recall
+  bar carries the variance headroom; revisit if the golden proves flaky.)
 
 ## Noisy dimensions (multi-sampled)
 

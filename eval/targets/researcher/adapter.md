@@ -34,6 +34,7 @@ directly from the scenario's `setup` block, which is faster and fully controlled
 | `process-source` | `research-process-source` SKILL | Sources are seeded LOCAL files (under `source-material/` in the working dir) so no live web access is needed. |
 | `cross-ref` | `research-cross-ref` SKILL | Operates on seeded notes. |
 | `check-gaps` | `research-check-gaps` SKILL | Operates on seeded notes + plan + exclusion ledger. |
+| `review-corpus` | `research-review-corpus` SKILL | The credibility-gate runner (W7). Scenario seeds a whole mini-corpus via `setup.fixture`; scenarios pin **tier t2 only** (Codex CLI is not assumed in the eval environment). The runner plays the Tier-2 reviewer by reading `<root>/agents/corpus-reviewer.md` + `<root>/reference/corpus-review-brief.md` — **from the four inputs only**: when playing the reviewer, judge the corpus strictly from what is on the fixture's disk against the brief; never from the scenario, the fixture's name, or the runner-skill context. Everything else executes the skill's real machinery: manifest build and `validate-receipt` run the actual `<root>/reference/validate-corpus-review.py`. **Honesty note (for maintainers/judges):** in-context play is structurally weaker than production coldness (production dispatches a fresh agent); these scenarios prove the mechanical seam (brief → result schema → validator → receipt) and defect recall, while genuinely cold reviewer behavior is proven by the W7 stage-5 live dual-tier run. |
 
 ## Working dir and setup
 
@@ -44,6 +45,16 @@ multi-sampled scenarios). The research artifacts live under `research/` (and
 
 If the scenario has a `setup` block, write it into the working dir **before** the first
 turn. Setup keys:
+
+- `setup.fixture` → copy the entire tree at
+  `eval/targets/researcher/fixtures/<name>/` into the working dir (the fixture carries
+  its own `CLAUDE.md` and full `research/` tree; none of the other setup keys or default
+  scaffolds apply — the fixture is the complete project). Used by `review-corpus`
+  entries. Fixture names are deliberately neutral (`corpus-a`, `corpus-b`) — the runner
+  must learn a corpus's condition only by reviewing it; what each fixture seeds and what
+  the judge expects live in `coverage.md` and the scenarios' `expected_behavior`
+  (judge-only surfaces). These are the W7 corpus-scale fixtures — the pass that must be
+  green before gate blocking switches on (stage 4).
 
 - `setup.plan` → `research/research-plan.md` (markdown; defines phases, questions, and
   each phase's `**Output:**` / `**Outputs:**` lines — the deliverable manifest source).
@@ -113,6 +124,8 @@ transition/handoff. Every turn is written to `transcript.md`.
 - `<working-dir>/research/audits/` — the audit report and gate-log.
 - `<working-dir>/research/discovery/exclusions.md` and `negative-searches.md` — the
   record-never-restrict artifacts.
+- `<working-dir>/research/reviews/` — (`review-corpus` entries) the receipt, report, and
+  any `.failed.json` attempt records the runner wrote.
 
 ## Deterministic gates
 
@@ -132,4 +145,8 @@ conventional draft or promoted output (→ Traceability), both optional-file.
 **What the runner must record** (`gate-inputs.json`): `entry`, plus for judge use:
 `expected_promotion` (did the scenario expect the draft to be promoted), and
 `seeded_files` (the list of setup-written paths, so the judge can distinguish seeded
-state from run-produced state).
+state from run-produced state). For `review-corpus` entries additionally:
+`receipt_written` (bool), `receipt_validated` (did `validate-receipt` exit 0),
+`verdict` (the receipt's verdict), and `material_classes` (the classes of material
+findings in the receipt) — the judge grades seeded-class recall from these plus the
+receipt itself.

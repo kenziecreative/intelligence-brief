@@ -1,9 +1,9 @@
 {
- "schema_version": "1.0",
  "protocols": {
   "1": {
-   "validator_sha256": "42d5f4223de75c204e3c96e2ec145a83a9899440f322c20618bc397180c3f6aa",
-   "schema_version": "1.0"
+   "schema_version": "1.0",
+   "validator_sha256": "af7b63430faec47e94e455f825d5b64e198d5569e90a01d3ec495d3c46d3d86e"
   }
- }
+ },
+ "schema_version": "1.0"
 }

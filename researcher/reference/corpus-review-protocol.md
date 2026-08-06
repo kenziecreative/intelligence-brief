@@ -530,6 +530,7 @@ any receipt is considered. An empty canonical file cannot gate C1 and is likewis
 | Mode | Job |
 |---|---|
 | `manifest` | Build the canonical manifest; print it (the runner's manifest source — one implementation, not two). |
+| `validate-receipt --receipt PATH [--filename NAME]` | Validate a **candidate** receipt document (staged outside `reviews/`) against the frozen schema and the current corpus — the runner's preflight (§2's duty that an unparseable or incomplete reviewer result is a failed attempt, never a receipt), through the one implementation. *(Added at stage 3; additive — no schema or verdict-logic change.)* |
 | `gate` | Full pre-close verdict (below). |
 | `transition [--apply] [--closed-unreviewed --reason "…"]` | Compute the allowed STATE transition; with `--apply`, re-run the gate, then write `completion.json` + STATE per §6.2's interruption-safe apply semantics (a half-applied close resumes deterministically). Dry-run prints the resulting STATE and record. |
 | `check-completion` | Post-close validation for sentinel readers (§6.4). |
@@ -590,7 +591,8 @@ manifest failure) are skipped, not guessed.
 ## 10. The deterministic fixture battery (`--self-test`)
 
 Embedded, hermetic (temp dirs, synthetic plugin root, the running script as the
-installed-validator fixture), no network, no clock dependence beyond "now". 64 cases:
+installed-validator fixture), no network, no clock dependence beyond "now". 69 cases
+(64 at the stage-2 freeze; +5 additive `validate-receipt` cases at stage 3):
 
 - **Gate:** valid close passes · no-review · stale-hash (corpus and STATE edits after
   receipt) · incomplete receipt (missing check) · truncated receipt · open material finding ·
@@ -609,6 +611,11 @@ installed-validator fixture), no network, no clock dependence beyond "now". 64 c
   evidence and files_examined outside the corpus · failed-attempts-only = no-review
   (both-tiers-unavailable) · one-valid-receipt-plus-failed-attempt passes
   (Tier-2-incomplete-result) · union-of-set gating · cross-category reason accumulation.
+- **Runner preflight (`validate-receipt`, stage-3 additive):** valid candidate passes
+  from outside `reviews/` · missing check is `incomplete-receipt` (a failed attempt) ·
+  corpus changed during the review is `stale-hash` · malformed member shapes are
+  `incomplete-receipt`, never a crash · the mode's flags are rejected outside the mode
+  (pre-existing modes unchanged).
 - **Manifest:** determinism · STATE split out of the corpus hash · golden canonical hash
   (canonicalization frozen — a change is a protocol version bump) · NFD/NFC path
   equivalence · reviews/ non-self-invalidation · out-of-tree symlink · symlinked STATE ·
