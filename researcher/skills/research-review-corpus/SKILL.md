@@ -44,6 +44,14 @@ Arguments (both optional):
 - **You never adjudicate.** Findings are closed later — by reconciliation (corpus changes →
   fresh review), by a cited `rejected-with-record` entry in the resolution ledger, or by a
   commissioner exception. None of that happens inside a review run.
+- **Work silently; report once.** Steps 1–9 run backstage. The only things they may say to
+  the user are: the one-sentence protocol-adoption notice (step 1), a stop with its remedy
+  (failed preconditions, preflight, manifest, or validator errors), and a brief heads-up
+  when a long reviewer run starts. Everything else — hashes, identities, commands, exit
+  codes, staging, assembly, existence checks, write verification, step names — is
+  machinery, and machinery is never narrated. The review is presented exactly once, at
+  step 10, verdict first. A turn that walks the user through the steps as bolded headers
+  has failed this skill regardless of how good the review was.
 
 ## Process
 
@@ -254,21 +262,45 @@ If the project carries the protocol marker, run the validator's `gate --json` an
 named verdict into the report (on a `final` run this is the gate state the closeout will
 see; on `on-demand` an open-findings or no-final-review result is expected, not alarming).
 
-Present, in the product's vocabulary:
+**The turn's first sentence is the verdict** — e.g. "The corpus review came back
+not-ready: five material findings" or "The review found nothing material — one sampler's
+ready." The verdict is always the *sampler's* assessment, never the gate's state: do not
+phrase it as "nothing blocks the gate," "the gate would pass," or any equivalent — the
+gate's verdict belongs to the validator alone. Everything else, including the
+protocol-adoption notice from step 1, comes after it. Then present, in the product's
+vocabulary, in this order:
 
-- **Per tier:** verdict, duration, and coverage in one line each (files examined per the
-  checks; any `insufficient-coverage` or notably partial checks named plainly).
-- **The findings** — the product of the run. For each: id, class, severity, a one-line
-  `observed`, and its first evidence citation. Material findings first. Where the two
-  tiers found the same issue, say so; where they disagree, present both sides without
-  arbitrating.
+- **The findings** — the product of the run. For each: class, severity, a one-line
+  `observed` in plain words, its first evidence citation, **and the remedy the reviewer
+  recorded** (`closure_evidence_required`, in plain words) — minor findings included; a
+  finding whose fix is withheld is a finding the user can't act on. Material findings
+  first. Where two tiers found the same issue, say so; where they disagree, present both
+  sides without arbitrating. On a clean run, say plainly what was checked and name two or
+  three concrete things that *would have failed this corpus* had they been present (a
+  promised deliverable missing, a conclusion outrunning its evidence, a figure reversing
+  between phases) — a clean verdict earns its calm by showing its work, never by brevity.
+- **Coverage, one line per tier:** how much of the corpus the reviewer actually opened,
+  and any `insufficient-coverage` or notably partial checks named plainly. **A check that
+  did not apply is named to the user with its reason** — never absorbed into "everything
+  was checked" or "nothing was skipped," which overstates coverage in the exact sentence
+  asserting honesty. Internal vocabulary stays internal — say "the reviewer couldn't see
+  enough to assess X," not `insufficient-coverage`; say "the study-design check didn't
+  apply — this corpus proposes none," not "C7 n/a."
 - **Failed attempts**, if any, with their cause and what would fix a re-run.
-- **What happens next:** material findings block the completion gate until each is either
-  reconciled (the fix changes the corpus, so a fresh review follows), rejected with a
-  cited record in the resolution ledger, or accepted by the commissioner as a recorded
-  exception — and that `deliverable-missing` and `internal-contradiction` findings cannot
-  be excepted. A reviewer's `ready` verdict earns nothing by itself; the gate unlocks on
-  valid receipts plus zero open material findings.
+- **What happens next — always, findings or none.** Short sentences; two ideas, both
+  mandatory in substance:
+  1. *Closure paths:* a material finding blocks the completion gate until it is fixed
+     (which changes the corpus, so a fresh review follows), rejected with a cited record
+     in the resolution ledger, or accepted by the commissioner as a recorded exception —
+     and a missing promised deliverable or a real internal contradiction can never be
+     excepted.
+  2. *The ready sentence — never omitted, never paraphrased into gate-framing:* "One
+     sampler's ready earns nothing by itself — the gate opens only on valid receipts
+     plus zero open material findings." On a clean run this is how the reader knows
+     `ready` did not just open the gate; skipping it, or replacing it with "nothing
+     blocks the gate," fails this skill. The same rule covers the whole turn: no
+     sentence anywhere in it asserts the gate's state ("nothing here blocks anything,"
+     "the gate would pass") — the gate speaks only through the validator.
 
 Backstage, never narrated: the scratch staging, candidate assembly, validator invocations
 and exit codes, identity computation, existence checks, write verification. Onstage: the
@@ -286,3 +318,5 @@ review, its verdict, its findings, coverage honesty, and the adjudication paths.
 | Treating a `ready` verdict as the gate opening | The gate's verdict belongs to the validator (valid receipts + zero open material findings + no insufficient coverage). Report `ready` as one sampler's assessment, nothing more. |
 | Adjudicating findings in the run report — "this one seems wrong, ignore it" | Closure paths are the ledgers': reconcile, reject-with-record (cited), or commissioner exception. The runner reports; the commissioner decides. |
 | Running the review over a corpus that fails to enumerate | Manifest failure stops the run before any reviewer launches — an unreadable file or symlink escape means the review would be reviewing an unknown corpus. |
+| Narrating the run — step headers, hashes, command lines, exit codes, staging, and write checks walked through in the user-facing turn | The ground rule is "work silently; report once." Steps 1–9 speak only to stop or to give the sanctioned one-sentence notices; the review is presented once at step 10, verdict in the first sentence. The machinery lives in the report header and the receipt, where an auditor looks — not in the conversation. |
+| Skipping the what-happens-next close because the run was clean | The gate-semantics close is unconditional. A clean run still ends by saying what a material finding would have done, that no exception can cover a missing deliverable or an internal contradiction, and that one sampler's `ready` does not open the gate. |
