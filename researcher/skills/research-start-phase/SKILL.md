@@ -1,7 +1,7 @@
 ---
 name: research-start-phase
 description: This skill should be used when the user asks to begin or move to the next research phase (e.g. "start the next research phase", "begin research phase 3", "move to the next phase of the research"). Marks the next phase active in STATE.md, surfaces its questions and relevant carryover from prior phases, updates the Phase Tier Record, and points the user at discovery.
-allowed-tools: Read, Grep, Glob, Edit, Write
+allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 model: sonnet
 ---
 
@@ -12,6 +12,42 @@ Prepare to begin the next research phase by gathering all relevant context.
 ## Current State
 
 !`cat research/STATE.md 2>/dev/null || echo "No STATE.md found — run /research-init first."`
+
+## Pre-check 0: Completion sentinel (before anything else)
+
+If STATE.md's Current Position carries a completion sentinel (a `- Completion:` bullet —
+`ALL PHASES COMPLETE — validated closeout …` or `CLOSED UNREVIEWED — administrative
+archive …`), the claim is validated before any phase work is even considered. Run:
+
+```
+python3 research/bin/validate-corpus-review.py check-completion --root . --json
+```
+
+(A sentinel or `Review protocol:` line with no installed validator is protocol damage —
+say so, name the repair as re-init, and do not start a phase.) Route on the exit code:
+
+- **0 (valid):** the project is validly closed; there is no phase to start. Say so — the
+  corpus is frozen and any change invalidates the completion — and point at
+  `/research-progress` for the dashboard. Stop.
+- **22 (stale-or-invalid-completion):** surface it prominently: STATE claims completion
+  but the claim is stale or unbacked (show the validator's reasons). Do not start a
+  phase on top of a broken completion — the user resolves it first via the documented
+  manual repair: remove `research/reviews/completion.json`, revert the
+  sentinel/closeout lines in STATE by hand, record why in `research/notes-to-self.md`;
+  the project then reads as open and a fresh final review can run. Never edit sealed
+  receipts or ledgers, and never perform the repair for them. Stop.
+- **23 (closed-unreviewed):** the project is an administrative archive — not
+  decision-ready and not active. **Do not start a phase, with or without confirmation**
+  — the protocol defines no reopen transition, so a conversational yes cannot write
+  into an archive the record still seals. Say so plainly: the archive stands; if the
+  commissioner genuinely wants to resume research, that is a manual protocol repair
+  (removing the archive record and sentinel by hand, documented as such — the next
+  `check-completion` will then report the project as open), and it is theirs to
+  perform, not this skill's. Stop.
+- **21 (not-closed) or 10 (no-marker):** proceed normally (on 10, the project has no
+  credibility gate — legacy).
+
+If no sentinel is present, skip this pre-check.
 
 ## Pre-check: Source Material Reconciliation (mandatory)
 

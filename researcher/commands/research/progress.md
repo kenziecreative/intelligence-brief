@@ -1,6 +1,6 @@
 ---
 description: Show research project dashboard — phase status, source counts, and next action
-allowed-tools: Read, Glob, Grep
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 Show the research project dashboard.

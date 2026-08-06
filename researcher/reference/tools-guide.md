@@ -82,6 +82,29 @@ tvly map "https://docs.example.com" --json
 npx firecrawl-cli crawl "https://docs.example.com" --limit 50 --wait --json
 ```
 
+## Codex CLI (the Tier-1 corpus reviewer)
+
+`/research-review-corpus` uses the OpenAI Codex CLI as its Tier-1 reviewer — an
+independent cross-family sampler for the completion credibility gate. It is optional:
+with Codex absent, reviews run Tier-2 only (the plugin's own cold reviewer agent), and a
+`final` run records the unavailable tier as a failed attempt so the set's composition
+stays visible.
+
+- **Install / auth:** `npm install -g @openai/codex` (or the vendor's current channel),
+  then `codex login`. Verify with `codex --version` — the runner captures this string
+  into the receipt.
+- **Invocation contract (the runner owns this):** `codex exec -s read-only
+  --skip-git-repo-check "<prompt>"`. The read-only sandbox is mandatory — reviewers
+  never write. `--skip-git-repo-check` is required when the working directory is not a
+  Codex-trusted root (the usual case for a scratch staging dir).
+- **Budget:** measured runs take 11–25 minutes on a ~200-file corpus; the runner's
+  timeout is 30 minutes. Run it in the background with stdout/stderr captured to files —
+  and with stdin closed (`< /dev/null`): a detached `codex exec` with an open stdin can
+  exit immediately with empty output.
+- **Output contract:** the review is the *last fenced JSON block* in stdout, per the
+  review brief. Anything unparseable or truncated is recorded as a failed attempt, never
+  a receipt.
+
 ## Local PDF Processing
 
 For files in `source-material/`, try `pdftotext` before the Read tool:

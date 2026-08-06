@@ -21,6 +21,7 @@
 // this reports; it does not decide the build. No dependencies (Node 18+).
 
 import { readFileSync, existsSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { resolve, join } from "node:path";
 
 function arg(name, fallback = null) {
@@ -180,6 +181,27 @@ function evalGate(gate) {
       const haystack = index.toLowerCase();
       const missing = claimed.filter((f) => !haystack.includes(slug(f)) && !haystack.includes(f.toLowerCase()));
       return missing.length ? fail(`not in library: ${missing.join(", ")}`) : pass(`all in library: ${claimed.join(", ")}`);
+    }
+    case "command_exit0": {
+      // Run a shell command with cwd = the working dir; pass iff it exits 0.
+      // `${PLUGIN_ROOT}` in the command is substituted with --plugin-root. This keeps
+      // gate verdicts mechanical when the invariant lives behind a target-shipped
+      // checker (e.g. researcher's validate-corpus-review.py validating a receipt) —
+      // a runner-reported boolean is not a gate. Commands must be deterministic and
+      // read-only over the capture.
+      if (!gate.command) return fail("command_exit0 gate has no command");
+      if (gate.command.includes("${PLUGIN_ROOT}") && !pluginRoot) {
+        return fail("no --plugin-root given for ${PLUGIN_ROOT} substitution");
+      }
+      const cmd = gate.command.replaceAll("${PLUGIN_ROOT}", pluginRoot ? resolve(pluginRoot) : "");
+      try {
+        const out = execSync(cmd, { cwd: workingDir, encoding: "utf8",
+                                    stdio: ["ignore", "pipe", "pipe"], timeout: 60000 });
+        return pass(`exit 0 — ${out.trim().split("\n").slice(-1)[0]?.slice(0, 120) || "no output"}`);
+      } catch (e) {
+        const tail = `${e.stdout ?? ""}${e.stderr ?? ""}`.trim().split("\n").slice(-2).join(" | ");
+        return fail(`exit ${e.status ?? "?"} — ${tail.slice(0, 160) || e.message}`);
+      }
     }
     default:
       return fail(`unknown gate type '${gate.type}'`);

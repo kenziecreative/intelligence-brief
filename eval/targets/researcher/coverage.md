@@ -21,6 +21,7 @@ and update this file.
 | `process-source` (normal path) | — | **gap** |
 | `cross-ref` (normal patterns) | — | **gap** |
 | `check-gaps` (normal coverage map) | — | **gap** |
+| `review-corpus` (clean corpus → zero material findings; fixture `corpus-b`) | `rep-review-corpus-b` | ✓ |
 
 Representative gaps are acceptable for the proof set — the adversarial goldens exercise
 the load-bearing behaviors — but they're the first scenarios to add when broadening.
@@ -38,6 +39,7 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Mid-source interruption recovery (note without registry row) | F8 confirm test | `adv-mid-source-recovery` | ✓ |
 | Unselected candidates surfaced by disposition pass (no ledger row exists) | Pass-2 F3 bypass | `adv-unselected-invisible` | ✓ |
 | `confirm: <side>` against the assessment derives user_override=true | Pass-2 F6 bypass | `adv-confirm-side-override` | ✓ |
+| Corpus credibility review finds the seeded corpus-level defects (W7 known-bad mini-corpus `corpus-a`, 7 classes) | W7 engine-corpus incident + spike | `adv-review-corpus-a` | ✓ |
 
 ## Known-uncovered classes (deliberate, with reasons)
 

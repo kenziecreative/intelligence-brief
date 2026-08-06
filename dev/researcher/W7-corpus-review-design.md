@@ -267,10 +267,29 @@ C1–C14 as in v2, plus:
 ## 10. Build order (v2-review's revision, spike stage done)
 
 1. ~~**Vertical spike**~~ — **done** (results above; brief validated on both engines).
-2. **Contract spine:** manifest/hash spec, receipt + ledger schemas, protocol marker,
-   validator + its fixtures. Schema freezes only at the end of this stage.
-3. **Reviewer implementation + proof:** runner, brief (from the spike base), Tier-2 agent,
-   corpus-scale fixtures pass.
+2. ~~**Contract spine**~~ — **done** (2026-08-05): shipped as
+   `researcher/reference/corpus-review-protocol.md` (the frozen protocol v1 — normative over
+   this design on mechanics), `reference/validate-corpus-review.py` (64-case embedded
+   battery), `reference/review-protocol-contract.json`, marker + completion-criteria
+   templates. Hardened by a second Codex adversarial review (fix-first: 9 blockers → all
+   addressed in-scope; receipt/ledger *post-close* immutability implemented as completion
+   seals, with pre-close mutation explicitly assigned to the manual-tamper class the design
+   already discloses). **Schemas are frozen** — changes from here are a protocol version
+   bump.
+3. **Reviewer implementation + proof — built 2026-08-05; proof pending.** Implementation
+   shipped: `skills/research-review-corpus/` + `commands/research/review-corpus.md` (the
+   runner: four-inputs coldness, exclusive-create publishes, failed attempts in both run
+   kinds, fail-closed disclosure preflight), `reference/corpus-review-brief.md` (spike
+   base + C15 + required-evidence + the frozen receipt-schema deltas + a
+   read-nothing-outside-the-manifest rule), `agents/corpus-reviewer.md` (Tier 2).
+   Validator gained the additive `validate-receipt` runner-preflight mode (battery 64→69;
+   contract hash regenerated). Corpus-scale fixtures ship in the eval pack
+   (`eval/targets/researcher/fixtures/`: `corpus-a` = known-bad, 7 seeded classes;
+   `corpus-b` = clean — neutral names so the blind runner can't infer the condition)
+   behind two golden `review-corpus` scenarios, a Credibility Gate rubric dimension, and
+   a deterministic `review_receipt_validates` gate. Codex fix-first review applied (5
+   blockers / 5 majors). **The stage closes when the two goldens pass** — that pass is
+   the stage-4 switch-on precondition; cold reviewer behavior is proven at stage 5.
 4. **Gate wiring:** closeout refactor, side doors, sentinel readers, init/migration,
    permissions.
 5. **Live proof + release:** remediated-corpus dual review, Cowork path, docs/map/versions,

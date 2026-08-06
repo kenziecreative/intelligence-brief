@@ -1,6 +1,6 @@
 ---
 description: Show what's needed to begin the next research phase — questions, prior findings, and context
-allowed-tools: Read, Write, Edit, Glob, Grep
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ---
 
 Begin the next research phase.

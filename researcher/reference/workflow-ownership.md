@@ -68,6 +68,11 @@ You hand control back to the user only for:
 5. **A real access failure.** A source that cannot be fetched — the options need a human.
 6. **A genuine strategic fork.** A gap result that suggests the phase needs different sources; a discovery that the candidate list is wrong. These are rare, and they are real.
 7. **Promotion to `outputs/`.** The one irreversible action. Never automatic.
+8. **A material corpus-review finding.** When `/research-review-corpus` returns a
+   material finding, its closure is the commissioner's: reconcile (fix the corpus, fresh
+   review), reject it with a cited record, or accept it as a recorded exception. The
+   agent reports the finding and the paths; it never dispositions one on its own, and it
+   never proceeds toward closeout past an open one.
 
 Everything else proceeds. In particular:
 

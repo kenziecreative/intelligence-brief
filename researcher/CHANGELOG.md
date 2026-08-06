@@ -2,6 +2,50 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.8.0] — 2026-08-06
+
+The credibility-gate release (W7). A completed project used to be whatever STATE.md said it
+was — every per-claim gate could pass while the corpus as a whole wasn't decision-ready.
+Now completion is earned: an independent adversarial review reads the entire corpus against
+the project's own success criteria, and a deterministic validator — not the agent, not the
+conversation — owns the completion verdict.
+
+### Added
+- `/research-review-corpus` — the review runner: dual reviewer tiers (Codex CLI as an
+  independent cross-family sampler; a cold in-plugin `corpus-reviewer` agent as an isolated
+  same-family sampler), a fixed C1–C15 review battery with per-check required evidence and
+  honest coverage discipline, immutable receipts and reports under `research/reviews/`,
+  failed attempts recorded as failed attempts — never receipts.
+- `reference/corpus-review-protocol.md` (frozen protocol v1) and
+  `reference/validate-corpus-review.py` — canonical corpus manifest and hashes, receipt and
+  ledger schemas, commissioner exceptions with validator-owned waivability, the exact
+  allowed STATE transition, post-close seals, distinct exit codes, and a 71-case embedded
+  self-test. The shipped trust contract pins the validator's hash.
+- Project completion now runs through the validator: `audit-claims`' final-phase closeout is
+  a three-stage sequence (read-only preflight, gate verdict, `transition --apply` as the
+  only completion writer), with a mutation-free re-entry after the review runs. Projects
+  that cannot obtain a review can close only as a visibly-marked unreviewed archive.
+- Sentinel-as-claim readers: `progress` and `start-phase` validate any completion claim via
+  `check-completion` and report what the validator says — a stale or unbacked completion is
+  reported as exactly that, and drifted archives are never quietly "archived".
+- `init` installs the protocol kit (validator, marker, STATE discriminator, stable-ID
+  completion criteria, reviews/ scaffold) on new projects; existing projects adopt with
+  `/research-init upgrade` (content untouched; pre-existing review receipts handled
+  honestly).
+
+### Changed
+- Research plans now carry stable-ID (`SC-N`) success criteria, generated from a canonical
+  `completion-criteria.md` the review binds to; drift between the two blocks the gate.
+- Manual completion instructions everywhere (STATE template, project CLAUDE.md, discover's
+  recovery menu) are scoped to non-final phases.
+- `tools-guide.md` documents the optional Codex CLI tier; `workflow-ownership.md` adds
+  material corpus findings to the stop list.
+
+### Migration
+- Existing projects keep pre-W7 behavior with a visible "no credibility gate" notice at
+  closeout until upgraded via `/research-init upgrade`. Un-upgraded projects cannot claim
+  the validated completion state.
+
 ## [1.7.0] — 2026-08-05
 
 The audit-battery release. The claim audit now runs a fixed, enumerated check battery on every pass instead of an improvised set — which stops the "one draft audited three times" pattern — plus three fixes to places where a skill's own generated docs contradicted what the skill does.
