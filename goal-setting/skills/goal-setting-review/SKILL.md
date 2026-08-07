@@ -250,13 +250,18 @@ outgrew years ago. That's the failure the annual check exists to prevent.
    to arithmetic: durations, counts and elapsed time are claims about their record, so subtract
    the dates in `goals/active.md`, count the entries in `goals/journal.md`, then say the result.
    Three ways this goes wrong here, all of them the differential's own arithmetic:
-   - **Elapsed time is not execution.** `running since` says how long a system has existed;
-     only the weekly entries say how often it actually ran, and a minimum test duration is
-     served by the second. Eight weeks on the calendar against four entries in the journal is
-     four weeks of evidence.
-   - **Where the window is longer than the record, the record is the answer** — and the gap
-     is worth saying rather than filling: *"eight weeks since you set it up, but I only have
-     four weeks of entries."*
+   - **Elapsed time and execution count are different facts — read each from its own source.**
+     `running since` gives you elapsed time, and that is what the minimum test duration and the
+     lag are measured against. The weekly entries give you how many times it ran. Report each
+     from where it actually comes from; do not derive one from the other in either direction.
+   - **Never state more executions than the record holds.** "Every week for eight weeks" when
+     the journal has four entries is the failure this rule exists for — say four.
+   - **A gap in the journal is not evidence the system didn't run, and it does not restart the
+     duration clock.** An owner who executed without logging is the common case, not the
+     exception. Where the window is longer than the record, name the gap and let them resolve
+     it — *"the block's been live eight weeks; I've got four weeks of entries. Did the earlier
+     ones run?"* — rather than either crediting weeks you cannot see or retreating to *too
+     early to call* when the recorded terms already answer the question.
    - **An event the record never dated has no date.** If nothing says when the work stopped,
      "it stopped mid-quarter" invents a fact out of an absence. Say what the record says: the
      audit never ran.

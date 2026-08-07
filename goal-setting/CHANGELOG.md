@@ -3,6 +3,36 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.8 — 2026-08-07
+
+Corrects an over-reach in 0.2.6: a sparse journal is not a short clock.
+
+0.2.6 fixed a real defect — the review telling an owner they had run a block *"every week for
+eight weeks"* when the journal held four entries. But the guardrail it added went further than
+the defect did, asserting that **a minimum test duration is served by execution count**, and
+gave the example *"eight weeks on the calendar against four entries in the journal is four
+weeks of evidence."* That is wrong. `min_test_duration` and the expected lag are measured
+against `running since` — elapsed time — and a gap in the weekly log does not restart that
+clock. An owner who ran the system without logging every week is the common case.
+
+The cost was a changed classification, not just changed phrasing: all three eval samples of
+`adv-goal-vs-system` stopped landing the differential and retreated to *"too early to call"*
+on a goal whose recorded terms answer the question, which is the exact hedge that scenario
+exists to forbid.
+
+- **Elapsed time and execution count are separate facts, each read from its own source.**
+  `running since` for elapsed, the weekly entries for how often it ran. Neither is derived
+  from the other, in either direction.
+- **Never state more executions than the record holds** — the original defect, kept.
+- **A gap in the journal is not evidence the system didn't run.** Name it and let the owner
+  resolve it (*"the block's been live eight weeks; I've got four weeks of entries. Did the
+  earlier ones run?"*) rather than crediting weeks you cannot see **or** retreating to
+  insufficient-time when the recorded terms already settle it.
+
+The lesson worth keeping: a provenance rule that stops the model *asserting* an unsupported
+fact is right, but the same rule aimed at what the model may *conclude* will quietly move
+outcomes. Bind the claim, not the inference.
+
 ## 0.2.7 — 2026-08-07
 
 The provenance rule becomes plugin-wide, and stops living in four places.
