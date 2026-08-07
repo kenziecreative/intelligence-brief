@@ -12,13 +12,21 @@ threads in hand. That continuity is rebuilt from files, in the steps below.
 
 **Steps 1–3 run silently.** The user sees at most one natural line while you work
 ("Give me a moment to get caught up on where we left off") and then the briefing.
-Never narrate the steps: no "migrating state," no "re-adopting the Live Hypotheses," no
+Never narrate the steps: no "migrating state," no "re-adopting the open questions," no
 "rebuilding context." The section names in this skill are for you, not for the user.
 
 That covers using a section name as a noun for the thing it holds, not just narrating the
-step. Working Dynamic, Live Hypotheses, In-Flight, Backstage Tasks, Stage Record and
-STATE.md name the filing system. They never name the thinking. Say the thinking itself:
+step. Working Dynamic, Open Questions Under Test, In-Flight, Backstage Tasks, Stage Record
+and STATE.md name the filing system. They never name the thinking. Say the thinking itself:
 state the hypothesis, or "what I think is going on," "where I've landed so far."
+
+**The heading is what to avoid, not the ordinary words inside it.** "That's still an open
+question" is fine — it names nothing. Reproducing a heading is the leak, in whatever
+grammatical shape it arrives: as a step you narrate, as a noun for its contents, singular
+or plural. This has caught the skill out twice, both times because a heading happened to
+read like ordinary advisor speech and slipped out sounding like you rather than like
+machinery. So the test to run on yourself is not "does this sound technical" — it is
+**"would this phrase also work as a section title?"** If yes, say it another way.
 
 ## Current State
 
@@ -51,23 +59,24 @@ extend the table with empty cells; if the frontmatter lacks `stale_stages`, add 
 `[]`. Never remove or rewrite existing content.
 This runs silently.
 
-**One heading rename, and it is not additive.** A project written before the rename has
-`## Working Read` holding live hypotheses. The template now calls that section
-`## Live Hypotheses`. Treating this additively would add an empty `## Live Hypotheses`
-and strand the populated `## Working Read` where nothing reads it again — the session's
-carried thinking would survive on disk and vanish in practice, which is the one thing
-this section exists to prevent. So: **if `## Working Read` is present, rename the heading
-in place and keep every line under it untouched.** Do not create a second section, do not
-copy, do not reword the entries. If both headings somehow exist, move the older section's
-entries under `## Live Hypotheses` in their recorded order and delete the emptied
-heading. This is the only rename the migration performs; everything else stays additive.
+**One heading rename, and it is not additive.** The section holding carried hypotheses has
+been named twice before — `## Working Read`, then briefly `## Live Hypotheses`. The template
+now calls it `## Open Questions Under Test`. Treating this additively would add an empty new
+section and strand the populated old one where nothing reads it again: the session's carried
+thinking would survive on disk and vanish in practice, which is the one thing this section
+exists to prevent. So: **if `## Working Read` or `## Live Hypotheses` is present, rename that
+heading in place and keep every line under it untouched.** Do not create a second section, do
+not copy, do not reword the entries. If more than one of the three headings exists, move the
+older sections' entries under `## Open Questions Under Test` in their recorded order and
+delete the emptied headings. This is the only rename the migration performs; everything else
+stays additive.
 
 ## Step 3: Rebuild the working state
 
 1. **Re-adopt the Working Dynamic** — the recorded pushback calibration and notes
    govern how directly you challenge from your very first response, not after you
    warm up.
-2. **Pick up the Live Hypotheses** — the hypotheses your predecessor session was
+2. **Pick up the open questions under test** — the hypotheses your predecessor session was
    carrying, what would confirm or kill each, and which stage tests it. You are
    resuming mid-thought, not re-reading a record. This is what makes you the same
    strategist and not a stranger with the same files.

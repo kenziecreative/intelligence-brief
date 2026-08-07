@@ -24,36 +24,66 @@ section names, this was the only one that ever leaked across nine recorded runs.
 Dynamic, In-Flight, Backstage Tasks and Stage Record never did, because nobody talks
 that way.
 
-**So the section was renamed: `## Working Read` → `## Live Hypotheses`.** The collision is
-gone rather than policed. A run may still say "the working read is…" and it now costs
-nothing, because the phrase names nothing.
+**So the section was renamed — twice.** The first attempt, `## Live Hypotheses`, was wrong
+in an instructive way: it was chosen on the diagnosis that the other five section names never
+leak "because nobody talks that way," and then **that test was never applied to the new
+name**. Singularised, `Live Hypotheses` becomes "a live hypothesis" — as ordinary in advisor
+English as "working read" was. A full eval run caught it saying *"there's a live hypothesis on
+the table that the churn is concentrated in month-1 cohorts"*: same construction as the leak
+it replaced, new name. That build was never tagged or released.
+
+**The section is now `## Open Questions Under Test`.** It passes the test the previous name
+failed: no advisor says "an open question under test." Ordinary phrases sitting inside it —
+"that's still an open question" — remain free, because they reproduce no heading.
+
+The firewall now carries the test rather than a longer list of banned words. The failure was
+never that the model narrates machinery; it is that a heading which reads like natural speech
+gets spoken *as* natural speech. So the rule the skill states is: **would this phrase also work
+as a section title?** If yes, say it another way. That generalises to the next rename; a
+prohibition would not.
 
 - **The migration is the load-bearing part.** `strategist-resume` Step 2 was additive-only
   and explicitly forbade renames. Left that way, a project written before this release
-  would gain an *empty* `## Live Hypotheses` while its populated `## Working Read` sat
-  where nothing reads it again — the carried hypotheses surviving on disk and vanishing in
-  practice, which is the exact failure the section exists to prevent. Step 2 now carries
-  one authorised rename: if `## Working Read` is present, rename the heading in place and
-  keep every line under it. Everything else stays additive.
-- The firewall's phrasing-specific warning was **cut, not rewritten**. Once the collision
-  is gone, a rule forbidding a harmless English phrase is a fossil.
+  would gain an *empty* new section while its populated old one sat where nothing reads it
+  again — the carried hypotheses surviving on disk and vanishing in practice, which is the
+  exact failure the section exists to prevent. Step 2 now carries one authorised rename,
+  covering **both** prior names: if `## Working Read` or `## Live Hypotheses` is present,
+  rename that heading in place and keep every line under it. Everything else stays additive.
+- The firewall's phrasing-specific warnings were **cut, not accumulated**. Once a collision
+  is gone, a rule forbidding a harmless English phrase is a fossil; what replaces them is
+  the test, which does not go stale.
 - `strategist-save`, `strategist-stage`, `strategist-init` (the schema authority), the save
   command wrapper and `AGENTS.md` all follow the new name.
 
-**Verification.** The resume golden passes 3/3 with both critical dimensions at 3, all
-gates green. A hand-built legacy project (two hypotheses under the old heading) migrates
-with both entries intact, in order, and no orphaned heading; the briefing then speaks both
-back without naming any section. Evidence under
-`eval/targets/strategist/_eval/iteration-8/`.
+**Verification.** Full-scope eval, 13 scenarios / 25 runs. Evidence under
+`eval/targets/strategist/_eval/`.
+
+**Also in this release.**
+
+- **`rep-analyse-waterfall` gained its missing fourth user turn.** The scenario's three
+  scripted messages contained no confirmation — the last was a request for work — so a run
+  that correctly refused to capture an unconfirmed result could never reach the advance the
+  `single_stage_advance` gate requires. It produced a false red in two consecutive full
+  iterations. The criterion is not turn count but whether the final message functions as
+  consent; `rep-synthesise-tree`, `adv-preference-over-evidence` and `rep-story-pyramid` all
+  clear it at three turns.
 
 **Known, not fixed here.**
 
+- **`rep-define-scq` has the same defect.** Its final message ("…sounds like the right
+  target") is a *proposal*, which invites the challenge the skill is obliged to make, so
+  consent can never arrive. It is the last scenario in the pack that cannot pass by correct
+  behavior.
 - The additive migration adds template sections using the template's *placeholder* text,
   which can then contradict the project's real state — a project with two completed stages
   gained `**Completed:** (none yet)` under `## Position`, the section the next resume reads
   to orient itself. Predates this release; any project resumed across a template change can
   hit it.
 - No scenario covers the legacy-migration path; it was tested once, by hand.
+- **`framework_in_library` cannot see frameworks the assistant only *offers*.** On
+  `adv-invented-framework` the gate passed on "no framework claimed" while the run named four
+  in prose — a run offering four *invented* alternatives would produce the same green gate.
+  A false negative on the suite's most critical dimension.
 - `Working Read` remains the name in `researcher` and in the cross-plugin convergence plan.
   Only strategist diverged, because only strategist speaks it aloud.
 

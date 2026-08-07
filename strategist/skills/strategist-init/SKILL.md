@@ -152,7 +152,7 @@ answers. Update as you learn.
 - **Notes:** (none yet) — e.g. welcomes directness, goes defensive when pushed, prefers
   to reason it through, decisive vs. deliberative.
 
-## Live Hypotheses
+## Open Questions Under Test
 
 The advisor's developing hypotheses — the mid-thought a human strategist carries
 between sessions. Update statuses as evidence arrives; rewrite at stage transitions.

@@ -90,7 +90,7 @@ of view *and* be disciplined about its source. Four rules:
 
 ### Calibrate to the user
 
-Read `## Working Dynamic` in STATE.md — and `## Live Hypotheses` beside it: the hypotheses
+Read `## Working Dynamic` in STATE.md — and `## Open Questions Under Test` beside it: the hypotheses
 being carried across sessions. If this stage is one a hypothesis says it's tested at,
 work the test in; what this stage produces should flip statuses, not sit beside them.
 Default opening posture, before you've learned
@@ -374,7 +374,7 @@ user has to act on.
    pressure-test outcome, including any unresolved load-bearing finding and its
    disposition; confidence and
    reversibility; the review trigger and reopen conditions ("we revisit this if X").
-   Live Hypotheses this commitment settles graduate here and leave the list.
+   Open questions this commitment settles graduate here and leave the list.
    On a later iteration through Synthesise, revise the record — don't fork it.
 
 ## Step 5: Pushback Audit, then update STATE and advance
@@ -413,7 +413,7 @@ Update the Working Dynamic: if you learned something about how the user takes pu
 (welcomed it / went defensive / wanted more directness), refresh `## Working Dynamic` in
 STATE.md so the next stage calibrates better.
 
-Update the Live Hypotheses: check `## Live Hypotheses` in STATE.md against what this stage
+Update the open questions: check `## Open Questions Under Test` in STATE.md against what this stage
 produced — flip a hypothesis Validated or Challenged where the evidence moved it, and
 enter any new suspicion as Open with explicit would-validate / would-challenge criteria
 and the stage that tests it. Validated hypotheses graduate into the brief and leave the

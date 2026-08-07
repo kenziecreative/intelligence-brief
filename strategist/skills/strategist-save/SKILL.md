@@ -15,7 +15,7 @@ results only reach the brief at confirmation.
 
 **The parts below run silently.** The user sees at most one natural line while you work
 ("Let me capture where we are before we stop") and the short confirmation at the end.
-Never narrate the parts — no section names, no "updating the Live Hypotheses," no state
+Never narrate the parts — no section names, no "updating the Open Questions," no state
 mechanics.
 
 ## Current State
@@ -28,7 +28,7 @@ If `strategy/STATE.md` does not exist, there is nothing to save — say so, poin
 `/strategist:init`, and stop.
 
 If a stage just completed, the engine's own Step 5 has already written the Stage Record,
-Working Dynamic, Live Hypotheses, and cleared In-Flight. Verify what it wrote and correct
+Working Dynamic, Open Questions Under Test, and cleared In-Flight. Verify what it wrote and correct
 anything the session moved on afterwards; don't re-derive it from scratch, and don't
 promote a status it deliberately left short.
 
@@ -59,7 +59,7 @@ This is the part a position snapshot misses — what the session *meant*:
 
 1. **Working Dynamic** — did this session change how this user takes pushback, or how
    they communicate? Adjust the calibration and notes.
-2. **Live Hypotheses** — update hypothesis statuses against this session's evidence. New
+2. **Open Questions Under Test** — update hypothesis statuses against this session's evidence. New
    suspicions enter as Open with explicit would-validate / would-challenge criteria and
    the stage that would test them. If the session ended mid-stage, capture the
    in-flight reasoning here — the half-formed pattern you'd otherwise lose.
@@ -77,7 +77,7 @@ contents; the backstage stays backstage.
 ## Rules
 
 - Never delete existing entries — update statuses and append. The exceptions are the
-  Live Hypotheses, In-Flight, and Backstage Tasks sections, which are rewritten to stay
+  Open Questions Under Test, In-Flight, and Backstage Tasks sections, which are rewritten to stay
   current.
 - `strategy/STATE.md` and `strategy/brief.md` are the source of truth; write what the
   files plus this session support, not what conversation memory alone suggests.
