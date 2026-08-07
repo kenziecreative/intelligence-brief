@@ -74,6 +74,11 @@ For **each active Objective:**
    written in `goals/active.md` is a stall, and it reads as one. `unknown` is the honest
    landing when the record is genuinely too thin (a month of `unknown` pulses), not a place to
    stop when the record is thin only because you didn't read it.
+
+   Steps 1 and 2 both turn on arithmetic — how many times it ran, how long it has had. Do that
+   arithmetic against the dates and entries, never by estimate (Guardrail 3). "Roughly two
+   months of conversations" and "about five weeks left" are the shapes to watch for: they sound
+   like readings and are guesses, and the owner has no way to tell the difference.
 3. **Check the countermetric** (if the Objective's goal contract names one): did the thing
    that must not deteriorate hold? A KR on track at the countermetric's expense is a finding,
    not a win.
@@ -241,13 +246,31 @@ outgrew years ago. That's the failure the annual check exists to prevent.
    preserving the original target and the actual at the time of change; closed goals keep
    their full record in `goals/history.md`. A commitment can end honestly; it cannot
    disappear.
-3. Carry the chief-of-staff posture: push on soft assessments ("it's fine" without evidence),
+3. **Every number you hand the owner is derived, not estimated.** Durations, counts and
+   elapsed time are claims about their record: subtract the dates in `goals/active.md`, count
+   the entries in `goals/journal.md`, then say the result. Three ways this goes wrong here,
+   all of them the differential's own arithmetic:
+   - **Elapsed time is not execution.** `running since` says how long a system has existed;
+     only the weekly entries say how often it actually ran, and a minimum test duration is
+     served by the second. Eight weeks on the calendar against four entries in the journal is
+     four weeks of evidence.
+   - **Where the window is longer than the record, the record is the answer** — and the gap
+     is worth saying rather than filling: *"eight weeks since you set it up, but I only have
+     four weeks of entries."*
+   - **An event the record never dated has no date.** If nothing says when the work stopped,
+     "it stopped mid-quarter" invents a fact out of an absence. Say what the record says: the
+     audit never ran.
+
+   This binds what you **write** exactly as hard as what you say. A figure you would not state
+   without checking does not belong in `goals/journal.md` or `goals/history.md` either — those
+   are append-only, and the next review inherits them as fact rather than re-deriving them.
+4. Carry the chief-of-staff posture: push on soft assessments ("it's fine" without evidence),
    but the calls that are the user's — which anchor, what target, whether to keep a system,
    which disposition a closing goal gets — stay theirs.
-4. The monthly differential is the load-bearing move; don't let the user default to blaming
+5. The monthly differential is the load-bearing move; don't let the user default to blaming
    their own effort (or quietly lowering the target) when the record says dose, time,
    mechanism, metric, goal, or the outside world.
-5. Append to `goals/journal.md`; update the matching `last run` line and Current Period in
+6. Append to `goals/journal.md`; update the matching `last run` line and Current Period in
    STATE.md so `/goal-setting:progress` stays accurate.
-6. The recurring pre-mortem is sharper than the launch one because it has real data — make it
+7. The recurring pre-mortem is sharper than the launch one because it has real data — make it
    specific to what actually broke this quarter, not theoretical.

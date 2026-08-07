@@ -3,6 +3,39 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.6 — 2026-08-07
+
+The review skill stops estimating the numbers it reports.
+
+- **Every duration and count the review hands the owner is now derived, not estimated**
+  (Guardrail 3). The monthly differential's first two questions — did the system run at the
+  committed dose, has the minimum test duration been served — are both arithmetic over the
+  record, and the skill said the answers were "answerable from the record" without ever saying
+  to *compute* them. Runs estimated instead: *"roughly two months of conversations"* against a
+  record showing about six weeks, *"about five weeks left"* against a deadline nine weeks out,
+  *"a month into a two-month runway"* on a three-month period. Each one sounds like a reading
+  and is a guess, and the owner has no way to tell which.
+- **Elapsed calendar time is not execution.** `running since` says how long a system has
+  existed; only the weekly entries say how often it ran, and a minimum test duration is served
+  by the second. One run told an owner they had run a block *"every week for eight weeks"* when
+  the journal held four entries — then rested the whole dose rule-out on that number. Where the
+  window is longer than the record, the record is the answer, and the gap gets said aloud
+  rather than filled.
+- **An event the record never dated has no date.** A quarterly closeout wrote *"work on this
+  stopped mid-quarter"* into `goals/history.md`; nothing anywhere dated when it stopped, and
+  the same run's *spoken* line was correctly unstamped. Written records must not be looser than
+  spoken ones.
+- **The rule binds writes as hard as speech.** Five of the eight instances went into
+  `journal.md`, `history.md`, or `active.md` — append-only files the next review inherits as
+  fact rather than re-deriving. This mirrors the discipline v0.2.5 gave the critic, which was
+  scoped to the critic's claims about prior *text*; the review's failures were arithmetic, and
+  the rule now covers both.
+
+Found by eval iteration-7, where the review skill carried five of eight provenance failures
+across the golden set. Not caught earlier because each judge read its own instance as loose
+phrasing rather than a fabrication; the concentration only appeared once derived values were
+ruled in scope.
+
 ## 0.2.5 — 2026-07-12
 
 The critic stops claiming it can see the past.
