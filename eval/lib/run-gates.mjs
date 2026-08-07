@@ -246,15 +246,17 @@ function evalGate(gate) {
 
 // content-lint: a forbidden pattern must NOT appear in the file (skip if the
 // file is absent and the rule is optional — e.g. the reader brief before Story).
-// `flags` is appended to the default "m" (JS has no inline (?i) — passing one
-// throws, which is how this was found).
+// `flags` is merged into the default "m" — deduped, because JS throws on a
+// repeated flag and packs legitimately write "mi" (blueprint ×3) as well as "i"
+// (goal-setting). Invalid characters are stripped: JS has no inline (?i), and
+// passing one throws, which is how this was found.
 function evalLint(rule) {
   const filePath = join(workingDir, rule.file);
   const text = readIf(filePath);
   if (text == null) {
     return rule.optional_file ? { status: "n/a", evidence: `${rule.file} absent (optional)` } : fail(`missing file ${rule.file}`);
   }
-  const flags = "m" + (rule.flags ?? "").replace(/[^gimsuy]/g, "");
+  const flags = [...new Set("m" + (rule.flags ?? "").replace(/[^gimsuy]/g, ""))].join("");
   const m = text.match(new RegExp(rule.forbid, flags));
   return m ? fail(`forbidden /${rule.forbid}/ found: "${m[0].slice(0, 40)}"`) : pass(`clean of /${rule.forbid}/`);
 }
