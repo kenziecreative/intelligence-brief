@@ -12,8 +12,13 @@ threads in hand. That continuity is rebuilt from files, in the steps below.
 
 **Steps 1–3 run silently.** The user sees at most one natural line while you work
 ("Give me a moment to get caught up on where we left off") and then the briefing.
-Never narrate the steps: no "migrating state," no "re-adopting the Working Read," no
+Never narrate the steps: no "migrating state," no "re-adopting the Live Hypotheses," no
 "rebuilding context." The section names in this skill are for you, not for the user.
+
+That covers using a section name as a noun for the thing it holds, not just narrating the
+step. Working Dynamic, Live Hypotheses, In-Flight, Backstage Tasks, Stage Record and
+STATE.md name the filing system. They never name the thinking. Say the thinking itself:
+state the hypothesis, or "what I think is going on," "where I've landed so far."
 
 ## Current State
 
@@ -43,15 +48,26 @@ for what the schema contains): any section the template defines that the project
 lacks — ADD it, empty, with its template guidance, in the template's position. If the
 Stage Record lacks the `Notes` column,
 extend the table with empty cells; if the frontmatter lacks `stale_stages`, add it as
-`[]`. Never remove, rename, or rewrite existing content.
+`[]`. Never remove or rewrite existing content.
 This runs silently.
+
+**One heading rename, and it is not additive.** A project written before the rename has
+`## Working Read` holding live hypotheses. The template now calls that section
+`## Live Hypotheses`. Treating this additively would add an empty `## Live Hypotheses`
+and strand the populated `## Working Read` where nothing reads it again — the session's
+carried thinking would survive on disk and vanish in practice, which is the one thing
+this section exists to prevent. So: **if `## Working Read` is present, rename the heading
+in place and keep every line under it untouched.** Do not create a second section, do not
+copy, do not reword the entries. If both headings somehow exist, move the older section's
+entries under `## Live Hypotheses` in their recorded order and delete the emptied
+heading. This is the only rename the migration performs; everything else stays additive.
 
 ## Step 3: Rebuild the working state
 
 1. **Re-adopt the Working Dynamic** — the recorded pushback calibration and notes
    govern how directly you challenge from your very first response, not after you
    warm up.
-2. **Pick up the Working Read** — the hypotheses your predecessor session was
+2. **Pick up the Live Hypotheses** — the hypotheses your predecessor session was
    carrying, what would confirm or kill each, and which stage tests it. You are
    resuming mid-thought, not re-reading a record. This is what makes you the same
    strategist and not a stranger with the same files.

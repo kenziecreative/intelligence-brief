@@ -49,8 +49,8 @@ turn, so the run starts from that state:
   Dynamic` (for calibration scenarios).
 - `setup.state_extra` → mid-stage state for `entry: resume` scenarios, seeded into the
   scaffolded `strategy/STATE.md` **before** the first turn. Each field maps to its
-  STATE.md section: `working_dynamic` → `## Working Dynamic`; `working_read` (list of
-  hypothesis lines) → `## Working Read`; `in_flight` (framework, answered, open,
+  STATE.md section: `working_dynamic` → `## Working Dynamic`; `live_hypotheses` (list of
+  hypothesis lines) → `## Live Hypotheses`; `in_flight` (framework, answered, open,
   provisional) → `## In-Flight`; `backstage_tasks` → `## Backstage Tasks`. For
   `entry: resume`, `current_stage` is the stage named in `in_flight.framework` (e.g.
   "Waterfall (Analyse)" → `analyse`), not the entry name.

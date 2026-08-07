@@ -18,7 +18,7 @@ Once a tool is installed, it shows up as commands and skills you can run in any 
 | Photo Generator | 1.2.0 | Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is | [guide](./photo-generator/README.md) |
 | Researcher | 1.10.0 | Research you can stand behind — every claim audited back to its source note, and every note to a declared source | [guide](./researcher/README.md) |
 | Sage | 0.2.0 | Always know where a decision landed and who owes what, across a whole week of meetings | [guide](./sage/README.md) |
-| Strategist | 0.5.0 | Think a hard problem all the way through, and come out with a strategy you can defend | [guide](./strategist/README.md) |
+| Strategist | 0.6.0 | Think a hard problem all the way through, and come out with a strategy you can defend | [guide](./strategist/README.md) |
 | Thinkers | 0.1.0 | Make sense of a confusing situation — what's really going on, where your own thinking might be off, and what to do | [guide](./thinkers/README.md) |
 
 Each version mirrors that plugin's `plugin.json`, which is the source of truth for updates.

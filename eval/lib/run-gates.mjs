@@ -22,7 +22,7 @@
 
 import { readFileSync, existsSync } from "node:fs";
 import { execSync } from "node:child_process";
-import { resolve, join } from "node:path";
+import { resolve, join, dirname } from "node:path";
 
 function arg(name, fallback = null) {
   const i = process.argv.indexOf(`--${name}`);
@@ -178,7 +178,24 @@ function evalGate(gate) {
       if (!pluginRoot) return fail("no --plugin-root given for library check");
       const index = readIf(join(pluginRoot, gate.index));
       if (index == null) return fail(`missing library index ${gate.index}`);
-      const haystack = index.toLowerCase();
+      // The index carries each entry's slug and title but NOT its `aka` aliases,
+      // which live in the entry's own frontmatter. A framework named by a
+      // documented alias is in the library; matching against the index alone
+      // reports it as fabricated — and this gate feeds No-Fabrication, so that
+      // false positive is expensive. Every entry declares `aka`, so the whole
+      // library was exposed to it. (Proof case: strategist iteration-5
+      // rep-framework-eisenhower claimed "Eisenhower Matrix";
+      // reference/synthesise/eisenhower.md declares it under `aka`.)
+      const indexDir = dirname(join(pluginRoot, gate.index));
+      const aliases = [];
+      for (const rel of index.match(/[A-Za-z0-9._/-]+\.md/g) ?? []) {
+        const fm = frontmatter(readIf(join(indexDir, rel)) ?? "");
+        if (!fm) continue;
+        for (const a of [...(fmList(fm, "aka") ?? []), ...(fmList(fm, "title") ?? [])]) {
+          aliases.push(a, slug(a));
+        }
+      }
+      const haystack = [index, ...aliases].join("\n").toLowerCase();
       const missing = claimed.filter((f) => !haystack.includes(slug(f)) && !haystack.includes(f.toLowerCase()));
       return missing.length ? fail(`not in library: ${missing.join(", ")}`) : pass(`all in library: ${claimed.join(", ")}`);
     }

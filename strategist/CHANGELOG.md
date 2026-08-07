@@ -3,6 +3,60 @@
 All notable changes to the Strategist plugin. Per-plugin semver; tags are plugin-scoped
 (`strategist-vX.Y.Z`).
 
+## 0.6.0 — 2026-08-07
+
+The **resume-continuity release**. 0.5.0's own eval found one regression against the
+0.4.1 baseline, and chasing it surfaced something more interesting than the bug: a state
+section named after a phrase people actually say.
+
+**The leak.** On resume, the advisor said *"that's why the working read is that churn,
+not acquisition, is the driver"* — speaking a STATE.md section name aloud, which the
+narration firewall exists to prevent. It failed the resume golden, which had scored a
+clean 3-3-3 one release earlier.
+
+**Why instruction alone did not fix it.** The firewall already banned narrating the step
+("re-adopting the Working Read"). The leak was the *noun* form, and the noun form is
+ordinary English: "my working read is X" is a sentence a competent advisor says without
+thinking about machinery at all. Tightening the prohibition moved the phrasing rather than
+stopping it — a first attempt that added the replacement `"my read so far is"` next to the
+banned term produced `"my working read going in is"`, the two blended. Of the six STATE.md
+section names, this was the only one that ever leaked across nine recorded runs. Working
+Dynamic, In-Flight, Backstage Tasks and Stage Record never did, because nobody talks
+that way.
+
+**So the section was renamed: `## Working Read` → `## Live Hypotheses`.** The collision is
+gone rather than policed. A run may still say "the working read is…" and it now costs
+nothing, because the phrase names nothing.
+
+- **The migration is the load-bearing part.** `strategist-resume` Step 2 was additive-only
+  and explicitly forbade renames. Left that way, a project written before this release
+  would gain an *empty* `## Live Hypotheses` while its populated `## Working Read` sat
+  where nothing reads it again — the carried hypotheses surviving on disk and vanishing in
+  practice, which is the exact failure the section exists to prevent. Step 2 now carries
+  one authorised rename: if `## Working Read` is present, rename the heading in place and
+  keep every line under it. Everything else stays additive.
+- The firewall's phrasing-specific warning was **cut, not rewritten**. Once the collision
+  is gone, a rule forbidding a harmless English phrase is a fossil.
+- `strategist-save`, `strategist-stage`, `strategist-init` (the schema authority), the save
+  command wrapper and `AGENTS.md` all follow the new name.
+
+**Verification.** The resume golden passes 3/3 with both critical dimensions at 3, all
+gates green. A hand-built legacy project (two hypotheses under the old heading) migrates
+with both entries intact, in order, and no orphaned heading; the briefing then speaks both
+back without naming any section. Evidence under
+`eval/targets/strategist/_eval/iteration-8/`.
+
+**Known, not fixed here.**
+
+- The additive migration adds template sections using the template's *placeholder* text,
+  which can then contradict the project's real state — a project with two completed stages
+  gained `**Completed:** (none yet)` under `## Position`, the section the next resume reads
+  to orient itself. Predates this release; any project resumed across a template change can
+  hit it.
+- No scenario covers the legacy-migration path; it was tested once, by hand.
+- `Working Read` remains the name in `researcher` and in the cross-plugin convergence plan.
+  Only strategist diverged, because only strategist speaks it aloud.
+
 ## 0.5.0 — 2026-08-07
 
 The **upskill release**. A full constraint audit of every strategist surface
