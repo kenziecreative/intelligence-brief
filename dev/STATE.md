@@ -1,117 +1,86 @@
 # Work state — kenzie-creative-marketplace
 
-**Last updated:** 2026-08-06 · **Session focus:** W6a/b COMPLETE — the prevention layer
-for the credibility gate. Released as **researcher v1.10.0**, committed + tagged on
-`researcher-w6ab`. NOT pushed, and NOT merged to main — that's Kelsey's call. Design +
-fork record: `dev/researcher/w6ab-design.md` (all 4 forks resolved per recommendation).
-Shipped: append-only decision ledger with per-skill writers; B13 disposition conformance;
-criteria preflight (hard stop, evidence-named); advisory criteria trajectory; settled-framing
-guard. Regression: iterations 21→23. **Iteration 21 found 4 red goldens** (2 of them the new
-mechanisms); all 4 green by iteration 23, incl. a post-decision-re-argument defect open since
-iteration 4. **The durable lesson: every fix in 22 and 23 was to how a result is REPORTED,
-not to a detection mechanism — and both reporting failures traced to instruction wording.
-Specifying a rule for an internal step does not bind the turn; saying a contract "binds the
-turn, not just the report" de-emphasised the report into neglect. State two-surface contracts
-symmetrically; enumerate multi-part routes.** Open harness debt (logged, not done): no gate
-sees a STATE write during a write-free preflight, none sees cycle-step/checkbox incoherence,
-and one capture editorialized a turn upward and distorted its score.
+**Last updated:** 2026-08-07 · **Session focus:** strategist — full `/upskill` constraint
+audit, first runtime eval baseline, and the resulting **v0.5.0 upskill release**. Committed
+and tagged on `strategist-upskill`. NOT pushed. NOT merged to main. **One step outstanding:
+the eval re-run that verifies the pass against its own baseline.**
 
 ## Where things stand
 
-- **researcher (1.7.0 released; W7 on branch `researcher-w7`, stages 3–4 done)** —
-  Commits this arc: `7135d13` (stage 3 build) → `2a630bf` (stage-3 hardening from the
-  golden campaign) → `562bcbd` (stage 4 gate wiring). The credibility gate is now
-  **wired**: audit-claims' final closeout is the validator-owned three-stage sequence
-  (with a mutation-free closeout-only re-entry), side doors are closed, sentinel readers
-  validate completion claims (verdict outranks STATE text), and init installs/adopts the
-  full protocol kit (`/research-init upgrade` for existing projects). Validator battery
-  **71/71**, contract hash current. No version bump yet — release is stage 5.
-- **Eval record:** iterations 10–18 = the corpus-scale golden campaign (both goldens
-  judged PASS; every red a true positive — 6 fixture defects, 1 register deficiency, 3
-  phrasing gaps). Iteration 19 = audit-entry regression, all three goldens PASS
-  multi-sampled, zero stage-4 leakage. New harness pieces: `command_exit0` gate type in
-  `eval/lib/run-gates.mjs`, `review_receipt_validates` gate, Credibility Gate rubric
-  dimension, fixtures `corpus-a`/`corpus-b` (neutral names — blind-runner leak defense).
-- **The map** — ARCHITECTURE Layer 9 current (stages 3–4 built/proven; stage 5
-  proposed); Layer 2 gained the runner/validator ownership rows.
-- **Other plugins** — unchanged.
+- **strategist (0.5.0, committed `4ec11f2`, not merged)** — two commits on
+  `strategist-upskill`, which is linear with main (main is an ancestor; a merge is a
+  fast-forward, no rebase needed):
+  - `4cc55e8` **v0.4.2** — shipped-reference correction (`reference/frameworks/README.md`
+    now records that only two of the six derivations `creating-conditions.md` names actually
+    ship) plus the audit record. Tagged `strategist-v0.4.2`.
+  - `4ec11f2` **v0.5.0** — the upskill release. 30 decisions applied. Tag NOT yet created,
+    deliberately: tag after the eval re-run passes.
+- **The audit** — `dev/strategist/constraint-audit.md` is the full record: every surface,
+  every proposed rewrite as a numbered decision, and a disposition ledger (26 accepted,
+  0 rejected, 3 deferred, plus runtime findings 27–30). Read this first when picking the
+  thread back up.
+- **The baseline** — `eval/targets/strategist/_eval/iteration-1/` (gitignored, local only):
+  25 runs, 25 scorecards, `scores.md`. **9/13 under rubric 1.2.0; 7/13 under the new 1.3.0
+  floor** — `scores.md` carries both derivations. Compare iteration 2 against the **7/13**
+  figure, never the 8/8 golden headline, or the rubric change reads as a phantom regression.
+
+## The one outstanding step
+
+**Run `/eval-run --target strategist --scope all` and compare to iteration 1.** Everything
+else in the arc is done. Notes for that run:
+
+- It should be much cheaper than iteration 1. `eval-judge` now has a `Write` tool and
+  persists its own `scorecard.md`; in iteration 1 **all 25 judges returned nothing on first
+  completion** and every card survived only because the orchestrator re-asked, 25 times.
+- The scenario set changed, so a few comparisons are not like-for-like: `rep-define-scq` and
+  `rep-analyse-waterfall` were reseeded off library Worked Examples they collided with,
+  `rep-synthesise-tree` gained the 4th user turn the engine needs to reach Step 4 consent
+  (its iteration-1 gate failure was a scenario turn-budget flaw, not a plugin defect), and
+  `adv-skip-loop` gained a 3rd turn so Probing is actually exercised.
+- **The thing to actually check:** whether decision 27 landed. Iteration 1 had the plugin
+  narrating its internal checks across five of seven stages, at Register 0 or 1. Under the
+  1.3.0 floor a Register 0 now fails any scenario, so a regression here turns a golden red.
+- **R-SE2 has no automated net.** The adapter has the runner play the critic directly
+  because a subagent cannot nest, which bypasses `allowed-tools` entirely. Verify the
+  Synthesise `Task` fix by running `/strategist:synthesise` live and confirming the critic
+  dispatches. A green eval proves nothing about that seam.
 
 ## Done this session
 
-- Stage 3: runner skill + command, brief (C15 + required-evidence + frozen deltas),
-  Tier-2 agent, additive `validate-receipt` mode, corpus-scale fixtures + scenarios +
-  rubric dimension + deterministic receipt gate; two Codex fix-first reviews applied
-  (stage 3: 5 blockers/5 majors; stage 4: 4 blockers/5 majors/1 minor).
-- Stage 4: three-stage closeout, side doors, sentinel readers, init kit + adoption path,
-  tools-guide Codex section, workflow-ownership stop item, validator archive
-  drift-check (battery 69→71).
-- Verification green at every step: self-test 71/71, contract hash matches, plugin
-  validate ×2, check-version-prefix, golden set green (see `_eval/iteration-19/scores.md`).
+- **v0.4.2** released and tagged; branch synced to main first (it was 3 behind and would
+  have committed stale version tables).
+- **Iteration-1 eval baseline** — 25 runs, zero ungraded, one deterministic gate failure
+  (adjudicated as a scenario turn-budget flaw; the fix belongs in `scenarios.jsonl`, and a
+  plugin-side "fix" would have loosened Step 4's consent rule).
+- **v0.5.0** — 30 decisions: 8 model pins cut, the "exactly" adverb family, the Synthesise
+  `Task` defect, `strategist-framework` un-frozen, `_inventory.json` deleted, `no_em_dashes`
+  wired, the narration firewall rewritten to catch paraphrase rather than vocabulary,
+  `open (n)` made a real count, done-bar adherence tightened.
+- **Harness repairs** — judge self-persistence, transcript convention (grammatical person is
+  the tell: third-person is annotation, second-person is speech), `expected_no_advance`
+  moved off the blind runner, rubric 1.3.0 floor, two scenarios reseeded, two turn budgets.
+- **New lint** — `indexCompleteness` in `lint-doctrine-drift.mjs`: every shipped entry
+  reachable by slug from `INDEX.md`, every row pointing at a real file. Tested both ways.
 
-## In flight / uncommitted
+## Open decisions / debt
 
-None. Working tree clean at `562bcbd`.
+- **Four Q-answers from the audit not applied** (Q3 transition-box status, Q10 inline-paste
+  recording path, Q11 malformed-settings merge, Q12 on-demand alternative set). Small, all
+  one-liners; sites were not cheap to locate. Recorded here rather than silently dropped.
+- **Q8 was resolved against its own disposition.** The audit parked "standalone framework
+  capture path vs the 0.4.x state model" as product work, then the pass wrote a boundary for
+  it anyway in `strategist-framework` Step 4 (the write does not advance the loop, set a
+  status, or clear In-Flight; it notes provenance in the `Notes` cell). Conservative and
+  arguably the minimal sentence the audit asked for — but it contradicts the ledger. Keep or
+  revert deliberately.
+- **Q7 still parked** — CHARTER.md has no staleness/migration vocabulary when Define
+  materially rewrites the decision.
+- **X7 still deferred** — whether the `` !`cat` `` preamble executes in Cowork. Five skills
+  carry it; none allow Bash. Nothing depends on the answer.
+- **Prose framework counts** — "70" still appears in the README and both descriptions. Now
+  guarded by the index-completeness lint rather than de-numbered.
 
-## Next steps (in order)
+## Other plugins
 
-0. **Push** (Kelsey): `git push origin main researcher-v1.8.0` publishes v1.8.0 to the
-   marketplace. Also Cowork-side verification of the review/closeout surfaces (build
-   model: each surface tested by the tool that sees it) — structural checks done here
-   (no hook dependencies; plain python3), live Cowork pass still open.
-0a. **Kelsey's engine corpus has 8 open material findings** from the live dual-tier
-   review (t1: 6 — incl. OD-6 ownership contradiction, $29 floor-vs-top residue,
-   WTP-spec rule conflict; t2: 2 — stale 05a scope-limitation paragraph, 11:353
-   floor-of-class reintroduction; full receipts/reports in the session scratchpad's
-   live-run/ + live-remediated/research/reviews/, which are SESSION-TEMPORARY — the
-   durable record is this list + the readout). To act on them properly: in the real
-   repo, `/research-init upgrade` then `/research-review-corpus final`, then adjudicate
-   via the new ledger procedure in audit-claims.
-1. **(retired) W7 stage 5 — done:** dual-tier review (`/research-review-corpus
-   final`, t1+t2) of the remediated engine corpus (repo
-   `~/Projects/_shared/helloalice-research`, project
-   `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated
-   `93ec4fc`+; snapshot via `git archive`); the validator against the pre-remediation
-   snapshot must block; Cowork path test; Codex review of the whole W7 change; five
-   version surfaces + CHANGELOG + tag `researcher-v1.8.0` (or as decided); merge
-   `researcher-w7`.
-2. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`, program-status
-   block current): W6a/b → W2 → W3 → W1 → rest. Chips pending: audit-register cleanup
-   (`task_73dee9b0`), Evidence-Against golden (`task_c631be46`), FAIL-branch durable
-   manifest (`task_d6b356eb`, new this session).
-
-## Open questions / decisions pending
-
-- **Spec calls for Kelsey to eyeball** (all recorded in-protocol with rationale):
-  additive `validate-receipt` mode (§9, stage 3); archive drift-check tightening of
-  `check-completion` (stage 4 — spec-compliance reading of §1.4/§6.4); rubric kept
-  strict on clean-run gate-semantics close (skill emits it unconditionally).
-- Eval-harness follow-ups (non-blocking, from iteration 19): runner scenario-extractor
-  must project only entry/setup/user_messages (one runner accidentally printed
-  judge-only fields; judge adjudicated the capture clean); No-Tics rubric question
-  (within-turn vs cross-turn recurrence); assorted surface-for-decision items in
-  `_eval/iteration-19/scores.md`.
-
-## Session knowledge worth keeping
-
-- **Branch `researcher-w7`** until stage-5 release; STATE.md commits ride it.
-- **Contract-hash sync rule** unchanged (validator edit → regenerate contract from
-  `hash-self`).
-- **Codex background gotchas:** always `< /dev/null`; if a large argv prompt dies
-  instantly (exit 1, empty streams) while tiny prompts work, feed the prompt via stdin
-  (`codex exec ... "Follow the instructions on stdin." < prompt.md`).
-- **Eval blind-runner surfaces:** fixture names, adapter prose, and dir names must not
-  encode expected outcomes; judge-only truth lives in coverage.md / rubric /
-  expected_behavior / seed_notes. Sampler variance is real: a clean corpus must be
-  *actually* clean, not clean-on-one-roll — the seven-repair corpus-b saga (iterations
-  10–17) is the case study.
-- **Multi-sample rule bites:** goldens whose critical dimensions are noisy run 3×,
-  worst sample decides — iteration 19 honored it (waiver + override 3×, manifest 1×).
-
-## How to resume
-
-1. Read `AGENTS.md`, then this file. Confirm branch `researcher-w7`.
-2. For stage 5: protocol §§6, 8, 9 + the runner skill's `final` mode; engine-corpus
-   coordinates above; release ritual in researcher/AGENTS.md ("Maintaining this
-   plugin"); update the plan file's program-status block at every stage move.
-3. Build discipline (standing): one change at a time; Codex-review before ship; eval
-   regression on changed skills; sync ARCHITECTURE in the same change.
+- **researcher (1.10.0)**, **blueprint (0.3.1)** — released on main, unchanged this session.
+- Everything else unchanged.
