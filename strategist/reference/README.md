@@ -50,4 +50,4 @@ The [`frameworks/`](frameworks/) directory ships the canonical source documents 
 - [`learning-and-teaching.md`](frameworks/learning-and-teaching.md) — the learning model the spine's analytical core mirrors.
 - [`creating-conditions.md`](frameworks/creating-conditions.md) — the parent posture beneath all of it.
 
-These are copies of canonical documents maintained outside the plugin. When the plugin is updated, verify they still match canon.
+These are copies of canonical documents maintained outside the plugin. Sync is machine-checked and release-blocking (`node dev/scripts/lint-doctrine-drift.mjs --plugin strategist`); change the canon, then re-copy — never edit these in place.

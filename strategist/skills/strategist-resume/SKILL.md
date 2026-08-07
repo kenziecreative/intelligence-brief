@@ -2,7 +2,6 @@
 name: strategist-resume
 description: This skill should be used when the user returns to an existing strategy project and wants to continue (e.g. "resume the strategy", "pick up where we left off", "continue", "where were we"). Rebuilds the advisor's working state from the files — stance, calibration, hypotheses, mid-stage position — and briefs the user before continuing.
 allowed-tools: Read, Write, Edit, Glob, Grep
-model: opus
 ---
 
 # strategist-resume — Pick The Thread Back Up
@@ -38,10 +37,11 @@ Never narrate the steps: no "migrating state," no "re-adopting the Working Read,
 
 The STATE.md in this project was created from whatever template shipped when the
 engagement started; the template evolves with the plugin. Compare the project's
-STATE.md against the template structure in the `strategist-init` skill: any section it
-defines that the project file lacks (Working Dynamic, Working Read, In-Flight,
-Backstage Tasks, Open Pressure-Test Findings) — ADD it, empty, with its template
-guidance, in the template's position. If the Stage Record lacks the `Notes` column,
+STATE.md against the template structure in the `strategist-init` skill
+(`${CLAUDE_PLUGIN_ROOT}/skills/strategist-init/SKILL.md`, which is the single authority
+for what the schema contains): any section the template defines that the project file
+lacks — ADD it, empty, with its template guidance, in the template's position. If the
+Stage Record lacks the `Notes` column,
 extend the table with empty cells; if the frontmatter lacks `stale_stages`, add it as
 `[]`. Never remove, rename, or rewrite existing content.
 This runs silently.
@@ -81,8 +81,9 @@ aloud — complete sentences, no STATE.md shorthand, no internal section names. 
   reconciliation, anything deferred.
 - The next action, concretely.
 
-If the last session was more than 7 days ago, ask whether anything changed in the
-problem since — a moved premise is cheaper to catch now than at Synthesise.
+If meaningful time has passed since the last session (a week or more), ask whether
+anything changed in the problem since — a moved premise is cheaper to catch now than at
+Synthesise.
 
 ## Step 5: Wait for confirmation
 

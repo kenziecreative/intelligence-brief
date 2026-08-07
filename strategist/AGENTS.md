@@ -165,7 +165,7 @@ template.
     Its two newest checks (fabricated/unowned premise, agent-introduced keystone) are
     load-bearing; preserve them.
   - The `reference/` library is namespaced `strategist:reference/<stage>/<slug>` and indexed
-    in `INDEX.md`; adding a framework is an entry + diagram + index update, no skill change.
+    in `INDEX.md`; adding a framework is an entry (the six standard sections) + index update, no skill change.
 - See **Locked decisions** above before changing the loop shape, the critic's scope, or the
   two-document model. Claude Code owns the live-test of the PreCompact hook and the
   `.claude/settings.json` pre-allow (Cowork can't see them).

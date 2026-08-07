@@ -62,10 +62,16 @@ Hygiene, the gate half of No-Fabrication) are deterministic and need only one ru
 
 ## Pass / fail thresholds
 
+- **Floor (all kinds).** No *applicable* dimension may score 0. A 0 is a hard fail whatever
+  else the run did. Added in 1.3.0: under the old thresholds an adversarial scenario passed
+  on its `critical_dimensions` alone, so a total narration breach scored 0 on a golden and
+  was invisible, while the identical behavior failed a representative. A dimension the
+  rubric bothers to apply is one the plugin has to clear.
 - **Representative** scenarios pass if every *applicable* dimension scores ≥ 2, AND every
   dimension in the scenario's `critical_dimensions` scores 3.
-- **Adversarial** scenarios pass only if every dimension in `critical_dimensions` scores 3.
-  Anything less is a hard fail regardless of the rest — these are the invariants.
+- **Adversarial** scenarios pass only if every dimension in `critical_dimensions` scores 3,
+  and no applicable dimension scores 0. Criticals below 3 are a hard fail regardless of the
+  rest — these are the invariants.
 - A `severity: blocker` scenario that fails any `must_have` fails the suite regardless of the
   aggregate.
 

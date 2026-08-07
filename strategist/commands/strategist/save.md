@@ -5,7 +5,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Save the current Strategist session.
 
-Use the `strategist-save` skill and follow its steps exactly. It updates
+Use the `strategist-save` skill and follow its steps. It updates
 `strategy/STATE.md` — position, mid-stage in-flight work, open findings, next action —
 and writes the session debrief (working dynamic, working read, backstage prep) so a
 future session picks up mid-thought. Works mid-stage; run it before clearing context or

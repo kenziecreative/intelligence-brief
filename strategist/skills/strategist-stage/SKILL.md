@@ -2,7 +2,6 @@
 name: strategist-stage
 description: This skill should be used when the user asks to run or advance a stage of the Strategy Spine — Define, Frame, Analyse, Insight, Synthesise, Story, or Move (e.g. "let's define the problem", "move to the analyse stage", "run synthesise"). Presents the stage's frameworks, applies the chosen one to the user's problem, and captures the result in the working brief.
 allowed-tools: Read, Write, Edit, Glob, Grep, Task
-model: opus
 ---
 
 # strategist-stage — Run One Stage Of The Loop
@@ -111,7 +110,11 @@ own failure.
 1. If `strategy/STATE.md` does not exist, stop and tell the user to run `/strategist:init`.
 2. Read `strategy/STATE.md`, `strategy/brief.md`, and the project config (`./CLAUDE.md`
    or `strategy/strategist-config.md`) for the problem statement, `depth`, and
-   `pressure_test` setting.
+   `pressure_test` setting, plus any output-style settings it declares. `no_em_dashes:
+   true` means exactly what it says: no em dashes in anything you write for this project
+   — conversation, `brief.md`, the reader brief, `DECISION.md`. Rebuild the sentence
+   rather than swapping in a longer dash; a config the deployment set and the loop
+   ignores is a promise the plugin breaks every turn.
 3. Read `strategy/CHARTER.md` if it exists — the decision being made, who decides, the
    stakes, the constraints and non-goals, the required confidence. Stage work that
    drifts against a charter line gets that named, like any preference-over-evidence
@@ -195,8 +198,9 @@ forward to sketch a later stage. Check this stage's position against
    situation — concrete, specific, theirs. This is the deliverable of the stage.
 4. If multiple frameworks genuinely apply (common in Analyse and Insight), you may apply
    more than one; record each.
-5. **Persist as you go.** After each substantive answer — every few turns at the very
-   most — silently refresh `## In-Flight (mid-stage)` in STATE.md: the framework in
+5. **Persist as you go.** `## In-Flight (mid-stage)` in STATE.md must stay current enough
+   that a stop at any moment is recoverable from the file alone; in practice that means
+   silently refreshing it after each substantive answer: the framework in
    play, what's answered so far (one line of substance each, not just topics), what's
    still open, any provisional conclusions. Sessions end without warning — an
    auto-compaction, a closed laptop — and the file, not the conversation, is what
@@ -324,7 +328,11 @@ it pressure-tests reasoning *before* you commit.
    `## Open Pressure-Test Findings` in STATE.md, and mark Synthesise's
    `Pressure-tested` cell honestly: `clear` (it ran; nothing load-bearing left open),
    `open (n)` (it ran; n load-bearing findings stand unresolved), or `declined`.
-   Tested-with-a-standing-objection is not `clear`.
+   Tested-with-a-standing-objection is not `clear`. **`n` is a count, not an
+   impression:** it equals the number of findings you just recorded under
+   `## Open Pressure-Test Findings`, and anything you say aloud about how many are open
+   has to match it. `/strategist:progress` and `/strategist:resume` both read that cell,
+   so an undercount there quietly shrinks the objection every session afterwards.
 4. **Non-blocking.** The findings inform the commitment; the user decides what to
    address now, what to carry as an open finding, and whether to commit anyway. Never
    hold the gate hostage to a clean report — but every unresolved load-bearing finding
@@ -339,7 +347,12 @@ it pressure-tests reasoning *before* you commit.
    `brief.md`, and carry it into the reader brief's "What this rests on" section. The
    reader of an untested strategy gets to know it's untested.
 
-**The commitment is checked and recorded.** As the commitment is written:
+**The commitment is checked and recorded.** As the commitment is written. These are three
+things you *do*, not three things you announce — a charter divergence or a thin kernel part
+is named to the user in your own voice because they need to know it, but "Charter check:",
+"Kernel check:", "Real alternatives check:" as labeled headings in conversation is the
+machinery on stage. Record the full result in the Synthesise section; speak only what the
+user has to act on.
 
 1. **Charter check.** Check it against `strategy/CHARTER.md`: is this the decision the
    engagement set out to make, does it respect the stated constraints and non-goals,
@@ -366,8 +379,14 @@ it pressure-tests reasoning *before* you commit.
 
 ## Step 5: Pushback Audit, then update STATE and advance
 
-**Self-Audit (run this silently before writing anything).** Two parts, one for each half
-of the posture:
+**Self-Audit — runs silently, before you write anything.** Nothing about this step reaches
+the user: not its name, not its result, not the fact that it happened. The test is not
+whether you used the step's own vocabulary — "one honest check before I lock this in",
+"from the self-check I ran before writing", "Self-audit:", "named, graded sound" are all
+the same failure as saying "Self-Audit", because each one tells the user a check was run.
+What the audit *finds* often does belong in the conversation: say the finding in your own
+voice, as your own judgement, with no account of the process that produced it. Two parts,
+one for each half of the posture:
 
 *Friction check.* Did the stage's weakest point get a genuine look? If real pushback
 happened during the stage, this check is already satisfied. If the stage flowed entirely
@@ -401,10 +420,14 @@ and the stage that tests it. Validated hypotheses graduate into the brief and le
 list. Clear `## In-Flight (mid-stage)` back to `(none)` — the stage is complete; the
 mid-stage snapshot belongs to `/strategist:save`.
 
-**Done-bar check.** Each stage README carries a "The stage is done when" block — that
-block is the stage's completion contract, and the engine reads it as a checklist before
-advancing. Read it now (`${CLAUDE_PLUGIN_ROOT}/reference/<dir>/README.md`) and check the
-stage's actual output against each bar. A filled-in framework is not automatically a
+**Done-bar check** (silent, like the audit above — the user hears the outcome, never the
+checking). Each stage README carries a "The stage is done when" block — that block is the
+stage's completion contract, and the engine reads it as a checklist before advancing. Read
+it now (`${CLAUDE_PLUGIN_ROOT}/reference/<dir>/README.md`) and check the stage's actual
+output against **each** bar in turn, by name. A bar you did not actually look for is an
+unmet bar, not a met one: marking a stage `complete` asserts every bar was checked and
+held, so if you cannot point to what satisfied a given bar, it is unmet and takes the
+unmet path below. A filled-in framework is not automatically a
 finished stage: Analyse's bar requires every Frame dimension interrogated, Synthesise's
 requires the commitment gate passed, Story's requires structure then shape, Move's
 requires the execution backbone. If a bar is unmet, say which one and what would meet it,

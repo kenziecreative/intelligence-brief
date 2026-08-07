@@ -2,7 +2,6 @@
 name: strategist-pressure-test
 description: This skill should be used when the user asks to pressure-test, stress-test, or red-team the current strategy's reasoning (e.g. "pressure-test this strategy", "red-team my recommendation", "stress-test the decision"). Dispatches the strategist-critic subagent to interrogate assumptions, logic, and failure modes; tests logic, not evidence.
 allowed-tools: Read, Write, Edit, Glob, Grep, Task
-model: opus
 ---
 
 # strategist-pressure-test — Interrogate The Reasoning
@@ -63,15 +62,22 @@ stage it bears on, so `/strategist:progress` can surface them and the user can c
 them as they address them. Mark the stage's `Pressure-tested` cell in the Stage Record
 table honestly: `clear` if nothing load-bearing stands open, `open (n)` if n
 load-bearing findings remain unresolved — tested-with-a-standing-objection is not
-`clear`.
+`clear`. `n` is a count: it equals the number of findings you just wrote into that
+section, and it has to match whatever you say aloud about how many are open.
 
 Do **not** edit `brief.md`. Acting on a finding is the user's call, made by re-running
-the relevant stage — point them there:
+the relevant stage — so point them there **when there is something to address**:
 
 ```
 ▶ To address these: re-run /strategist:<stage> for the affected stage(s), or talk them
   through with me here. Run /strategist:progress to see open findings any time.
 ```
+
+Resolve `<stage>` to the actual stage names before this reaches the user. **If nothing
+load-bearing was found, this block does not belong in the reply** — a clean result that
+closes by pointing at findings that don't exist reads as boilerplate and undercuts the
+affirmation you just made. Close with where things stand instead, and mention
+`/strategist:progress` only if it's useful.
 
 ## Guardrails
 

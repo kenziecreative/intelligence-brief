@@ -1,6 +1,12 @@
 {
   "pluginRoot": "strategist",
-  "scanRoots": ["skills", "agents", "commands", "reference", "templates"],
+  "scanRoots": [
+    "skills",
+    "agents",
+    "commands",
+    "reference",
+    "templates"
+  ],
   "stalePhrases": [
     {
       "id": "blocker_vocab",
@@ -64,10 +70,22 @@
     }
   ],
   "canonPairs": [
-    { "copy": "reference/frameworks/strategy-spine.md", "canon": "strategy/strategy-spine.md" },
-    { "copy": "reference/frameworks/metaskills.md", "canon": "metaskills.md" },
-    { "copy": "reference/frameworks/learning-and-teaching.md", "canon": "learning-and-teaching.md" },
-    { "copy": "reference/frameworks/creating-conditions.md", "canon": "creating-conditions.md" }
+    {
+      "copy": "reference/frameworks/strategy-spine.md",
+      "canon": "strategy/strategy-spine.md"
+    },
+    {
+      "copy": "reference/frameworks/metaskills.md",
+      "canon": "metaskills.md"
+    },
+    {
+      "copy": "reference/frameworks/learning-and-teaching.md",
+      "canon": "learning-and-teaching.md"
+    },
+    {
+      "copy": "reference/frameworks/creating-conditions.md",
+      "canon": "creating-conditions.md"
+    }
   ],
   "requiredSections": [
     {
@@ -91,23 +109,82 @@
     },
     {
       "file": "reference/insight/3x3-model.md",
-      "markers": ["## Stage Boundary (Insight)"]
+      "markers": [
+        "## Stage Boundary (Insight)"
+      ]
     },
     {
       "file": "reference/insight/continuum.md",
-      "markers": ["## Stage Boundary (Insight)"]
+      "markers": [
+        "## Stage Boundary (Insight)"
+      ]
     },
     {
       "file": "reference/insight/capability-map.md",
-      "markers": ["## Stage Boundary (Insight)"]
+      "markers": [
+        "## Stage Boundary (Insight)"
+      ]
     },
     {
       "file": "reference/insight/gantt.md",
-      "markers": ["## Stage Boundary (Insight)"]
+      "markers": [
+        "## Stage Boundary (Insight)"
+      ]
     },
     {
       "file": "reference/insight/one-pager.md",
-      "markers": ["## Stage Boundary (Insight)"]
+      "markers": [
+        "## Stage Boundary (Insight)"
+      ]
+    },
+    {
+      "file": "reference/define/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
+    },
+    {
+      "file": "reference/frame/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
+    },
+    {
+      "file": "reference/analyse/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
+    },
+    {
+      "file": "reference/insight/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
+    },
+    {
+      "file": "reference/synthesise/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
+    },
+    {
+      "file": "reference/story/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
+    },
+    {
+      "file": "reference/move/README.md",
+      "markers": [
+        "## How it runs",
+        "The stage is done when"
+      ]
     }
   ],
   "contracts": [
@@ -117,9 +194,10 @@
       "files": [
         "skills/strategist-stage/SKILL.md",
         "skills/strategist-progress/SKILL.md",
-        "skills/strategist-init/SKILL.md"
+        "skills/strategist-init/SKILL.md",
+        "skills/strategist-save/SKILL.md"
       ],
-      "reason": "the downstream-staleness status is written by the stage engine, defined in the init template legend, and surfaced by progress"
+      "reason": "the downstream-staleness status is written by the stage engine, defined in the init template legend, and surfaced by progress; strategist-save writes these cells at checkpoint and must use the same vocabulary"
     },
     {
       "id": "declined_pressure_test_vocabulary",
@@ -127,9 +205,10 @@
       "files": [
         "skills/strategist-stage/SKILL.md",
         "skills/strategist-progress/SKILL.md",
-        "skills/strategist-init/SKILL.md"
+        "skills/strategist-init/SKILL.md",
+        "skills/strategist-save/SKILL.md"
       ],
-      "reason": "the declined pressure-test marking is written by the commitment gate, defined in the init template legend, and surfaced by progress"
+      "reason": "the declined pressure-test marking is written by the commitment gate, defined in the init template legend, and surfaced by progress; strategist-save writes these cells at checkpoint and must use the same vocabulary"
     },
     {
       "id": "charter_read_by_gate",
@@ -159,9 +238,10 @@
         "skills/strategist-stage/SKILL.md",
         "skills/strategist-progress/SKILL.md",
         "skills/strategist-init/SKILL.md",
-        "skills/strategist-resume/SKILL.md"
+        "skills/strategist-resume/SKILL.md",
+        "skills/strategist-save/SKILL.md"
       ],
-      "reason": "honest advance-past-done-bar status (0.4.1, pass-2 F5): written by the engine, defined at init, surfaced by progress and resume"
+      "reason": "honest advance-past-done-bar status (0.4.1, pass-2 F5): written by the engine, defined at init, surfaced by progress and resume; strategist-save writes these cells at checkpoint and must use the same vocabulary"
     },
     {
       "id": "open_n_pressure_vocabulary",
@@ -170,9 +250,17 @@
         "skills/strategist-stage/SKILL.md",
         "skills/strategist-progress/SKILL.md",
         "skills/strategist-init/SKILL.md",
-        "skills/strategist-pressure-test/SKILL.md"
+        "skills/strategist-pressure-test/SKILL.md",
+        "skills/strategist-save/SKILL.md"
       ],
-      "reason": "tested-open pressure vocabulary (0.4.1, pass-2 F2): written by the gate and the pressure-test skill, defined at init, surfaced by progress"
+      "reason": "tested-open pressure vocabulary (0.4.1, pass-2 F2): written by the gate and the pressure-test skill, defined at init, surfaced by progress; strategist-save writes these cells at checkpoint and must use the same vocabulary"
     }
-  ]
+  ],
+  "indexCompleteness": {
+    "index": "reference/INDEX.md",
+    "entryGlob": "reference",
+    "excludeDirs": [
+      "frameworks"
+    ]
+  }
 }

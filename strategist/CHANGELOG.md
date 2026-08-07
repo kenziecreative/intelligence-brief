@@ -3,6 +3,77 @@
 All notable changes to the Strategist plugin. Per-plugin semver; tags are plugin-scoped
 (`strategist-vX.Y.Z`).
 
+## 0.5.0 — 2026-08-07
+
+The **upskill release**. A full constraint audit of every strategist surface
+(`dev/strategist/constraint-audit.md`) plus the first runtime eval baseline, applied
+together. Two different kinds of finding, and the split is the story: the audit went
+looking for instructions that constrain the model unnecessarily and found a small,
+peripheral set. The eval found the opposite problem — correct instructions the model
+wasn't following — which no amount of constraint-cutting fixes.
+
+**Headroom (the audit's cuts).**
+
+- **All eight model pins removed.** `opus` on stage/init/save/resume/pressure-test and the
+  critic, `sonnet` on framework/progress — present since the v0.1.0 and v0.3.0 scaffolds,
+  never recorded as a decision in any changelog, locked decision, or AGENTS line. Every
+  surface now inherits the session model. Follows researcher v1.9.0's precedent.
+- **The "follow its steps exactly" adverb is gone from all ten command wrappers.** The
+  delegation to the skill is the architecture and stays; the adverb was a trust hedge
+  aimed at the model's execution.
+- **`strategist-framework` un-frozen.** It had sat at 0.3.0 while the engine moved through
+  0.4.x. Alias resolution actually works now (`aka` lives in per-entry frontmatter, not
+  INDEX, so the old instruction silently failed); entries are read in full with any
+  **Stage Boundary** section binding; apply-pacing matches the engine's, including its
+  batching valve and a new clause so a user who has already supplied everything gets the
+  result rather than being re-asked for it.
+- **`reference/_inventory.json` deleted** — a generated manifest nothing referenced.
+  Replaced by a real check (below) against the filesystem rather than a second copy of it.
+- Wrapper de-fossilisation: the pressure-test wrapper no longer carries v0.1.0's stale
+  five-check list; the init wrapper stops claiming it "copies templates/CLAUDE.md" and
+  stops omitting CHARTER.md. Critic persona line becomes a role definition.
+
+**Defects.**
+
+- **The Synthesise wrapper can dispatch its own critic.** `commands/strategist/synthesise.md`
+  omitted `Task` while the engine's Step 4b mandates dispatching `strategist-critic` during
+  that very run — the commitment gate's auto-run could not fire from the command path.
+- **`open (n)` is a count, not an impression.** It must equal the findings actually recorded
+  and match what is said aloud; `/strategist:progress` and `/strategist:resume` both read
+  that cell, so an undercount shrank the objection every session afterwards.
+- **A done-bar you didn't look for is unmet, not met.** Marking a stage `complete` asserts
+  every bar was checked and held.
+- `strategist-save` gains the missing-STATE stop that progress and resume already had, and
+  a verify-don't-re-derive rule for running straight after a stage close.
+- `no_em_dashes` is wired into the engine's config read. It shipped in `templates/CLAUDE.md`
+  from v0.1.0 with zero consumers — a promise the plugin broke every turn.
+
+**The narration firewall (found by the eval, not the audit).**
+
+The engine already said the Step 5 self-audit runs silently and is "not a checklist item to
+announce." Runs narrated it anyway across five of seven stages. The rule was a trailing
+sentence after a twenty-line block, and it named only the step — so a run could comply with
+the letter while telling the user "one honest check before I lock this in" or "from the
+self-check I ran before writing." The contract now leads the step and states the real test:
+**did you tell the user a check was run.** Step 4b's charter, kernel and alternatives checks
+get the same boundary — a charter divergence is still spoken, because the user has to act on
+it; the labelled heading is what leaks.
+
+**Mechanism over prose.** The drift linter gained an **index-completeness check**: every
+shipped entry must be reachable by slug from `INDEX.md`, and every row must point at a file
+that exists. `strategist-save` now names the status vocabulary it writes, which let it be
+pinned into four reader/writer contracts it was previously passing by luck; all seven stage
+READMEs have their "How it runs" and done-bar headings pinned, making that wiring normative.
+
+**Eval.** Iteration 1 baseline recorded at `df7f0c0` (25 runs, 13 scenarios). Rubric moved to
+1.3.0 with an unconditional floor — no applicable dimension may score 0 in any scenario kind,
+because under the old thresholds a total narration breach was invisible on a golden while the
+identical behaviour failed a representative. Harness repairs: the judge writes its own
+scorecard (25 of 25 returned nothing on first completion), the transcript convention separates
+runner annotation from assistant speech, `expected_no_advance` moved from the blind runner to
+the orchestrator, two scenarios reseeded off library Worked Examples they collided with, and
+two turn budgets corrected.
+
 ## 0.4.2 — 2026-08-06
 
 Documentation correction in the shipped reference library. No behaviour change; no skill,

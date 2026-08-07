@@ -65,6 +65,24 @@ order — emit the assistant turn the skill dictates, take the next user message
 reply, repeat. The run ends when messages are exhausted or the skill reaches its transition/
 handoff. Every turn is written to `transcript.md`.
 
+### Transcript convention (load-bearing — Register is scored off this)
+
+Keep runner annotation and user-facing assistant speech unambiguously separate:
+
+- **Assistant speech** goes inside the `**ASSISTANT:**` block and nowhere else.
+- **Runner annotation** — internal steps taken, files written, "user messages exhausted" —
+  goes on its own line, **outside** the speaker block, prefixed `(Runner note: …)`.
+- Never wrap both in the same italic-parenthetical form inside an `ASSISTANT:` block.
+
+This is not cosmetic. Register scores 0 when the machinery is spoken to the user, so a
+transcript that cannot distinguish "the agent said this" from "the runner noted this" makes
+the dimension unscoreable. In iteration 1, three judges scored the *same behavior* 0, 2 and 3
+purely on how they parsed that ambiguity, and one capture's score swung two full anchors on it.
+Two judges independently found the only reliable tell — **grammatical person**: third-person
+past ("the run recorded X") is annotation, second-person present ("you took two direct pushes")
+is speech. Encoding the prefix removes the guesswork; the person test remains the fallback for
+older captures.
+
 ## Artifacts the judge reads
 
 - `<working-dir>/transcript.md` — the full conversation.
@@ -90,16 +108,24 @@ absent before Story): no `_Not yet started._` residue, no `[TODO]`/`[placeholder
 (→ Brief Coherence).
 
 **What the runner must record** (`gate-inputs.json`, since the script can't see them):
-`entry`, `baseline_completed_stages` (from `setup`), `claimed_frameworks` (every framework the
-assistant said it was applying — the decisive input to the fabrication gate), and
-`expected_no_advance`.
+`entry`, `baseline_completed_stages` (from `setup`), and `claimed_frameworks` (every framework
+the assistant said it was applying — the decisive input to the fabrication gate).
 
-### `expected_no_advance` scenarios
+The runner does **not** record `expected_no_advance` — see below.
+
+### `expected_no_advance` scenarios (set by the orchestrator, never the runner)
 
 Some adversarial scenarios are *supposed* to end with the stage not completing — a
 stonewalling user who only gives non-answers, where the correct behavior is to keep pushing
-and **refuse** to capture a result. A scenario sets `"expected_no_advance": true`, the runner
-copies it into `gate-inputs.json`, and `run-gates.mjs` **inverts** `single_stage_advance` and
-`brief_section_filled`: not advancing is a `pass`, advancing is a `fail`. Without this, those
-gates penalize correct refusal-to-capture — the harness false-negative the first strategist
-run exposed.
+and **refuse** to capture a result. A scenario sets `"expected_no_advance": true`, and
+`run-gates.mjs` **inverts** `single_stage_advance` and marks `brief_section_filled` n/a: not
+advancing is a `pass`, advancing is a `fail`. Without this, those gates penalize correct
+refusal-to-capture — the harness false-negative the first strategist run exposed.
+
+**The orchestrator injects that field into `gate-inputs.json` from `scenarios.jsonl` before
+running the gates.** It used to be the runner's job, which was incoherent two ways: the runner
+is specified as blind, so it cannot know the field exists — and telling it hands over the
+answer ("you are not supposed to advance") immediately before it decides whether to advance.
+Iteration 1 hit exactly that: the field was withheld to preserve blindness, three scenarios
+wrote `false`, and correct refusals were scored as gate failures. `scenarios.jsonl` is
+authoritative; the runner stays blind; the gate verdict comes out right.

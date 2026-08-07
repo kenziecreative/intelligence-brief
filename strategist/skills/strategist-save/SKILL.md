@@ -2,7 +2,6 @@
 name: strategist-save
 description: This skill should be used when a strategy working session is wrapping up or should be checkpointed (e.g. "let's stop here", "save the strategy session", "done for today", "checkpoint before I clear context") — including mid-stage. Updates the loop state and writes the session debrief so a future session resumes mid-thought, not from scratch.
 allowed-tools: Read, Write, Edit, Glob, Grep
-model: opus
 ---
 
 # strategist-save — Session Debrief & State Save
@@ -25,11 +24,24 @@ mechanics.
 
 ## Part 1: Position (the record)
 
+If `strategy/STATE.md` does not exist, there is nothing to save — say so, point to
+`/strategist:init`, and stop.
+
+If a stage just completed, the engine's own Step 5 has already written the Stage Record,
+Working Dynamic, Working Read, and cleared In-Flight. Verify what it wrote and correct
+anything the session moved on afterwards; don't re-derive it from scratch, and don't
+promote a status it deliberately left short.
+
 Read the current `strategy/STATE.md` (with the Read tool, before any edit). Based on
 everything in this session, update:
 
 - **Stage Record + Position** — statuses, frameworks applied, pressure-tested cells,
-  any staleness markings from this session.
+  any staleness markings from this session. Use the loop's vocabulary exactly as the
+  engine writes it, because `/strategist:progress` and `/strategist:resume` parse these
+  cells: statuses are `complete`, `active`, `pending`, `stale (premise changed)`,
+  `complete (on stale inputs)`, or `incomplete (advanced by user)`; pressure-tested cells
+  are `clear`, `open (n)`, or `declined`. Record what the session actually reached — save
+  writes the position down, it never promotes it.
 - **In-Flight (mid-stage)** — if a stage is underway, make this current: the framework
   in play, the questions answered so far (with the answers' one-line substance, not
   just topics), what's still open, and any provisional conclusions. The stage engine

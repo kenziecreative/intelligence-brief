@@ -62,7 +62,7 @@ The `strategist-stage` skill runs this stage. Working from the dimensions your F
 
 1. Takes each dimension in turn and names the question being asked of it.
 2. Helps you pick the framework that answers that question, using the menu above.
-3. Applies it with you against your data, and records the finding in `strategy/brief.md` under Analyse.
+3. Applies it with you against your data, and records the finding in `strategy/brief.md` under Analyse. This is a high-stakes stage where `/strategist:pressure-test` is offered before moving on.
 4. Advances `strategy/STATE.md` to Insight once every dimension has a finding that clears the bar above.
 
 The loop runs backward when it has to. If a finding here changes your mind about the problem or the frame, the stage points you back to Define or Frame rather than forcing forward with a question you no longer believe.
