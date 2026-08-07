@@ -34,6 +34,7 @@
 // this reports; it does not decide the build. No dependencies (Node 18+).
 
 import { readFileSync, existsSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { resolve, join } from "node:path";
 
 function arg(name, fallback = null) {
@@ -116,6 +117,17 @@ function naForContext(gate) {
   return inputs[gate.applies_when] !== true;
 }
 
+// Some gates presuppose the run produced steps. When a scenario legitimately
+// ends with none — the interview never reached a walkthrough, and the target
+// correctly refused to invent one — a gate like "autonomy ratings present"
+// would go red on exactly the behavior it should reward. A gate opts in with
+// `na_when_zero_steps` and the runner records `step_count` in gate-inputs.
+// Absent step_count, this never triggers. (Proof case: blueprint iteration-1
+// adv-form-dump-request — zero steps captured, non-invention worked, gate red.)
+function naForZeroSteps(gate) {
+  return gate.na_when_zero_steps === true && Number(inputs.step_count) === 0;
+}
+
 // --- gate evaluators -------------------------------------------------------
 
 function evalGate(gate) {
@@ -123,6 +135,7 @@ function evalGate(gate) {
   if (naForContext(gate)) {
     return { status: "n/a", evidence: `n/a — scenario did not declare '${gate.applies_when}'` };
   }
+  if (naForZeroSteps(gate)) return { status: "n/a", evidence: "n/a — run captured zero steps; nothing to rate" };
   // Write-shaped gates on a run that is SUPPOSED to end without a capture. A skill
   // correctly holding its confirm-before-capture gate writes nothing, and "nothing
   // written" is the pass — reading it as a missing artifact false-fails the exact
@@ -132,6 +145,13 @@ function evalGate(gate) {
   }
   const filePath = gate.file ? join(workingDir, gate.file) : null;
   const text = filePath ? readIf(filePath) : null;
+  // A gate that only applies when its target file exists (e.g. an inventory
+  // write-back check that is only relevant when a capture started from a
+  // Process Inventory). Opt in with `na_if_file_absent`; a missing file is n/a,
+  // not a fail. Gates without the flag keep failing on a missing file.
+  if (gate.na_if_file_absent === true && text == null) {
+    return { status: "n/a", evidence: `n/a — ${gate.file} absent (gate applies only when present)` };
+  }
 
   switch (gate.type) {
     case "frontmatter_keys": {
@@ -171,6 +191,21 @@ function evalGate(gate) {
       const baseline = Number(inputs.baseline_completed_stages ?? 0);
       const delta = finalCount - baseline;
       const ok = delta === (gate.delta ?? 1);
+      // The 0.4.1 honest statuses: a stage the user advanced past its done-bar
+      // is recorded `incomplete (advanced by user)` and EXCLUDED from
+      // completed_stages, while current_stage still moves on. That is a
+      // legitimate, recorded non-certification — the loop advanced exactly once
+      // and the record says honestly why the stage isn't certified. Read the
+      // Stage Record, not just the frontmatter count. (Proof case: strategist
+      // iteration-2 adv-preference-over-evidence/run-1.)
+      if (!ok && !expectedNoAdvance && delta === 0) {
+        const honestRow = /incomplete \(advanced by user\)/.test(text);
+        const cur = fm ? (fmList(fm, "current_stage") ?? [])[0] : null;
+        const advanced = cur && entry && cur.toLowerCase() !== entry.toLowerCase();
+        if (honestRow && advanced) {
+          return pass(`Δ0 with honest status — 'incomplete (advanced by user)' recorded, current_stage advanced to '${cur}'`);
+        }
+      }
       return invertIfNoAdvance(ok, `completed_stages ${baseline}→${finalCount} (Δ${delta})`);
     }
     case "framework_in_library": {
@@ -182,6 +217,27 @@ function evalGate(gate) {
       const haystack = index.toLowerCase();
       const missing = claimed.filter((f) => !haystack.includes(slug(f)) && !haystack.includes(f.toLowerCase()));
       return missing.length ? fail(`not in library: ${missing.join(", ")}`) : pass(`all in library: ${claimed.join(", ")}`);
+    }
+    case "command_exit0": {
+      // Run a shell command with cwd = the working dir; pass iff it exits 0.
+      // `${PLUGIN_ROOT}` in the command is substituted with --plugin-root. This keeps
+      // gate verdicts mechanical when the invariant lives behind a target-shipped
+      // checker (e.g. researcher's validate-corpus-review.py validating a receipt) —
+      // a runner-reported boolean is not a gate. Commands must be deterministic and
+      // read-only over the capture.
+      if (!gate.command) return fail("command_exit0 gate has no command");
+      if (gate.command.includes("${PLUGIN_ROOT}") && !pluginRoot) {
+        return fail("no --plugin-root given for ${PLUGIN_ROOT} substitution");
+      }
+      const cmd = gate.command.replaceAll("${PLUGIN_ROOT}", pluginRoot ? resolve(pluginRoot) : "");
+      try {
+        const out = execSync(cmd, { cwd: workingDir, encoding: "utf8",
+                                    stdio: ["ignore", "pipe", "pipe"], timeout: 60000 });
+        return pass(`exit 0 — ${out.trim().split("\n").slice(-1)[0]?.slice(0, 120) || "no output"}`);
+      } catch (e) {
+        const tail = `${e.stdout ?? ""}${e.stderr ?? ""}`.trim().split("\n").slice(-2).join(" | ");
+        return fail(`exit ${e.status ?? "?"} — ${tail.slice(0, 160) || e.message}`);
+      }
     }
     default:
       return fail(`unknown gate type '${gate.type}'`);

@@ -64,16 +64,18 @@ Use these labels consistently in `research/gaps.md`. All statuses are calculated
 
 Independence determines how many distinct data points exist for a question — not how many source notes reference it.
 
-- Independence is determined by the **origin_chain field** in source notes (added in Phase 7)
+- Independence is established by the **origin_chain field** in source notes only when it affirmatively identifies distinct origins
+- **Independence defaults to unknown, never assumed.** A source whose origin chain reads "Origin unclear" has UNKNOWN independence: it counts toward Direct coverage existence but supplies no corroboration credit. A question whose 2+-source status rests on unclear-origin sources is "independence unverified" — treat as lopsided-risk, not confirmed convergence. Three differently-worded articles from one hidden press release are one data point, whether or not any of them says so.
 - Sources sharing the same cited original (e.g., multiple articles all citing the same Gartner report) collapse to **one independent data point**
+- **Shared-wording / shared-figure heuristics:** near-identical phrasing, the same uncommon figure with identical rounding, or the same unattributed quote across sources — especially unclear-origin ones — mark a *suspected* shared-origin cluster. Treat it as Echo level (one data point) until independence is established.
 - Coverage status uses independent source count: 3 sources sharing one origin = 1 independent = Partial, not Complete
-- Two sources that independently reach the same conclusion are still two independent sources — independence requires tracing to the same origin, not merely agreement
+- Two sources with clear, distinct origins that independently reach the same conclusion are still two independent sources — collapse requires tracing to the same origin (confirmed or suspected), not mere agreement
 - Cross-reference with `pattern-recognition-guide.md` Echo level for shared-origin clusters
 
 ## When to Accept Gaps
 
 A gap is **acceptable** when:
-- Public sources genuinely do not exist for the question (and you have searched, not just assumed)
+- Sources for the question were **not found via the mapped discovery channels** after actual searching (not just assumption). Note the limit of the claim: purposive sampling through mapped channels can establish "not found where we looked," never "does not exist." Record the gap in those terms.
 - The user has explicitly acknowledged the gap and decided to proceed
 - The question is peripheral to the phase's core objective
 

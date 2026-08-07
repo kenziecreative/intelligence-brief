@@ -9,6 +9,11 @@
   },
   "plugins": [
     {
+      "name": "blueprint",
+      "source": "./blueprint",
+      "description": "v0.3.1 — Turn how you actually work into a structured process model. A guided interview extracts what people forget to write down — triggers, data movement, decision criteria, exceptions, approval authority — then rates every step Automate, Monitor, or Human so you know where automation is safe and where a human must stay in the loop. The ratings are a reviewed draft, not a safety certification, until a stakeholder signs off. Discover sweeps your recurring work into a process inventory when you can't yet name your processes; capture models a process you already run; design models a new one you don't yet, proposing an intended flow grounded in your real constraints and nearest analog, never invented. Standalone."
+    },
+    {
       "name": "goal-setting",
       "source": "./goal-setting",
       "description": "v0.2.5 — Set business goals that survive contact with reality, then actually operate against them — not a vision board you abandon by February. A six-stage Setup Arc takes you from what game you're playing to goals stress-tested before launch; a five-cadence Ongoing Arc (daily writing to annual vision check) keeps them alive. A hard cap of three active goals and a critic that red-teams every goal before you commit keep it honest. Standalone."
@@ -26,7 +31,7 @@
     {
       "name": "researcher",
       "source": "./researcher",
-      "description": "v1.4.1 — Get research you can stand behind, not a confident summary that might be invented. Pick a topic and work through a phased plan together: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to a real source before it reaches output. A research partner, not a summarizer. Standalone."
+      "description": "v1.10.0 — Get research you can stand behind, not a confident summary that might be invented. Describe your research challenge and work through a phased plan grounded in it: collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim back to its source note — and every note to a declared source. Decisions the project records — corrections, resolutions, accepted gaps, your own directives — are durable, and no later draft can quietly walk one back. Completion is gated by your stated success criteria and an independent adversarial review of the whole corpus. A research partner, not a summarizer. Standalone."
     },
     {
       "name": "sage",

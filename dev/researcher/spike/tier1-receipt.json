@@ -1,0 +1,374 @@
+{
+ "verdict": "not-ready",
+ "corpus": {
+  "files_in_manifest": 209,
+  "files_opened": 69
+ },
+ "checks": [
+  {
+   "id": "C1",
+   "status": "run",
+   "files_examined": [
+    "research/research-plan.md",
+    "research/STATE.md",
+    "research/outputs/00-executive-summary.md",
+    "research/outputs/05a-eval-harness-extension-spec.md",
+    "research/outputs/06a-wtp-instrument-spec.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/outputs/12-assumption-validation-report.md",
+    "research/outputs/13-open-decisions-and-parked.md",
+    "research/audits/00-executive-summary-audit.md",
+    "research/audits/11-pricing-recommendation-audit.md"
+   ],
+   "coverage_note": "All eleven numbered and amended success criteria were checked. Criteria 1, 3, 4, 5, 6, and 7 are unmet without recorded waivers; criteria 2, 5a, 5b, 8, and 9 are met.",
+   "finding_ids": [
+    "F-001",
+    "F-004",
+    "F-005"
+   ]
+  },
+  {
+   "id": "C2",
+   "status": "run",
+   "files_examined": [
+    "research/research-plan.md",
+    "research/notes-to-self.md",
+    "research/outputs/07-churn-ltv-payback.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/outputs/00-executive-summary.md",
+    "research/notes/chartmogul-churn-by-arpa-band-logo-and-mrr-constructions.md"
+   ],
+   "coverage_note": "The governing business-value reframe was respected, but the final price conclusion strengthens a cross-sectional classification into a ruled-out option without affirmative product evidence.",
+   "finding_ids": [
+    "F-002"
+   ]
+  },
+  {
+   "id": "C3",
+   "status": "run",
+   "files_examined": [
+    "research/outputs/01-comp-set-and-market-structure.md",
+    "research/outputs/03-unit-economics-cost-floor.md",
+    "research/outputs/04-icp-and-segment-sizing.md",
+    "research/outputs/07-churn-ltv-payback.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/reference/canonical-figures.json",
+    "research/reference/claim-graph.json",
+    "research/cross-reference.md"
+   ],
+   "coverage_note": "Load-bearing price corridors, churn dispositions, CAC figures, and objective branches were sampled across phases. The final $19 disposition silently exceeds Phase 7's resolution, and the claim graph still records the withdrawn corridor as High confidence.",
+   "finding_ids": [
+    "F-002",
+    "F-003"
+   ]
+  },
+  {
+   "id": "C4",
+   "status": "run",
+   "files_examined": [
+    "research/STATE.md",
+    "research/research-plan.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/outputs/13-open-decisions-and-parked.md",
+    "research/outputs/05a-eval-harness-extension-spec.md",
+    "research/audits/gate-log.md"
+   ],
+   "coverage_note": "The detailed blocker lists are internally consistent, but STATE simultaneously declares the research complete despite unmet research completion gates, unowned launch blockers, and an undelivered required instrument.",
+   "finding_ids": [
+    "F-001"
+   ]
+  },
+  {
+   "id": "C5",
+   "status": "run",
+   "files_examined": [
+    "research/outputs/05a-eval-harness-extension-spec.md",
+    "research/outputs/06a-wtp-instrument-spec.md",
+    "research/outputs/07-churn-ltv-payback.md",
+    "research/outputs/11-pricing-recommendation.md"
+   ],
+   "coverage_note": "No failure found. The final recommendation names WTP, T0, and observed-churn outcomes that could overturn price or thesis components. Instrument defects are separately reported under C7.",
+   "finding_ids": []
+  },
+  {
+   "id": "C6",
+   "status": "run",
+   "files_examined": [
+    "research/outputs/02-build-and-entitlement-reality.md",
+    "research/outputs/09-packaging-and-tier-design.md",
+    "research/outputs/10-rollout-framing-and-price-testing.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/outputs/13-open-decisions-and-parked.md"
+   ],
+   "coverage_note": "The recommended decaying grandfather and paid package depend on unresolved product decisions and unpriced or absent capabilities.",
+   "finding_ids": [
+    "F-004"
+   ]
+  },
+  {
+   "id": "C7",
+   "status": "run",
+   "files_examined": [
+    "research/outputs/05a-eval-harness-extension-spec.md",
+    "research/outputs/06a-wtp-instrument-spec.md",
+    "research/audits/05a-eval-harness-extension-spec-audit.md",
+    "research/audits/06a-wtp-instrument-spec-audit.md",
+    "research/audits/06a-wtp-instrument-spec-re-audit.md",
+    "research/notes/schmidt-bijmolt-hypothetical-bias-metaanalysis-2019.md",
+    "research/notes/murphy-et-al-hypothetical-bias-metaanalysis-2005.md"
+   ],
+   "coverage_note": "Both proposed instruments were inspected. The WTP specification exhibits two named battery patterns: a rule comparing an unmeasured quantity and a precise transfer correction applied beyond its supported domain.",
+   "finding_ids": [
+    "F-005"
+   ]
+  },
+  {
+   "id": "C8",
+   "status": "run",
+   "files_examined": [
+    "research/discovery/strategy.md",
+    "research/discovery/exclusions.md",
+    "research/discovery/phase1-candidates.md",
+    "research/discovery/phase2-candidates.md",
+    "research/discovery/phase3-candidates.md",
+    "research/discovery/phase4-candidates.md",
+    "research/discovery/phase5-candidates.md",
+    "research/discovery/phase6-candidates.md",
+    "research/discovery/phase7-candidates.md",
+    "research/discovery/phase8-candidates.md",
+    "research/discovery/phase9-candidates.md",
+    "research/discovery/phase10-candidates.md",
+    "research/outputs/08-price-psychology-and-perceived-value.md"
+   ],
+   "coverage_note": "All discovery Markdown records were scanned. Unprocessed candidates, inaccessible channels, adverse evidence, and the Phase 8 candidate shortfall are disclosed in downstream methodology or limitations. No invisible adverse candidate was found that independently settles a final conclusion.",
+   "finding_ids": []
+  },
+  {
+   "id": "C9",
+   "status": "run",
+   "files_examined": [
+    "research/assumptions.md",
+    "research/outputs/00-executive-summary.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/outputs/12-assumption-validation-report.md",
+    "research/audits/00-executive-summary-audit.md",
+    "research/audits/11-pricing-recommendation-audit.md"
+   ],
+   "coverage_note": "No separate concealment failure found. Low and Insufficient confidence, open assumptions, and the provisional nature of the recommendations are disclosed in the final documents. Their disclosure does not cure C1's below-bar completion failure.",
+   "finding_ids": []
+  },
+  {
+   "id": "C10",
+   "status": "run",
+   "files_examined": [
+    "research/research-plan.md",
+    "research/outputs/06a-wtp-instrument-spec.md",
+    "research/outputs/07-churn-ltv-payback.md",
+    "research/outputs/10-rollout-framing-and-price-testing.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/cross-reference.md"
+   ],
+   "coverage_note": "Most pre-registered thresholds remain visible. The material exception is the $19 decision: Phase 7 routes the unanswered causal question to testing, while Phase 11 treats the same non-causal benchmark classification as dispositive without recording a new decision rule.",
+   "finding_ids": [
+    "F-002"
+   ]
+  },
+  {
+   "id": "C11",
+   "status": "run",
+   "files_examined": [
+    "research/outputs/08-price-psychology-and-perceived-value.md",
+    "research/outputs/09-packaging-and-tier-design.md",
+    "research/outputs/10-rollout-framing-and-price-testing.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/outputs/00-executive-summary.md"
+   ],
+   "coverage_note": "Major risks are generally carried forward, but the guarantee/refund mechanism that Phase 8 says changes the action disappears from the final package alternatives and recommendation.",
+   "finding_ids": [
+    "F-006"
+   ]
+  },
+  {
+   "id": "C12",
+   "status": "run",
+   "files_examined": [
+    "research/reference/source-standards.md",
+    "research/reference/canonical-figures.json",
+    "research/reference/claim-graph.json",
+    "research/reference/decision-ledger.md",
+    "research/reference/retrieval-log.md",
+    "research/outputs/00-executive-summary.md",
+    "research/outputs/01-comp-set-and-market-structure.md",
+    "research/outputs/11-pricing-recommendation.md"
+   ],
+   "coverage_note": "The evidence workflow is strong at individual-note level, but the assembled registries are not current: the claim graph retains a withdrawn High-confidence corridor and canonical figures omit final downstream consumers required by the standard.",
+   "finding_ids": [
+    "F-003",
+    "F-007"
+   ]
+  },
+  {
+   "id": "C13",
+   "status": "run",
+   "files_examined": [
+    "research/reference/source-standards.md",
+    "research/outputs/00-executive-summary.md",
+    "research/outputs/01-comp-set-and-market-structure.md",
+    "research/outputs/07-churn-ltv-payback.md",
+    "research/outputs/08-price-psychology-and-perceived-value.md",
+    "research/outputs/09-packaging-and-tier-design.md",
+    "research/outputs/11-pricing-recommendation.md"
+   ],
+   "coverage_note": "No undisclosed aged-out material fact was found. Stale benchmark vintages and re-verification windows are explicitly flagged. This was a targeted review, not an exhaustive date audit of every source note.",
+   "finding_ids": []
+  },
+  {
+   "id": "C14",
+   "status": "run",
+   "files_examined": [
+    "research/outputs/00-executive-summary.md",
+    "research/outputs/07-churn-ltv-payback.md",
+    "research/outputs/11-pricing-recommendation.md",
+    "research/notes/chartmogul-churn-by-arpa-band-logo-and-mrr-constructions.md",
+    "research/audits/11-pricing-recommendation-audit.md"
+   ],
+   "coverage_note": "Most recommendations label commissioner decisions and analyst constructions explicitly. The exception is the load-bearing $19 exclusion, where a benchmark-classification inference is given the decision force of affirmative evidence.",
+   "finding_ids": [
+    "F-002"
+   ]
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-001",
+   "class": "completion-integrity",
+   "severity": "material",
+   "observed": "STATE declares ALL PHASES COMPLETE and says the research is complete, but the corpus itself records untested registered hypotheses, no exact exit-value price, no exit-objective priced package, four unowned and unrun instruments, and one required test design that was never written. The two main consumption documents were audited at overall Insufficient. No waiver is recorded.",
+   "criterion_violated": "Research-plan success criteria 1, 3, 4, 6, and 7; C1 completion integrity; C4 status coherence.",
+   "evidence": [
+    "research/research-plan.md:711",
+    "research/research-plan.md:713",
+    "research/research-plan.md:714",
+    "research/research-plan.md:718",
+    "research/research-plan.md:719",
+    "research/STATE.md:6",
+    "research/STATE.md:8",
+    "research/outputs/12-assumption-validation-report.md:61",
+    "research/outputs/12-assumption-validation-report.md:67",
+    "research/outputs/13-open-decisions-and-parked.md:127",
+    "research/outputs/13-open-decisions-and-parked.md:138",
+    "research/audits/00-executive-summary-audit.md:42",
+    "research/audits/00-executive-summary-audit.md:48",
+    "research/audits/11-pricing-recommendation-audit.md:39",
+    "research/audits/11-pricing-recommendation-audit.md:45"
+   ],
+   "decision_impact": "The commissioner cannot treat the research programme or its final recommendation as having satisfied the commissioned completion contract. The missing exit branch, instruments, ownership, and below-bar audits can change the selected price, package, rollout, and confidence attached to them.",
+   "closure_evidence_required": "A criterion-by-criterion closure record showing the missing exit price and package, executable owned instruments, completed registered tests, and final deliverables audited at or above the required bar, or an explicit recorded waiver for each unmet criterion."
+  },
+  {
+   "id": "F-002",
+   "class": "conclusion-vs-brief",
+   "severity": "material",
+   "observed": "Phase 7 concludes that the effect of pricing this product at $19 rather than $29 is not established in either direction and routes the question to a test. Phase 11 nevertheless says '$19 is ruled out' and that nothing argues affirmatively for it. Its stated support is only a cross-company benchmark classification from one stale source that excludes companies under $300K ARR. No recorded decision rule licenses converting that classification into an exclusion.",
+   "criterion_violated": "C2 conclusion-vs-brief prohibition on unsupported 'ruled out' language; C3 cross-phase consistency; C10 decision-rule drift; C14 recommendation provenance.",
+   "evidence": [
+    "research/outputs/07-churn-ltv-payback.md:229",
+    "research/outputs/07-churn-ltv-payback.md:235",
+    "research/outputs/11-pricing-recommendation.md:42",
+    "research/outputs/11-pricing-recommendation.md:44",
+    "research/outputs/11-pricing-recommendation.md:81",
+    "research/notes/chartmogul-churn-by-arpa-band-logo-and-mrr-constructions.md:112",
+    "research/notes/chartmogul-churn-by-arpa-band-logo-and-mrr-constructions.md:128"
+   ],
+   "decision_impact": "This is the load-bearing reason for rejecting the board's $19 option. Restoring the earlier disposition would leave $19 unresolved rather than ruled out and could change launch price or require testing before selection.",
+   "closure_evidence_required": "Affirmative same-product evidence establishing the decision consequence of $19 versus $29, or a recorded pre-evidence decision rule that validly makes benchmark classification dispositive while carrying the source's age and population exclusions."
+  },
+  {
+   "id": "F-003",
+   "class": "cross-phase-consistency",
+   "severity": "material",
+   "observed": "The claim graph still records as High confidence that the structurally matched main-tier corridor is $17-$29. Phase 1 explicitly withdrew that central finding after correcting comparator classification and replaced it with a $29-$499 monthly-list corridor. The graph contains no visible supersession at the stale claim.",
+   "criterion_violated": "C3 cross-phase consistency and C12 corpus-level standard compliance.",
+   "evidence": [
+    "research/reference/claim-graph.json:18",
+    "research/reference/claim-graph.json:22",
+    "research/outputs/01-comp-set-and-market-structure.md:3",
+    "research/outputs/01-comp-set-and-market-structure.md:5",
+    "research/outputs/01-comp-set-and-market-structure.md:24"
+   ],
+   "decision_impact": "Any downstream reader or process using the claim graph can recover a withdrawn high-confidence price range and reach the opposite conclusion about whether $29 is a ceiling or floor.",
+   "closure_evidence_required": "A versioned claim-graph entry that marks the $17-$29 claim withdrawn or superseded, links the reason and replacement disposition, and demonstrates that no downstream consumer still treats it as active."
+  },
+  {
+   "id": "F-004",
+   "class": "prerequisite-honesty",
+   "severity": "material",
+   "observed": "The final document recommends a decaying memory grandfather while acknowledging that the option does not exist unless older conversation is hidden rather than deleted, that this decision is unmade and unowned, and that implementation requires an unpriced per-owner capability absent from the locked tier configuration. The same final package remains conditional on choosing and building a checkable paid line.",
+   "criterion_violated": "Research-plan success criteria 4 and 5; C6 prerequisite honesty.",
+   "evidence": [
+    "research/research-plan.md:714",
+    "research/research-plan.md:715",
+    "research/outputs/11-pricing-recommendation.md:207",
+    "research/outputs/11-pricing-recommendation.md:215",
+    "research/outputs/11-pricing-recommendation.md:218",
+    "research/outputs/13-open-decisions-and-parked.md:54",
+    "research/outputs/13-open-decisions-and-parked.md:58",
+    "research/outputs/13-open-decisions-and-parked.md:66"
+   ],
+   "decision_impact": "The recommended rollout and package cannot presently be executed as written. The hide/delete ruling, sponsorship fork, engineering feasibility, and actual line cost can change the chosen rollout, package, delivery timeline, and launch scope.",
+   "closure_evidence_required": "A recorded hide-versus-delete decision, entitlement/build feasibility evidence, cost and owner/date for the required capability, and objective-specific packages and rollout recommendations that remain valid under those resolved prerequisites."
+  },
+  {
+   "id": "F-005",
+   "class": "instrument-validity",
+   "severity": "material",
+   "observed": "A pre-registered WTP rule compares acceptance of the product at $29 with acceptance of the described alternative at $20, but the instrument produces price-ladder acceptance only for the product; the alternative appears as a forced-choice option, not as its own measured acceptance rate. Separately, every decision rule is evaluated after dividing prices by the precise constant 1.2079, although the supporting meta-analysis concerns one-shot consumer goods and the spec admits no source establishes transfer to subscriptions or existing free users.",
+   "criterion_violated": "Research-plan success criterion 6; C7 named patterns 'decision rules comparing quantities the instrument never measures' and 'unsupported precision.'",
+   "evidence": [
+    "research/outputs/06a-wtp-instrument-spec.md:57",
+    "research/outputs/06a-wtp-instrument-spec.md:59",
+    "research/outputs/06a-wtp-instrument-spec.md:176",
+    "research/outputs/06a-wtp-instrument-spec.md:185",
+    "research/outputs/06a-wtp-instrument-spec.md:203",
+    "research/outputs/06a-wtp-instrument-spec.md:205",
+    "research/outputs/06a-wtp-instrument-spec.md:211"
+   ],
+   "decision_impact": "The instrument's output cannot execute one of its own decision rules, while the unsupported correction can move the apparent $29 and $49 thresholds. Those rules directly control whether price moves down, whether H10 is challenged, and whether the $49 revisit is accelerated.",
+   "closure_evidence_required": "An instrument-to-decision-rule measurement crosswalk proving every compared quantity is directly measured, plus domain-relevant validation for any correction constant or decision reporting that does not make the unsupported precise transfer dispositive."
+  },
+  {
+   "id": "F-006",
+   "class": "alternatives-risk-completeness",
+   "severity": "material",
+   "observed": "Phase 8 says its credence-goods evidence changes an action: showing the work barely affects outcomes, while the experimentally supported mechanism is a binding guarantee or refund. Phase 9 repeats that the evidenced lever is a guarantee. The final packaging alternatives and recommendation do not evaluate or carry a guarantee/refund option.",
+   "criterion_violated": "C11 alternatives and risk completeness.",
+   "evidence": [
+    "research/outputs/08-price-psychology-and-perceived-value.md:96",
+    "research/outputs/08-price-psychology-and-perceived-value.md:98",
+    "research/outputs/09-packaging-and-tier-design.md:75",
+    "research/outputs/11-pricing-recommendation.md:118",
+    "research/outputs/11-pricing-recommendation.md:149"
+   ],
+   "decision_impact": "A corpus-surfaced alternative with stronger experimental support than the selected verifiability mechanism is absent where the commissioner chooses the package. Including it could change the paid promise, price justification, compliance exposure, and implementation scope.",
+   "closure_evidence_required": "A final consumption-surface disposition that evaluates guarantee/refund alongside the selected package, including its evidence, cost, compliance implications, and an explicit reason if rejected."
+  },
+  {
+   "id": "F-007",
+   "class": "corpus-standard-compliance",
+   "severity": "material",
+   "observed": "The evidence standard requires each registered cross-phase figure to maintain a referenced_by inventory. Canonical CAC figures used in the final recommendation list only the plan or source digest as consumers and omit the final recommendation and executive summary. The purported single source of truth is therefore not a current provenance inventory.",
+   "criterion_violated": "C12 corpus-level standard compliance and the cross-phase citation rule in source-standards.md.",
+   "evidence": [
+    "research/reference/source-standards.md:16",
+    "research/reference/source-standards.md:19",
+    "research/reference/canonical-figures.json:20",
+    "research/reference/canonical-figures.json:23",
+    "research/reference/canonical-figures.json:36",
+    "research/reference/canonical-figures.json:38",
+    "research/outputs/11-pricing-recommendation.md:89"
+   ],
+   "decision_impact": "The corpus cannot reliably answer where its load-bearing modeled CAC figures were propagated. That weakens change-impact analysis and makes stale corrections or caveats easier to miss in the board-facing recommendation.",
+   "closure_evidence_required": "A reconciled canonical-figure registry whose referenced_by arrays enumerate every manifested downstream consumer, verified against the output corpus and accompanied by any missing qualifier or confidence propagation."
+  }
+ ]
+}

@@ -12,10 +12,11 @@ Once a tool is installed, it shows up as commands and skills you can run in any 
 
 | Plugin | Version | What you get | Guide |
 |---|---|---|---|
+| Blueprint | 0.3.1 | Turn how you actually work into a structured process model, with every step rated for where automation is safe and where a human must stay in the loop — discover the processes you have, capture ones you run, or design ones you don't yet | [guide](./blueprint/README.md) |
 | Goal Setting | 0.2.5 | Set business goals that survive contact with reality — and actually operate against them, not abandon them by February | [guide](./goal-setting/README.md) |
 | Intelligence Briefing | 0.3.0 | Know what actually moved in your world today, without wading through the whole news cycle | [guide](./intelligence-briefing/README.md) |
 | Photo Generator | 1.2.0 | Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is | [guide](./photo-generator/README.md) |
-| Researcher | 1.4.1 | Research you can stand behind, with every claim traced back to a real source | [guide](./researcher/README.md) |
+| Researcher | 1.10.0 | Research you can stand behind — every claim audited back to its source note, and every note to a declared source | [guide](./researcher/README.md) |
 | Sage | 0.2.0 | Always know where a decision landed and who owes what, across a whole week of meetings | [guide](./sage/README.md) |
 | Strategist | 0.4.1 | Think a hard problem all the way through, and come out with a strategy you can defend | [guide](./strategist/README.md) |
 | Thinkers | 0.1.0 | Make sense of a confusing situation — what's really going on, where your own thinking might be off, and what to do | [guide](./thinkers/README.md) |
@@ -23,6 +24,12 @@ Once a tool is installed, it shows up as commands and skills you can run in any 
 Each version mirrors that plugin's `plugin.json`, which is the source of truth for updates.
 
 ## The tools
+
+### Blueprint
+
+**Turn how you actually work into a structured process model — with every step rated for where automation is safe and where a human must stay in the loop.** Most process docs describe the idealized version and forget the micro-steps, workarounds, and judgment calls that make the work actually run. Blueprint interviews you instead: it walks you through your most recent real run, asks the questions that surface the tacit detail, and writes a structured Process Blueprint where every step carries an autonomy rating — Automate, Monitor, or Human — decided by one question: if this step were done wrong with no review, what would happen? Quick mode (~15 min) builds a coarse model of one process; deep mode (~45-60 min) produces a model detailed enough to hand to a new team member or take into an automation build once a stakeholder has validated it. It flags what it doesn't know instead of inventing detail, and it treats its own ratings as a reviewed draft — not a safety certification — until the person who owns the risk signs off.
+
+→ **[Read the Blueprint guide](./blueprint/README.md)** for the two modes, the interview method, and the autonomy ratings.
 
 ### Goal Setting
 
@@ -44,7 +51,7 @@ Each version mirrors that plugin's `plugin.json`, which is the source of truth f
 
 ### Researcher
 
-**Get research you can actually stand behind, instead of a confident summary that might be invented.** Pick a topic, get a phased plan grounded in preliminary research, then work through it together — collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim before it reaches output. Every claim traces back to a specific source. Not a summarizer; a research partner.
+**Get research you can actually stand behind, instead of a confident summary that might be invented.** Pick a topic, get a phased plan grounded in preliminary research, then work through it together — collecting sources, finding patterns, mapping gaps, synthesizing findings, and auditing every claim before it reaches output. Every claim is audited back to its source note, and every note to a declared source. Not a summarizer; a research partner.
 
 → **[Read the Researcher guide](./researcher/README.md)** for setup, research types, and the integrity model.
 

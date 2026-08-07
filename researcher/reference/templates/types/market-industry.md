@@ -45,7 +45,7 @@
 - Vendor-funded research is not independent research. Note the funding source when citing analyst reports.
 - Do not extrapolate trends linearly. "X grew 40% last year" does not mean it will grow 40% next year. Present what's known and flag the uncertainty.
 
-**Phase Pattern:** 8-12 phases, adapted by the plan generator based on the topic scope and data availability. Typical structure:
+**Typical shape (non-binding):** 8-12 phases, adapted by the plan generator based on the topic scope and data availability. Typical structure:
 - Phase 1: Market definition, scope, and boundaries (what exactly are we studying?)
 - Phase 2: Current state and maturity assessment (where are we on the curve?)
 - Phase 3: Market size, growth data, and adoption patterns (how big, how fast, who's adopting?)

@@ -55,6 +55,8 @@ curl -s "https://api.openalex.org/works?search={topic}&filter=cited_by_count:>10
 
 Substitute: `{topic}` = search phrase, `{email}` = contact email for polite pool.
 
+**The citation floor is a per-run choice, not a fixed filter.** `cited_by_count:>10` is the default for established topics, where citations are a workable quality proxy. For **emerging topics** (a field or question younger than ~3 years, or fast-moving areas where the important work is recent), the floor systematically excludes exactly the papers that matter — drop the `cited_by_count` filter entirely and add `from_publication_date:{year_minus_2}`, sorting by `publication_date:desc`; judge quality by venue, author affiliation, and methodology instead (Tier 2 criteria apply — recent ≠ low quality). Decide per run from the phase's questions, state which floor was used ("citation floor: >10" or "citation floor: none — emerging topic"), and record the actual query in the retrieval log as always.
+
 ### Template B — Author Search
 Find recent papers by a specific researcher:
 
@@ -72,6 +74,8 @@ curl -s "https://api.openalex.org/works?search={topic}&filter=from_publication_d
 ```
 
 Substitute: `{topic}` = search phrase, `{year_minus_5}` = current year minus 5 (e.g., `2020` if current year is 2025), `{email}` = contact email.
+
+The same per-run citation-floor choice as Template A applies: for emerging topics, drop `cited_by_count:>5` and sort by `publication_date:desc` instead of `cited_by_count:desc`.
 
 ### Crossref Query Templates
 

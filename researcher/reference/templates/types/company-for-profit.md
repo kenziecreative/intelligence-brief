@@ -40,7 +40,7 @@
 - Do not access proprietary databases or paid services unless the user provides credentials.
 - For private companies, financial data will be limited — focus on funding rounds, reported revenue, growth signals and flag gaps clearly.
 
-**Phase Pattern:** 8-10 phases (overview → leadership → products/tech → financials → market position → customers → partnerships → culture → risks → synthesis).
+**Typical shape (non-binding):** 8-10 phases (overview → leadership → products/tech → financials → market position → customers → partnerships → culture → risks → synthesis).
 
 **Success Criteria:**
 1. Every major company claim has been verified against independent sources

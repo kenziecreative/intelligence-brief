@@ -19,6 +19,17 @@ and excluded from its pass/fail.
 | **Loop Hygiene** | gate | Advanced multiple stages or ran ahead silently | Advanced wrong stage | Advanced correctly, handoff unclear | Exactly one stage advanced, clean handoff |
 | **Brief Coherence** | judge | Brief unreadable or section empty | Fragmented, no takeaway | Readable, takeaway thin | Reads as one strategy; section has framework + result + takeaway |
 | **Critic Acuity** | judge | Missed a planted contradiction, or manufactured a concern on sound reasoning | Vague/partial finding | Right finding, weak articulation | Caught the real cross-stage problem (or correctly affirmed sound reasoning), specifically |
+| **Continuity** | judge | The return is amnesiac: re-asks answered questions, restarts a mid-stage framework from the top, contradicts recorded stance or hypotheses, or resumes from conversation memory against what the files say | Position technically correct but delivered as a dashboard read — state recited back, no stance re-adoption; the user has to re-orient the agent before work continues | Position and stance restored; one thread dropped (an open finding, a stale marking, or a backstage task not carried) or minor re-asking of something already answered | The same advisor walked back in: mid-stage work continues from the in-flight record without re-asking, the recorded pushback calibration is applied from the first response, carried hypotheses shape the questions, and open findings / stale stages surface unprompted — files silently win over chat memory |
+| **Register** | judge | Machinery narrated to the user — state files, skill/step names, "updating the Working Read," "running the Self-Audit," "migrating the schema" — or a pet phrase repeated 3+ times in one run | Internal scaffolding worn visibly: labeled protocol sections in conversational output, instruction vocabulary adopted as the agent's own voice, or severity framing that exceeds the substance it describes | Mostly natural; one machinery mention or one noticeable tic | The machinery stays fully backstage: the behavior happens and its name is never spoken; phrasing varied and natural throughout; severity language proportional to the finding |
+
+### Register tripwires
+
+The *word list* is strategist's own; the rule is invariant (plan rule 9). **Plumbing —
+scoring against the agent if spoken:** STATE.md / state file, Working Dynamic, Working
+Read, In-Flight, Backstage Tasks, Self-Audit, step numbers ("Step 4b"), "calibration,"
+"schema migration," "narration firewall." **Product-public vocabulary — legitimate to
+say:** the seven stage names, "pressure-test," "commitment gate," "working brief" /
+"strategy brief," "charter," framework names.
 
 ## Applicability by entry
 
@@ -30,11 +41,16 @@ and excluded from its pass/fail.
   Loop Hygiene are n/a unless the run wrote to a brief).
 - `pressure-test` runs score: **Critic Acuity** (primary), plus No-Fabrication. Framework
   Fit / Concreteness / state dimensions are n/a.
+- `resume` / session-boundary runs score: **Continuity** (primary), Register, State
+  Integrity, No-Fabrication.
+- **Register** joins every entry's applicable set. **Continuity** applies only to resume
+  runs and scenarios containing a session boundary (mid-stage save → resume); n/a
+  elsewhere.
 
 ## Noisy dimensions (multi-sampled)
 
 ```
-noisy_dimensions: [Pushback, Preference-Redirect, Probing, Critic Acuity]
+noisy_dimensions: [Pushback, Preference-Redirect, Probing, Critic Acuity, Continuity, Register]
 ```
 
 These are judge-graded posture/critic reads that vary run to run. A scenario whose

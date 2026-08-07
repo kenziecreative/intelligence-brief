@@ -35,7 +35,7 @@
 - Do not conflate your own assumptions with user evidence. Every pain point must trace to at least one source where a real person described the problem. "It seems like they would need X" is not evidence.
 - Distinguish between problems people complain about and problems people would pay to solve. Complaints are necessary but not sufficient — look for willingness-to-pay signals before ranking an opportunity highly.
 
-**Phase Pattern:** 6-8 phases, adapted by the plan generator based on niche specificity and available evidence. Typical structure:
+**Typical shape (non-binding):** 6-8 phases, adapted by the plan generator based on niche specificity and available evidence. Typical structure:
 - Phase 1: Niche definition and audience profiling (who are they, how many, what defines them)
 - Phase 2: Watering hole mapping and community discovery (where they talk, what platforms, what formats)
 - Phase 3: Pain point extraction and complaint analysis (what they complain about, frequency, intensity)

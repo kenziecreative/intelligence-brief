@@ -23,7 +23,8 @@ and trivial; conflicts on a shared body were not.
 
 | Stream | Worktree / branch | State | Last touched |
 |---|---|---|---|
-| **goal-setting** | `kenzie-build-goal-setting` · `convergence/goal-setting` | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-07-12 |
+| **goal-setting** | `kenzie-build-goal-setting` · `convergence/goal-setting` | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-08-07 |
+| **researcher** | `core-kenzie-marketplace` · `researcher-w6ab` | [dev/state/researcher.md](state/researcher.md) | 2026-08-06 |
 | **strategist** | `kenzie-build-strategist` · `convergence/strategist` | [dev/state/strategist.md](state/strategist.md) | 2026-07-12 |
 | **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-07-12 |
 

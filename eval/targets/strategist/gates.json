@@ -1,14 +1,21 @@
 {
   "target": "strategist",
-  "rubric_version": "1.1.0",
+  "rubric_version": "1.2.0",
   "gates": [
     {
       "name": "state_frontmatter",
       "type": "frontmatter_keys",
       "file": "strategy/STATE.md",
-      "keys": ["status", "current_stage", "completed_stages"],
+      "keys": [
+        "status",
+        "current_stage",
+        "completed_stages"
+      ],
       "feeds": "State Integrity",
-      "na_for_entries": ["framework", "pressure-test"]
+      "na_for_entries": [
+        "framework",
+        "pressure-test"
+      ]
     },
     {
       "name": "working_dynamic_present",
@@ -16,7 +23,10 @@
       "file": "strategy/STATE.md",
       "pattern": "## Working Dynamic",
       "feeds": "State Integrity",
-      "na_for_entries": ["framework", "pressure-test"]
+      "na_for_entries": [
+        "framework",
+        "pressure-test"
+      ]
     },
     {
       "name": "brief_section_filled",
@@ -25,7 +35,11 @@
       "section_from": "entry",
       "placeholder": "_Not yet started._",
       "feeds": "State Integrity",
-      "na_for_entries": ["framework", "pressure-test"]
+      "na_for_entries": [
+        "framework",
+        "pressure-test",
+        "resume"
+      ]
     },
     {
       "name": "single_stage_advance",
@@ -33,7 +47,11 @@
       "file": "strategy/STATE.md",
       "delta": 1,
       "feeds": "Loop Hygiene",
-      "na_for_entries": ["framework", "pressure-test"]
+      "na_for_entries": [
+        "framework",
+        "pressure-test",
+        "resume"
+      ]
     },
     {
       "name": "framework_in_library",

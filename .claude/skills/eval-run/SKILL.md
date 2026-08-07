@@ -88,6 +88,13 @@ Capture its JSON array (`{gate, feeds, status, evidence}`). These verdicts are i
 ### Step 4 — score each run through the judge
 Spawn an **eval-judge** per run. Pass it: `rubric.md` + `principles.md`, the **full** scenario (now including `expected_behavior` + `critical_dimensions`), the path to `capture.md` + artifacts, the **gate-results JSON** from Step 3, and `eval/reference/grade-procedure.md`. It returns a per-run scorecard, inheriting gates and judging the rest.
 
+**Judge persistence (the orchestrator writes, the judge does not).** `eval-judge` is read-only by design — it has no Write tool. Its scorecard exists only in the message it returns, so:
+- Tell every judge explicitly: **return the complete scorecard as your final message** — it is the deliverable, not a summary of one.
+- The **orchestrator** writes each returned scorecard to `<working-dir>/scorecard.md` as soon as it lands. Do not batch this to the end of the run; a judge whose card is never persisted is an ungraded run.
+- If a judge returns nothing usable, **re-ask it once** before giving up. If it still returns nothing, record the run as **ungraded** in `scores.md` with the reason — never infer a score from the other samples, and never quietly drop it from the denominator.
+
+(Both prior iterations lost a scorecard this way. It is a protocol failure, not a model quirk.)
+
 ### Step 5 — surface raw captures to the human FIRST
 Before printing any verdict, give the user the paths to this iteration's raw `transcript.md`/artifacts and a one-line "read these first." The score is a lens on the output, not a substitute for it.
 

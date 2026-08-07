@@ -36,12 +36,13 @@
 **Boundaries:**
 - This project uses only publicly available information. Do not attempt to access private records, hack accounts, or social engineer information.
 - Do not research personal life (family, health, relationships) unless the person has made it publicly relevant to their professional identity.
+- **Third parties are protected by default — real specificity, not real identity.** The commissioned research subject is in scope by name; everyone else who surfaces in the record is not. Private individuals encountered along the way (colleagues, family members, former co-workers quoted in reviews, anonymous posters) are anonymized in drafts and outputs — role and context stay ("a former direct report," "a co-founder who departed in 2019"), names and identifying detail go — unless the person is a public figure acting in their public capacity, or a source note records explicit permission. Source notes may keep identifying links for traceability; the deliverable does not expose them. The downstream default when no permission record reaches the writing step is always anonymize — the fail direction is over-anonymization, never exposure.
 - Do not make character judgments. Report what the evidence shows and let the reader draw conclusions.
 - Flag the difference between what the person claims and what can be independently verified. Self-reported accomplishments are data, not evidence.
 - If the person has a thin public footprint, say so. Do not fill gaps with inference. A short report with clearly marked gaps is more valuable than a long report padded with speculation.
 - This is research, not opposition research. The goal is an accurate picture, not a case for or against the person.
 
-**Phase Pattern:** 6-10 phases, adapted by the plan generator based on the person's public profile depth and the reason for research. Typical structure:
+**Typical shape (non-binding):** 6-10 phases, adapted by the plan generator based on the person's public profile depth and the reason for research. Typical structure:
 - Phase 1: Career arc and identity (establish the timeline, roles, companies, transitions)
 - Phase 2: Expertise validation (published work, patents, demonstrated outcomes, peer recognition)
 - Phase 3: Track record deep dive (what did they actually do at each major role? outcomes vs. claims)

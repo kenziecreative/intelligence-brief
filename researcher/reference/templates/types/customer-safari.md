@@ -32,10 +32,11 @@
 **Boundaries:**
 - This is market intelligence, not product design or content creation. The output is a strategic intelligence report with prioritized findings. Do not produce product specs, content calendars, go-to-market plans, or wireframes.
 - Capture what people actually say, not what you think they mean. Every tagged observation must include the exact quote or close paraphrase with source link. Do not interpret community sentiment without evidence.
+- **Community members are anonymized by default — real specificity, not real identity.** The people being observed never consented to appearing in a strategy document. Notes keep exact quotes with source links (the research record needs traceability); drafts and outputs keep the exact words, platform, and context but drop usernames, handles, and real names — attribute as "a community member on r/[subreddit]" or equivalent. Do not quote identifiable handles, link to individual profiles, or stitch together detail that makes one person recognizable, unless a source note records explicit permission. The downstream default when no permission record reaches the writing step is always anonymize — the fail direction is over-anonymization, never exposure.
 - Distinguish painkillers from vitamins. Tag every PAIN finding as 🔥 Painkiller or 💊 Vitamin based on emotional intensity and solution-seeking behavior. Do not present vitamins as urgent opportunities. A vivid complaint is not the same as a problem someone would pay to solve.
 - The tier system is about focus, not importance. Tier 4 (ignore) is as valuable as Tier 1 (primary focus). Knowing what not to pursue enables focus on what matters. Be explicit about what to ignore and why.
 
-**Phase Pattern:** 6-8 phases, adapted by the plan generator based on audience complexity and community landscape. Typical structure:
+**Typical shape (non-binding):** 6-8 phases, adapted by the plan generator based on audience complexity and community landscape. Typical structure:
 - Phase 1: Audience definition and watering hole mapping (who are they, where do they gather, platform-by-platform inventory with notes on what each platform reveals)
 - Phase 2: Multi-source observation and labeling (systematic reading across communities, tagging every observation as PAIN/DELIGHT/RECOMMENDATION/QUESTION/JARGON, capturing exact quotes with source links)
 - Phase 3: Pain analysis and painkiller/vitamin classification (group pains by theme, classify each as painkiller or vitamin, identify workaround patterns that signal unmet demand)

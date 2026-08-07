@@ -34,7 +34,7 @@
 - Do not over-index on any single source. Triangulate.
 - If a research question can't be answered with available tools and public sources, say so in `gaps.md` and flag it as needing primary research.
 
-**Phase Pattern:** 8-12 phases (theoretical → evidence → landscape → practical → synthesis).
+**Typical shape (non-binding):** 8-12 phases (theoretical → evidence → landscape → practical → synthesis).
 
 **Success Criteria:**
 1. Every major claim has been tagged

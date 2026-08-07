@@ -1,0 +1,46 @@
+{
+  "target": "blueprint-design",
+  "rubric_version": "1.0.0",
+  "gates": [
+    {
+      "name": "designed_status",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "Designed — not yet run",
+      "feeds": "Proposed-Honesty",
+      "na_if_file_absent": true
+    },
+    {
+      "name": "steps_proposed",
+      "type": "file_contains",
+      "file": "blueprints/captured-blueprint.md",
+      "pattern": "(\\*\\*Proposed\\*\\*|Rests on:|Breaks if:)",
+      "feeds": "Proposed-Honesty",
+      "na_if_file_absent": true
+    }
+  ],
+  "content_lint": [
+    {
+      "name": "no_template_field_brackets",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "\\[(Action name|Process Name|Input|Format|Step #|The question|Person / agent|Frequency|Unknown, and who could answer it|Who runs it today|Quick / Deep|Steps|Operator)\\]",
+      "feeds": "Artifact Integrity",
+      "optional_file": true
+    },
+    {
+      "name": "no_placeholder_tokens",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "(\\[(TODO|TBD|placeholder|FILL)\\b|\\?\\?\\?)",
+      "feeds": "Artifact Integrity",
+      "optional_file": true
+    },
+    {
+      "name": "no_design_narration",
+      "file": "blueprints/captured-blueprint.md",
+      "forbid": "(the interview\\b|in this session|this session (the|surfaced|covered)|the operator (first|initially|then) (said|stated|described|mentioned|proposed)|during (the|this) (design session|interview session))",
+      "flags": "mi",
+      "feeds": "Register",
+      "optional_file": true
+    }
+  ]
+}

@@ -33,11 +33,11 @@
 - Do not over-index on any single source. Triangulate.
 - If a research question can't be answered with available tools and public sources, say so in `gaps.md` and flag it as needing internal validation.
 
-**Phase Pattern:** 8-10 phases from PRD assumption clusters + synthesis.
+**Typical shape (non-binding):** 8-10 phases from PRD assumption clusters + synthesis.
 
 **Success Criteria:**
 1. Every major PRD assumption has been tagged
 2. All outputs have been audited for unsupported claims
-3. The executive summary gives clear go/no-go/modify per PRD section
+3. The commissioned deliverable(s) give a clear go/no-go/modify verdict per PRD section
 4. Technical risks are specific enough for engineering to plan around
 5. Every factual claim traces to a processed source

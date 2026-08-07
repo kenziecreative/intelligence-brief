@@ -1,0 +1,40 @@
+{
+  "target": "blueprint-discover",
+  "rubric_version": "1.0.0",
+  "gates": [
+    {
+      "name": "inventory_written",
+      "type": "file_contains",
+      "file": "blueprints/captured-inventory.md",
+      "pattern": "^#\\s+Process Inventory",
+      "feeds": "Artifact Integrity"
+    }
+  ],
+  "content_lint": [
+    {
+      "name": "no_autonomy_ratings",
+      "file": "blueprints/captured-inventory.md",
+      "forbid": "(\\*\\*Autonomy|Autonomy:\\s*(Automate|Monitor|Human)|\\b(Automate|Monitor|Human)\\s*/\\s*(Monitor|Human)\\b|\\brated\\s+(Automate|Monitor|Human)\\b)",
+      "feeds": "No-Premature-Rating"
+    },
+    {
+      "name": "no_sweep_narration",
+      "file": "blueprints/captured-inventory.md",
+      "forbid": "(the interview\\b|in this session|this session (the|surfaced|covered)|(recognized|surfaced|captured|named|mentioned) (during|in) (the |this )?(sweep|discovery|session)|(the |this )?(cue|memory) (list|surface)|the operator (first |initially |then )?(said|stated|described|mentioned|proposed|suggested|noted))",
+      "flags": "mi",
+      "feeds": "Register"
+    },
+    {
+      "name": "no_template_field_brackets",
+      "file": "blueprints/captured-inventory.md",
+      "forbid": "\\[(Working name|Whose work this covers|What makes it recur|What it appears to produce|Current operator|The real instance|Time, annoyance|What happens when|Routine|Confirmed candidate|Deep capture|why|candidate)\\]",
+      "feeds": "Artifact Integrity"
+    },
+    {
+      "name": "no_placeholder_tokens",
+      "file": "blueprints/captured-inventory.md",
+      "forbid": "(\\[(TODO|TBD|placeholder|FILL)\\b|\\?\\?\\?)",
+      "feeds": "Artifact Integrity"
+    }
+  ]
+}

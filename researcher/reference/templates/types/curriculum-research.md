@@ -41,7 +41,7 @@
 - Do not skip the practitioner reality phases. Textbook knowledge without practitioner grounding produces curriculum that sounds good in design but fails in the classroom.
 - If a skill decomposition can't be verified through public sources, flag it as needing expert consultation. Don't guess at what practitioners actually do.
 
-**Phase Pattern:** 6-10 phases, adapted by the plan generator based on the topic scope and how much the designer already knows. Typical structure:
+**Typical shape (non-binding):** 6-10 phases, adapted by the plan generator based on the topic scope and how much the designer already knows. Typical structure:
 - Phase 1: Domain landscape — what is this field? Boundaries, key concepts, major frameworks, current state. Establish the vocabulary and scope.
 - Phase 2: Practitioner reality — how do people actually do this work? Daily workflows, tools, decision points, common challenges. Research from practitioner sources.
 - Phase 3: Skill decomposition — what are the component skills? What must someone be able to do (not just know) to be competent? Map the skill structure.

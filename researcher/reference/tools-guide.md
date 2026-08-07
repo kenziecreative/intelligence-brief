@@ -38,7 +38,7 @@ Tools are organized into three tiers. Skills try each tier in order — if a com
 | Processing | `tvly extract` (or fallback chain) | Read a specific source you've already found and evaluated |
 
 **Automated vs. manual discovery:**
-- `/research:discover` — systematic channel-by-channel discovery via playbooks; use for projects with a defined research type and phases
+- `/research-discover` — systematic channel-by-channel discovery via playbooks; use for projects with a defined research type and phases
 - Manual `tvly search` — targeted follow-up queries, one-off lookups, projects not using the discover skill
 
 **Status taxonomy:** Sources move through DISCOVERED → ACCESSIBLE → PROCESSED. See channel playbooks for full definitions.
@@ -81,6 +81,29 @@ npx playwright pdf "https://example.com/spa" /tmp/extract-$(date +%s).pdf
 tvly map "https://docs.example.com" --json
 npx firecrawl-cli crawl "https://docs.example.com" --limit 50 --wait --json
 ```
+
+## Codex CLI (the Tier-1 corpus reviewer)
+
+`/research-review-corpus` uses the OpenAI Codex CLI as its Tier-1 reviewer — an
+independent cross-family sampler for the completion credibility gate. It is optional:
+with Codex absent, reviews run Tier-2 only (the plugin's own cold reviewer agent), and a
+`final` run records the unavailable tier as a failed attempt so the set's composition
+stays visible.
+
+- **Install / auth:** `npm install -g @openai/codex` (or the vendor's current channel),
+  then `codex login`. Verify with `codex --version` — the runner captures this string
+  into the receipt.
+- **Invocation contract (the runner owns this):** `codex exec -s read-only
+  --skip-git-repo-check "<prompt>"`. The read-only sandbox is mandatory — reviewers
+  never write. `--skip-git-repo-check` is required when the working directory is not a
+  Codex-trusted root (the usual case for a scratch staging dir).
+- **Budget:** measured runs take 11–25 minutes on a ~200-file corpus; the runner's
+  timeout is 30 minutes. Run it in the background with stdout/stderr captured to files —
+  and with stdin closed (`< /dev/null`): a detached `codex exec` with an open stdin can
+  exit immediately with empty output.
+- **Output contract:** the review is the *last fenced JSON block* in stdout, per the
+  review brief. Anything unparseable or truncated is recorded as a failed attempt, never
+  a receipt.
 
 ## Local PDF Processing
 
@@ -126,6 +149,6 @@ If tools aren't found despite the hook:
 - **Extracting before searching** — Running `tvly extract` on a URL you guessed or recalled, skipping search evaluation entirely. Always search first.
 - **Skipping tiers** — Jumping to WebSearch when tvly is available. Always try Tier 1 first; the fallback chain handles unavailability automatically. This includes site-scoped queries — use `tvly search --include-domains "github.com"` instead of WebSearch with `site:github.com`. WebSearch is a last-resort fallback, never a parallel tool.
 - **Crawling without mapping** — Crawling a domain without running `tvly map` or `npx firecrawl-cli map` first wastes time on irrelevant sections.
-- **Manual search for systematic discovery** — Running `tvly search` manually for a full research project when `/research:discover` exists. Use the skill; it reads channel playbooks and handles degradation automatically.
+- **Manual search for systematic discovery** — Running `tvly search` manually for a full research project when `/research-discover` exists. Use the skill; it reads channel playbooks and handles degradation automatically.
 - **Inline `export PATH=...` before CLI calls** — Don't. The `SessionStart` hook sets PATH for the whole session and bare-name commands match the project `settings.json` pre-allow patterns. An inline export breaks the pre-allow match and triggers a permission prompt on every call.
 - **Assuming "command not found" means "not installed"** — The harness shell has a different PATH than your interactive terminal. A tool can exist on disk and still be invisible to the Bash tool. Always verify with `ls` before concluding a tool isn't installed.

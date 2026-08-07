@@ -25,6 +25,7 @@ literally:
 | `define` … `move` (any of the 7 stages) | `strategist-stage` SKILL for that stage | The main path. |
 | `framework` | `strategist-framework` SKILL | First `user_message` carries the framework name/slug. |
 | `pressure-test` | `strategist-pressure-test` SKILL **and** the `strategist-critic` agent | The pressure-test step dispatches the critic; since the runner can't nest a subagent, it plays the critic itself by reading `agents/strategist-critic.md` and producing exactly the findings that agent would, then has the skill present them. |
+| `resume` | `strategist-resume` SKILL, then `strategist-stage` for the in-flight stage | Session-boundary scenarios. The run starts as a fresh session against the seeded files: the resume skill re-establishes position, then work continues mid-stage. |
 
 `init` is not run per-scenario; the runner establishes any needed prior state directly from
 the scenario's `setup` (below), which is faster and fully controlled.
@@ -46,6 +47,13 @@ turn, so the run starts from that state:
   `strategy/brief.md` (this is how a planted cross-stage contradiction is seeded).
 - `setup.working_dynamic` → optional `pushback_calibration` value to seed `## Working
   Dynamic` (for calibration scenarios).
+- `setup.state_extra` → mid-stage state for `entry: resume` scenarios, seeded into the
+  scaffolded `strategy/STATE.md` **before** the first turn. Each field maps to its
+  STATE.md section: `working_dynamic` → `## Working Dynamic`; `working_read` (list of
+  hypothesis lines) → `## Working Read`; `in_flight` (framework, answered, open,
+  provisional) → `## In-Flight`; `backstage_tasks` → `## Backstage Tasks`. For
+  `entry: resume`, `current_stage` is the stage named in `in_flight.framework` (e.g.
+  "Waterfall (Analyse)" → `analyse`), not the entry name.
 
 When there is no `setup`, scaffold a minimal fresh `strategy/STATE.md` + `brief.md` (as
 `strategist-init` would) with the scenario's implied problem, then run the entry stage.
@@ -73,8 +81,8 @@ dimensions and are inherited by the judge.
 | --- | --- | --- |
 | `state_frontmatter` | `strategy/STATE.md` frontmatter has `status`, `current_stage`, `completed_stages` | State Integrity |
 | `working_dynamic_present` | `strategy/STATE.md` contains a `## Working Dynamic` section | State Integrity |
-| `brief_section_filled` | the `entry` stage's `##` section in `brief.md` is no longer `_Not yet started._` (n/a for `framework`/`pressure-test`) | State Integrity |
-| `single_stage_advance` | `completed_stages` grew by exactly 1 vs the `setup` baseline (n/a for `framework`/`pressure-test`) | Loop Hygiene |
+| `brief_section_filled` | the `entry` stage's `##` section in `brief.md` is no longer `_Not yet started._` (n/a for `framework`/`pressure-test`/`resume`) | State Integrity |
+| `single_stage_advance` | `completed_stages` grew by exactly 1 vs the `setup` baseline, **or** the loop advanced past a stage honestly recorded as a non-certification — a Stage Record row `incomplete (advanced by user)` with `current_stage` advanced counts as a recorded pass, not a Δ0 fail (n/a for `framework`/`pressure-test`/`resume`) | Loop Hygiene |
 | `framework_in_library` | every framework the assistant claimed to apply resolves to a slug in `strategist/reference/INDEX.md` | No-Fabrication |
 
 Plus two `content_lint` checks on the reader brief (`strategy/strategy-brief.md`, optional —

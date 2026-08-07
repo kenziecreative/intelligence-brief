@@ -1,0 +1,195 @@
+{
+  "pluginRoot": "researcher",
+  "scanRoots": ["skills", "commands", "reference"],
+  "stalePhrases": [
+    {
+      "id": "tier_absolute_no_fail",
+      "pattern": "reason to fail or hold a draft\\.",
+      "reason": "the absolute 'confidence tier never fails a draft' rule — narrowed in 1.5.0 (D2): the project's own commissioned evidence standard IS enforced at the gate; the tier stays advisory only for what the standard doesn't name"
+    },
+    {
+      "id": "waiver_recorded_only_at_promotion",
+      "pattern": "Record the waiver in the audit report and in the gate-log row.s Detail column, and insert",
+      "reason": "waiver recording bundled into the promotion path — superseded post-iteration-1 (red golden adv-audience-standard-waiver): a waiver is recorded the moment it is granted, on the turn it arrives, even with no audit running. See 'Waiver Arriving Between Audits'."
+    },
+    {
+      "id": "independence_origin_chain_only",
+      "pattern": "Independence is determined solely by the",
+      "flags": "i",
+      "reason": "independence read off origin_chain alone — superseded in 1.5.0 (F9): origin_chain establishes independence only when it affirmatively identifies DISTINCT origins; 'Origin unclear' is unknown, never independent"
+    },
+    {
+      "id": "independence_from_agreement",
+      "pattern": "Two sources that\\b[^.]*still two independent sources",
+      "reason": "independence inferred from mere agreement, with no clear-and-distinct-origin qualifier — superseded in 1.5.0 (F9). The surviving sentence must read 'Two sources WITH clear, distinct origins ...'; the unqualified form resurrects false convergence."
+    },
+    {
+      "id": "counter_evidence_hard_block",
+      "pattern": "no counter-evidence found for \\[research type\\](?!, and no adverse search)",
+      "reason": "counter-evidence gate as an unconditional block — superseded in 1.5.0 (F7 valve): a documented adverse search plus user acknowledgment is an honest second exit. 'Named, searched, none found' is a legitimate recorded outcome."
+    },
+    {
+      "id": "saturation_raw_repeats",
+      "pattern": "saturation percentage: confirmatory / total findings(?!, counted per independent cluster)",
+      "reason": "saturation counted over raw repeats — superseded in 1.5.0 (pass-2 F9): the ratio is computed per independent cluster, so one file cannot say 'Echo — one data point' and '100% confirmatory' about the same sources"
+    },
+    {
+      "id": "override_set_by_keyword",
+      "pattern": "Contradictions section with `user_override=true`",
+      "reason": "user_override set by the resolution keyword — superseded in 1.5.0 (pass-2 F6): the flag is DERIVED from suggested_resolution vs user_resolution differing. A `confirm: side-A` against a side-B assessment is an override and carries no keyword."
+    },
+    {
+      "id": "progress_checks_settings_json",
+      "pattern": "STATE\\.md missing required frontmatter|hooks\\.PreToolUse and hooks\\.PreCompact|matcher: \"Write\"",
+      "reason": "progress health-check reading a deployment the plugin never ships (.claude/settings.json separate Write/Edit matchers; STATE.md YAML frontmatter) — fixed in 1.5.0; the checks read the plugin's hooks.json combined matcher and STATE.md's real sections. Resurrecting these fails every real project."
+    }
+  ],
+  "requiredSections": [
+    {
+      "file": "skills/research-audit-claims/SKILL.md",
+      "markers": [
+        "## Pass/Fail Criteria",
+        "## After Audit",
+        "## Waiver Arriving Between Audits",
+        "## Phase Debrief (after pass)",
+        "Deliverable manifest check",
+        "Methodology & Limitations structural check"
+      ]
+    },
+    {
+      "file": "skills/research-init/SKILL.md",
+      "markers": [
+        "## Enforceable rules",
+        "## Waiver protocol",
+        "| Timestamp | Action | Result | File | Detail |"
+      ]
+    },
+    {
+      "file": "reference/posture-register.md",
+      "markers": [
+        "## The opener reflex",
+        "## Register rules — every response",
+        "Keep the machinery backstage",
+        "## Pushback provenance"
+      ]
+    },
+    {
+      "file": ".claude-plugin/plugin.json",
+      "markers": ["every note to a declared source"]
+    },
+    {
+      "file": "README.md",
+      "markers": ["every note to a declared source"]
+    },
+    {
+      "file": "../README.md",
+      "markers": ["every note to a declared source"]
+    },
+    {
+      "file": "../.claude-plugin/marketplace.json",
+      "markers": ["every note to a declared source"]
+    }
+  ],
+  "contracts": [
+    {
+      "id": "gate_log_vocabulary",
+      "pattern": "gate-log\\.md",
+      "files": [
+        "skills/research-audit-claims/SKILL.md",
+        "skills/research-init/SKILL.md",
+        "hooks/gate-outputs.sh"
+      ],
+      "reason": "the promotion authorization row is written by audit-claims, its table is created by init, and the PreToolUse hook reads it to authorize writes to outputs/ — all three sides must keep the same file"
+    },
+    {
+      "id": "evidence_standard_contract",
+      "pattern": "evidence-standard\\.md",
+      "files": [
+        "skills/research-init/SKILL.md",
+        "skills/research-audit-claims/SKILL.md"
+      ],
+      "reason": "D2: init compiles the commissioned standard, audit-claims enforces it at the gate — a standard nothing reads is theater"
+    },
+    {
+      "id": "waiver_protocol_vocabulary",
+      "pattern": "waive: <claim",
+      "files": [
+        "skills/research-init/SKILL.md",
+        "skills/research-audit-claims/SKILL.md"
+      ],
+      "reason": "the waiver format init promises the user in their own evidence standard must be the format audit-claims accepts and records"
+    },
+    {
+      "id": "exclusion_ledger_contract",
+      "pattern": "exclusions\\.md",
+      "files": [
+        "skills/research-discover/SKILL.md",
+        "skills/research-check-gaps/SKILL.md",
+        "skills/research-cross-ref/SKILL.md"
+      ],
+      "reason": "F3 record-never-restrict: discover writes every declined candidate with a verbatim reason; check-gaps and cross-ref read the ledger so a curated evidence base says so"
+    },
+    {
+      "id": "negative_search_record",
+      "pattern": "negative-searches\\.md",
+      "files": [
+        "skills/research-summarize-section/SKILL.md",
+        "skills/research-audit-claims/SKILL.md"
+      ],
+      "reason": "F7 valve: summarize-section writes the adverse-search record and stamps the output; audit-claims verifies the record exists behind the stamp. A stamp with no record is an unsupported claim about the research process itself."
+    },
+    {
+      "id": "backstage_queue_contract",
+      "pattern": "backstage-tasks\\.md",
+      "files": [
+        "skills/research-init/SKILL.md",
+        "skills/research-audit-claims/SKILL.md",
+        "skills/research-cross-ref/SKILL.md",
+        "skills/research-start-phase/SKILL.md"
+      ],
+      "reason": "the agent's private prep queue is created at init, written at phase close and by cross-ref's cluster heuristics, and worked through silently by start-phase — a queue nothing reads is a dead file"
+    },
+    {
+      "id": "derived_override_fields",
+      "pattern": "suggested_resolution",
+      "files": [
+        "skills/research-cross-ref/SKILL.md",
+        "skills/research-summarize-section/SKILL.md",
+        "skills/research-audit-claims/SKILL.md"
+      ],
+      "reason": "pass-2 F6: cross-ref records suggested_resolution + user_resolution; synthesis and audit DERIVE the override by comparing the fields. If any side reverts to trusting the boolean, `confirm: side-A` against a side-B assessment launders an override into the deliverable."
+    },
+    {
+      "id": "methodology_limitations_contract",
+      "pattern": "Methodology & Limitations",
+      "files": [
+        "skills/research-summarize-section/SKILL.md",
+        "skills/research-audit-claims/SKILL.md"
+      ],
+      "reason": "pass-2 F5/F7 seam: summarize-section writes the section, audit-claims gates on it structurally (step 5b). A section required of the writer but unchecked by the audit is decoration."
+    },
+    {
+      "id": "posture_register_wiring",
+      "pattern": "posture-register\\.md",
+      "files": [
+        "skills/research-init/SKILL.md",
+        "skills/research-audit-claims/SKILL.md",
+        "skills/research-cross-ref/SKILL.md",
+        "skills/research-check-gaps/SKILL.md",
+        "skills/research-process-source/SKILL.md"
+      ],
+      "reason": "D1 register port: the doctrine ships as a reference file, init's CLAUDE.md template points at it, and EVERY skill that composes a user-facing turn points at it from its Output section. Iteration-3 proved why: when the doctrine was reachable only from audit-claims' phase debrief — which runs solely on the PASS branch — Register scored 0 in 15 of 23 runs. A doctrine one skill reads is a doctrine the other skills violate."
+    },
+    {
+      "id": "independence_unknown_vocabulary",
+      "pattern": "Origin unclear",
+      "files": [
+        "skills/research-process-source/SKILL.md",
+        "skills/research-cross-ref/SKILL.md",
+        "skills/research-check-gaps/SKILL.md",
+        "reference/coverage-assessment-guide.md"
+      ],
+      "reason": "F9: process-source writes 'Origin unclear' into the note rather than omitting the field; cross-ref and check-gaps must both treat it as independence-UNKNOWN (no corroboration credit), and the coverage guide defines it. Drop the token on any side and unknown silently reads as independent."
+    }
+  ]
+}

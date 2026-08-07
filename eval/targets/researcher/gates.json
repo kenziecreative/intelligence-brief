@@ -1,0 +1,44 @@
+{
+  "target": "researcher",
+  "rubric_version": "1.0.0",
+  "gates": [
+    {
+      "name": "state_active_phase",
+      "type": "file_contains",
+      "file": "research/STATE.md",
+      "pattern": "Active phase:",
+      "feeds": "State Integrity"
+    },
+    {
+      "name": "draft_methodology_section",
+      "type": "file_contains",
+      "file": "research/drafts/04-test-section.md",
+      "pattern": "## Methodology & Limitations",
+      "feeds": "Traceability",
+      "na_for_entries": ["audit", "process-source", "cross-ref", "check-gaps", "review-corpus"]
+    },
+    {
+      "name": "review_receipt_validates",
+      "type": "command_exit0",
+      "command": "set -e; r=$(ls research/reviews/*.receipt.json 2>/dev/null | head -1); test -n \"$r\"; python3 \"${PLUGIN_ROOT}/reference/validate-corpus-review.py\" validate-receipt --root . --receipt \"$r\" --filename \"$(basename \"$r\")\"",
+      "feeds": "Credibility Gate",
+      "na_for_entries": ["audit", "synthesize", "process-source", "cross-ref", "check-gaps"]
+    }
+  ],
+  "content_lint": [
+    {
+      "name": "draft_no_placeholders",
+      "file": "research/drafts/04-test-section.md",
+      "forbid": "\\[(TODO|TBD|placeholder|FILL)\\b",
+      "feeds": "Traceability",
+      "optional_file": true
+    },
+    {
+      "name": "output_no_placeholders",
+      "file": "research/outputs/04-test-section.md",
+      "forbid": "\\[(TODO|TBD|placeholder|FILL)\\b",
+      "feeds": "Traceability",
+      "optional_file": true
+    }
+  ]
+}
