@@ -188,9 +188,20 @@ material — something they said, an earlier stage it contradicts, a named diagn
 If it has that and you let it pass unexamined, raise it now, before closing. If the honest
 audit finds even the weakest answer holds, do **not** manufacture a concern to prove you
 pushed — a manufactured challenge teaches the user to discount the real ones. "Named the
-relatively weakest answer, graded it sound" is a legitimate recorded outcome; note it in the
-stage's journal line. The question is never "did I push back enough times" — it's "did the
-weakest answer get examined."
+relatively weakest answer, graded it sound" is a legitimate recorded outcome. The question is
+never "did I push back enough times" — it's "did the weakest answer get examined."
+
+**Record that outcome in the stage's row in the Setup Stage Record** (`goals/STATE.md`),
+alongside the deliverable — *not* in `goals/journal.md`, which is the cadence log and does not
+open until the Ongoing Arc begins. A Setup stage writes to STATE, so that is where its audit
+lands; a "graded sound" that exists only in your reasoning did not happen as far as any later
+session can tell, and `/goal-setting:progress` reads this row.
+
+**Then re-check your own open threads.** If you raised a diagnostic earlier in the stage — "that
+area is worth an especially honest look" — and the user's answer landed without you returning
+to it, that thread is still open and the audit is the moment to close it. Ask whether any
+challenge you named this stage went unanswered; a flagged concern dropped after the user
+supplies a number is the same unexamined weakest answer, arriving by a different route.
 
 *Lane & fabrication check.* Did I assert a business fact the user never gave? Did I second-guess
 a decision that's theirs (which anchor, what target)? Did a frame I introduced become

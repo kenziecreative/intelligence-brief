@@ -3,6 +3,51 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.7 — 2026-08-07
+
+The provenance rule becomes plugin-wide, and stops living in four places.
+
+- **The general rule now lives once, in `reference/heartbeat.md` §1** — the trust order every
+  skill already applies at Step 0 and points at rather than copies. It said the files win over
+  memory; it now also says **what you work out is not exempt.** A duration you computed, a
+  pattern you inferred, a prior state you reconstructed, a number that felt about right — none
+  become facts by being reasonable, and the honest move is to *name the absence rather than
+  fill it.* The owner cannot tell your inference from your reading, and acts on both the same
+  way. v0.2.6's review guardrail is now stated as an application of this rather than its own
+  rule, so the two cannot drift apart.
+- **The critic's record carries the same shape as its speech** (`agents/goal-setting-critic.md`).
+  v0.2.5 fixed the spoken reassertion and stated that writes bind equally, but gave the written
+  record no shape — so a run said *"the KR today reads …"* aloud and wrote *"the KR **still
+  reads** …"* to the journal, which is the fabrication in the file rather than the sentence.
+  The journal shape is now given explicitly, with the tell named: ***the defect is still
+  present*** is a claim about the finding and is yours to make; ***the KR still reads "…"*** is
+  a claim about the text not having changed, which you cannot see. The two sentences look
+  nearly identical and only one is honest.
+- **The pulse reads `kr_progressing` against the KR's own measure** (`goal-setting-pulse`).
+  Work toward a KR is not the KR moving: two booked conversations against a *signed retainers*
+  Key Result is `unknown`, not `yes`. The leading indicator moving is precisely when the
+  outcome may still be stuck. The gap must also be **said** — ask the converting question or
+  state that the read is open; recording `yes` takes a business call that is the owner's, and
+  recording `unknown` silently leaves them thinking you agreed.
+- **Restart's re-score no longer presumes a prior score** (`goal-setting-restart`). Step 2 was
+  framed as "scores have moved," which invited a comparison against a number that may not
+  exist; against an empty Score History a run offered *"the one from six weeks ago"* — inventing
+  both a reading and a date for it. Read `goals/scorecard.md` first: contrast only against dated
+  scores that are actually there, and otherwise just ask for today's number.
+- **The Setup-stage Self-Audit finally has somewhere to land** (`goal-setting-setup-stage`).
+  It was told to record "named the weakest answer, graded it sound" in the stage's *journal
+  line* — but Setup stages never write `goals/journal.md`, which is the cadence log and does
+  not open until the Ongoing Arc begins. The outcome had nowhere to go, which made the honest
+  audit invisible to every later session. It now goes in the stage's row in the Setup Stage
+  Record, where `/goal-setting:progress` already reads. The audit also re-checks threads the
+  stage itself opened: a concern you raised and then dropped once the user supplied a number is
+  the same unexamined weakest answer arriving by another route.
+
+Found by eval iteration-7. The concentration was invisible until derived values were ruled in
+scope and the flagged-but-undocked instances were scored consistently — at which point eight of
+nine failing runs turned out to be one discipline, spread across four surfaces, five of them
+fossilized in append-only files.
+
 ## 0.2.6 — 2026-08-07
 
 The review skill stops estimating the numbers it reports.

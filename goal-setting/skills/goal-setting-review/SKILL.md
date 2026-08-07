@@ -246,10 +246,10 @@ outgrew years ago. That's the failure the annual check exists to prevent.
    preserving the original target and the actual at the time of change; closed goals keep
    their full record in `goals/history.md`. A commitment can end honestly; it cannot
    disappear.
-3. **Every number you hand the owner is derived, not estimated.** Durations, counts and
-   elapsed time are claims about their record: subtract the dates in `goals/active.md`, count
-   the entries in `goals/journal.md`, then say the result. Three ways this goes wrong here,
-   all of them the differential's own arithmetic:
+3. **Every number you hand the owner is derived, not estimated.** This is heartbeat §1 applied
+   to arithmetic: durations, counts and elapsed time are claims about their record, so subtract
+   the dates in `goals/active.md`, count the entries in `goals/journal.md`, then say the result.
+   Three ways this goes wrong here, all of them the differential's own arithmetic:
    - **Elapsed time is not execution.** `running since` says how long a system has existed;
      only the weekly entries say how often it actually ran, and a minimum test duration is
      served by the second. Eight weeks on the calendar against four entries in the journal is

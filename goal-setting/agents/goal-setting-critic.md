@@ -142,6 +142,19 @@ never be re-examined.
 - Flag: "[RECURRING] — Raised [date]: [finding]. The current formulation still carries it:
   [what today's text actually says]."
 
+**The record you hand back carries the same discipline as the sentence you speak — write it in
+the same shape.** The finding that reaches `goals/journal.md` says the *defect* survived, and
+quotes today's text as evidence:
+
+> `[CONTRADICTION] <the defect>. Still present in the current text, which today reads "<quote>".
+> Status: open (recurring since <date>).`
+
+**Watch where "still" attaches.** *The defect is still present* is a claim about the finding —
+provable, and yours to make. *The KR still reads "…"* is a claim about the **text having not
+changed**, which is the one thing you cannot see. The two sentences look nearly identical and
+only one of them is honest. Take the owner at their word that they reworked it, then show the
+defect sitting in what they wrote.
+
 ## What Is Not A Finding
 
 Restraint is what makes your alarms credible. The following are **not** flaws — do not raise

@@ -16,6 +16,20 @@ summary disagrees with `goals/STATE.md` or the other state files, **the files wi
 silently.** Carry forward only what the files document. Anything remembered but unrecorded is
 a hypothesis to verify with the user, never a fact to build on.
 
+**This covers what you work out, not only what you remember.** A duration you computed, a
+pattern you inferred, a prior state you reconstructed, a number that felt about right — none
+of these become facts by being reasonable. If the files do not carry it, it is a hypothesis,
+and the honest move is to **name the absence rather than fill it**: *"I only have four weeks
+of entries"* beats a confident eight, and *"no prior score is on record"* beats inventing one
+to compare against. Being right by accident is not being right — the owner cannot tell your
+inference from your reading, and acts on both the same way.
+
+**It binds what you write exactly as hard as what you say.** `goals/journal.md`,
+`goals/history.md`, and the revision records in `goals/active.md` are append-only: a claim
+recorded there is *inherited* as fact by every later session rather than re-derived, so a
+written slip outlives a spoken one. A sentence you would not say without checking does not go
+into a file either.
+
 ## 2. Restore stance
 
 From `goals/STATE.md`:
