@@ -3,6 +3,25 @@
 All notable changes to the Strategist plugin. Per-plugin semver; tags are plugin-scoped
 (`strategist-vX.Y.Z`).
 
+## 0.4.2 — 2026-08-06
+
+Documentation correction in the shipped reference library. No behaviour change; no skill,
+command, agent, or framework-entry file is touched.
+
+- **`reference/frameworks/README.md` records which derivations ship.** `creating-conditions.md`
+  names six frameworks derived from the parent posture; only two of them (Metaskills, Learning and
+  Teaching) are included in this plugin. Organic Systems, Legible and Memorable, Durable AI Practice
+  and Minimum Lovable Products are maintained in canon and deliberately not shipped here, and the
+  `frameworks/…` paths that document uses for them are canon paths, not files in `reference/`.
+  A reader following those references was previously sent looking for files that were never meant
+  to be present. `creating-conditions.md` itself is untouched — it is a `canonPairs` entry under the
+  release-blocking byte-diff lint, so any change to it lands in canon first.
+
+Groundwork, not shipped: a full `/upskill` constraint audit of every strategist surface and a
+25-run `/eval-run` baseline both landed this cycle (`dev/strategist/constraint-audit.md`). The
+audit's 26 accepted rewrites are approved but deliberately **not** applied here — they land as
+their own release against that baseline.
+
 ## 0.4.1 — 2026-07-12
 
 The **pass-2 hardening release** — same-day repairs for the six PARTIAL verdicts from
