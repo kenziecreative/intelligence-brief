@@ -21,7 +21,7 @@
     {
       "name": "intelligence-briefing",
       "source": "./intelligence-briefing",
-      "description": "v0.3.0 — Start the day knowing what actually moved in your world, without reading the whole internet to find it. It scans news, industry, research, policy, and science, triages it down to the few items worth your attention (keyed to a relevance context you set once), and writes them up as a clean, self-contained page you can read anywhere or forward. Self-contained; runs on its own."
+      "description": "v0.3.1 — Start the day knowing what actually moved in your world, without reading the whole internet to find it. It scans news, industry, research, policy, and science, triages it down to the few items worth your attention (keyed to a relevance context you set once), and writes them up as a clean, self-contained page you can read anywhere or forward. Self-contained; runs on its own."
     },
     {
       "name": "photo-generator",

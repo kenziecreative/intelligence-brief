@@ -1,7 +1,7 @@
 {
   "name": "intelligence-briefing",
-  "version": "0.3.0",
-  "description": "v0.3.0 \u2014 Start the day knowing what actually moved in your world, without reading the whole internet to find it. It scans news, industry, research, policy, and science, triages it down to the few items worth your attention (keyed to a relevance context you set once), and writes them up as a clean, self-contained styled HTML brief you can read anywhere or forward. Part of the Kenzie Creative marketplace; self-contained and runs on its own.",
+  "version": "0.3.1",
+  "description": "v0.3.1 \u2014 Start the day knowing what actually moved in your world, without reading the whole internet to find it. It scans news, industry, research, policy, and science, triages it down to the few items worth your attention (keyed to a relevance context you set once), and writes them up as a clean, self-contained styled HTML brief you can read anywhere or forward. Part of the Kenzie Creative marketplace; self-contained and runs on its own.",
   "author": {
     "name": "Kelsey Ruger",
     "url": "https://github.com/kenziecreative"
