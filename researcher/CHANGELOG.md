@@ -57,6 +57,35 @@ closes on one interested source. Merged the other way, you get the stall back.
   gets reached, and the standing limit: saturation supports "not found where we looked," never
   "does not exist."
 
+### Fixed (found during verification, iterations 24–29)
+
+- **Post-decision re-argument after `confirm: <side>`** — open since iteration 4 and not
+  closed by the v1.10.0 attempt. The ban existed; it failed because a comparative restatement
+  *is* forward-looking, so it read as the permitted "forward consequence." Now: state what the
+  output will carry, never the comparison already made, and name the override once *inside*
+  that sentence rather than appending it. If a clause would still work as an argument for the
+  other side, it is one.
+- **The cycle box and the `Cycle step` pointer are one write** — `cross-ref` step 10 and
+  `summarize-section` step 10 each checked their box and left the pointer on it, so STATE said
+  a step was both finished and current.
+- **Classification is per question** — a note Direct for one question and Adjacent to another
+  belongs in both places, not filed once under the one it fits best.
+- Two defects in W2's own new wording, caught and fixed in the same pass: the stale-saturation
+  disclosure did not bind the adequate-coverage branch, and the fix for that narrated file
+  mechanics at the user instead of stating the substance.
+
+### Verified
+
+Iterations 24–29. **17 of 17 goldens pass**, with all seven noisy scenarios sampled 3× and
+scored on the worst sample. Zero deterministic-gate failures and zero capture-integrity
+failures across 43 runs.
+
+Known and recorded, not fixed here: on one of three samples, `summarize-section` rendered a
+note's "60–70% of teams report a reduction" as "a 60–70% reduction," and the same draft's
+Methodology & Limitations claimed two independent sources for single-sourced findings. The
+integrity agent cleared both. Traceability is not a critical dimension on that scenario so it
+passes, but this is the note-fidelity seam (W1) showing up as observed rather than inferred.
+
 Design and the three resolved author forks: `dev/researcher/w2-design.md`. Map updated in the
 same change (`dev/researcher/ARCHITECTURE.md` — Seam 1 closed).
 

@@ -1,13 +1,11 @@
 # Stream: researcher
 
-**Status:** live — **v1.11.0 (W2) committed on branch `researcher-w2`, still UNTAGGED.** The
-full golden set has now run: **17 of 17 behaviors pass, 0 gate failures, 0 capture-integrity
-failures.** Six defects were found and fixed along the way, including one open since
-iteration 4. **The one thing standing between this and a tag is the 3x sampling** — seven
-scenarios have noisy critical dimensions and were run once each; the suite call takes the
-worst of three. 14 runs outstanding.
+**Status:** live — **v1.11.0 (W2) verified and tagged `researcher-v1.11.0` (local, unpushed).**
+**17 of 17 goldens pass**, all seven noisy scenarios sampled 3x and scored on the worst sample.
+Zero gate failures and zero capture-integrity failures across 43 runs. Seven defects found and
+fixed during verification, including post-decision re-argument, open since iteration 4.
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `researcher-w2` (off `main`
-at `8833dd9`; `main` holds nothing from this stream)
+at `8833dd9`; `main` holds nothing from this stream). Nothing pushed, nothing merged.
 **Last touched:** 2026-08-09
 
 **Branch layout — the first commit is meant to be lifted off.** `researcher-w2` opens with
@@ -38,7 +36,7 @@ Program-level view — the plan's status block at
 | W7 — adversarial corpus review (the credibility gate) | **done**, v1.8.0 |
 | /upskill constraint pass | **done**, v1.9.0 |
 | W6a + W6b — completion integrity + cross-phase consistency | **done**, v1.10.0 |
-| W2 — saturation → stop decision (Seam 1) | **built, v1.11.0 — 17/17 green at 1x; 3x sampling outstanding** |
+| W2 — saturation → stop decision (Seam 1) | **done**, v1.11.0 — 17/17 at 3x |
 | W3 (conclusion-vs-brief), W1 (note fidelity), W4, W5, W6c–f | not started |
 
 ## Done this session
@@ -68,25 +66,24 @@ None.
 
 ## Next steps (in order)
 
-1. **Run the 3x sampling — 14 runs — then tag.** Two more samples each of
-   `adv-audience-standard-waiver`, `adv-override-disclosure`, `adv-counter-evidence-valve`,
-   `adv-exclusion-visibility`, `adv-independence-unknown`, `adv-unselected-invisible`,
-   `adv-confirm-side-override`. Take the **worst** sample per dimension. Five judges flagged
-   their own single-sample verdicts as provisional, unprompted — that is the harness telling
-   you not to close on one roll. Full record: `eval/targets/researcher/_eval/iteration-27/scores.md`
-   (local only). Use the shared briefs at `_eval/_briefs/` — they cut dispatch cost sharply.
-2. **Tag `researcher-v1.11.0`** once that reads clean. Bump to 1.11.1 first if it forces fixes.
-3. **Cherry-pick the shared-harness commit to `main`** (`711c092`) whenever convenient — see
-   the branch-layout note above. Deferred by Kelsey's call on 2026-08-09 since no other plugin
-   work is in flight.
-4. **W3** (conclusion-vs-brief / significance, Seam 2 — *observed*). Two watch items from this
-   pass belong to it: the `cross-ref` Output template prescribing dashboard vocabulary the
-   posture doctrine bans, and the same conflict in `research-process-source` line 31.
-5. **W1** has a fresh piece of evidence: `adv-counter-evidence-valve` turned "60-70% of teams
-   report reduced time-to-value" into "a 60-70% reduction in time-to-value" and nothing caught
-   it — the integrity agent returned clean and audit-claims never ran. That is the note-fidelity
-   seam, observed rather than inferred.
-6. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
+1. **Merge `researcher-w2` to `main` and push** — the branch is verified and tagged. This also
+   carries the shared-harness commit `711c092` to `main`, which resolves the parked-shared-edit
+   question in Next Step 3 of the old list.
+2. **W1 has a live piece of evidence, and it is the strongest signal from this pass.** In one
+   of three samples, `summarize-section` turned a note's "60-70% of teams report a reduction"
+   into "a 60-70% reduction," and the same draft's M&L claimed two independent sources for
+   findings that had one each. The integrity agent returned clean and audit-claims never ran.
+   Traceability is not critical on that scenario so it passed — which is precisely the shape of
+   thing that ships. Captures: `_eval/iteration-28/adv-counter-evidence-valve/run-3/`.
+3. **W3** (conclusion-vs-brief / significance, Seam 2). Two watch items belong to it: the
+   `cross-ref` Output template prescribes dashboard vocabulary the posture doctrine bans, and
+   `research-process-source` line 31 has the same conflict. Both are two documents disagreeing,
+   not run variance.
+4. **A gap no gate covers:** `check-gaps` rolls the cycle back from the seeded position on
+   scenarios where coverage is arguably adequate. `state_cycle_coherent` passes it because the
+   result is internally consistent; nothing asserts the rollback was *warranted*. Three judges
+   flagged it independently.
+5. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
    v1.9.0.
 
 ## Open questions / decisions pending
