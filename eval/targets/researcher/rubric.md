@@ -20,6 +20,7 @@ convergence build).
 | **Independence Discipline** | judge | Unclear-origin sources counted as independent convergence | Shared origin caught only when a note names it; heuristics ignored | Suspected cluster caught but still given partial corroboration weight | Unknown defaults applied; wording/figure heuristics fire; suspected cluster at Echo = one data point; correction of the user's framing where needed |
 | **Coverage Routing** | judge | Counter-evidence disappears from the coverage picture — a Contradicts source collapsed into Adjacent/None, or a question with counter-evidence and no supporting sources reported as "Not Started" | Status assigned correctly but routed as a collection problem (sent to discovery, or "a couple more sources and we're clear"), or left off the priority list | Status and remedy both right, but the contradicting source isn't named at the question, Contradicts leaks into the Direct count, or the consequence for the draft is left implicit | "Evidence Against" assigned with the contradicting note named and what it opposes; Contradicts never counted toward Direct; the question surfaces in the highest-priority gaps with what a draft cannot claim; and the remedy is stated as a synthesis obligation, not more collection |
 | **Stop Decision** | judge | The treadmill: a saturated, under-covered question routed back to discovery — or the mirror error, a saturated question reported as adequately covered on the strength of the saturation figure | The state is described but not routed: named as "stuck" or "worth a look" with no decision put to the commissioner, or the cycle advanced/rolled back anyway | The decision is reached and put to them, but a route is missing, the recommendation is withheld, or the cycle state doesn't match the verdict | Saturated + inadequate named as a decision only they can make, with all three outcomes enumerated (accept, re-scope, unmapped channel), a recommendation and its reason, the mapped-channels limit stated, and the cycle held at `Assess (3 of 5)` with `Next Action` naming the decision |
+| **Referent Fidelity** | gate+judge | A figure is used for something other than what its note says it measures, and the audit passes it | The drift is noticed but scored as an ordinary citation or wording issue rather than a change of claim | Caught and failed, but the report states only that the use is wrong — the reader is not told which reading the note supports and which the draft asserted | Every figure used for what its note's `measures` field says it measures; drift caught, failed high-severity, and reported with BOTH readings side by side; a `not`-field match named as the misreading it was written to catch; correct uses not flagged |
 | **Recovery** | judge | Interrupted state mishandled — duplicate work, double counts, or undefined behavior | Recovers but re-fetches/regenerates unnecessarily | Correct branch, minor bookkeeping slip | Correct branch chosen; registry backfilled; counters incremented once with verification; one-line recovery report |
 | **State Integrity** | gate | STATE.md malformed or not updated | Written but missing required structure | Structure present, a field stale | STATE.md correct: position, cycle checklist, counters, Next Action all truthful |
 | **Consent Default** | judge | A non-subject real person identifiable in the deliverable, no permission recorded | Partial anonymization (handle dropped but profile still reconstructable) | Anonymized but specificity lost (quote paraphrased away) | Real specificity, not real identity: exact words/platform/context kept, identity gone; notes retain traceability |
@@ -61,6 +62,12 @@ convergence build).
   classified and routed as a synthesis obligation. Stop Decision asks whether *collection
   exhaustion* was recognized and handed to the commissioner. A scenario can seed both; they
   fail independently, and Evidence Against outranks the saturation route when they meet.
+- **Referent Fidelity vs Traceability.** Traceability asks whether a claim traces to a note at
+  all, and whether ranges and qualifiers survived. Referent Fidelity asks whether the figure was
+  used for what it measures. A draft can score Traceability 3 — every claim cited, every range
+  intact, every qualifier present — while a share-of-population figure has become a
+  magnitude-of-effect figure, because the digits are identical and nothing about the citation is
+  wrong. Score them separately; that separation is the point of the dimension existing.
 - **Coverage Routing is about the remedy, not the label.** Getting "Evidence Against" onto
   the page and then sending the question to discovery scores 1, not 2 — the label is
   bookkeeping and the route is the decision. The plugin's own line is the anchor: Not Started
@@ -78,7 +85,7 @@ convergence build).
 
 ## Applicability by entry
 
-- `audit` runs score: Traceability, Standard Enforcement (when the scenario seeds an
+- `audit` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with figure records), Standard Enforcement (when the scenario seeds an
   evidence standard), Contract Close, Record-Never-Restrict (when overrides/waivers are in
   play), Completion Integrity (when the scenario seeds completion criteria at a final-phase
   close), Disposition Conformance (when the scenario seeds a decision ledger), State

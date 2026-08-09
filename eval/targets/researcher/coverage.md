@@ -41,6 +41,8 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | `confirm: <side>` against the assessment derives user_override=true | Pass-2 F6 bypass | `adv-confirm-side-override` | ✓ |
 | Corpus credibility review finds the seeded corpus-level defects (W7 known-bad mini-corpus `corpus-a`, 7 classes) | W7 engine-corpus incident + spike | `adv-review-corpus-a` | ✓ |
 | Counter-evidence routes as a synthesis obligation, not a discovery target (`Evidence Against`) | W2 protection (plan chip `task_c631be46`) | `adv-evidence-against-routing` | ✓ |
+| A figure used for something other than what its note measures is failed as a change of claim | W1 (Seam 0 adjacent — observed in iteration 28) | `adv-referent-drift` | ✓ |
+| A figure used correctly is NOT flagged — the negative control on the referent check | W1 | `rep-referent-correct-use` | ✓ |
 | Saturated + inadequate reaches the commissioner as a decision, never another discovery round | W2 (Seam 1 — the live-run stall) | `adv-saturation-stall-decision` | ✓ |
 | Saturated + adequate proceeds normally — the negative control on the stall route | W2 | `rep-saturation-adequate-proceeds` | ✓ |
 | A stale saturation record reads as unavailable, never as "not saturated" | W2 | `adv-saturation-stale-record` | ✓ |
@@ -81,13 +83,20 @@ and Assess while leaving Connect checked. Only `check-gaps` was ever told to rec
 two representations, and it reconciles them incompletely. Expect these red until the
 routing work fixes the writes.
 
+**B14/B15 on pre-schema notes.** Every golden written before v1.12.0 seeds notes without figure
+records, so the whole existing set exercises the `n/a` path for both new battery items. That is
+deliberate coverage, not an accident of ordering — a check that fires on notes written before it
+existed is noise, and the existing set is the regression net for that.
+
 ## Known-uncovered classes (deliberate, with reasons)
 
-- **F1 — note-against-source fidelity (snapshots + locators).** The blind review's
-  Critical. NOT covered because the evidence architecture is commissioned separately
-  (Decision B1) and lands after this release — a scenario for it would test behavior the
-  plugin doesn't ship yet. Add it the moment B1 lands; it becomes the pack's most
-  important golden.
+- **F1 — note-against-source fidelity.** The blind review's Critical, and **still uncovered
+  after v1.12.0**. W1 added locators (B15 checks one exists) and the referent check (B14), but
+  **nothing re-reads an original source**, so there is no behavior to test: a scenario would have
+  to assert that the plugin caught a note misquoting its source, and the plugin cannot. This
+  becomes testable only if sampled re-validation ships (W1 fork 2, deliberately deferred). Until
+  then the honest statement is that B15 proves the corpus is *checkable*, not checked — and this
+  entry is the reminder not to read a green battery as more than that.
 - **F5 — coverage/nonexistence overclaim.** Partially exercised by
   `rep-synthesize-methodology`'s purposive-sampling disclosure; a dedicated "gap accepted
   as 'not found via mapped channels', never 'does not exist'" scenario is a candidate.
