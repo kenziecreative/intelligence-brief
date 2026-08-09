@@ -139,8 +139,30 @@ and **refuse** to capture a result. A scenario sets `"expected_no_advance": true
 advancing is a `pass`, advancing is a `fail`. Without this, those gates penalize correct
 refusal-to-capture — the harness false-negative the first strategist run exposed.
 
-**The orchestrator injects that field into `gate-inputs.json` from `scenarios.jsonl` before
-running the gates.** It used to be the runner's job, which was incoherent two ways: the runner
+### Judge-only fields — never in the runner's payload
+
+Three fields in `scenarios.jsonl` are written for the judge and the gate script. **None of
+them may reach the runner:**
+
+| Field | Why it must be withheld |
+| --- | --- |
+| `expected_behavior` | the rubric's answer key — `must_include` / `must_not_do` |
+| `expected_no_advance` | tells the runner not to advance, immediately before it decides |
+| `end_state` | prose description of the correct ending |
+
+`end_state` is the easiest to miss because it appears on **exactly one scenario**
+(`adv-preference-over-evidence`) and reads like scene-setting rather than an answer key. It
+is not. It says *"the override recorded and the loop advanced … never held mid-stage"* — the
+precise behavior that scenario exists to test, and the precise behavior that failed in
+iteration 10. A runner shown that field is being told the answer.
+
+Build the blind payload by allow-list, not by deletion: `id`, `entry`, `tags`, `setup`,
+`user_messages`, `tone_notes`. Anything else is judge-side until proven otherwise. A
+deny-list only ever excludes the leaks someone already found — which is how `end_state`
+survived alongside a rule written specifically about this failure mode.
+
+**The orchestrator injects `expected_no_advance` into `gate-inputs.json` from
+`scenarios.jsonl` before running the gates.** It used to be the runner's job, which was incoherent two ways: the runner
 is specified as blind, so it cannot know the field exists — and telling it hands over the
 answer ("you are not supposed to advance") immediately before it decides whether to advance.
 Iteration 1 hit exactly that: the field was withheld to preserve blindness, three scenarios
