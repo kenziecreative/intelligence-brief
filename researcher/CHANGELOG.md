@@ -2,6 +2,61 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.12.0] — 2026-08-09
+
+**W1 — source-note fidelity (Seam 0), and the thing that turned out to be sitting next to it.**
+
+A number can keep every digit and change what it means. In eval iteration 28 a note recorded
+"60–70% **of teams report** a reduction in time-to-value" and the draft written from it said
+"a 60–70% **reduction in** time-to-value" — a share of a population rendered as the size of an
+effect, which is a different and much stronger claim. Every check that compares numbers passed
+it, because nothing about the number changed. Nothing in the plugin asked what a number is *of*.
+
+That is **not** the seam W1 was scoped around, and the distinction is recorded rather than
+smoothed over: W1's subject is the note versus the *original source*, which nothing has ever
+checked and which no defect has ever demonstrated — because demonstrating one requires re-reading
+originals. Both land on the same surface, so they ship together rather than as two migrations of
+the note format.
+
+### Added
+
+- **Per-figure records in source notes.** Every quote and number a draft might cite now carries
+  `measures` (what the figure is a measurement *of*, with its population), an optional `not` (the
+  plausible neighbouring reading it does **not** support), `locator` (where in the source it
+  sits), and `verbatim` (the source's own words). `measures` is the load-bearing field: "60–70%"
+  is not a fact, "60–70% *of surveyed teams*, reporting *any* reduction" is.
+- **B14 — referent conformance.** A draft must use each figure for what its note says it measures.
+  Digits matching is the precondition for the check, not evidence of anything. High severity, and
+  the finding reports *both* readings — what the note supports and what the draft asserted —
+  because "used incorrectly" tells a writer nothing.
+- **B15 — source-anchor presence.** Every cited figure record must carry a usable locator.
+  Moderate severity. A locator that honestly reads "not locatable in the extracted content" is
+  not a finding — that is the note doing its job.
+- **Prevention at the writing site**, not only detection at the gate: `summarize-section`
+  guardrail 4a states the rule where drafts are written.
+
+### Changed
+
+- **The integrity agent counts sources per finding, not per section.** It cleared a draft whose
+  Methodology & Limitations read "Single-source findings: none. Both findings rest on two
+  independent sources" over two findings with one source each — the ordinary case of finding A
+  from note 1 and finding B from note 2, counted as a section total and applied to both. A
+  statement about source counts is now itself a checked claim.
+- Old notes predating the schema report `n/a`, never a finding, and are upgraded when a skill
+  reads them. A check that fires on every note written before it existed is noise, and noise is
+  what gets a battery item skipped.
+
+### What this does not do — stated plainly
+
+**Nothing re-reads original sources.** B15 asserts that a verifiable anchor *exists*; it does not
+open the source and check the note against it. A clean B15 means the corpus is checkable, not
+that it has been checked, and **Seam 0 remains open**. Sampled re-validation at audit was
+deliberately deferred: it needs fetching inside the audit path and fails on exactly the sources
+that matter most — paywalled, dated, moved. Revisit once locators exist and we can see how often
+they resolve at all.
+
+Design, and the correction to how W1 got promoted: `dev/researcher/w1-design.md`.
+
 ## [1.11.0] — 2026-08-09
 
 **W2 — saturation to the stop decision (Seam 1).** The most-felt gap: on a live run the

@@ -701,7 +701,7 @@ Do not create files outside this structure for research artifacts. Working files
 | Discover Sources | `/research-discover` | Finds candidate sources for the current phase using type-aware multi-channel discovery |
 | Review Corpus | `/research-review-corpus` | Runs the independent adversarial corpus review (the credibility gate's review run); project completion requires a passing final review set |
 
-**Integrity agent:** `research-integrity` — runs automatically after `/research-summarize-section` writes a draft, and when `/research-init` or `/research-start-phase` integrate source material. It watches for fabricated data, range narrowing, qualifier stripping, cross-phase drift, and unsourced claims. It is **not** auto-run after every source note — invoke it manually on a note if you want a note-level check.
+**Integrity agent:** `research-integrity` — runs automatically after `/research-summarize-section` writes a draft, and when `/research-init` or `/research-start-phase` integrate source material. It watches for fabricated data, range narrowing, qualifier stripping, cross-phase drift, unsourced claims, and confidence inflated beyond the per-finding source count. It is **not** auto-run after every source note — invoke it manually on a note if you want a note-level check.
 
 5. **Workflow:**
 

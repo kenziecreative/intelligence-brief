@@ -70,6 +70,9 @@ When given a file to review (a source note, a draft, or a synthesis document), p
 ### 7. Confidence Inflation
 - A finding backed by one source should use "single source suggests" language. A finding backed by 3+ should use "confirmed by multiple sources." Check for mismatches.
 - Flag: "CONFIDENCE INFLATED: Line [N] uses [strong language] but the finding traces to only [N] source(s)."
+- **Count per finding, never per section.** A section citing two notes is not a section whose findings each have two sources — the ordinary case is finding A from note 1 and finding B from note 2, which is two single-sourced findings sitting next to each other. Resolve each finding to its own citations before comparing anything to its language. Counting the section's distinct sources and applying that total to every finding in it reads two single-sourced claims as mutually corroborated, which is the opposite of what the evidence says.
+- **A statement about source counts is itself a claim, and it gets checked like one.** Methodology & Limitations lines such as "Single-source findings: none" or "both findings rest on two independent sources" are frequently the only place a reader looks for this, and they are written by the same pass that wrote the findings — so they inherit its errors. Verify each against the per-finding counts you just resolved.
+- Flag: "SOURCE-COUNT CLAIM WRONG: Line [N] states [claim about source counts], but [finding] traces to [N] source(s)." *(Observed: a draft's M&L read "Single-source findings: none. Both findings in this section rest on two independent sources" over two findings with one source each, and this check cleared it.)*
 
 ### 8. Source Material Coverage
 - This check runs ONLY when invoked with BOTH a research plan path AND a source material digest path. When invoked with a single file, skip this check entirely.

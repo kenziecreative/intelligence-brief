@@ -89,7 +89,7 @@ noted.
 | **cross-ref** (Connect) | **contradiction materiality**, **shared-origin/echo detection (triangulation)**, **saturation signals (advisory)**, pattern ID | `cross-reference.md`, **`saturation.json`** (W2 — the machine-readable half of the saturation verdict), resets counter, checks **Connect** box, backstage-tasks, Next Action, **`decision-ledger.md` `resolution` entries** (material resolutions only, at resolution time — W6b) |
 | **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed); **reads `saturation.json` and owns the saturation↔adequacy precedence contract + the collection-exhausted decision** (W2) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date), **`decision-ledger.md` `acceptance` entries** (first acceptance only — W6b) |
 | **summarize-section** (Synthesize) | **synthesis / "so what"**, qualifier+range preservation, **counter-evidence gate**, assumption logging, methodology section, runs integrity; **reads the decision ledger pre-draft** (conformance-by-default — W6b) | `drafts/`, `assumptions.md`, `negative-searches.md`, STATE (draft pending) |
-| **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B13** (v2: track 2; B13 disposition conformance — W6b), confidence tiers, deliverable manifest, waivers, **phase closeout** incl. the **criteria preflight** (W6a: SC self-assessment at final-close stage 1, hard stop on plain unmet) and the **advisory criteria trajectory** in phase debriefs | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`), **`decision-ledger.md` `correction` + `directive` entries** (frame corrections at fix time; commissioner directives at (b-final) — W6b) |
+| **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B15** (v2: track 2; B13 disposition conformance — W6b; **B14 referent conformance + B15 source-anchor presence — W1**), confidence tiers, deliverable manifest, waivers, **phase closeout** incl. the **criteria preflight** (W6a: SC self-assessment at final-close stage 1, hard stop on plain unmet) and the **advisory criteria trajectory** in phase debriefs | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`), **`decision-ledger.md` `correction` + `directive` entries** (frame corrections at fix time; commissioner directives at (b-final) — W6b) |
 | phase-insight / graph-analysis / progress | read-only decision-support (progress + start-phase also *validate completion claims* via `check-completion` — verdict outranks STATE text) | nothing |
 | **research-integrity** (agent) | independent provenance/consistency/drift check | **registers cross-phase figures in `canonical-figures.json`** (v2 correction); *reads and surfaces* drift warnings — it does **not** write them |
 | **review-corpus** (runner, W7) | reviewer orchestration, execution metadata, four-inputs coldness, disclosure preflight | **sole writer of `research/reviews/`** pre-close: receipts + reports (immutable), `.failed.json` attempts. Reviewers write nothing. |
@@ -119,7 +119,7 @@ Phase Cycle (5-step checklist), Completed Phases, Key Decisions, Sources Process
 | `bin/where-am-i.py` | computes position from files (project-local so Cowork can run it) | durable |
 | `sources/registry.md` | completion ledger | durable |
 | `discovery/*-candidates.md` | **batch ledger** (`[PROCESSED]` tags = disposition) | durable |
-| `notes/` | per-source structured notes — **the trust anchor (see Seam 0)** | durable |
+| `notes/` | per-source structured notes, each carrying **per-figure records** (`measures` / `not` / `locator` / `verbatim` — W1) — **the trust anchor (see Seam 0)** | durable |
 | `cross-reference.md`, `gaps.md` | regenerated each run (patterns, coverage) | derived |
 | `drafts/` → `outputs/` + `audits/` | synthesis → audited output + reports | durable |
 | `reference/canonical-figures.json` | cross-phase figure registry (written by **integrity**) | durable |
@@ -257,13 +257,27 @@ The constitution. A change that violates one is almost certainly wrong.
 Each labeled by evidence type. Track 2 (the audit battery) partially closed several draft-vs-note
 blind spots; those are noted.
 
-- **Seam 0 — Source-note fidelity (the trust anchor).** Every downstream gate — cross-ref,
-  integrity, audit, synthesis — terminates at the **AI-authored note**, not the original source.
-  Notes are captured without passage/page locators, and no step reopens the original. A
+- **Seam 0 — Source-note fidelity (the trust anchor) — PARTLY addressed in v1.12.0 (W1).**
+  Every downstream gate — cross-ref, integrity, audit, synthesis — terminates at the
+  **AI-authored note**, not the original source, and no step reopens the original. A
   transcription error, dropped qualifier, or selective quote baked into a note passes every later
-  check clean. **[inferred] structurally; arguably the most fundamental gap.** The missing control
-  is source snapshots or passage-level locators + selective original-source revalidation. *(Track
-  2's battery checks draft-vs-note, not note-vs-original — it does not close this.)*
+  check clean. Still **[inferred]**, and still the most fundamental gap: it is the one failure
+  class whose *observation* requires the control that does not exist.
+
+  **What v1.12.0 changed.** Notes now carry a per-figure record (`measures`, `not`, `locator`,
+  `verbatim`), and battery item **B15** asserts every cited figure has a usable anchor. That
+  makes the corpus *checkable* and makes an unlocatable figure a stated fact rather than a silent
+  one. **It does not check the note against the source** — nothing re-reads originals, and a green
+  B15 must never be read as "the notes are faithful." Sampled re-validation at audit was
+  deliberately deferred (W1 fork 2): it needs fetching inside the audit path and fails on exactly
+  the sources that matter most — paywalled, dated, moved.
+
+  **What v1.12.0 also closed, which is a different seam wearing this one's clothes.** The defect
+  observed in eval iteration 28 was draft-vs-note, not note-vs-original: a note's "60–70% of teams
+  report a reduction" became "a 60–70% reduction" in the draft. The digits matched, so every
+  numeric check passed — **referent drift**, now battery item **B14**, with prevention at the
+  writing site (`summarize-section` guardrail 4a). Design and the correction to how W1 got
+  promoted: `dev/researcher/w1-design.md`.
 
 - **Seam 1 — Saturation ↔ adequacy — CLOSED in v1.11.0 (W2).** Was: cross-ref computed
   saturation (Connect); check-gaps owned the stop (Assess) and never read it, so a question

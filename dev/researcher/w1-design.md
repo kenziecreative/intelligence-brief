@@ -114,7 +114,7 @@ independent sources" over two findings with one source each, because it counted 
 the *section* rather than the sources for *each finding*. The count is per finding, not per
 section, and an M&L statement about source counts is a claim like any other.
 
-## Author forks
+## Author forks — all three resolved 2026-08-09 (Kelsey took the recommendation on each)
 
 **Fork 1 — scope of this release.**
 (a) W1 as originally scoped: locators only. Closes Gap A's enabling condition; leaves the
