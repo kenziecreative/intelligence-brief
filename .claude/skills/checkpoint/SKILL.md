@@ -1,12 +1,12 @@
 ---
 name: checkpoint
-description: Capture the state and progress of work in this marketplace repo so the session context can be safely cleared — survey what happened, clean up loose ends, write dev/STATE.md, commit. Run before /clear or at the end of any substantial work session.
+description: Capture the state and progress of work in this marketplace repo so the session context can be safely cleared — survey what happened, clean up loose ends, write dev/<plugin>/STATE.md, commit. Run before /clear or at the end of any substantial work session.
 ---
 
 # /checkpoint
 
-Make the current session disposable: a fresh session reading `AGENTS.md` + `dev/STATE.md`
-should be able to pick up exactly where this one left off, with nothing living only in
+Make the current session disposable: a fresh session reading `AGENTS.md`, `dev/STATE.md`
+(the stream index) and the relevant `dev/<plugin>/STATE.md` should be able to pick up exactly where this one left off, with nothing living only in
 conversation context.
 
 ## Step 1: Survey
@@ -35,25 +35,41 @@ git tag --sort=-creatordate | head -5
   loop in AGENTS.md if a plugin changed: version bump → both descriptions' v-prefix →
   CHANGELOG → root README row → checker → validate), or — if it's genuinely half-done —
   leave it uncommitted and record exactly what it is and what finishing it looks like in
-  STATE.md. Never let uncommitted work go unrecorded.
+  the plugin's STATE.md. Never let uncommitted work go unrecorded.
 - **Stop background tasks** this session started; list anything deliberately left running.
 - **Scratch artifacts** (sample projects, temp dirs, eval `.eval/` runs): don't chase
-  deleting them — note their paths and how to recreate them in STATE.md. (File deletion is
+  deleting them — note their paths and how to recreate them in the plugin's STATE.md. (File deletion is
   gated per folder in Cowork; don't fight it for scratch.)
 
-## Step 3: Write dev/STATE.md
+## Step 3: Write dev/<plugin>/STATE.md
 
-Overwrite `dev/STATE.md` (a snapshot, not a log — git history holds old versions):
+**Write the plugin's own state file — `dev/<plugin>/STATE.md` — not `dev/STATE.md`.**
+`dev/STATE.md` is an index of streams and the branching rule; it is not a state file and a
+checkpoint almost never edits it. Touch it only when a stream's *status* changes (a plugin
+becomes active or goes idle, a new stream starts, a cross-stream item resolves) — one row,
+not prose.
+
+This split is load-bearing. A single whole-repo state file overwritten wholesale is the one
+thing that makes two concurrent plugin streams conflict; every other shared file in this repo
+is row-per-plugin and auto-merges. Writing stream detail into `dev/STATE.md` recreates the
+collision the split exists to remove.
+
+If a session genuinely spanned two plugins, write both files. If it touched only shared
+tooling (`eval/`, `dev/scripts/`, `.claude/skills/`), write the state file of the plugin the
+work was in service of, and say so in its first line.
+
+Overwrite the plugin's file (a snapshot, not a log — git history holds old versions):
 
 ```markdown
-# Work state — kenzie-creative-marketplace
+# Work state — <plugin>
 
 **Last updated:** <date> · **Session focus:** <one line>
 
 ## Where things stand
 
-<Per-plugin: current version, what state it's in, one or two lines. Only entries with
-activity or pending work — link to the plugin's CHANGELOG for full history.>
+<This plugin: current version, what state it's in, branch name, a few lines. Link to its
+CHANGELOG for full history rather than restating it. Note other plugins ONLY where this
+stream actually depends on them.>
 
 ## Done this session
 
@@ -86,12 +102,12 @@ AGENTS.md or a plugin doc instead, put it THERE and skip it here.>
 
 ## Step 4: Commit
 
-Commit `dev/STATE.md` (and any clean work) in logical units. In Cowork, commits work once
+Commit `dev/<plugin>/STATE.md` (and any clean work) in logical units. In Cowork, commits work once
 folder deletion is approved; `git push` is safest from a real terminal.
 
 ## Rules for the content
 
-- STATE.md is a **snapshot**. Overwrite it; don't append. The next session reads the
+- The plugin's STATE.md is a **snapshot**. Overwrite it; don't append. The next session reads the
   current state, not a diary.
 - Be specific in Next Steps: a fresh session should be able to execute each item without
   asking. Point at the grounding doc (`dev/<plugin>/PRD.md`, a CHANGELOG, a skill file).

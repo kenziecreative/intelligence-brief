@@ -1,117 +1,64 @@
-# Work state — kenzie-creative-marketplace
+# Work state — index
 
-**Last updated:** 2026-08-06 · **Session focus:** W6a/b COMPLETE — the prevention layer
-for the credibility gate. Released as **researcher v1.10.0**, committed + tagged on
-`researcher-w6ab`. NOT pushed, and NOT merged to main — that's Kelsey's call. Design +
-fork record: `dev/researcher/w6ab-design.md` (all 4 forks resolved per recommendation).
-Shipped: append-only decision ledger with per-skill writers; B13 disposition conformance;
-criteria preflight (hard stop, evidence-named); advisory criteria trajectory; settled-framing
-guard. Regression: iterations 21→23. **Iteration 21 found 4 red goldens** (2 of them the new
-mechanisms); all 4 green by iteration 23, incl. a post-decision-re-argument defect open since
-iteration 4. **The durable lesson: every fix in 22 and 23 was to how a result is REPORTED,
-not to a detection mechanism — and both reporting failures traced to instruction wording.
-Specifying a rule for an internal step does not bind the turn; saying a contract "binds the
-turn, not just the report" de-emphasised the report into neglect. State two-surface contracts
-symmetrically; enumerate multi-part routes.** Open harness debt (logged, not done): no gate
-sees a STATE write during a write-free preflight, none sees cycle-step/checkbox incoherence,
-and one capture editorialized a turn upward and distorted its score.
+**This file is an index, not a state file.** It says which plugin streams exist, where each
+one's state lives, and how work is branched. It carries no stream detail — that belongs in
+`dev/<plugin>/STATE.md`, one per plugin, written by `/checkpoint`.
 
-## Where things stand
+## Why it is split
 
-- **researcher (1.7.0 released; W7 on branch `researcher-w7`, stages 3–4 done)** —
-  Commits this arc: `7135d13` (stage 3 build) → `2a630bf` (stage-3 hardening from the
-  golden campaign) → `562bcbd` (stage 4 gate wiring). The credibility gate is now
-  **wired**: audit-claims' final closeout is the validator-owned three-stage sequence
-  (with a mutation-free closeout-only re-entry), side doors are closed, sentinel readers
-  validate completion claims (verdict outranks STATE text), and init installs/adopts the
-  full protocol kit (`/research-init upgrade` for existing projects). Validator battery
-  **71/71**, contract hash current. No version bump yet — release is stage 5.
-- **Eval record:** iterations 10–18 = the corpus-scale golden campaign (both goldens
-  judged PASS; every red a true positive — 6 fixture defects, 1 register deficiency, 3
-  phrasing gaps). Iteration 19 = audit-entry regression, all three goldens PASS
-  multi-sampled, zero stage-4 leakage. New harness pieces: `command_exit0` gate type in
-  `eval/lib/run-gates.mjs`, `review_receipt_validates` gate, Credibility Gate rubric
-  dimension, fixtures `corpus-a`/`corpus-b` (neutral names — blind-runner leak defense).
-- **The map** — ARCHITECTURE Layer 9 current (stages 3–4 built/proven; stage 5
-  proposed); Layer 2 gained the runner/validator ownership rows.
-- **Other plugins** — unchanged.
+`dev/STATE.md` used to be one whole-repo file that `/checkpoint` overwrote wholesale. Every
+concurrent plugin stream rewrote it, so any two streams conflicted on it — and on nothing
+else. Measured across six unmerged branches in August 2026: `marketplace.json`, `AGENTS.md`,
+`README.md` and `eval/lib/run-gates.mjs` all auto-merged cleanly, because each plugin edits a
+different row. **`dev/STATE.md` was the only true collision in the repo.** Splitting it is
+what makes two plugin streams independent.
 
-## Done this session
+## Streams
 
-- Stage 3: runner skill + command, brief (C15 + required-evidence + frozen deltas),
-  Tier-2 agent, additive `validate-receipt` mode, corpus-scale fixtures + scenarios +
-  rubric dimension + deterministic receipt gate; two Codex fix-first reviews applied
-  (stage 3: 5 blockers/5 majors; stage 4: 4 blockers/5 majors/1 minor).
-- Stage 4: three-stage closeout, side doors, sentinel readers, init kit + adoption path,
-  tools-guide Codex section, workflow-ownership stop item, validator archive
-  drift-check (battery 69→71).
-- Verification green at every step: self-test 71/71, contract hash matches, plugin
-  validate ×2, check-version-prefix, golden set green (see `_eval/iteration-19/scores.md`).
+| Plugin | Version | Stream state | Status |
+|---|---|---|---|
+| Blueprint | 0.3.1 | `dev/blueprint/` | idle |
+| Goal Setting | 0.2.1 | `dev/goal-setting/STATE.md` | active |
+| Intelligence Briefing | 0.3.0 | `dev/intelligence-briefing/STATE.md` | two branches to reconcile — see below |
+| Photo Generator | 1.2.0 | — | idle |
+| Researcher | 1.10.0 | `dev/researcher/STATE.md` | idle (merged) |
+| Sage | 0.2.0 | `dev/sage/` | idle |
+| Strategist | 0.7.0 | `dev/strategist/STATE.md` | active |
+| Thinkers | 0.1.0 | `dev/thinkers/` | idle |
 
-## In flight / uncommitted
+Repo-wide tooling (`eval/`, `dev/scripts/`, `.claude/skills/`) has no stream file; changes to
+it ride whichever plugin branch needs them, and it is shared — see the collision rule below.
 
-None. Working tree clean at `562bcbd`.
+## How plugin work is branched
 
-## Next steps (in order)
+**One plugin, one branch, one worktree.** A stream working on plugin `X`:
 
-0. **Push** (Kelsey): `git push origin main researcher-v1.8.0` publishes v1.8.0 to the
-   marketplace. Also Cowork-side verification of the review/closeout surfaces (build
-   model: each surface tested by the tool that sees it) — structural checks done here
-   (no hook dependencies; plain python3), live Cowork pass still open.
-0a. **Kelsey's engine corpus has 8 open material findings** from the live dual-tier
-   review (t1: 6 — incl. OD-6 ownership contradiction, $29 floor-vs-top residue,
-   WTP-spec rule conflict; t2: 2 — stale 05a scope-limitation paragraph, 11:353
-   floor-of-class reintroduction; full receipts/reports in the session scratchpad's
-   live-run/ + live-remediated/research/reviews/, which are SESSION-TEMPORARY — the
-   durable record is this list + the readout). To act on them properly: in the real
-   repo, `/research-init upgrade` then `/research-review-corpus final`, then adjudicate
-   via the new ledger procedure in audit-claims.
-1. **(retired) W7 stage 5 — done:** dual-tier review (`/research-review-corpus
-   final`, t1+t2) of the remediated engine corpus (repo
-   `~/Projects/_shared/helloalice-research`, project
-   `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated
-   `93ec4fc`+; snapshot via `git archive`); the validator against the pre-remediation
-   snapshot must block; Cowork path test; Codex review of the whole W7 change; five
-   version surfaces + CHANGELOG + tag `researcher-v1.8.0` (or as decided); merge
-   `researcher-w7`.
-2. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`, program-status
-   block current): W6a/b → W2 → W3 → W1 → rest. Chips pending: audit-register cleanup
-   (`task_73dee9b0`), Evidence-Against golden (`task_c631be46`), FAIL-branch durable
-   manifest (`task_d6b356eb`, new this session).
+1. Branches from current `main` — never from another plugin's branch.
+2. Touches `X/`, `dev/X/`, `eval/targets/X/`, and its own rows in the shared registries
+   (`.claude-plugin/marketplace.json`, `README.md`, `AGENTS.md`). Those registries are
+   *row-per-plugin*, so two streams editing different rows merge without conflict.
+3. Writes stream state only to `dev/X/STATE.md`. Never to this file.
+4. Merges back to `main` when its release loop is green (see `AGENTS.md`).
 
-## Open questions / decisions pending
+**The shared-tooling exception.** `eval/lib/`, `dev/scripts/`, and `.claude/skills/` are
+genuinely shared. Two streams changing the same shared file will conflict, legitimately.
+Keep those changes small and merge them promptly rather than letting them sit on a long-lived
+plugin branch.
 
-- **Spec calls for Kelsey to eyeball** (all recorded in-protocol with rationale):
-  additive `validate-receipt` mode (§9, stage 3); archive drift-check tightening of
-  `check-completion` (stage 4 — spec-compliance reading of §1.4/§6.4); rubric kept
-  strict on clean-run gate-semantics close (skill emits it unconditionally).
-- Eval-harness follow-ups (non-blocking, from iteration 19): runner scenario-extractor
-  must project only entry/setup/user_messages (one runner accidentally printed
-  judge-only fields; judge adjudicated the capture clean); No-Tics rubric question
-  (within-turn vs cross-turn recurrence); assorted surface-for-decision items in
-  `_eval/iteration-19/scores.md`.
+**Don't leave a branch behind `main` for long.** The August 2026 backlog had branches 40–114
+commits behind; every one of them still merged clean, but that was luck, not design.
 
-## Session knowledge worth keeping
+## Open cross-stream items
 
-- **Branch `researcher-w7`** until stage-5 release; STATE.md commits ride it.
-- **Contract-hash sync rule** unchanged (validator edit → regenerate contract from
-  `hash-self`).
-- **Codex background gotchas:** always `< /dev/null`; if a large argv prompt dies
-  instantly (exit 1, empty streams) while tiny prompts work, feed the prompt via stdin
-  (`codex exec ... "Follow the instructions on stdin." < prompt.md`).
-- **Eval blind-runner surfaces:** fixture names, adapter prose, and dir names must not
-  encode expected outcomes; judge-only truth lives in coverage.md / rubric /
-  expected_behavior / seed_notes. Sampler variance is real: a clean corpus must be
-  *actually* clean, not clean-on-one-roll — the seven-repair corpus-b saga (iterations
-  10–17) is the case study.
-- **Multi-sample rule bites:** goldens whose critical dimensions are noisy run 3×,
-  worst sample decides — iteration 19 honored it (waiver + override 3×, manifest 1×).
+- **Intelligence Briefing has two competing branches** — `review/intelligence-briefing`
+  (parked mid-Codex-review) and `blueprint-guide-drift` (v0.3.1, merged). They overlap on
+  `plugin.json`, `CHANGELOG.md` and `environmental-briefing/SKILL.md`. Reconciling them is a
+  session of its own.
+- **`backup/ec65313-two-releases`** holds one commit not in `main` or any other branch.
+  Deliberately untouched; confirm it is disposable before deleting.
 
 ## How to resume
 
-1. Read `AGENTS.md`, then this file. Confirm branch `researcher-w7`.
-2. For stage 5: protocol §§6, 8, 9 + the runner skill's `final` mode; engine-corpus
-   coordinates above; release ritual in researcher/AGENTS.md ("Maintaining this
-   plugin"); update the plan file's program-status block at every stage move.
-3. Build discipline (standing): one change at a time; Codex-review before ship; eval
-   regression on changed skills; sync ARCHITECTURE in the same change.
+1. Read `AGENTS.md` (orientation and the release loop).
+2. Read the `dev/<plugin>/STATE.md` for the plugin you're picking up.
+3. Branch from current `main`.
