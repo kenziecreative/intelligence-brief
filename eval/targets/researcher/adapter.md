@@ -147,10 +147,17 @@ inverts per scenario. Grow the gate set as the pack matures.
 Plus `content_lint` checks: no `[TODO]`/`[TBD]`/`[placeholder]` tokens in the
 conventional draft or promoted output (→ Traceability), both optional-file.
 
+The table above lists this pack's **structural** gates only. The rest of the gate set is
+documented judge-side in `coverage.md`, because this file is runner-visible and a gate on
+*behavior* becomes an answer key the moment it is written down here. Maintainers: that
+omission is deliberate — do not "complete" the table.
+
 **What the runner must record** (`gate-inputs.json`): `entry`, plus for judge use:
-`expected_promotion` (did the scenario expect the draft to be promoted), and
+`expected_promotion` (did the scenario expect the draft to be promoted),
 `seeded_files` (the list of setup-written paths, so the judge can distinguish seeded
-state from run-produced state). For `review-corpus` entries additionally:
+state from run-produced state), and `artifacts_written` (every path the run produced or
+modified — a script checks each one exists, so seeded-but-untouched files do not belong
+on it). For `review-corpus` entries additionally:
 `receipt_written` (bool), `receipt_validated` (did `validate-receipt` exit 0),
 `verdict` (the receipt's verdict), and `material_classes` (the classes of material
 findings in the receipt) — the judge grades seeded-class recall from these plus the

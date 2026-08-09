@@ -40,6 +40,43 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Unselected candidates surfaced by disposition pass (no ledger row exists) | Pass-2 F3 bypass | `adv-unselected-invisible` | ✓ |
 | `confirm: <side>` against the assessment derives user_override=true | Pass-2 F6 bypass | `adv-confirm-side-override` | ✓ |
 | Corpus credibility review finds the seeded corpus-level defects (W7 known-bad mini-corpus `corpus-a`, 7 classes) | W7 engine-corpus incident + spike | `adv-review-corpus-a` | ✓ |
+| Counter-evidence routes as a synthesis obligation, not a discovery target (`Evidence Against`) | W2 protection (plan chip `task_c631be46`) | `adv-evidence-against-routing` | ✓ |
+
+**Why the Evidence-Against golden exists, and why it landed before W2.** W2 builds the
+saturation → stop-decision routing contract, and `Evidence Against` is the state where the
+obvious route is the wrong one: the question has active counter-evidence and no supporting
+evidence, so it is neither answered nor answerable by collecting more. The skill already
+says so (`research-check-gaps`: "Not Started questions are discovery targets. Evidence
+Against questions are synthesis challenges"), but nothing tested it — so W2 could route
+saturation over the top of that distinction and no scenario would notice. The golden pins
+the behavior *before* the routing contract is built, which is the only order in which a
+regression test can protect anything.
+
+## Deterministic gates (judge-side — deliberately NOT in adapter.md)
+
+The gate table in `adapter.md` lists only structural gates, because the runner reads that
+file. These three check **behavior**, so naming them there would hand the system under test
+its own answer key — a runner told that cycle coherence is gated will tidy the checkboxes
+the skill forgot to tidy, which is precisely the defect being measured.
+
+| Gate | Invariant | Feeds |
+| --- | --- | --- |
+| `state_cycle_coherent` | `research/STATE.md`'s `Cycle step` field and its five-box checklist describe the same position: the ordinal matches the step, every earlier step is checked, the active step and every later one are not. Runs `checks/state-coherence.mjs`; n/a on a closed project (no active cycle). | State Integrity |
+| `state_unchanged_on_write_free` | On a scenario declaring `write_free_run`, `research/STATE.md` is byte-identical to seed. Fires the Completion Integrity anchor-3 clause "nothing written to the corpus during the preflight" as a script check rather than a judgment. | Completion Integrity |
+| `decision_ledger_unedited` | On a scenario declaring `ledger_frozen`, `research/reference/decision-ledger.md` is byte-identical to seed — the append-only ledger's "no existing entry edited" clause. | Disposition Conformance |
+
+Both `file_unchanged` gates need the orchestrator to stage `_seed/<file>` from the
+scenario's setup **after** the run; a missing baseline fails loudly rather than skipping.
+
+**Standing finding as of this pack version.** `state_cycle_coherent` goes red on three
+existing goldens (`adv-exclusion-visibility`, `adv-counter-evidence-valve`,
+`adv-confirm-side-override`) — 13 of 41 captures across iterations 20–22. Those are true
+positives against the plugin, not gate miscalibration: `research-cross-ref` step 10 and
+`research-summarize-section` step 10 tell the skill to tick its checkbox and never to move
+the `Cycle step` pointer, and `research-check-gaps`' gaps-remain rollback unchecks Collect
+and Assess while leaving Connect checked. Only `check-gaps` was ever told to reconcile the
+two representations, and it reconciles them incompletely. Expect these red until the
+routing work fixes the writes.
 
 ## Known-uncovered classes (deliberate, with reasons)
 

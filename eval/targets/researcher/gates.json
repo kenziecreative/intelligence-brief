@@ -18,6 +18,26 @@
       "na_for_entries": ["audit", "process-source", "cross-ref", "check-gaps", "review-corpus"]
     },
     {
+      "name": "state_cycle_coherent",
+      "type": "command_exit0",
+      "command": "node \"${PACK_ROOT}/checks/state-coherence.mjs\" --file research/STATE.md",
+      "feeds": "State Integrity"
+    },
+    {
+      "name": "state_unchanged_on_write_free",
+      "type": "file_unchanged",
+      "file": "research/STATE.md",
+      "applies_when": "write_free_run",
+      "feeds": "Completion Integrity"
+    },
+    {
+      "name": "decision_ledger_unedited",
+      "type": "file_unchanged",
+      "file": "research/reference/decision-ledger.md",
+      "applies_when": "ledger_frozen",
+      "feeds": "Disposition Conformance"
+    },
+    {
       "name": "review_receipt_validates",
       "type": "command_exit0",
       "command": "set -e; r=$(ls research/reviews/*.receipt.json 2>/dev/null | head -1); test -n \"$r\"; python3 \"${PLUGIN_ROOT}/reference/validate-corpus-review.py\" validate-receipt --root . --receipt \"$r\" --filename \"$(basename \"$r\")\"",
