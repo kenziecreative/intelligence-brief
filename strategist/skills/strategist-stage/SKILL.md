@@ -123,6 +123,10 @@ the leaks someone already found. These are the shapes it has actually failed in:
   checklist read aloud.
 - **Naming the file.** "Recorded in the brief and the state file." "Written into
   `strategy/DECISION.md`." Say *what* you recorded. Where it lives is your business.
+  **One exception, and only one:** the rendered transition block at the end of Step 6 says
+  `Captured in strategy/brief.md.` That block is a structured affordance, not advisor
+  speech — it is boxed, it lists commands, and a path is the useful thing there. Render it
+  as written. Everywhere else in conversational prose, the path stays backstage.
 - **Narrating a step this skill calls silent.** If the instruction says silently, then "I've
   saved that so it's not lost" is the breach — the silence was the whole point.
 - **Relaying an internal format.** Findings come back from the critic in an agent-to-agent
