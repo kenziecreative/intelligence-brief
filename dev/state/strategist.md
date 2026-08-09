@@ -1,6 +1,6 @@
 # Stream: strategist
 
-**Status:** live — v0.7.0 merged to `main`, untagged, one verification run outstanding.
+**Status:** live — v0.7.0 merged and tagged; full eval suite outstanding.
 **Worktree:** merged from `claude/git-branch-verification-f49849` (branch retired after merge)
 **Last touched:** 2026-08-09
 
@@ -10,13 +10,13 @@
 
 ## Where it stands
 
-**v0.7.0, merged to `main`, NOT TAGGED.** Two fixes: the Synthesise commitment gate now closes
+**v0.7.0, merged to `main` and tagged `strategist-v0.7.0` at `bdf4f5d`.** Two fixes: the Synthesise commitment gate now closes
 on an explicit user override (it could previously stall asking the user to dispose of
 pressure-test findings), and the narration firewall is one rule across three skills instead of
 one, held by a release-blocking drift contract (`narration_firewall_test`).
 
-**Three releases are untagged: v0.5.0, v0.6.0, v0.7.0.** Latest strategist tag is
-`strategist-v0.4.2`. v0.6.0 was tagged and deliberately retracted when its own eval found a
+**All three releases are now tagged** (v0.5.0, v0.6.0, v0.7.0), backfilling from
+`strategist-v0.4.2`. v0.6.0 had been tagged and deliberately retracted when its own eval found a
 regression — a pending human call, not an oversight. Full history: `strategist/CHANGELOG.md`.
 
 ## Done in the last session

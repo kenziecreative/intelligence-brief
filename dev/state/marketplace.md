@@ -1,6 +1,6 @@
 # Stream: marketplace
 
-**Status:** live — merge backlog cleared, `main` not yet pushed.
+**Status:** idle — merge backlog cleared, tagged, and pushed. Nothing in flight.
 **Worktree:** `core-kenzie-marketplace` (primary) · branch `main`
 **Last touched:** 2026-08-09
 
@@ -15,8 +15,12 @@ table and the AGENTS list: blueprint 0.3.1, goal-setting 0.2.8, intelligence-bri
 photo-generator 1.2.0, researcher 1.10.0, sage 0.2.0, security 0.1.0, strategist 0.7.0,
 thinkers 0.1.0, trailhead 0.1.0.
 
-**`main` is ahead of `origin/main` and has not been pushed.** That is the one outstanding
-action on this stream.
+**`main` is pushed and every plugin version carries its tag.** Six tags created this
+session: `strategist-v0.5.0`, `strategist-v0.6.0`, `strategist-v0.7.0`,
+`goal-setting-v0.2.8`, `intelligence-briefing-v0.3.1`, `trailhead-v0.1.0`.
+`strategist-v0.7.0` points at `bdf4f5d`, not the `2b18f7d` release commit — `bdf4f5d`
+fixed a self-contradiction in the firewall with no version bump, so it is v0.7.0's true
+content.
 
 ## Done this session
 
@@ -49,21 +53,21 @@ None. Tree clean, all validation green.
 
 ## Next steps (in order)
 
-1. **Push `main`.** Outward-facing, so it waits on Kelsey.
-2. **Reconcile intelligence-briefing's two branches.** `review/intelligence-briefing` is 10
+1. **Reconcile intelligence-briefing's two branches.** `review/intelligence-briefing` is 10
    ahead and 72 behind, parked mid-Codex-review since 2026-07-12; `blueprint-guide-drift`
    (now merged) shipped 0.3.1 over the same files — `plugin.json`, `CHANGELOG.md`,
    `skills/environmental-briefing/SKILL.md`. Its own session.
-3. **Decide `backup/ec65313-two-releases`.** One commit not in `main` or any other branch.
+2. **Decide `backup/ec65313-two-releases`.** One commit not in `main` or any other branch.
    Left untouched deliberately; confirm it's disposable before deleting.
-4. **Tags.** Several merged releases are untagged, strategist most notably (v0.5.0, v0.6.0,
-   v0.7.0 all untagged; latest tag is `strategist-v0.4.2`). See `dev/state/strategist.md`.
+3. **Full strategist eval suite** against merged `main` (iteration-12). v0.7.0 is tagged on
+   a 5x verification of the blocker scenario only; the other nine surfaces the narration
+   firewall touches have not been re-run. See `dev/state/strategist.md`.
 
 ## Open questions / decisions pending
 
-- **Push timing** — nothing is published until `main` is pushed.
-- **Whether to delete the six merged branches.** All are 0 ahead of `main` and safe to remove;
-  left in place because deletion wasn't asked for.
+- **Stale remote branches.** `origin` still carries `security`, `trailhead-v0.1.0` and
+  `goal-setting-eval-target`, all fully merged into `main` or superseded. Safe to prune with
+  `git push origin --delete <branch>`; nothing is lost since the content is in `main`.
 
 ## Session knowledge worth keeping
 
