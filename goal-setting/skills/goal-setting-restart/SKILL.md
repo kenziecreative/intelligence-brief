@@ -31,10 +31,18 @@ system: it exists so a lapse interrupts the practice rather than ending it.
 wastes the time the practice needs. Treat it like a missed workout: note it, restart, move on.
 Do not run a post-mortem on the lapse.
 
-**2. Re-score the Anchor Areas.** Scores have moved — some 7s decayed to 5s, some ignored areas
-became urgent. Run a quick, honest re-score across the seven (ten minutes; use the chapters in
-`${CLAUDE_PLUGIN_ROOT}/reference/anchor-areas/` if needed). Append a dated snapshot to
+**2. Re-score the Anchor Areas.** Scores may have moved — a 7 can decay to a 5, an ignored area
+can become urgent. Run a quick, honest re-score across the seven (ten minutes; use the chapters
+in `${CLAUDE_PLUGIN_ROOT}/reference/anchor-areas/` if needed). Append a dated snapshot to
 `goals/scorecard.md`. Keep the active set within the max-three cap.
+
+**Read `goals/scorecard.md` before you frame the ask.** If it holds dated scores, you may
+contrast against them and should name the date you're contrasting with. **If Score History is
+empty, there is no previous number** — ask for the score plainly and don't imply one exists.
+*"I'd rather have this week's honest number than the one from six weeks ago"* invents a prior
+reading and a date for it; against an empty scorecard both halves are fiction. The instinct is
+right — a fresh number beats a stale one — but say it without conjuring the stale one:
+*"Where's Demand Generation sitting today, one to ten?"* does the same work and is true.
 
 **3. Restart with ONE system, not all of them (HARD CONSTRAINT).** The temptation is to
 relaunch at full intensity. Refuse it. Have the user choose the **single** most important

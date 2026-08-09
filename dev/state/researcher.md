@@ -1,4 +1,19 @@
-# Work state — kenzie-creative-marketplace
+# Stream: researcher
+
+**Status:** live — researcher **v1.10.0** committed + tagged on `researcher-w6ab`; **not pushed, not merged to main** (Kelsey's call).
+**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `researcher-w6ab`
+**Last touched:** 2026-08-06
+
+> **Provenance.** This file was split out of the monolithic `dev/STATE.md` on 2026-08-07, when
+> main merged into `convergence/goal-setting`. Everything below is main's `dev/STATE.md` body
+> carried over **verbatim** — the researcher stream's own snapshot, moved to where the
+> per-worktree architecture says it belongs. Nothing was edited, so read it as a 2026-08-06
+> snapshot, not as current fact. Note it is internally stale in places: the header says v1.10.0
+> while the body below still describes v1.7.0/W7 and a pending `researcher-v1.8.0` push. That
+> inconsistency is main's, and it is exactly the lost-update bug the split exists to prevent.
+
+---
+
 
 **Last updated:** 2026-08-06 · **Session focus:** W6a/b COMPLETE — the prevention layer
 for the credibility gate. Released as **researcher v1.10.0**, committed + tagged on

@@ -1,12 +1,12 @@
 ---
 name: checkpoint
-description: Capture the state and progress of work in this marketplace repo so the session context can be safely cleared — survey what happened, clean up loose ends, write dev/<plugin>/STATE.md, commit. Run before /clear or at the end of any substantial work session.
+description: Capture the state and progress of work in this marketplace repo so the session context can be safely cleared — survey what happened, clean up loose ends, write this workstream's dev/state/<stream>.md, commit. Run before /clear or at the end of any substantial work session.
 ---
 
 # /checkpoint
 
-Make the current session disposable: a fresh session reading `AGENTS.md`, `dev/STATE.md`
-(the stream index) and the relevant `dev/<plugin>/STATE.md` should be able to pick up exactly where this one left off, with nothing living only in
+Make the current session disposable: a fresh session reading `AGENTS.md` + `dev/STATE.md` + its stream file
+should be able to pick up exactly where this one left off, with nothing living only in
 conversation context.
 
 ## Step 1: Survey
@@ -35,41 +35,42 @@ git tag --sort=-creatordate | head -5
   loop in AGENTS.md if a plugin changed: version bump → both descriptions' v-prefix →
   CHANGELOG → root README row → checker → validate), or — if it's genuinely half-done —
   leave it uncommitted and record exactly what it is and what finishing it looks like in
-  the plugin's STATE.md. Never let uncommitted work go unrecorded.
+  your stream file. Never let uncommitted work go unrecorded.
 - **Stop background tasks** this session started; list anything deliberately left running.
 - **Scratch artifacts** (sample projects, temp dirs, eval `.eval/` runs): don't chase
-  deleting them — note their paths and how to recreate them in the plugin's STATE.md. (File deletion is
+  deleting them — note their paths and how to recreate them in your stream file. (File deletion is
   gated per folder in Cowork; don't fight it for scratch.)
 
-## Step 3: Write dev/<plugin>/STATE.md
+## Step 3: Write YOUR STREAM's state file
 
-**Write the plugin's own state file — `dev/<plugin>/STATE.md` — not `dev/STATE.md`.**
-`dev/STATE.md` is an index of streams and the branching rule; it is not a state file and a
-checkpoint almost never edits it. Touch it only when a stream's *status* changes (a plugin
-becomes active or goes idle, a new stream starts, a cross-stream item resolves) — one row,
-not prose.
+**State is split per workstream, and this is the step where that matters most.** Several
+worktrees run against this repo at once (`core-kenzie-marketplace` on `main`,
+`kenzie-build-strategist`, `kenzie-build-goal-setting`). They used to share one `dev/STATE.md`,
+and a shared snapshot under concurrent writers is a **lost-update bug**: whoever checkpointed last
+silently erased everyone else's. A goal-setting session once opened a STATE file whose "next
+steps" were the strategist's.
 
-This split is load-bearing. A single whole-repo state file overwritten wholesale is the one
-thing that makes two concurrent plugin streams conflict; every other shared file in this repo
-is row-per-plugin and auto-merges. Writing stream detail into `dev/STATE.md` recreates the
-collision the split exists to remove.
+So:
 
-If a session genuinely spanned two plugins, write both files. If it touched only shared
-tooling (`eval/`, `dev/scripts/`, `.claude/skills/`), write the state file of the plugin the
-work was in service of, and say so in its first line.
-
-Overwrite the plugin's file (a snapshot, not a log — git history holds old versions):
+1. **Identify your stream** — the worktree/branch you're actually in. `dev/STATE.md` is the index;
+   your stream's file is `dev/state/<stream>.md`.
+2. **Overwrite ONLY your stream's file** (a snapshot, not a log — git history holds old versions).
+3. **Touch only your own row** in `dev/STATE.md` (the "Last touched" date). Never rewrite another
+   stream's file or its row, and never "tidy up" a stream that looks stale — **a quiet stream is
+   parked, not dead.** If you genuinely believe another stream's file is wrong, say so to the user;
+   don't correct it from outside.
+4. If your work is a **new** stream, add a row and create its file.
 
 ```markdown
-# Work state — <plugin>
+# Stream: <name>
 
-**Last updated:** <date> · **Session focus:** <one line>
+**Status:** <live / live-but-paused / blocked on X> — <one line; say plainly if something is RED>
+**Worktree:** `<dir>` · branch `<branch>`
+**Last touched:** <date>
 
-## Where things stand
+## Where it stands
 
-<This plugin: current version, what state it's in, branch name, a few lines. Link to its
-CHANGELOG for full history rather than restating it. Note other plugins ONLY where this
-stream actually depends on them.>
+<Current version, what's committed vs pushed, what's red. Link the CHANGELOG for full history.>
 
 ## Done this session
 
@@ -96,18 +97,18 @@ AGENTS.md or a plugin doc instead, put it THERE and skip it here.>
 
 ## How to resume
 
-1. Read `AGENTS.md` (orientation), then this file.
+1. Read `AGENTS.md` (orientation), then `dev/STATE.md` (the index), then this file.
 2. <Any session-specific resume steps.>
 ```
 
 ## Step 4: Commit
 
-Commit `dev/<plugin>/STATE.md` (and any clean work) in logical units. In Cowork, commits work once
+Commit your stream file + the `dev/STATE.md` index row (and any clean work) in logical units. In Cowork, commits work once
 folder deletion is approved; `git push` is safest from a real terminal.
 
 ## Rules for the content
 
-- The plugin's STATE.md is a **snapshot**. Overwrite it; don't append. The next session reads the
+- Your stream file is a **snapshot**. Overwrite it; don't append. The next session reads the
   current state, not a diary.
 - Be specific in Next Steps: a fresh session should be able to execute each item without
   asking. Point at the grounding doc (`dev/<plugin>/PRD.md`, a CHANGELOG, a skill file).

@@ -73,6 +73,20 @@ intelligent adaptation, not a guilt ritual — you're asking "is the design work
    yes or no. If anything is no, unknown, or mixed, capture the free-text "what needs to
    change."
 
+   **`kr_progressing` is read against the KR's own measure — nothing else counts as movement.**
+   Work done toward a KR is not the KR moving. If the Key Result is *signed retainers* and the
+   week produced two booked conversations, the honest record is `unknown`: booked is not
+   signed, and the leading indicator moving is exactly the situation where the outcome may
+   still be stuck. Check what the KR actually measures in `goals/active.md` before you write
+   the value — the temptation is strongest on good news, because the activity is real and the
+   user is pleased with it.
+
+   **Say the gap, don't just file it.** Either ask the converting question — *"has any of that
+   turned into a signed one yet?"* — or state plainly that the read is open: *"two booked is
+   real, and I'll leave the retainer count unread until one closes."* What you must not do is
+   grade the goal silently in either direction. Recording `yes` takes a business call that is
+   the owner's; recording `unknown` without saying so leaves them thinking you agreed.
+
 2. **Sweep the weekly mitigation triggers** (one line, only if any exist): for each
    mitigation in `goals/active.md` with `check_frequency: weekly` — "any of these trip last
    week: <conditions>?" Three honest outcomes per signal: **fired** (set `triggered_active`,
@@ -145,6 +159,25 @@ from the journal's restart and weekly entries, write them, and continue.)
 
 Record every transition in the journal restart line and in STATE (`restart_phase`, the
 restart flags, `Next due`).
+
+**Then say it in the room, not in the schema.** This section is written in state-machine
+vocabulary because the files need it; the user never does. **Every turn that touches the
+transition is speech** — the recap at the end, *and the offer one turn earlier*, and any question
+you ask about it. Both of the last two leaks came out of this section: first the recap printed the
+transition as the record holds it, then the recap was fixed and the offer leaked instead. Neither
+felt like talking. Both were (heartbeat §5).
+
+Bad (the recap): "Restart: hold met on outreach (2 clean weeks) → reintroducing. Friday QA review
+hour is now the system under evaluation; clean-week count reset to 0."
+Bad (the offer): "The queue has the QA hour lined up first, then the pricing audit. Keep that
+order, or swap?"
+Good (the offer): "The QA hour's next in line, then the pricing audit — keep that order, or would
+you rather swap them?"
+Good (the recap): "Two clean weeks on the outreach block — the QA hour comes back this week. It
+gets its own two clean weeks before the pricing audit follows."
+
+Phase names, the clean-week counter, **the word "queue"**, and `status:` values live in the files.
+What the user hears is which system just came back, what's next in line, and what it has to hold.
 
 ---
 

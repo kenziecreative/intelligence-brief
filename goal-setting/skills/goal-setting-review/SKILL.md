@@ -63,6 +63,22 @@ For **each active Objective:**
    #5 (lower the target). Make them walk past dose, time, mechanism, and metric first —
    with their own weekly record as the evidence. Where the record shows `mixed`, untangle
    the split here: which KR moved, which system ran, and what that pair actually says.
+
+   **Record the classification; speak its gloss.** `insufficient_time` is a field value, not
+   a sentence. Write the label into the record and tell the user what it *means* — "too early
+   to call; the lag you set hasn't run out." Never hand them the key (heartbeat §5).
+
+   **Land the call.** The differential is answerable from the record the deployment already
+   keeps: the system's experiment terms (dose, lag, minimum duration, decision rule) plus the
+   weekly entries. Check them before asking the user for anything — a question whose answer is
+   written in `goals/active.md` is a stall, and it reads as one. `unknown` is the honest
+   landing when the record is genuinely too thin (a month of `unknown` pulses), not a place to
+   stop when the record is thin only because you didn't read it.
+
+   Steps 1 and 2 both turn on arithmetic — how many times it ran, how long it has had. Do that
+   arithmetic against the dates and entries, never by estimate (Guardrail 3). "Roughly two
+   months of conversations" and "about five weeks left" are the shapes to watch for: they sound
+   like readings and are guesses, and the owner has no way to tell the difference.
 3. **Check the countermetric** (if the Objective's goal contract names one): did the thing
    that must not deteriorate hold? A KR on track at the countermetric's expense is a finding,
    not a win.
@@ -75,7 +91,10 @@ For **each active Objective:**
 
 **If a change revises a KR or an Objective, the original commitment is preserved — never
 overwritten.** Append a revision record under that goal in `goals/active.md` before making
-the change:
+the change.
+
+The shape (`<angled>` parts are yours to fill; **the square brackets around the date are
+literal — type them**):
 
 ```
 - revised [YYYY-MM-DD]: <field> was <original target> (actual at change: <current value>) →
@@ -83,6 +102,27 @@ the change:
   justified it — usually goal_wrong or metric_wrong; a revision claiming any other
   classification deserves a second look>.
 ```
+
+Filled, so there's no ambiguity about the brackets — this is exactly what a real line looks like:
+
+```
+- revised [2026-08-01]: KR target was 3 signed retainers by Sep 30 (actual at change: 0) →
+  now 1 signed retainer by Sep 30. Reason: the owner judged the original too ambitious.
+  Classification: goal_wrong — owner's call; the stated reason is a volume read, not the
+  offer-based pipeline evidence this goal's contract set as its revision bar.
+```
+
+The bracketed date is what makes revisions findable across a long `active.md` (it matches the
+journal's `- **[2026-07-28] weekly**` convention). A revision written without them is still an
+honest record, but it is one nobody can grep for.
+
+**Push once, then write it (heartbeat §4a).** The revision conditions in the goal's contract are
+there to make the change *examined*, not to make it *impossible*. Cite them, say plainly if the
+user's stated reason doesn't clear the bar they set for themselves, and then — if they still want
+the change — **make it, and record it with that note attached.** The target is theirs. Refusing to
+write leaves `active.md` asserting a commitment the owner has already retired, which is not
+holding the line; it is just a file that lies. The honest note in the Classification field is how
+the record keeps its integrity. Withholding the pen is not.
 
 The revised goal keeps its full record; a goal that gets easier quietly is exactly what this
 line exists to prevent. If the revision is deep enough that it's really a *different*
@@ -115,6 +155,22 @@ force — and **nothing gets planned until the outgoing quarter is closed.**
    three-goal cap without inventing an archival step under pressure; a quarter that ends
    with three actives and no dispositions is the forbidden-fourth trap. The disposition
    calls are the user's; requiring *a* disposition is yours.
+
+   Ask for the dispositions in plain language, never as a menu of the schema's four values
+   (heartbeat §5): *"did it get there, did it fall short, or did you stop working it?"* The
+   label is yours to write down; the call is theirs to make.
+
+   **Commit the closeout before you go on — it is its own durable event.** The moment the last
+   record lands in `goals/history.md`, write the dated closeout entry to `goals/journal.md`
+   (`- **[YYYY-MM-DD] quarterly** — closeout: <objective> <disposition>, …`, one line per
+   Objective with its lessons) and update `Quarterly review last run` and the Current Period in
+   `goals/STATE.md`. **Do not defer these writes to the end of the review.** The quarterly is a
+   half-day cadence and it gets interrupted; this step has already emptied `active.md` and moved
+   three commitments to history, so a session that dies at step 2 would otherwise leave a
+   deployment whose files say the quarter was never closed while its goals are already gone. The
+   record must survive the session that made it. If the remaining steps don't run today, note
+   what's outstanding in Backstage Tasks and pick it up next time — a closeout that happened is
+   never a closeout that isn't written down.
 2. **Re-run the Anchor Areas Scorecard.** Fresh diagnostic, not a reaffirmation — has anything
    moved? Did the focused area improve? New vulnerabilities? Score all seven honestly (use the
    chapters in `${CLAUDE_PLUGIN_ROOT}/reference/anchor-areas/` and the signals of strength as
@@ -143,10 +199,15 @@ force — and **nothing gets planned until the outgoing quarter is closed.**
    recorded protocol as the Setup close. New commitments get the critic before they start,
    not after they wobble.
 
-Write the full quarterly entry to `goals/journal.md` (dispositions with lessons, updated
-scorecard snapshot, system keep/revise/retire decisions, backlog decisions, next-quarter
-Objectives, revised mitigations). Update the `Quarterly review last run` and the Current
-Period (advance the quarter) in `goals/STATE.md`.
+Complete the quarterly entry in `goals/journal.md` — the closeout line is already there from
+step 1; extend it with the rest of the review (updated scorecard snapshot, system
+keep/revise/retire decisions, backlog decisions, next-quarter Objectives, revised mitigations).
+Advance the Current Period (the new quarter) in `goals/STATE.md`.
+
+Each step of the quarterly writes as it finishes, rather than banking every write for the end.
+A half-day cadence is one that gets interrupted, and an interrupted review must leave the files
+telling the truth about how far it got — never a half-applied quarter that reads as if nothing
+happened.
 
 ---
 
@@ -185,13 +246,36 @@ outgrew years ago. That's the failure the annual check exists to prevent.
    preserving the original target and the actual at the time of change; closed goals keep
    their full record in `goals/history.md`. A commitment can end honestly; it cannot
    disappear.
-3. Carry the chief-of-staff posture: push on soft assessments ("it's fine" without evidence),
+3. **Every number you hand the owner is derived, not estimated.** This is heartbeat §1 applied
+   to arithmetic: durations, counts and elapsed time are claims about their record, so subtract
+   the dates in `goals/active.md`, count the entries in `goals/journal.md`, then say the result.
+   Three ways this goes wrong here, all of them the differential's own arithmetic:
+   - **Elapsed time and execution count are different facts — read each from its own source.**
+     `running since` gives you elapsed time, and that is what the minimum test duration and the
+     lag are measured against. The weekly entries give you how many times it ran. Report each
+     from where it actually comes from; do not derive one from the other in either direction.
+   - **Never state more executions than the record holds.** "Every week for eight weeks" when
+     the journal has four entries is the failure this rule exists for — say four.
+   - **A gap in the journal is not evidence the system didn't run, and it does not restart the
+     duration clock.** An owner who executed without logging is the common case, not the
+     exception. Where the window is longer than the record, name the gap and let them resolve
+     it — *"the block's been live eight weeks; I've got four weeks of entries. Did the earlier
+     ones run?"* — rather than either crediting weeks you cannot see or retreating to *too
+     early to call* when the recorded terms already answer the question.
+   - **An event the record never dated has no date.** If nothing says when the work stopped,
+     "it stopped mid-quarter" invents a fact out of an absence. Say what the record says: the
+     audit never ran.
+
+   This binds what you **write** exactly as hard as what you say. A figure you would not state
+   without checking does not belong in `goals/journal.md` or `goals/history.md` either — those
+   are append-only, and the next review inherits them as fact rather than re-deriving them.
+4. Carry the chief-of-staff posture: push on soft assessments ("it's fine" without evidence),
    but the calls that are the user's — which anchor, what target, whether to keep a system,
    which disposition a closing goal gets — stay theirs.
-4. The monthly differential is the load-bearing move; don't let the user default to blaming
+5. The monthly differential is the load-bearing move; don't let the user default to blaming
    their own effort (or quietly lowering the target) when the record says dose, time,
    mechanism, metric, goal, or the outside world.
-5. Append to `goals/journal.md`; update the matching `last run` line and Current Period in
+6. Append to `goals/journal.md`; update the matching `last run` line and Current Period in
    STATE.md so `/goal-setting:progress` stays accurate.
-6. The recurring pre-mortem is sharper than the launch one because it has real data — make it
+7. The recurring pre-mortem is sharper than the launch one because it has real data — make it
    specific to what actually broke this quarter, not theoretical.

@@ -3,6 +3,245 @@
 All notable changes to the Goal Setting plugin. Per-plugin semver; tags are plugin-scoped
 (`goal-setting-vX.Y.Z`).
 
+## 0.2.8 — 2026-08-07
+
+Corrects an over-reach in 0.2.6: a sparse journal is not a short clock.
+
+0.2.6 fixed a real defect — the review telling an owner they had run a block *"every week for
+eight weeks"* when the journal held four entries. But the guardrail it added went further than
+the defect did, asserting that **a minimum test duration is served by execution count**, and
+gave the example *"eight weeks on the calendar against four entries in the journal is four
+weeks of evidence."* That is wrong. `min_test_duration` and the expected lag are measured
+against `running since` — elapsed time — and a gap in the weekly log does not restart that
+clock. An owner who ran the system without logging every week is the common case.
+
+The cost was a changed classification, not just changed phrasing: all three eval samples of
+`adv-goal-vs-system` stopped landing the differential and retreated to *"too early to call"*
+on a goal whose recorded terms answer the question, which is the exact hedge that scenario
+exists to forbid.
+
+- **Elapsed time and execution count are separate facts, each read from its own source.**
+  `running since` for elapsed, the weekly entries for how often it ran. Neither is derived
+  from the other, in either direction.
+- **Never state more executions than the record holds** — the original defect, kept.
+- **A gap in the journal is not evidence the system didn't run.** Name it and let the owner
+  resolve it (*"the block's been live eight weeks; I've got four weeks of entries. Did the
+  earlier ones run?"*) rather than crediting weeks you cannot see **or** retreating to
+  insufficient-time when the recorded terms already settle it.
+
+The lesson worth keeping: a provenance rule that stops the model *asserting* an unsupported
+fact is right, but the same rule aimed at what the model may *conclude* will quietly move
+outcomes. Bind the claim, not the inference.
+
+## 0.2.7 — 2026-08-07
+
+The provenance rule becomes plugin-wide, and stops living in four places.
+
+- **The general rule now lives once, in `reference/heartbeat.md` §1** — the trust order every
+  skill already applies at Step 0 and points at rather than copies. It said the files win over
+  memory; it now also says **what you work out is not exempt.** A duration you computed, a
+  pattern you inferred, a prior state you reconstructed, a number that felt about right — none
+  become facts by being reasonable, and the honest move is to *name the absence rather than
+  fill it.* The owner cannot tell your inference from your reading, and acts on both the same
+  way. v0.2.6's review guardrail is now stated as an application of this rather than its own
+  rule, so the two cannot drift apart.
+- **The critic's record carries the same shape as its speech** (`agents/goal-setting-critic.md`).
+  v0.2.5 fixed the spoken reassertion and stated that writes bind equally, but gave the written
+  record no shape — so a run said *"the KR today reads …"* aloud and wrote *"the KR **still
+  reads** …"* to the journal, which is the fabrication in the file rather than the sentence.
+  The journal shape is now given explicitly, with the tell named: ***the defect is still
+  present*** is a claim about the finding and is yours to make; ***the KR still reads "…"*** is
+  a claim about the text not having changed, which you cannot see. The two sentences look
+  nearly identical and only one is honest.
+- **The pulse reads `kr_progressing` against the KR's own measure** (`goal-setting-pulse`).
+  Work toward a KR is not the KR moving: two booked conversations against a *signed retainers*
+  Key Result is `unknown`, not `yes`. The leading indicator moving is precisely when the
+  outcome may still be stuck. The gap must also be **said** — ask the converting question or
+  state that the read is open; recording `yes` takes a business call that is the owner's, and
+  recording `unknown` silently leaves them thinking you agreed.
+- **Restart's re-score no longer presumes a prior score** (`goal-setting-restart`). Step 2 was
+  framed as "scores have moved," which invited a comparison against a number that may not
+  exist; against an empty Score History a run offered *"the one from six weeks ago"* — inventing
+  both a reading and a date for it. Read `goals/scorecard.md` first: contrast only against dated
+  scores that are actually there, and otherwise just ask for today's number.
+- **The Setup-stage Self-Audit finally has somewhere to land** (`goal-setting-setup-stage`).
+  It was told to record "named the weakest answer, graded it sound" in the stage's *journal
+  line* — but Setup stages never write `goals/journal.md`, which is the cadence log and does
+  not open until the Ongoing Arc begins. The outcome had nowhere to go, which made the honest
+  audit invisible to every later session. It now goes in the stage's row in the Setup Stage
+  Record, where `/goal-setting:progress` already reads. The audit also re-checks threads the
+  stage itself opened: a concern you raised and then dropped once the user supplied a number is
+  the same unexamined weakest answer arriving by another route.
+
+Found by eval iteration-7. The concentration was invisible until derived values were ruled in
+scope and the flagged-but-undocked instances were scored consistently — at which point eight of
+nine failing runs turned out to be one discipline, spread across four surfaces, five of them
+fossilized in append-only files.
+
+## 0.2.6 — 2026-08-07
+
+The review skill stops estimating the numbers it reports.
+
+- **Every duration and count the review hands the owner is now derived, not estimated**
+  (Guardrail 3). The monthly differential's first two questions — did the system run at the
+  committed dose, has the minimum test duration been served — are both arithmetic over the
+  record, and the skill said the answers were "answerable from the record" without ever saying
+  to *compute* them. Runs estimated instead: *"roughly two months of conversations"* against a
+  record showing about six weeks, *"about five weeks left"* against a deadline nine weeks out,
+  *"a month into a two-month runway"* on a three-month period. Each one sounds like a reading
+  and is a guess, and the owner has no way to tell which.
+- **Elapsed calendar time is not execution.** `running since` says how long a system has
+  existed; only the weekly entries say how often it ran, and a minimum test duration is served
+  by the second. One run told an owner they had run a block *"every week for eight weeks"* when
+  the journal held four entries — then rested the whole dose rule-out on that number. Where the
+  window is longer than the record, the record is the answer, and the gap gets said aloud
+  rather than filled.
+- **An event the record never dated has no date.** A quarterly closeout wrote *"work on this
+  stopped mid-quarter"* into `goals/history.md`; nothing anywhere dated when it stopped, and
+  the same run's *spoken* line was correctly unstamped. Written records must not be looser than
+  spoken ones.
+- **The rule binds writes as hard as speech.** Five of the eight instances went into
+  `journal.md`, `history.md`, or `active.md` — append-only files the next review inherits as
+  fact rather than re-deriving. This mirrors the discipline v0.2.5 gave the critic, which was
+  scoped to the critic's claims about prior *text*; the review's failures were arithmetic, and
+  the rule now covers both.
+
+Found by eval iteration-7, where the review skill carried five of eight provenance failures
+across the golden set. Not caught earlier because each judge read its own instance as loose
+phrasing rather than a fabrication; the concentration only appeared once derived values were
+ruled in scope.
+
+## 0.2.5 — 2026-07-12
+
+The critic stops claiming it can see the past.
+
+- **The critic may never assert anything about a goal's PRIOR text.** Its memory of a finding is
+  the *defect* it named, not the wording it was named against — and unless a revision record
+  preserves the original, no file it can read contains what the goal used to say (a journal entry
+  paraphrases the defect; it does not quote the goal). It was telling owners *"word for word what
+  they were before — whatever you reworked, it wasn't this,"* calling them liars about their own
+  work on evidence it did not have. In one eval sample the seeded text happened to be identical,
+  so it was **right by accident** — which is not being right: had the owner genuinely reworked the
+  goal, the plugin would have told them, in writing, that they hadn't.
+- **This binds what the critic writes, not only what it says.** `goals/journal.md` is append-only,
+  so a fabricated claim recorded there becomes a fact every later pressure-test inherits and never
+  re-examines. That is worse than a spoken slip.
+- **The fix is also the stronger argument.** Take the owner at their word about the rework, then
+  make the claim that is actually provable and survives any rewrite: *"Whatever changed, this
+  objective still commits you to leading 90% of engagements personally — the same contradiction I
+  raised on July 15."* The `[RECURRING]` flag template now quotes what today's text says instead
+  of asserting what yesterday's did.
+
+The eval's rubric gained a matching **provenance rule** binding every judged dimension: a claim
+the record cannot support is a fabrication and scores as one, *even when the conclusion it carries
+is correct.* Being right by accident is not being right.
+
+## 0.2.4 — 2026-07-12
+
+The counterweight. Eval iteration-3 confirmed 0.2.3 landed everything it aimed at — the quarterly
+closeout is durable, the enum menu is gone, "once means once" holds. It also caught two things
+0.2.3 either caused or failed to finish, and both are about a rule's *edges* rather than its
+content.
+
+- **Where the firmness stops (heartbeat §4a) — a regression 0.2.2/0.2.3 introduced.** Two releases
+  taught this plugin not to hedge, to recommend plainly, to hold the record, and to stop softening
+  out of discomfort. None of them said where its authority *ends*, and it generalized firmness into
+  a veto: in one eval sample it **refused a user-directed KR change outright and wrote nothing**,
+  leaving `active.md` asserting a commitment the owner had already retired. The new §4a draws the
+  edge those patches were missing. Some calls are the owner's, full stop — the targets, the
+  revisions, the dispositions, the business. On those: **challenge once with the record, then
+  capture their call, flagged.** Refusing to write is not integrity; it is the one move that makes
+  the record lie. You may argue with the owner exactly once, and then you are a scribe. The monthly
+  review carries the rule at the point of use, since the revision step is where it broke.
+- **The backstage rule takes no surface as its subject (heartbeat §5).** This rule has now been
+  written three times and evaded three times, always the same way: applied to the surface that
+  *feels* like talking, skipped on the one that doesn't. Prose got clean and the **recap** leaked
+  (`→ reintroducing; clean-week count reset to 0`). The recap got clean and the **offer one turn
+  earlier** leaked ("the queue has the QA hour lined up first"). So the rule no longer names a
+  surface: **if the user will read it, it is speech** — every turn, every line, including the ones
+  that feel like bookkeeping. The word "queue" is now explicitly backstage alongside the phase
+  names and counters.
+- **The revision-record template is pinned with a filled example (review skill).** The template
+  put `<angle>` placeholders and a literal `[YYYY-MM-DD]` on the same line, so the square brackets
+  read as "substitute here" and a sample dropped them — an honest record that nothing could grep
+  for. A filled literal example removes the ambiguity.
+
+Register and posture only. No change to the arcs, the three-goal rule, the differential, or the
+critic.
+
+## 0.2.3 — 2026-07-12
+
+The recap patch. Eval iteration-2 confirmed 0.2.2 closed the register leak **in prose** — the
+42-day-return golden went from red to a stable 3 across every sample. The same leak then turned
+up one surface over, in the construct §5 never reached: the **recap**, the line where the
+advisor reads back what it is about to write. Seven judges found it independently across six
+runs. Plus one real durability bug the gates caught in the quarterly.
+
+- **The read-back is speech too (heartbeat §5).** A recap doesn't *feel* like talking — it feels
+  like showing your work — so the record's own shape walks straight through it: phase names,
+  counters, enum values, field keys. It is talking; the user is reading it. **The record is a
+  data structure; the recap is a sentence.** The proof this was the right diagnosis: in the
+  failing run, the prose one line *above* the leak was perfect, and then the recap block printed
+  `→ reintroducing … clean-week count reset to 0`. The pulse's restart section now carries the
+  rule at the point of use, since that section is necessarily written in state-machine vocabulary
+  and the recap is where that vocabulary escapes.
+- **Never offer an enum as a menu (§5, and the quarterly closeout).** "Each one needs a
+  disposition — achieved, missed, abandoned, or superseded" hands the user the schema and makes
+  them do the mapping, including options that don't apply to anything on the table. Ask in
+  English ("did it get there, did it fall short, or did you stop working it?"); write the label
+  down yourself.
+- **The quarterly closeout commits its own trace (durability bug, review skill).** The journal
+  entry and the STATE update were written only after all six steps of a half-day cadence. So a
+  review that cleared the closeout gate and then stopped had already moved three commitments to
+  `history.md` and **emptied `active.md`** while leaving the journal blank and STATE still reading
+  the old quarter: files claiming the quarter was never closed, over goals that were already gone.
+  The closeout now writes its dated entry and advances STATE the moment the last record lands, and
+  every later step writes as it finishes. A half-day cadence is one that gets interrupted; an
+  interrupted review must leave the files telling the truth about how far it got.
+- **Once means once, including in disguise (setup-stage).** The out-of-order advisory was
+  delivered twice — the second time as diligence ("just to be sure before we lock it in…"), which
+  is the same question wearing a clipboard and reads to the user as not being heard. Confirming
+  the *content* about to be captured stays welcome; re-litigating a decision the user already made
+  does not. The record is what keeps the gap honest, not a second warning.
+
+Register and record-durability only. No change to the arcs, the three-goal rule, the differential,
+or the critic.
+
+## 0.2.2 — 2026-07-12
+
+The register patch. Iteration-1 of the goal-setting eval ran all ten goldens; every
+deterministic gate on every valid run passed, and the only *plugin*-caused red was one
+scenario failing on **register** — how the advisor sounds, not what it decides. Both leaks
+were in the same wall (`reference/heartbeat.md`), and both had cleared the doctrine that
+already banned them.
+
+- **Machinery leaks — the ban now covers paraphrase (§5).** §5 already forbade "STATE.md"
+  and `restart_phase`, and the leak walked straight past it: *"the restart machine tracks it
+  in the state file."* Banning spellings doesn't ban the fourth wall. §5 now names the
+  paraphrase family ("the state file", "the files", "my notes", "the tracker", "the restart
+  machine"), and states the test that actually generalizes: **it isn't which words appear,
+  it's who the sentence is about.** How the system knows something is backstage; what the
+  user did, and when, is the product. *"Your last pulse was July 13"* — not *"the state file
+  shows your last pulse was July 13."*
+- **Internal labels never surface (§5).** The monthly handed a user the raw enum
+  `insufficient_time`. Every classification key in `schemas.md` is now explicitly agent
+  vocabulary with a spoken gloss: record the label, say the meaning — "it's too early to
+  call; the lag you set hasn't run out." The monthly review carries the rule at the point of
+  use, since that's where the labels live.
+- **Route, don't menu (§4).** Against an unambiguous 42-day gap the advisor offered *"either
+  is fine, but I'd steer you toward the restart"* — a route diluted into a menu of equals.
+  The ~6-week row now says **recommend** the restart, and §4 carries the general rule: the
+  decision stays the user's, but the recommendation is not hedged into equivalence.
+  Softening scales with ambiguity, not with discomfort.
+- **The monthly lands its call (review skill).** The differential is answerable from the
+  record the deployment already keeps — the system's experiment terms plus the weekly
+  entries. Check them before asking the user for anything: a question whose answer is
+  written in `goals/active.md` is a stall. `unknown` remains the honest landing for a
+  genuinely thin record, not a resting place for an unread one.
+
+No behavior change to the arcs, the three-goal rule, the state files, or the critic. Register
+only.
+
 ## 0.2.1 — 2026-07-12
 
 The F1/F2 playbook release — the one STOP item from 0.2.0 that awaited Kelsey's review,

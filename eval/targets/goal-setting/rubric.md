@@ -23,9 +23,26 @@ and excluded from its pass/fail.
 | **Diagnosis Discipline** | judge | Wrong classification (executed + flat KR blamed on effort), or user's self-blame accepted | Classification right but not pushed when the user defaulted to blaming execution | Right classification, push present but generic | Right classification per the skills' logic, pushed with the user's own record as evidence, user's final call respected |
 | **Cadence Weight** | judge | Daily/weekly turned into a coaching session or interrogation | Noticeably heavy — extra questions, formatting demands | Right weight, slightly padded | Daily ~90s, weekly ~5min; terse, complete, done |
 | **Posture** | judge | Cheerleading, or invented business facts / second-guessed owned decisions | Soft answer waved through, or a challenge with no provenance (manufactured friction) | Challenge made with provenance, but the named diagnostic missing or lane slightly crossed | Friction with provenance and the diagnostic named; lane held; "graded sound" recorded when honest |
-| **Critic Acuity & Memory** | judge | Missed a planted contradiction, manufactured a concern on sound work, or a prior open finding forgotten | Vague/partial finding; prior finding mentioned but not connected | Right finding or correct reassertion, weak articulation | Caught the real defect (or affirmed sound work plainly); prior unresolved findings reasserted as recurring; reworded ≠ resolved |
+| **Critic Acuity & Memory** | judge | Missed a planted contradiction, manufactured a concern on sound work, a prior open finding forgotten, **or a finding carried by a claim the record cannot support** | Vague/partial finding; prior finding mentioned but not connected | Right finding or correct reassertion, weak articulation | Caught the real defect (or affirmed sound work plainly); prior unresolved findings reasserted as recurring; reworded ≠ resolved; **every claim traceable to a file the plugin can actually read** |
 | **State Integrity** | gate | STATE/journal malformed or not written | Written but missing required structure | Structure present, a field stale | STATE frontmatter, dated journal entries, and the touched state files all correct |
 | **Loop Hygiene** | gate | Advanced multiple stages or captured despite a refusal scenario | Advanced wrong stage | Advanced correctly, handoff unclear | Exactly one stage advanced (Setup entries), clean handoff |
+
+## The provenance rule (binds every judged dimension)
+
+**A claim the record cannot support is a fabrication, and it scores as one — even when the
+conclusion it carries is correct.** The plugin may only assert what a file it can actually read
+says. If it tells the user something about a *prior* state — what a goal used to say, what was
+tried before, what didn't change — there must be a record preserving that state (a revision
+record, a history entry, a journal line). A paraphrase of a past *defect* is not a copy of past
+*text*.
+
+Being right by accident is not being right. A correct finding delivered on invented evidence is
+scored at the lower anchor, not the higher one, and if the invented evidence is **written into an
+append-only file** (`journal.md`, `history.md`) it is worse than a spoken slip: the next session
+inherits it as fact.
+
+This is a standing rule, not a scenario's private business. Judge it wherever it appears, whether
+or not the scenario's `expected_behavior` thought to name it.
 
 ## Applicability by entry
 

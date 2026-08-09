@@ -14,7 +14,16 @@
       "type": "file_contains",
       "file": "goals/STATE.md",
       "pattern": "restart_phase:",
-      "feeds": "State Integrity"
+      "feeds": "State Integrity",
+      "note": "Deliberately weak: this asserts the KEY exists (the additive-migration invariant — an older deployment gains the field), not that a restart happened. It therefore passes on a zero-write run and proves nothing about a restart transition. The transition itself is checked by restart_transition_recorded below."
+    },
+    {
+      "name": "restart_transition_recorded",
+      "type": "file_contains",
+      "file": "goals/STATE.md",
+      "pattern": "restart_phase:\\s*(stabilizing|reintroducing)",
+      "feeds": "State Integrity",
+      "applies_when": "restart_transition_expected"
     },
     {
       "name": "journal_dated_entry",
@@ -22,7 +31,8 @@
       "file": "goals/journal.md",
       "pattern": "^- \\*\\*\\[\\d{4}-\\d{2}-\\d{2}\\]",
       "feeds": "State Integrity",
-      "na_for_entries": ["progress"]
+      "na_for_entries": ["orient", "horizons", "anchors", "goals", "systems", "premortem", "progress"],
+      "na_on_no_advance": true
     },
     {
       "name": "revision_preserves_original",
@@ -30,7 +40,7 @@
       "file": "goals/active.md",
       "pattern": "revised \\[\\d{4}-\\d{2}-\\d{2}\\]:.*was",
       "feeds": "Record Preservation",
-      "na_for_entries": ["orient", "horizons", "anchors", "goals", "systems", "premortem", "daily", "weekly", "quarterly", "annual", "restart", "pressure-test", "progress"]
+      "applies_when": "revision_expected"
     },
     {
       "name": "closeout_recorded",
@@ -38,7 +48,15 @@
       "file": "goals/history.md",
       "pattern": "[Dd]isposition",
       "feeds": "Record Preservation",
-      "na_for_entries": ["orient", "horizons", "anchors", "goals", "systems", "premortem", "daily", "weekly", "monthly", "annual", "restart", "pressure-test", "progress"]
+      "applies_when": "closeout_expected"
+    },
+    {
+      "name": "out_of_order_marked",
+      "type": "file_contains",
+      "file": "goals/STATE.md",
+      "pattern": "out of order",
+      "feeds": "Record Preservation",
+      "applies_when": "out_of_order_expected"
     },
     {
       "name": "single_stage_advance",
@@ -51,10 +69,20 @@
   ],
   "content_lint": [
     {
+      "name": "spoken_no_machinery",
+      "file": "spoken.md",
+      "optional_file": true,
+      "forbid": "\\b(restart_phase|restart_queue|restart_clean_weeks|restart_system|setup_status|current_stage|completed_stages|pushback_calibration|triggered_active|insufficient_dose|insufficient_time|mechanism_wrong|metric_wrong|goal_wrong|check_frequency|monitored_signal|response_evidence|min_test_duration|expected_signal|decision_rule|stabilizing|reintroducing|STATE\\.md|the state file|the restart machine|the queue|the system under evaluation|clean-week count)\\b",
+      "flags": "i",
+      "feeds": "Continuity",
+      "note": "The register class, made deterministic. The machinery leak was fixed twice and moved each time — prose (v0.2.2) -> the pulse recap (v0.2.3) -> the queue offer. Patching each instance never killed the class, because catching the next hiding place always required a judge to read for it. This runs against spoken.md (assistant turns verbatim, nothing else) rather than transcript.md ON PURPOSE: the runner's own transcript annotations name state files and fields, and a lint cannot tell the runner's voice from the plugin's — linting transcript.md false-positived on adv-out-of-order/run-2, whose register the judges had confirmed clean. It is a vocabulary blacklist rather than a rule about intent, because three iterations proved the leak survives any rule phrased as advice about how to talk. optional_file: n/a on pre-iteration-4 captures, which predate spoken.md."
+    },
+    {
       "name": "state_no_placeholders",
       "file": "goals/STATE.md",
       "forbid": "\\[(TODO|TBD|placeholder)\\b",
-      "feeds": "State Integrity"
+      "feeds": "State Integrity",
+      "note": "FILL is deliberately absent here though active.md forbids it: `**Direction:** [FILL]` is a sanctioned init-template value for a Direction the user has not given yet. In active.md the same token is residue. Four iteration-2 judges flagged the asymmetry as a bug; it is not."
     },
     {
       "name": "active_no_placeholders",

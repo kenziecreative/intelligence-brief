@@ -11,10 +11,23 @@
 //   --working-dir <dir>   the scenario's capture dir (artifacts live here)
 //   --gates <gates.json>  the target pack's machine-readable gate spec
 //   --plugin-root <dir>   the target plugin's root (for library checks)
-// The per-run facts the runner could not encode in artifacts are read from
-// <working-dir>/gate-inputs.json, which the runner writes:
-//   { "entry": "define", "baseline_completed_stages": 2,
-//     "claimed_frameworks": ["SCQ"], "expected_no_advance": false }
+//
+// Two input files, written by two different parties, and the split is the point:
+//
+//   <working-dir>/gate-inputs.json   — RUNNER-observed facts about the run it just
+//     performed (things only it can see): { "entry": "define",
+//     "baseline_completed_stages": 2, "claimed_frameworks": ["SCQ"] }
+//
+//   <working-dir>/gate-context.json  — ORCHESTRATOR-written facts declared by the
+//     scenario (the runner never sees these — it is blind): the scenario's
+//     `expected_no_advance` and its `gate_context` block, e.g.
+//     { "expected_no_advance": true, "revision_expected": true }
+//
+// gate-context overlays gate-inputs. A scenario-declared fact must not depend on a
+// blind runner remembering to copy it: goal-setting iteration-1 false-failed six runs
+// because `expected_no_advance` lived in the runner's hands and defaulted to false.
+// (gate-inputs may still carry `expected_no_advance` — older packs do; the overlay
+// wins. Nothing breaks if gate-context.json is absent.)
 //
 // Output: a JSON array of { gate, type, feeds, status, evidence } to stdout
 // (status ∈ pass | fail | n/a), plus a human table on stderr. Exit 0 always —
@@ -41,7 +54,9 @@ const read = (p) => readFileSync(p, "utf8");
 const readIf = (p) => (existsSync(p) ? read(p) : null);
 
 const spec = JSON.parse(read(gatesPath));
-const inputs = JSON.parse(readIf(join(workingDir, "gate-inputs.json")) ?? "{}");
+const runnerInputs = JSON.parse(readIf(join(workingDir, "gate-inputs.json")) ?? "{}");
+const scenarioContext = JSON.parse(readIf(join(workingDir, "gate-context.json")) ?? "{}");
+const inputs = { ...runnerInputs, ...scenarioContext };
 const entry = inputs.entry ?? null;
 const expectedNoAdvance = inputs.expected_no_advance === true;
 
@@ -91,6 +106,17 @@ function naForEntry(gate) {
   return Array.isArray(gate.na_for_entries) && entry && gate.na_for_entries.includes(entry);
 }
 
+// A gate whose invariant only exists when the scenario sets up the situation that
+// produces it. `revision_preserves_original` asks "when a KR was revised, was the
+// original kept?" — on a monthly where nothing was revised there is no original to
+// keep, and firing the gate anyway reads a correct run as a failure (iteration-1:
+// three false FAILs on adv-goal-vs-system). The trigger is scenario-declared, not
+// run-observed, so a plugin cannot dodge the gate by simply not doing the thing.
+function naForContext(gate) {
+  if (!gate.applies_when) return false;
+  return inputs[gate.applies_when] !== true;
+}
+
 // Some gates presuppose the run produced steps. When a scenario legitimately
 // ends with none — the interview never reached a walkthrough, and the target
 // correctly refused to invent one — a gate like "autonomy ratings present"
@@ -106,7 +132,17 @@ function naForZeroSteps(gate) {
 
 function evalGate(gate) {
   if (naForEntry(gate)) return { status: "n/a", evidence: `n/a for entry '${entry}'` };
+  if (naForContext(gate)) {
+    return { status: "n/a", evidence: `n/a — scenario did not declare '${gate.applies_when}'` };
+  }
   if (naForZeroSteps(gate)) return { status: "n/a", evidence: "n/a — run captured zero steps; nothing to rate" };
+  // Write-shaped gates on a run that is SUPPOSED to end without a capture. A skill
+  // correctly holding its confirm-before-capture gate writes nothing, and "nothing
+  // written" is the pass — reading it as a missing artifact false-fails the exact
+  // discipline the gate is there to protect.
+  if (gate.na_on_no_advance && expectedNoAdvance) {
+    return { status: "n/a", evidence: "expected_no_advance — no capture expected, so no write to check" };
+  }
   const filePath = gate.file ? join(workingDir, gate.file) : null;
   const text = filePath ? readIf(filePath) : null;
   // A gate that only applies when its target file exists (e.g. an inventory
@@ -227,13 +263,18 @@ function evalGate(gate) {
 
 // content-lint: a forbidden pattern must NOT appear in the file (skip if the
 // file is absent and the rule is optional — e.g. the reader brief before Story).
+// `flags` is merged into the default "m" — deduped, because JS throws on a
+// repeated flag and packs legitimately write "mi" (blueprint ×3) as well as "i"
+// (goal-setting). Invalid characters are stripped: JS has no inline (?i), and
+// passing one throws, which is how this was found.
 function evalLint(rule) {
   const filePath = join(workingDir, rule.file);
   const text = readIf(filePath);
   if (text == null) {
     return rule.optional_file ? { status: "n/a", evidence: `${rule.file} absent (optional)` } : fail(`missing file ${rule.file}`);
   }
-  const m = text.match(new RegExp(rule.forbid, rule.flags ?? "m"));
+  const flags = [...new Set("m" + (rule.flags ?? "").replace(/[^gimsuy]/g, ""))].join("");
+  const m = text.match(new RegExp(rule.forbid, flags));
   return m ? fail(`forbidden /${rule.forbid}/ found: "${m[0].slice(0, 40)}"`) : pass(`clean of /${rule.forbid}/`);
 }
 

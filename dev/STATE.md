@@ -1,64 +1,58 @@
-# Work state — index
+# Work state — kenzie-creative-marketplace
 
-**This file is an index, not a state file.** It says which plugin streams exist, where each
-one's state lives, and how work is branched. It carries no stream detail — that belongs in
-`dev/<plugin>/STATE.md`, one per plugin, written by `/checkpoint`.
+**This file is an index, not a snapshot.** One line per active workstream, pointing at its own
+state file. Nothing else lives here.
 
-## Why it is split
+## Why it's split (read this before you "fix" it)
 
-`dev/STATE.md` used to be one whole-repo file that `/checkpoint` overwrote wholesale. Every
-concurrent plugin stream rewrote it, so any two streams conflicted on it — and on nothing
-else. Measured across six unmerged branches in August 2026: `marketplace.json`, `AGENTS.md`,
-`README.md` and `eval/lib/run-gates.mjs` all auto-merged cleanly, because each plugin edits a
-different row. **`dev/STATE.md` was the only true collision in the repo.** Splitting it is
-what makes two plugin streams independent.
+We run several worktrees against this repo at once — `core-kenzie-marketplace` (primary, holds
+`main`), `kenzie-build-strategist`, `kenzie-build-goal-setting`. Until 2026-07-12 they all
+checkpointed into a single `dev/STATE.md`, and that is a **lost-update bug, not a staleness bug**:
+whichever session ran `/checkpoint` last overwrote the others' snapshot wholesale. The
+goal-setting stream then spent a session reading a STATE file whose "next steps 1 and 2" were the
+*strategist's*, because the strategist session had written last.
+
+Parallel streams need parallel files. A stream going quiet does not mean its work went away — it
+means nobody has touched that file lately, which is exactly what the file should say.
+
+**`/checkpoint` writes ONE stream file** (the one you're working in) **and touches only its own
+row here.** It never rewrites another stream's file. Merge conflicts on this index are one line
+and trivial; conflicts on a shared body were not.
 
 ## Streams
 
-| Plugin | Version | Stream state | Status |
+| Stream | Worktree / branch | State | Last touched |
 |---|---|---|---|
-| Blueprint | 0.3.1 | `dev/blueprint/` | idle |
-| Goal Setting | 0.2.1 | `dev/goal-setting/STATE.md` | active |
-| Intelligence Briefing | 0.3.0 | `dev/intelligence-briefing/STATE.md` | two branches to reconcile — see below |
-| Photo Generator | 1.2.0 | — | idle |
-| Researcher | 1.10.0 | `dev/researcher/STATE.md` | idle (merged) |
-| Sage | 0.2.0 | `dev/sage/` | idle |
-| Strategist | 0.7.0 | `dev/strategist/STATE.md` | active |
-| Thinkers | 0.1.0 | `dev/thinkers/` | idle |
+| **goal-setting** | merged to `main` 2026-08-09 | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-08-07 |
+| **researcher** | merged to `main` | [dev/state/researcher.md](state/researcher.md) | 2026-08-06 |
+| **strategist** | merged to `main` 2026-08-09 | [dev/state/strategist.md](state/strategist.md) | 2026-08-09 |
+| **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-07-12 |
 
-Repo-wide tooling (`eval/`, `dev/scripts/`, `.claude/skills/`) has no stream file; changes to
-it ride whichever plugin branch needs them, and it is shared — see the collision rule below.
+A stream is **live** until its own file says otherwise. Silence in this table is not a signal.
 
-## How plugin work is branched
+## What actually collides (measured, 2026-08-09)
 
-**One plugin, one branch, one worktree.** A stream working on plugin `X`:
+The split was designed against a lost-update bug. A merge of six parallel plugin branches
+later confirmed it was also the *only* structural collision, which is worth recording so
+nobody re-partitions something that was never a problem:
 
-1. Branches from current `main` — never from another plugin's branch.
-2. Touches `X/`, `dev/X/`, `eval/targets/X/`, and its own rows in the shared registries
-   (`.claude-plugin/marketplace.json`, `README.md`, `AGENTS.md`). Those registries are
-   *row-per-plugin*, so two streams editing different rows merge without conflict.
-3. Writes stream state only to `dev/X/STATE.md`. Never to this file.
-4. Merges back to `main` when its release loop is green (see `AGENTS.md`).
+- **Auto-merged cleanly every time:** `.claude-plugin/marketplace.json`, root `README.md`,
+  `AGENTS.md`, `eval/lib/run-gates.mjs`. The registries are row-per-plugin, so two streams
+  editing different rows never touch the same lines.
+- **Conflicted every time:** the shared state file, and nothing else.
+- **Genuinely shared and worth care:** `eval/lib/`, `dev/scripts/`, `.claude/skills/`. Two
+  streams changing the same file there will conflict legitimately. Keep those edits small and
+  merge them promptly instead of parking them on a long-lived plugin branch.
 
-**The shared-tooling exception.** `eval/lib/`, `dev/scripts/`, and `.claude/skills/` are
-genuinely shared. Two streams changing the same shared file will conflict, legitimately.
-Keep those changes small and merge them promptly rather than letting them sit on a long-lived
-plugin branch.
+**One plugin, one branch, branched from current `main`.** Don't branch from another plugin's
+branch. The August 2026 backlog had branches 40–114 commits behind `main`; they all still
+merged clean, but that was luck, not design.
 
-**Don't leave a branch behind `main` for long.** The August 2026 backlog had branches 40–114
-commits behind; every one of them still merged clean, but that was luck, not design.
+## Shared ground (true regardless of stream)
 
-## Open cross-stream items
-
-- **Intelligence Briefing has two competing branches** — `review/intelligence-briefing`
-  (parked mid-Codex-review) and `blueprint-guide-drift` (v0.3.1, merged). They overlap on
-  `plugin.json`, `CHANGELOG.md` and `environmental-briefing/SKILL.md`. Reconciling them is a
-  session of its own.
-- **`backup/ec65313-two-releases`** holds one commit not in `main` or any other branch.
-  Deliberately untouched; confirm it is disposable before deleting.
-
-## How to resume
-
-1. Read `AGENTS.md` (orientation and the release loop).
-2. Read the `dev/<plugin>/STATE.md` for the plugin you're picking up.
-3. Branch from current `main`.
+- Orientation: root `AGENTS.md`, then the plugin's own `AGENTS.md`.
+- Convergence work: `dev/convergence/README.md` (local-only) → the relevant build brief →
+  `dev/backstage-convergence-plan.md` § Decisions of Record.
+- Release ritual, versioning, and the three registration points: root `AGENTS.md` § Release.
+- Eval harness: `eval/README.md` + `eval/AGENTS.md`. Runs are local-only (`eval/**/_eval/` is
+  gitignored), so a scorecard exists only in the checkout that produced it.

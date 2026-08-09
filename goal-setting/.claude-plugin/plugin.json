@@ -1,7 +1,7 @@
 {
   "name": "goal-setting",
-  "version": "0.2.1",
-  "description": "v0.2.1 — Set business goals that survive contact with reality, then actually operate against them — not a vision board you abandon by February. A six-stage Setup Arc takes you from what game you're playing to goals stress-tested before launch; a five-cadence Ongoing Arc (daily writing to annual vision check) keeps them alive. A hard cap of three active goals and a critic that red-teams every goal before you commit keep it honest. Standalone.",
+  "version": "0.2.8",
+  "description": "v0.2.8 — Set business goals that survive contact with reality, then actually operate against them — not a vision board you abandon by February. A six-stage Setup Arc takes you from what game you're playing to goals stress-tested before launch; a five-cadence Ongoing Arc (daily writing to annual vision check) keeps them alive. A hard cap of three active goals and a critic that red-teams every goal before you commit keep it honest. Standalone.",
   "author": {
     "name": "Kelsey Ruger",
     "url": "https://github.com/kenziecreative"

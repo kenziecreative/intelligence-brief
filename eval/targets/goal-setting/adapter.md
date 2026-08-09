@@ -91,20 +91,50 @@ gate-sourced rubric dimensions.
 | --- | --- | --- |
 | `state_frontmatter` | `goals/STATE.md` frontmatter has `mode`, `setup_status`, `current_stage` | State Integrity |
 | `restart_phase_recorded` | `goals/STATE.md` carries a `restart_phase:` line (template or additive migration) | State Integrity |
-| `journal_dated_entry` | `goals/journal.md` has a dated `- **[YYYY-MM-DD] …**` entry (n/a for `progress`) | State Integrity |
-| `revision_preserves_original` | `goals/active.md` contains a `revised [date]: … was …` record (monthly revision scenarios only) | Record Preservation |
-| `closeout_recorded` | `goals/history.md` contains a disposition line (quarterly scenarios only) | Record Preservation |
+| `journal_dated_entry` | `goals/journal.md` has a dated `- **[YYYY-MM-DD] …**` entry — cadence entries only | State Integrity |
+| `revision_preserves_original` | `goals/active.md` contains a `revised [date]: … was …` record | Record Preservation |
+| `closeout_recorded` | `goals/history.md` contains a disposition line | Record Preservation |
+| `out_of_order_marked` | `goals/STATE.md` marks the stage `out of order` with its missing dependency | Record Preservation |
 | `single_stage_advance` | `completed_stages` grew by exactly 1 vs baseline (Setup-stage entries only) | Loop Hygiene |
 
 Plus `content_lint`: no `[TODO]/[TBD]/[FILL]` residue in `goals/STATE.md` or
 `goals/active.md` (→ State Integrity).
 
-**What the runner must record** (`gate-inputs.json`): `entry`,
-`baseline_completed_stages` (from `setup`), and `expected_no_advance`.
+**What the runner records** (`gate-inputs.json`, written by the blind runner): `entry` and
+`baseline_completed_stages` (from `setup`) — facts it *observed*, nothing about what the run
+was supposed to do.
 
-### `expected_no_advance` scenarios
+### Conditional gates — `gate_context` (scenario-declared, orchestrator-written)
 
-Refusal scenarios (e.g. a user stonewalling a Setup stage, or demanding a fourth active
-Objective with no swap) are *supposed* to end without a capture/advance; they set
-`"expected_no_advance": true` and the advance-shaped gates invert, exactly as in the
-strategist pack.
+Some gates check an invariant that **only exists when a scenario creates the situation**. A
+monthly where nothing was revised has no original to preserve; a Setup stage run in order has
+no out-of-order marker to write. Firing those gates on every run of the entry reads a correct
+run as a failure — iteration-1 lost six runs that way.
+
+So a scenario declares the situation it sets up in a `gate_context` block, and `/eval-run`
+writes it to `<working-dir>/gate-context.json` **after** the run. The keys this pack defines:
+`revision_expected` → `revision_preserves_original`; `closeout_expected` →
+`closeout_recorded`; `out_of_order_expected` → `out_of_order_marked`. A gate whose key is not
+declared is n/a.
+
+The trigger is the *scenario's*, never the run's — a plugin cannot dodge a gate by declining
+to do the thing. If a scenario declares a revision was demanded and the plugin silently
+rewrote the KR, the gate is live and it fails.
+
+Scenario-specific detail — which scenarios declare which keys, and what end-state each one is
+driving at — is **deliberately not written here.** This file is read by the blind runner. Keep
+it mechanism-only: what the gates check and who writes what. The moment it says "scenario X
+should end with Y," the runner has been told the answer.
+
+**Journal entries are a cadence artifact.** Setup stages write to STATE's Stage Record, not
+`goals/journal.md`, so `journal_dated_entry` is n/a for the six Setup entries (and `progress`,
+which is read-only).
+
+### `expected_no_advance`
+
+Some scenarios are *supposed* to end without a capture or a stage advance — a refusal held, a
+confirm-before-capture gate correctly left standing. They set `"expected_no_advance": true` at
+the scenario's top level; `/eval-run` puts it in `gate-context.json`, the advance-shaped gates
+invert, and the write-shaped gates marked `na_on_no_advance` go n/a (a skill correctly holding
+its capture gate writes nothing, and nothing is the pass). The runner is not told which
+scenarios these are, and must not be.
