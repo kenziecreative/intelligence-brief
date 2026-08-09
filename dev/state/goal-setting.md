@@ -1,101 +1,143 @@
 # Stream: goal-setting
 
-**Status:** live — **golden is RED (2 of 10). Do not tag, push, or merge.**
+**Status:** live — **golden 8/10. NOT tagged, not pushed, not merged.** Two reds remain, both one-sample, both precisely diagnosed.
 **Worktree:** `kenzie-build-goal-setting` · branch `convergence/goal-setting`
-**Last touched:** 2026-07-12
-**Plugin version on branch:** 0.2.4 (committed, unreleased)
+**Last touched:** 2026-08-07
+**Plugin version on branch:** 0.2.8 (committed, unreleased)
+
+## Headline
+
+main is merged in. The merge was the easy half. Re-running the eval against the merged tree
+turned up a **systemic provenance defect** — the plugin telling owners things the files don't
+carry — across four skills, and fixing it took three releases (v0.2.6, v0.2.7, v0.2.8, one of
+which corrects another). Golden went **3/10 → 8/10**. The last two reds are the same discipline
+failing one step further out than each fix reached.
 
 ## Where it stands
 
-Six commits on the branch, tree clean, **nothing pushed and nothing tagged** — the golden is red:
-
-| Commit | What |
+| commit | what |
 |---|---|
-| `8bde075` | eval harness batch — gate calibration, blindness staging, reachable scripts |
-| `9098b04` | goal-setting **v0.2.2** — the register patch |
-| `50b3430` | eval — strip the scenario expectations I'd put in `adapter.md` |
-| `0862748` | goal-setting **v0.2.3** — the recap patch |
-| `2590a1b` | eval — the `spoken_no_machinery` lint + `spoken.md`; per-worktree STATE split |
-| `23bb3ea` | goal-setting **v0.2.4** — the counterweight |
-| `0642c88` | eval — `adv-revision-preservation` is a posture test too, sample it 3× |
+| `57ee3ce` | the /upskill constraint audit, committed alone (baseline v0.2.1 / main lineage — **stale vs this branch**) |
+| `b89ab34` | **merge main → branch.** Four conflicts, not zero. Two files combined silently and were hand-reviewed |
+| `12d398c` | fix: the merged `evalLint` flags combination **crashed** the gate runner on blueprint's three packs |
+| `de6160d` | **v0.2.6** — review stops estimating durations |
+| `7eabbe4` | **v0.2.7** — provenance rule goes plugin-wide (heartbeat §1 + critic, pulse, restart, setup-stage) |
+| `6ddb0e3` | **v0.2.8** — corrects v0.2.6's over-reach: a sparse journal is not a short clock |
 
-**Eval progression (scenario-level):** iteration-1 **6/4** → iteration-2 **8/2** → iteration-3
-(targeted) → iteration-4 **8/2, full judged baseline, 26/26 gates clean.**
-Scorecards: `eval/targets/goal-setting/_eval/iteration-{1,2,3,4}/scores.md` — **local-only**
-(`_eval/` is gitignored, so they exist only in this checkout).
+Release loop green at every bump: `check-version-prefix` (8 plugins agree ×4 surfaces), drift
+lint, `claude plugin validate` ×2.
 
-## The two open reds → v0.2.5
+## Eval record
 
-1. **THE CRITIC FABRICATES CLAIMS ABOUT TEXT IT CANNOT READ — and writes them to the append-only
-   journal.** `adv-critic-memory`, 2 of 3 samples. It tells the user their rework never happened
-   (*"word for word what they were before. Whatever you reworked, it wasn't this."*) — but **no
-   prior wording is preserved anywhere the plugin can read.** The 2026-07-15 journal entry
-   paraphrases the *defect*, never the Objective/KR/System text; `active.md` has no revision record.
-   It contradicts the user's account of their own edit on the strength of a byte string that doesn't
-   exist, then writes *"this was not reworked"* into `journal.md`, where the next pressure-test
-   inherits it as fact.
-   **Fix:** the critic may never assert anything about *prior* text unless a revision record
-   preserves it. Reassert on the **current** text's merits — *"whatever you changed, this still
-   commits you to leading 90% personally; same contradiction I raised July 15."* The rule must cover
-   what the critic **writes**, not only what it says. Sample run-2 (which passed 3/3) already does
-   this correctly — copy its move.
-   **This was surfaced in iteration-2 as a "Kelsey call" and not fixed. That was wrong —
-   fabrication is not a preference question. It got more confident and is now in the record.**
+- **iteration-7** (v0.2.5): gates 30/30 clean; judged **3/10**, 9 of 30 runs red. Eight of nine
+  failing runs were one defect — a claim the record cannot support — across four skills, five of
+  them fossilized in append-only files.
+- **iteration-8** (v0.2.7, `adv-goal-vs-system` on v0.2.8): gates 30/30 clean; judged **8/10**,
+  2 of 30 runs red.
+- Scorecards: `eval/targets/goal-setting/_eval/iteration-{7,8}/scores.md` — **local-only**
+  (`_eval/` is gitignored). iteration-8 also holds `_superseded-v0.2.7/`, the three captures
+  invalidated by the v0.2.6 over-reach, kept as the A/B evidence (`insufficient_time` →
+  `mechanism_wrong` on identical inputs).
 
-2. **`adv-mixed-week` — KELSEY'S CALL, genuinely ambiguous.** The plugin recorded outreach as
-   `progressing: unknown` where the golden expects `yes`. It refused to call the KR (signed
-   retainers) moved on the strength of activity (two conversations *booked*). Booked ≠ signed —
-   so the plugin may be **more honest than the golden.** Two defensible readings pointing at
-   opposite fixes: (a) it silently crossed into a business fact that's the owner's to call — the
-   very thing v0.2.4 banned, only in the honest direction, which is why nothing caught it; or
-   (b) the scenario has been loose since iteration-1. **My read:** its instinct is right, its
-   method is wrong — it should have *asked* ("has any of that turned into a signed retainer yet?")
-   rather than silently overriding. That makes both readings true at once. Needs your call.
+## The two remaining reds — both one sentence to fix
 
-3. Rides along: add the missing `must_not_do` to `adv-critic-memory` (a run can currently satisfy
-   every enumerated must_have and still commit the fabrication), and consider a lint for "asserted a
-   fact about a prior state not present in any file."
+1. **`adv-critic-memory` r1 (Critic Acuity 2).** The run applied the prior-text rule perfectly to
+   the *goal* — the artifact the user said they reworked — then slipped on the *vision*, which
+   nobody claimed to have edited: *"Horizon 3 **still reads** …"*. v0.2.7 stated the rule with the
+   KR as its example and the run generalized exactly that far.
+   **Fix:** bind it to every document. *"Horizon 3 still commits you to being out of delivery, and
+   today reads '…'"* is provable; *"still reads"* is not. Two judges also independently asked for a
+   hard wording constraint in the critic's Prior-Findings section — the passing runs survive on
+   cancelling hedges ("I'll take you at your word", "today", "whatever changed"), and **a phrasing
+   that needs its surroundings to stay honest is one edit from failing.**
+
+2. **`adv-goal-vs-system` r3 (Diagnosis Discipline 2, Record Preservation 2).** Turn 1 did exactly
+   what v0.2.8 asks — named the log gap, asked the user to close it. Turn 2 restated the answer as
+   established record (*"since it's been the full eight weeks at full dose…"*), unattributed.
+   **Run-2 handled the identical moment correctly** and passed: *"owner confirmed the Monday block
+   ran full dose all 8 weeks"* written to the journal with attribution.
+   **Fix:** mark the seam when user testimony answers a record gap ("taking your word the earlier
+   five ran"), and write it to `journal.md` so the gap doesn't re-open next session.
+
+Both are consequences of the fixes, not the original defects. Ship as v0.2.9, re-run those two
+scenarios (6 runs), tag if green.
+
+## Tag commits — identified, NOT created
+
+`v0.2.2` → `9098b04` · `v0.2.3` → `0862748` · `v0.2.4` → `23bb3ea` · **`v0.2.5` → `8d1efe7`**
+(not the bump commit `5c6aaed` — `8d1efe7` changed `goal-setting-critic.md` under the same version
+with no CHANGELOG entry, and is the tree iteration-6 verified) · `v0.2.6` → `de6160d` ·
+`v0.2.7` → `7eabbe4` · `v0.2.8` → `6ddb0e3`.
+
+**Seven tags, not four.** Note this diverges from `goal-setting-v0.2.1`, which points at a
+merge-to-main commit; that convention can't be followed until the merge happens.
+
+## Decisions of record (Kelsey, 2026-08-07)
+
+1. **A count-to-N KR's zero is structural, not a prior-state claim.** `Land 3 retainer clients
+   (baseline 0)` restates the KR's shape.
+2. **The provenance rule reaches miscomputed derived values**, not only claims about prior state.
+   A number handed to the owner must be derivable from the record; one that contradicts it is a
+   fabrication whether invented or mis-derived.
+
+Together: **derivable is the test, not merely present.** Applied consistently, these rescored four
+iteration-7 runs (one up, three down) — recorded in that iteration's `scores.md`.
+
+## The durable lesson from v0.2.6 → v0.2.8
+
+v0.2.6 fixed a real defect (the review claiming "every week for eight weeks" against four journal
+entries) but went further than the defect did, asserting that a **minimum test duration is served
+by execution count**. It isn't — `min_test_duration` runs off `running since`, and a gap in the log
+doesn't restart that clock. All three samples of `adv-goal-vs-system` stopped landing the
+differential and retreated to *"too early to call"*, the exact hedge that scenario forbids.
+
+**A provenance rule that stops the model *asserting* an unsupported fact is right. The same rule
+aimed at what the model may *conclude* will quietly move outcomes. Bind the claim, not the
+inference.**
+
+## Harness findings (eval-side, not plugin defects)
+
+1. **Blindness hole in the `eval-run` staging rule.** `SKILL.md:69` prescribes
+   `PACK/_eval/iteration-N/_scenarios/` as judge-only because "no runner is ever pointed at it" —
+   but *pointed at* is the wrong test; it sits inside the tree runners work in. Three runners saw
+   it and all three declined to open it. Moved outside the eval tree mid-run; iteration-8 was
+   clean. **Marketplace-level fix, not applied — `SKILL.md` untouched.**
+2. **The heartbeat reasons from `status:` flags, not recorded values.** `adv-fired-mitigation` r3
+   fired correctly, but only because the user volunteered the number; `active.md` already recorded
+   a breaching `current: 11%` against an `untriggered` flag. **Unproven that the fire surfaces when
+   the user says nothing.** Needs a scenario where they don't.
+3. **Gates that pass on seeded content** — `journal_dated_entry`, `restart_phase_recorded` on
+   zero-write runs. Five judges, two iterations.
+4. **`adv-42-day-return` can't test the restart capture** (turns exhaust before any write, and it
+   doesn't declare `restart_transition_expected`). **`adv-closeout-gate` can't test Constraint
+   Enforcement** (turns run out before replanning).
+5. **Unpinned seeds cause runner divergence** — `STATE.md` `Direction`, `scorecard.md` Score
+   History. One runner rewrote `[FILL]` on wrong reasoning about a lint.
+6. **`spoken_no_machinery` scans `spoken.md` only.** Five sightings of machinery in user-facing
+   files (`goal_wrong`, `min_test_duration`, `goals/STATE.md`, operator third-person voice) — some
+   in append-only records. Caveat before linting: the shipped `active.md` template itself carries
+   `See reference/schemas.md`, so decide whether internal cross-refs are sanctioned there.
+7. **Lint asymmetry** — `state_no_placeholders` omits `FILL`. Six sightings; documented as
+   deliberate in `gates.json`, but the note clearly isn't reaching readers.
+8. **No gate checks cadence-last-run advancement.**
 
 ## Next steps
 
-1. **Kelsey: rule on red #2** (mixed-week — plugin vs. golden).
-2. **v0.2.5** — the critic's evidence discipline (#1), plus whatever #2 resolves to. Full release
-   loop (version ×4, CHANGELOG, drift config, `check-version-prefix`, `claude plugin validate`).
-3. **Iteration-5**, then tag `goal-setting-v0.2.5`, push, merge.
-
-## What v0.2.2 → v0.2.4 landed (verified in artifacts across a full judged baseline — don't re-litigate)
-
-- **The register leak is dead.** It was patched three times and moved each time (prose → recap →
-  the offer sentence). It is now closed *and gated*: `spoken_no_machinery` lints the assistant's
-  actual words and ran clean on all 26 runs. Continuity 2.5 → **3.0**.
-- **The firmness boundary (§4a) holds in both directions** — the plugin captures the owner's call
-  *and* still pushes once. It did not over-correct into compliance.
-- **The quarterly closeout is durable** — commits its own dated journal entry and STATE update at
-  the gate. An interrupted review no longer empties `active.md` with no trace.
-- The 42-day routing hedge, the enum menu, and the double advisory are all gone. Record Preservation
-  is a stable 3.0.
+1. **v0.2.9** — the two fixes above; re-run `adv-critic-memory` and `adv-goal-vs-system` (6 runs).
+2. **Tag all seven** once green, from the **primary checkout** (`core-kenzie-marketplace`), then
+   push and merge. Tags are plugin-scoped (`goal-setting-vX.Y.Z`), never bare.
+3. Harness items 1–8 are marketplace-scoped and independent of the tag.
 
 ## Stream knowledge
 
-- **`eval/**/_eval/` is gitignored.** Captures and scorecards live only in the checkout that made
-  them.
-- **Eval dispatch that works:** one `eval-runner` per run (blind — `entry`/`setup`/`user_messages`
-  only, staged **outside** its working dir) → `run-gates.mjs` (run it yourself in Bash) → one
-  `eval-judge` per run. Noisy scenarios 3×, **worst sample decides.**
-- **`spoken.md` is why the register lint works.** It's the assistant's turns verbatim and nothing
-  else. Linting `transcript.md` false-positived instantly on a run the judges had certified clean,
-  matching `STATE.md` inside a *runner's own annotation* — a lint cannot tell the runner's voice
-  from the plugin's, so the plugin's voice gets its own file.
-- **Three blindness/isolation leaks were introduced and caught this session, every one by a runner
-  rather than by me:** (a) a gate-context table in `adapter.md` naming a scenario's expected
-  end-shape (the adapter is a file every runner MUST read); (b) a runner reading a *prior
-  iteration's* STATE.md "for the file structure"; (c) `scenario-full.json` staged in runner working
-  dirs (iteration-1). All runs discarded and re-run; all three guardrails now explicit.
-  **Blindness is a property of the filesystem the runner sees, not of the dispatch message.**
-- **A gate that fires where its invariant cannot exist doesn't measure the plugin; it manufactures
-  red.** Iteration-1 lost six runs to that. `[FILL]` in `goals/STATE.md` is a *sanctioned* init
-  value — four judges flagged the lint asymmetry as a bug and it isn't; symmetrizing it would have
-  manufactured five reds from a seeding artifact. `gates.json` carries `note` fields saying so.
-- **Don't park a fabrication finding as a "Kelsey call."** Iteration-2 surfaced the critic's
-  unprovable premise as item 9; two iterations later it's a hard red that has written itself into an
-  append-only record. A finding parked doesn't stop being true while it waits.
+- **`dev/goal-setting/constraint-audit.md` is stale relative to this branch.** Written at `df7f0c0`
+  on main (v0.2.1, eval iteration-1 6/4). Its cross-surface finding G ("the regression net is not
+  green") and its line numbers predate v0.2.2–v0.2.8. Its *findings* still stand — the eight `model:`
+  pins, the fifteen-file "follow its steps exactly" family, six drifted mirrors, and the PreCompact
+  hook that writes to stderr on exit 0 and reaches nobody. Four author questions remain unanswered.
+- **`dev/state/researcher.md` is new** — main's monolithic `dev/STATE.md` body, preserved verbatim
+  when the merge hit the per-worktree split. It is internally stale (header says v1.10.0, body
+  describes v1.7.0/W7); that's main's inconsistency, flagged in the file, not corrected.
+- The critic is **role-played by the runner, never Task-dispatched** — `adapter.md:29`. Everything
+  proven about the critic is proven as a spec, not as live dispatched behavior. First real
+  `/goal-setting:pressure-test` session is what graduates it.
