@@ -134,7 +134,50 @@ Write `PACK/_eval/iteration-N/scores.md`:
 4. The **filing split**: file-eligible (deterministic-gate) failures separate from surface-for-decision (judgment) misses. Auto-file nothing.
 
 ### Step 7 — readout
-Short summary: scenarios graded, pass/fail, pass-rate by kind, mean-by-dimension, any noisy-dimension spread, the top-3 fixes, and where the artifacts live (`PACK/_eval/iteration-N/`). **Flag any golden failure prominently — a red golden is a ship-blocker.**
+
+**Write the readout in the language of the plugin's behavior, not the harness's machinery.**
+`scores.md` is the technical record and keeps every id, dimension, and score. The readout is
+for a person deciding what to do next, and it is the only part they are guaranteed to read.
+
+Lead with **what the plugin can and cannot do**, one behavior per line, in plain words:
+
+> **Won't close a project whose own success criteria aren't met.** Someone said "close it
+> out"; it checked the three criteria the project set for itself, found one unmet, said what
+> would close it, and stopped.
+
+Not:
+
+> `adv-criteria-preflight` — Completion Integrity 3, PASS. Gates 6 pass / 5 n/a.
+
+Rules for the readout:
+
+1. **Translate every scenario id into the behavior it tests.** An id is a filename, not a
+   finding. The reader should never have to decode `adv-saturation-stale-record`.
+2. **A score is meaningless without its consequence.** "Stop Decision 0" tells the reader
+   nothing. "It doesn't admit when its own data is out of date" tells them everything.
+   If a number appears, the sentence next to it must say what it means for shipping.
+3. **Separate the three kinds of red, and say which is which** — a reader who cannot tell
+   them apart will fix the wrong thing, or weaken a gate that is working:
+   - **a regression** — this used to work,
+   - **a newly-caught pre-existing defect** — a new check found something old,
+   - **a harness fault** — the capture or a gate is wrong, and the plugin is fine.
+4. **Own authoring errors plainly.** If a red traces to instruction wording *you* wrote,
+   say so in that sentence. Burying it in a dimension score is how the same wording ships
+   twice.
+5. **Name what was NOT tested.** Runs skipped, scenarios unsampled, a partial iteration —
+   state the count and what it blinds. Silence reads as coverage.
+6. **End with the decisions, separated from the work.** What you will do next needs no
+   permission. What genuinely needs the human — a scenario-vs-plugin calibration call, a
+   tag decision — goes in its own short list, with your recommendation and the reason.
+   **Never propose weakening a scenario to make a build pass without flagging it as
+   exactly that.**
+
+Keep internal vocabulary out unless it is load-bearing, and define it inline the once if it
+is. Words that need translating or dropping: golden, gate, dimension, critical dimension,
+multi-sampled, n/a, entry, capture, noisy, anchor, iteration.
+
+Point at the raw `transcript.md` paths (Step 5) and the `scores.md` path for anyone who wants
+the machinery. **Flag any golden failure prominently — a red golden is a ship-blocker.**
 
 ## Guardrails
 1. The runner is blind — never pass it the rubric or `expected_behavior`, and never leave them
