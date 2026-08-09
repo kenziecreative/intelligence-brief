@@ -1,11 +1,11 @@
 # Stream: researcher
 
-**Status:** live, nothing red — **v1.11.0 (W2) is verified and tagged `researcher-v1.11.0`**.
-17 of 17 goldens pass, the seven noisy scenarios sampled 3× and scored on the worst sample,
-0 gate failures and 0 capture-integrity failures across 43 runs. **The branch is unpushed and
-unmerged by Kelsey's instruction** — that is the only outstanding action on this release.
-**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `researcher-w2`, off `main`
-at `8833dd9`. `main` holds nothing from this stream.
+**Status:** live, nothing red — **v1.11.0 (W2) is released**: merged to `main`, pushed, and
+tagged `researcher-v1.11.0` on origin. 17 of 17 goldens pass, the seven noisy scenarios sampled
+3× and scored on the worst sample, 0 gate and 0 capture-integrity failures across 43 runs.
+No researcher work is unreleased or unpushed. **W1 (source-note fidelity) is next**, by Kelsey's
+call on 2026-08-09 — see Next Steps.
+**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-09
 
 ## Where it stands
@@ -29,15 +29,6 @@ discovery order and a second "Seam 0–5" scheme runs alongside them.
 | Eval harness debt | **closed** (this session) |
 | W3 (next in plan), W1, W4, W5, W6c–f | not started |
 
-### Branch layout — the first commit is meant to be liftable
-
-`researcher-w2` opens with `711c092`, **shared harness only** (`eval/lib/run-gates.mjs`,
-`eval/reference/target-pack-spec.md`, `.claude/skills/eval-run/`, `.claude/agents/eval-runner.md`).
-No researcher dependencies; `git cherry-pick 711c092` puts it on `main` alone. Everything
-researcher-specific starts at `347c18e`. Kelsey's call on 2026-08-09 was to leave it parked —
-the cost of parking is a concurrency cost and no other plugin work is in flight. Merging the
-branch normally makes this moot.
-
 ## Done this session
 
 - **Eval harness debt closed** (`711c092` engine + `347c18e` pack). New `file_unchanged` gate
@@ -58,18 +49,20 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-1. **Merge `researcher-w2` into `main`, push, and push the tag.** The branch is verified and
-   tagged; this is the only thing between v1.11.0 and released. It also carries the shared-harness
-   commit to `main` and closes the parked-shared-edit question above.
-2. **Decide the W1-vs-W3 order — a real fork, not bookkeeping.** The plan sequences W3 next. But
-   W1 moved from *inferred* to **observed** this session, on evidence produced by W2's own
+1. **W1 — source-note fidelity (Seam 0). Kelsey chose this over W3 on 2026-08-09.** Design
+   before build, per the plan's rule. The fork to resolve first (plan § W1): (a) passage/page
+   locators at capture, (b) source snapshots, (c) sampled re-validation of notes against
+   originals at audit. The plan's suggested first cut is (a) — a source-locator field per
+   quote/figure in the note schema, plus an audit battery item flagging any quote or figure
+   lacking one. **Why it moved ahead of W3:** W1 went from *inferred* to **observed** this session, on evidence produced by W2's own
    verification: in one of three samples, `summarize-section` rendered a note's "60–70% of teams
    report a reduction" as "a 60–70% reduction," and the same draft's M&L claimed two independent
    sources for findings that had one each. The integrity agent cleared both, and the golden
    passed, because accuracy-to-source is not a critical dimension on that scenario. That is the
    exact shape of defect that ships. Captures:
-   `eval/targets/researcher/_eval/iteration-28/adv-counter-evidence-valve/run-3/` (local only).
-3. **W3** (conclusion-vs-brief / significance, Seam 2). Two items from this session belong to it,
+   `eval/targets/researcher/_eval/iteration-28/adv-counter-evidence-valve/run-3/` (local only) —
+   that run is W1's lead evidence and its first golden should be built from it.
+2. **W3** (conclusion-vs-brief / significance, Seam 2). Two items from this session belong to it,
    both *two documents disagreeing* rather than run variance:
    - `research-cross-ref`'s Output template prescribes dashboard vocabulary ("Saturation
      advisory", "0% confirmatory") that `posture-register.md` bans in the turn.
@@ -88,7 +81,6 @@ None. Tree clean, everything committed, tag applied.
 
 ## Open questions / decisions pending
 
-- **W1 vs W3 sequencing** (Next Step 2). Kelsey's call.
 - **Kelsey's engine corpus has 8 open material findings** from the W7 live proof. Path:
   `/research-init upgrade` then `/research-review-corpus final` in that repo. Also the best
   real-world test of whether W6a/b's in-line checks would have caught what Codex caught by hand.
