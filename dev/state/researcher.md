@@ -1,8 +1,8 @@
 # Stream: researcher
 
-**Status:** live, nothing red — **v1.10.0 merged to `main` and pushed**. No uncommitted or
-unpushed researcher work. Three of eight workstreams complete; **W2 is next**, but see Next
-Steps: the eval harness has known blind spots that should be closed before W2 leans on it.
+**Status:** live — **v1.11.0 (W2) is committed on `main` and deliberately UNTAGGED and
+unpushed**: nothing has been eval-verified against this build. The harness gaps are closed and
+the Evidence-Against golden is in. **The single next action is an eval iteration (24).**
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-09
 
@@ -20,7 +20,7 @@ Program-level view — the plan's status block at
 | W7 — adversarial corpus review (the credibility gate) | **done**, v1.8.0 |
 | /upskill constraint pass | **done**, v1.9.0 |
 | W6a + W6b — completion integrity + cross-phase consistency | **done**, v1.10.0 |
-| W2 — saturation → stop decision (Seam 1) | next |
+| W2 — saturation → stop decision (Seam 1) | **built, v1.11.0 — unverified** |
 | W3 (conclusion-vs-brief), W1 (note fidelity), W4, W5, W6c–f | not started |
 
 ## Done this session
@@ -33,6 +33,16 @@ Program-level view — the plan's status block at
   trajectory in phase debriefs, settled-framing guard. Design + the four resolved author
   forks: [dev/researcher/w6ab-design.md](../researcher/w6ab-design.md).
 - Eval iterations 21–23. **Iteration 21 found four red goldens**; all four green by 23.
+- **Harness gaps closed** (commit `657a294`). New `file_unchanged` gate type, `${PACK_ROOT}`
+  substitution so a pack ships its own `checks/`, and an always-on capture-integrity layer.
+  Researcher gains `state_cycle_coherent`, `state_unchanged_on_write_free`,
+  `decision_ledger_unedited`. Verified: the exact iteration-21 miss now goes red with a diff
+  line; 0 integrity false positives across 352 captures in every pack.
+- **Evidence-Against golden** `adv-evidence-against-routing` + a Coverage Routing rubric
+  dimension. Chip `task_c631be46` is done.
+- **W2 built and released as v1.11.0** (commit `6b52442`), forks resolved by Kelsey. Design:
+  [dev/researcher/w2-design.md](../researcher/w2-design.md). Seam 1 marked closed in
+  ARCHITECTURE.md in the same change.
 
 ## In flight / uncommitted
 
@@ -40,33 +50,34 @@ None.
 
 ## Next steps (in order)
 
-1. **Close the eval-harness blind spots before starting W2.** Iterations 21–23 showed the
-   deterministic gates went **16/16 clean through an iteration with four red goldens** —
-   every red was judgment-sourced. Three judges independently named the same gaps:
-   - No gate detects a **STATE write during a write-free preflight**. The iteration-21
-     criteria-preflight run closed a project and wrote completion state; `state_active_phase`
-     passed anyway. Cheapest fix: assert `research/STATE.md` is byte-identical to seed on any
-     run whose expected terminus is a preflight.
-   - No gate detects **cycle-step / checkbox incoherence** (`Cycle step: Connect (2 of 5)`
-     with Connect checked; Collect unchecked with Connect checked). Hit 3× in one iteration.
-   - **Capture fidelity is unenforced.** One capture attributed file paths to the assistant
-     that its transcript did not contain, inflating a score. Add an explicit
-     runner instruction (and ideally a check) that `capture.md` may not exceed `transcript.md`.
-   Grounding: `eval/targets/researcher/_eval/iteration-21/scores.md` § gate-coverage gaps
-   (local only — `eval/**/_eval/` is gitignored, so these exist only in this checkout).
-2. **Build the Evidence-Against eval golden** — chip `task_c631be46`. It exists specifically
-   to protect W2, and the plan says do it early. Belongs with step 1 as one short pass.
-3. **Open W2** (saturation → the stop decision, Seam 1 — the most-felt gap; cross-ref computes
-   saturation and check-gaps, which owns the stop, never reads it). Design fork is already
-   resolved on paper by the Codex correction: **do not merge saturation and adequacy** —
-   they answer different questions. Build a precedence/routing contract, and wire the
-   accepted-gap state to a real route (it now has a durable home in the decision ledger).
-   Grounding: the plan file § W2.
-4. **Init eval scenario** — `/research-init` still ships behaviorally unverified (structural
-   validation only; no scenario exercises the challenge-first intake). Carried since v1.9.0.
+1. **Run eval iteration 24 — this is the gate on everything below.** `/eval-run --target
+   researcher`. Three things are being tested at once and they need separating in the
+   readout:
+   - **W2's own goldens** (`adv-saturation-stall-decision`,
+     `rep-saturation-adequate-proceeds`, `adv-saturation-stale-record`) — new behavior,
+     never run.
+   - **`adv-evidence-against-routing`** — must be green, and must stay green *because* W2's
+     routing sits next to it. It exists to catch exactly that collision.
+   - **`state_cycle_coherent` on the pre-existing goldens.** Expect red on
+     `adv-counter-evidence-valve` and `adv-confirm-side-override`: cross-ref step 10 and
+     summarize-section step 10 tick their checkbox and never move `Cycle step`. W2 fixed the
+     check-gaps rollback (so `adv-exclusion-visibility` should go green) and deliberately did
+     **not** touch the other two — they are W3's surfaces. **These reds are true positives,
+     not regressions.** Decide whether to fix them now or let W3 carry them; do not let a
+     green-washing instinct silence the gate.
+2. **Tag `researcher-v1.11.0` only after iteration 24 reads clean** — held on purpose. Bump to
+   1.11.1 first if the run forces fixes.
+3. **W3** (conclusion-vs-brief / significance, Seam 2 — *observed*). Carries the two remaining
+   cycle-pointer defects above, since it already touches `summarize-section`.
+4. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried
+   since v1.9.0.
 
 ## Open questions / decisions pending
 
+- **Two cycle-pointer defects are knowingly left open** in `research-cross-ref` step 10 and
+  `research-summarize-section` step 10: each ticks its own checkbox and neither advances
+  `Cycle step`, so a run ends with the active step ticked. Both are W3 surfaces; W2 fixed only
+  the check-gaps rollback. They will show as red `state_cycle_coherent` rows in iteration 24.
 - **Kelsey's engine corpus has 8 open material findings** from the W7 live proof. Path:
   `/research-init upgrade` then `/research-review-corpus final` in that repo. Also the best
   real-world test of whether W6a/b's in-line checks would have caught what Codex caught by
