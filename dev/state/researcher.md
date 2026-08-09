@@ -1,8 +1,11 @@
 # Stream: researcher
 
-**Status:** live — **v1.11.0 (W2) is committed on branch `researcher-w2`, deliberately UNTAGGED
-and unpushed**: nothing has been eval-verified against this build. The harness gaps are closed
-and the Evidence-Against golden is in. **The single next action is an eval iteration (24).**
+**Status:** live — **v1.11.0 (W2) committed on branch `researcher-w2`, still UNTAGGED.** The
+full golden set has now run: **17 of 17 behaviors pass, 0 gate failures, 0 capture-integrity
+failures.** Six defects were found and fixed along the way, including one open since
+iteration 4. **The one thing standing between this and a tag is the 3x sampling** — seven
+scenarios have noisy critical dimensions and were run once each; the suite call takes the
+worst of three. 14 runs outstanding.
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `researcher-w2` (off `main`
 at `8833dd9`; `main` holds nothing from this stream)
 **Last touched:** 2026-08-09
@@ -66,34 +69,29 @@ None.
 
 ## Next steps (in order)
 
-1. **Run eval iteration 24 — this is the gate on everything below.** `/eval-run --target
-   researcher`. Three things are being tested at once and they need separating in the
-   readout:
-   - **W2's own goldens** (`adv-saturation-stall-decision`,
-     `rep-saturation-adequate-proceeds`, `adv-saturation-stale-record`) — new behavior,
-     never run.
-   - **`adv-evidence-against-routing`** — must be green, and must stay green *because* W2's
-     routing sits next to it. It exists to catch exactly that collision.
-   - **`state_cycle_coherent` on the pre-existing goldens.** Expect red on
-     `adv-counter-evidence-valve` and `adv-confirm-side-override`: cross-ref step 10 and
-     summarize-section step 10 tick their checkbox and never move `Cycle step`. W2 fixed the
-     check-gaps rollback (so `adv-exclusion-visibility` should go green) and deliberately did
-     **not** touch the other two — they are W3's surfaces. **These reds are true positives,
-     not regressions.** Decide whether to fix them now or let W3 carry them; do not let a
-     green-washing instinct silence the gate.
-2. **Tag `researcher-v1.11.0` only after iteration 24 reads clean** — held on purpose. Bump to
-   1.11.1 first if the run forces fixes.
-3. **W3** (conclusion-vs-brief / significance, Seam 2 — *observed*). Carries the two remaining
-   cycle-pointer defects above, since it already touches `summarize-section`.
-4. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried
-   since v1.9.0.
+1. **Run the 3x sampling — 14 runs — then tag.** Two more samples each of
+   `adv-audience-standard-waiver`, `adv-override-disclosure`, `adv-counter-evidence-valve`,
+   `adv-exclusion-visibility`, `adv-independence-unknown`, `adv-unselected-invisible`,
+   `adv-confirm-side-override`. Take the **worst** sample per dimension. Five judges flagged
+   their own single-sample verdicts as provisional, unprompted — that is the harness telling
+   you not to close on one roll. Full record: `eval/targets/researcher/_eval/iteration-27/scores.md`
+   (local only). Use the shared briefs at `_eval/_briefs/` — they cut dispatch cost sharply.
+2. **Tag `researcher-v1.11.0`** once that reads clean. Bump to 1.11.1 first if it forces fixes.
+3. **Cherry-pick the shared-harness commit to `main`** (`711c092`) whenever convenient — see
+   the branch-layout note above. Deferred by Kelsey's call on 2026-08-09 since no other plugin
+   work is in flight.
+4. **W3** (conclusion-vs-brief / significance, Seam 2 — *observed*). Two watch items from this
+   pass belong to it: the `cross-ref` Output template prescribing dashboard vocabulary the
+   posture doctrine bans, and the same conflict in `research-process-source` line 31.
+5. **W1** has a fresh piece of evidence: `adv-counter-evidence-valve` turned "60-70% of teams
+   report reduced time-to-value" into "a 60-70% reduction in time-to-value" and nothing caught
+   it — the integrity agent returned clean and audit-claims never ran. That is the note-fidelity
+   seam, observed rather than inferred.
+6. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
+   v1.9.0.
 
 ## Open questions / decisions pending
 
-- **Two cycle-pointer defects are knowingly left open** in `research-cross-ref` step 10 and
-  `research-summarize-section` step 10: each ticks its own checkbox and neither advances
-  `Cycle step`, so a run ends with the active step ticked. Both are W3 surfaces; W2 fixed only
-  the check-gaps rollback. They will show as red `state_cycle_coherent` rows in iteration 24.
 - **Kelsey's engine corpus has 8 open material findings** from the W7 live proof. Path:
   `/research-init upgrade` then `/research-review-corpus final` in that repo. Also the best
   real-world test of whether W6a/b's in-line checks would have caught what Codex caught by
