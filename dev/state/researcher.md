@@ -1,10 +1,26 @@
 # Stream: researcher
 
-**Status:** live — **v1.11.0 (W2) is committed on `main` and deliberately UNTAGGED and
-unpushed**: nothing has been eval-verified against this build. The harness gaps are closed and
-the Evidence-Against golden is in. **The single next action is an eval iteration (24).**
-**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
+**Status:** live — **v1.11.0 (W2) is committed on branch `researcher-w2`, deliberately UNTAGGED
+and unpushed**: nothing has been eval-verified against this build. The harness gaps are closed
+and the Evidence-Against golden is in. **The single next action is an eval iteration (24).**
+**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `researcher-w2` (off `main`
+at `8833dd9`; `main` holds nothing from this stream)
 **Last touched:** 2026-08-09
+
+**Branch layout — the first commit is meant to be lifted off.** `researcher-w2` opens with
+`711c092`, which is **shared harness only** (`eval/lib/run-gates.mjs`,
+`eval/reference/target-pack-spec.md`, `.claude/skills/eval-run/`, `.claude/agents/eval-runner.md`).
+It has no researcher dependencies and cherry-picks to `main` on its own:
+`git cherry-pick 711c092`. Everything researcher-specific — including the pack-local
+`checks/state-coherence.mjs` — starts at `347c18e`.
+
+Do that promptly rather than waiting on iteration 24. The shared half was verified
+independently (0 integrity false positives across 352 captures spanning every pack), so its
+correctness does not depend on W2's verification — only the researcher half does. Parking it
+here means no other plugin's eval gets `file_unchanged`, `${PACK_ROOT}`, or capture-integrity
+until researcher merges, which is the trap this repo's own index warns about: keep shared
+edits to `eval/lib/`, `dev/scripts/`, and `.claude/skills/` small and merge them promptly
+instead of parking them on a long-lived plugin branch.
 
 ## Where it stands
 
