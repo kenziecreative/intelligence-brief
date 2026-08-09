@@ -86,8 +86,8 @@ noted.
 | **start-phase** | phase-entry briefing, carryover (assumptions/commonplace/gaps/backstage), source-material reconciliation | Phase Tier Record row; backstage check-offs; **`source-material-digest.md`** (created/updated during reconciliation — v2 correction) |
 | **discover** (Collect) | channel selection, query construction, candidate prioritization, **batch cadence + auto cross-ref**, exclusion recording | `discovery/*-candidates.md`, `exclusions.md`, `retrieval-log.json` |
 | **process-source** (Collect) | per-source note, **credibility assessment**, contradiction flagging, counter increments, candidate `[PROCESSED]` marking | `notes/`, `registry.md`, candidate tags, **STATE counters**, source-material-digest |
-| **cross-ref** (Connect) | **contradiction materiality**, **shared-origin/echo detection (triangulation)**, **saturation signals (advisory)**, pattern ID | `cross-reference.md`, resets counter, checks **Connect** box, backstage-tasks, Next Action, **`decision-ledger.md` `resolution` entries** (material resolutions only, at resolution time — W6b) |
-| **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date), **`decision-ledger.md` `acceptance` entries** (first acceptance only — W6b) |
+| **cross-ref** (Connect) | **contradiction materiality**, **shared-origin/echo detection (triangulation)**, **saturation signals (advisory)**, pattern ID | `cross-reference.md`, **`saturation.json`** (W2 — the machine-readable half of the saturation verdict), resets counter, checks **Connect** box, backstage-tasks, Next Action, **`decision-ledger.md` `resolution` entries** (material resolutions only, at resolution time — W6b) |
+| **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed); **reads `saturation.json` and owns the saturation↔adequacy precedence contract + the collection-exhausted decision** (W2) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date), **`decision-ledger.md` `acceptance` entries** (first acceptance only — W6b) |
 | **summarize-section** (Synthesize) | **synthesis / "so what"**, qualifier+range preservation, **counter-evidence gate**, assumption logging, methodology section, runs integrity; **reads the decision ledger pre-draft** (conformance-by-default — W6b) | `drafts/`, `assumptions.md`, `negative-searches.md`, STATE (draft pending) |
 | **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B13** (v2: track 2; B13 disposition conformance — W6b), confidence tiers, deliverable manifest, waivers, **phase closeout** incl. the **criteria preflight** (W6a: SC self-assessment at final-close stage 1, hard stop on plain unmet) and the **advisory criteria trajectory** in phase debriefs | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`), **`decision-ledger.md` `correction` + `directive` entries** (frame corrections at fix time; commissioner directives at (b-final) — W6b) |
 | phase-insight / graph-analysis / progress | read-only decision-support (progress + start-phase also *validate completion claims* via `check-completion` — verdict outranks STATE text) | nothing |
@@ -151,7 +151,7 @@ evidence-search discipline. Design each in its own place; do not build "one judg
 | Judgment | Where it's made today | Status / gap |
 |---|---|---|
 | **Position** ("where am I") | STATE.md + `where-am-i.py` + candidates ledger | **Shipped** (1.6.0). Computable **with a legacy/fallback path** — not "fully computable": untagged legacy ledgers and helper failure fall back to manual file derivation. **[enforced]** |
-| **Sufficiency / saturation** ("enough to stop") | cross-ref XREF-02 computes per-question confirmatory ratio over independent origins; check-gaps owns the stop verdict | Signal exists but is **[enforced]** advisory-only and **not reconciled** with check-gaps. No "uncloseable" state (though the coverage guide already allows accepted gaps — unwired). See Seam 1. |
+| **Sufficiency / saturation** ("enough to stop") | cross-ref XREF-02 computes per-question confirmatory ratio over independent origins and writes `saturation.json`; check-gaps reads it and owns the stop verdict | **Reconciled in v1.11.0 (W2)** by a precedence contract: adequacy governs the stop, saturation governs the route. The collection-exhausted state is a commissioner decision with three enumerated outcomes, and it holds the cycle at `Assess (3 of 5)` until answered. Accepted gaps are wired to it. Seam 1 closed. |
 | **What matters / triangulation** | cross-ref: "a pattern from one source is a claim" (guardrail 1), echo detection, independence-defaults-unknown | Fires in the pipeline *before* synthesis **[enforced]**. The concern that significance gets elevated in conversation *before* cross-ref runs is **[inferred]**, not demonstrated. See Seam 3. |
 | **Significance / interpretive license** ("this is a priority for us") | summarize-section generates "so what"; guards are evidentiary + `assumptions.md` + integrity | A **design exposure [inferred]**: audit/integrity check facts, not normative leaps, so a sourced fact can carry an uncited priority. Related failures are **[observed]** in live runs (priority-injection; the audit feedback's "research quoted its own prose as a citation"). Track 2's battery B2/B7 now catch the *self-sourced-quote* and *constructed-bracket* forms. See Seam 2. |
 | **Disconfirmation / confirmation bias** | counter-evidence gate (summarize, **PRD/Exploratory only**); `negative-searches.md`; `Evidence Against` (all types); `assumptions.md` "what would challenge" | The **mandatory adverse-search gate** is type-limited **[enforced]**; contradiction detection + `Evidence Against` exist for **all** types (v2 correction — v1 overstated this). Gap: no general standing falsification loop. See Seam 4. |
@@ -265,14 +265,18 @@ blind spots; those are noted.
   is source snapshots or passage-level locators + selective original-source revalidation. *(Track
   2's battery checks draft-vs-note, not note-vs-original — it does not close this.)*
 
-- **Seam 1 — Saturation ↔ adequacy unreconciled.** cross-ref computes saturation (Connect);
-  check-gaps owns the stop (Assess) and never reads the saturation signal, which is declared
-  non-binding (guardrail 8). **[enforced]** that the signal is not consumed. That this *causes a
-  stall* is **[observed]** in Kelsey's runs, **not** derivable from the code (Codex, seeing only
-  code, could not confirm it). **Fix (corrected):** the two are *legitimately separate* signals
-  ("saturated in one perspective, still inadequate overall" is valid) — the missing piece is a
-  **precedence/routing contract**, NOT a merged score. Also: wire the coverage guide's existing
-  accepted-gap protocol to a real state (the "uncloseable" idea partly duplicates it).
+- **Seam 1 — Saturation ↔ adequacy — CLOSED in v1.11.0 (W2).** Was: cross-ref computed
+  saturation (Connect); check-gaps owned the stop (Assess) and never read it, so a question
+  that was saturated *and* inadequate routed back to Collect every run — every step correct,
+  the loop the defect, invisible to every gate because each state was well-formed. The stall
+  was **[observed]** in Kelsey's runs and not derivable from the code. **Fix as built:** a
+  precedence contract, not a merged score. cross-ref writes `saturation.json` (step 7a);
+  check-gaps reads it (step 4a) and crosses it with coverage status (step 6h). Adequacy governs
+  the stop — saturation never promotes a question to covered. Saturation governs the route
+  inside the gaps-remain branch. The saturated+inadequate cell is a commissioner decision
+  (step 7c: three enumerated outcomes, a recommendation, and the mapped-channels limit), and
+  step 8 gained the cycle state that decision lives in. Accepted gaps are now reached by
+  computation rather than only by volunteer. Design: `dev/researcher/w2-design.md`.
 
 - **Seam 2 — Significance has no synthesis-time control.** "So what" is generated at
   `summarize-section` **[enforced]**; audit/integrity check facts, not normative leaps

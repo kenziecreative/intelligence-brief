@@ -51,6 +51,29 @@ Analyze all processed source notes for cross-cutting patterns.
    - **Aggregate saturation advisory:** when **≥75%** of findings *across all questions for the current phase* are confirmatory (independent-origin basis) — display: "Evidence is converging across independent origins — additional sources are unlikely to shift the picture. Consider moving to synthesis for saturated questions." If the raw repeat rate is high but the independent-origin ratio is not (many echoes, few origins), say that instead: "High repetition, low independence — [N] sources trace to [M] origins. More independent origins would shift the picture; more echoes will not."
 
    **Fire frequency:** these advisories regenerate on every cross-ref run. They are NOT sticky — if a question is still saturated on the next run, the advisory fires again. Do not suppress a repeated advisory; the user needs the current state each run.
+
+7a. **Write the saturation verdict where the stop decision can read it — `research/reference/saturation.json`.** The prose Saturation Summary in `cross-reference.md` is the human working view; this is the record `/research-check-gaps` reads to decide whether "go collect more" is honest advice or a treadmill. Both carry the same verdicts — they are two renderings of step 7, never two judgments. Overwrite the file each run (it describes the current phase's current state, like the advisories themselves). Create it if absent.
+
+   ```json
+   {
+     "generated": "YYYY-MM-DD",
+     "phase": 2,
+     "basis": "independent origin clusters",
+     "aggregate_advisory": true,
+     "questions": [
+       {
+         "question": "verbatim question text from research-plan.md",
+         "verdict": "saturated | under-covered | neither",
+         "confirmatory_ratio": 0.86,
+         "independent_clusters": 4
+       }
+     ]
+   }
+   ```
+
+   `verdict` follows step 7's own thresholds: `saturated` at ≥80% confirmatory, `under-covered` at <40%, `neither` in between. Every question in the current phase gets a row, including ones with no sources yet (`"verdict": "under-covered", "confirmatory_ratio": 0.0, "independent_clusters": 0`) — a question missing from the list reads downstream as "no saturation opinion," and an unanswered question having no opinion is different from its having none *available*. Question text must match `research-plan.md` verbatim; the reader matches on it.
+
+   This write is silent (posture rule 7) and non-blocking — guardrail 8 stands. Saturation still never stops the user processing more sources. What changes is that the skill that owns the stop can now see it.
 8. **Identify cross-cutting patterns** (convergence, gap clusters, temporal trends, source-type skew, outliers). When assessing pattern strength, apply shared-origin cluster adjustments: sources in the same cluster — confirmed or suspected — count as one data point, and unclear-origin sources add no corroboration credit.
 8a. **Read the exclusion ledger AND the unselected remainder.** Read `research/discovery/exclusions.md` (if it exists) and the phase candidates files at `research/discovery/*-candidates.md`; cross-check the candidates against `research/sources/registry.md` to find candidates that were neither processed nor formally excluded — the unselected remainder. Report both counts in the dashboard. When a convergence pattern exists on a question where an excluded OR unprocessed candidate's title or snippet suggested a dissenting view, note it beside the pattern: "Convergence on [question] should be read alongside the discovery record: [candidate] ([excluded: reason] / [discovered, never selected]) appeared to carry an opposing view." Report neutrally — the curation is the user's call; its visibility is this skill's job, and a candidate stranded by `top 5` is as invisible to the notes as one formally declined.
 9. **Regenerate `research/cross-reference.md`** using the template structure (Dashboard -> Contradictions -> Saturation Summary -> Shared-Origin Clusters -> pattern types). Carry forward existing contradiction resolutions if the contradiction still exists. Drop resolutions for contradictions that no longer exist in the data. Dropping a resolution from this working view never touches its `decision-ledger.md` entry — the ledger is append-only and is not this skill's to prune. Update the dashboard counts.
@@ -69,7 +92,7 @@ Analyze all processed source notes for cross-cutting patterns.
 
    **Ledger the resolution (durable record).** When a material resolution record is written, also append a `resolution` entry to `research/reference/decision-ledger.md` — create the file from `${CLAUDE_PLUGIN_ROOT}/reference/templates/decision-ledger.md` first if it doesn't exist (projects predating the ledger). Entry per the ledger's grammar: next sequential `D-<n>`, class `resolution`, today's date, the current phase, the contradiction's subject in one line, the adopted disposition in one line, evidence pointing at `research/cross-reference.md` — and when the commissioner overrode the suggestion, their words quoted in the disposition. The regenerated `cross-reference.md` is the working view; the ledger entry is the durable record `/research-audit-claims` enforces downstream. Immaterial auto-resolutions are **not** ledgered — they move no finding, and the working record preserves both values. This write is silent (posture rule 7), like every other file write in this skill.
 7. Shared-origin clusters collapse to one data point for pattern strength. Three blog posts citing the same study are Echo level, not Convergence. This applies retroactively to all existing patterns when shared-origin clusters are detected.
-8. Saturation signals are informational, not blocking. Display the signal and suggest focusing discovery on under-covered questions, but do not prevent the user from processing more sources.
+8. Saturation signals are informational, not blocking. Display the signal and suggest focusing discovery on under-covered questions, but do not prevent the user from processing more sources. **Not blocking is not the same as not consulted:** `/research-check-gaps` reads the step-7a record to tell a genuine gap from a treadmill, and saturation feeds that routing without ever deciding it. Saturation never promotes a question to adequate coverage — adequacy is counted over independent Direct sources and belongs to the gap check. A question can be fully saturated and still badly under-evidenced; those are two different facts and this skill only produces one of them.
 9. Regenerate cross-reference.md from scratch on every run for consistency. The only state carried forward is resolved contradiction decisions.
 
 ## Common Failure Modes

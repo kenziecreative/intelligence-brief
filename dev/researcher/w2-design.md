@@ -154,7 +154,7 @@ independent Direct coverage is below the bar" — never as a conditional over a 
 set. The iteration-21 preflight cleared a criterion as vacuously true and fell through to a
 branch that legitimately writes completion; the same shape is available here.
 
-## Author forks
+## Author forks — all three resolved 2026-08-09 (Kelsey took the recommendation on each)
 
 **Fork 1 — where the saturation verdict lives.**
 (a) `check-gaps` parses the Saturation Summary out of `cross-reference.md`. No new file.

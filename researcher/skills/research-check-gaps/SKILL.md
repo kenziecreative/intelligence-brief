@@ -15,6 +15,15 @@ Assess research coverage against the research plan and identify what's missing.
    - The specific claims, data points, and arguments the source provides
 3. **Read `research/outputs/`** for any completed phase outputs.
 4. **Read `${CLAUDE_PLUGIN_ROOT}/reference/coverage-assessment-guide.md`** for match classification criteria (Direct/Adjacent/Contradicts/None), source independence rules, and coverage status definitions.
+4a. **Read the saturation record — `research/reference/saturation.json`.** `/research-cross-ref` writes it (its step 7a): per phase question, whether the evidence has stopped changing. It answers a different question from the one this skill answers, and the difference is the whole point of reading it:
+
+   - **Adequacy** — is there enough here to write from? Counted over independent Direct sources. **This skill's question.**
+   - **Saturation** — is collecting more going to change that? Counted over independent origin clusters. **Cross-ref's question.**
+
+   A question can be fully saturated and still badly under-evidenced. Saturation never promotes a question to adequate coverage, never checks the `Collect` box, never advances `Cycle step`. It is read for one purpose: to tell a real gap from a treadmill when this skill is about to send the phase back to collect more.
+
+   **Decide whether the record is usable, and treat unusable as unavailable — never as "not saturated."** The record is **current** when it names the active phase and `Sources since last cross-reference` in STATE.md is 0. It is **stale** when sources have been processed since it was written, and **absent** when cross-ref has not run on this project. In both of those cases you have no saturation reading: route every under-covered question the ordinary way (collect more), and say in the turn that the saturation read wasn't available and why, rather than proceeding as though one had been consulted. Normal cycle order makes staleness rare — Connect runs before Assess — which is exactly why it will go unnoticed if you infer a verdict instead of reporting the absence of one.
+
 5. **Determine source independence.** Group source notes by origin_chain. Sources sharing the same cited original collapse to one independent data point. Build an independence map: for each unique origin, list the source notes that trace to it. **Sources whose note records "Origin unclear" have UNKNOWN independence — mark them `independence-unknown` in the map.** Unknown is not independent: an unclear-origin source still counts as a Direct source for coverage *existence*, but it never supplies corroboration credit — a question whose 2+-source status rests on independence-unknown sources is flagged "independence unverified" and treated as lopsided-risk, not confirmed convergence.
 5a. **Compute a disposition for every discovered candidate.** Read the phase candidates files at `research/discovery/*-candidates.md`, `research/discovery/exclusions.md` (if it exists), and `research/sources/registry.md`. Every candidate ever surfaced by discovery has exactly one disposition:
    - **processed** — a registry row corresponds to it. Match on URL when the registry carries one; the registry's columns are source name and note filename, so **fall back to matching the candidate's title against the registry's source name and its note file**. Do not treat "no URL column, therefore no match" as unprocessed — that would silently invent a stranded candidate out of a source that was in fact processed. If a candidate cannot be confidently matched either way, say so explicitly rather than guessing a disposition.
@@ -30,6 +39,21 @@ Assess research coverage against the research plan and identify what's missing.
    e. Assign coverage status using the coverage assessment guide definitions — based on independent Direct source count only. Adjacent matches do not contribute to coverage status.
    f. Flag lopsided coverage: any question with only 1 independent Direct source gets a lopsided flag.
    g. If a question has 0 Direct sources and at least 1 Contradicts source, assign coverage status "Evidence Against" (not "Not Started"). Evidence Against means the question has active counter-evidence, not an absence of evidence.
+6h. **Route each question — the precedence contract.** Coverage status (step 6e) decides whether the question is **adequate**; the saturation record (step 4a) decides whether more collecting is likely to help. Cross them, per question:
+
+   | | **Adequate** | **Inadequate** |
+   |---|---|---|
+   | **Not saturated** | Proceed — saturation is moot, the evidence is sufficient | **Collect more.** The ordinary route: discovery is still yielding. |
+   | **Saturated** | Proceed | **Collection exhausted — the decision belongs to the commissioner (step 7c).** |
+
+   The bottom-right cell is the one that has no automatic answer. The question is saturated — the last rounds of discovery returned confirmations of what was already there — and its independent Direct coverage is still below the bar. Sending it back to `/research-discover` produces another round of the same, and the run after that will reach this same cell with the same reading. **That loop is why this cell exists: name it and route to step 7c. Never emit a collect-more instruction for a question your own saturation record says more sources are unlikely to shift.**
+
+   State the condition affirmatively when you assess it — "this question is saturated and has N independent Direct sources, below the bar of two" — not as a conditional about what has not been found. A criterion phrased as a conditional over an empty set clears itself vacuously and falls through to whichever branch comes next.
+
+   **Evidence Against outranks this table.** A question with counter-evidence and no Direct sources (step 6g) is inadequate and cannot be closed by collecting, whatever its saturation reads. It never routes to collect-more and never routes to the step-7c decision: its remedy is a synthesis obligation — the draft must address the contradiction. Report it as such.
+
+   **An accepted gap (step 7b) is already routed.** It carries the commissioner's recorded acknowledgment, so it does not re-enter this table and does not block a coverage-adequate verdict. It appears in the Accepted gaps list with its rationale, as it does every run.
+
 7. **Regenerate `research/gaps.md`** with the following structure (full regeneration each run — read all notes and rebuild, consistent with cross-ref pattern):
 
    **Dashboard** (at top of file):
@@ -105,11 +129,29 @@ Assess research coverage against the research plan and identify what's missing.
    acceptance never covered) — the gap simply returns to open, and a fresh acceptance,
    if granted, gets a fresh entry. This write is silent (posture rule 7).
 
-8. **Update `research/STATE.md`** — set last gap check date to today, **then update `Next Action` to the true next step** — the same command your context-sensitive ▶ NEXT block renders below (`/research-discover` or `/research-process-source <url>` if gaps remain; `/research-summarize-section` if coverage is adequate). Never leave `Next Action` pointing at the gap check that just ran: a session resuming after a clear reads this field, and a stale value sends it to the wrong step. **Reconcile the cycle state to the coverage verdict — the gap check owns this, and nothing else marks `Collect` done.** The batch finishing gathers sources; whether that is *enough* is this skill's call, so it owns the `Collect` box.
-   - **Coverage adequate** (every question clears both tests): the phase's evidence gathering is complete. Ensure `Collect`, `Connect`, and `Assess` are all checked in `Current Phase Cycle`, and set `Cycle step` to `Synthesize (4 of 5)`.
-   - **Gaps remain:** the phase is still gathering — it cannot be past Collect. Ensure `Collect` and `Assess` are *unchecked*, and set `Cycle step` to `Collect (1 of 5)`.
+7c. **The collection-exhausted decision — present it, recommend, and stop.** For every question step 6h routed here, the phase cannot proceed and cannot usefully collect. That is a decision only the commissioner can make. **This contract binds two surfaces and each carries it in full: the `research/gaps.md` entry for the question, and the user-facing turn.** Neither is a summary of the other, and neither is the "real" one.
 
-   This is what stops a `Collect [x]` box from sitting next to a `Next Action` that says "go find more sources": the box, the `Cycle step`, and `Next Action` must all agree, and this reconciliation is what makes them. After the edit, re-read STATE.md and confirm the gap-check date is today, `Next Action` names the next step (not this one), and the `Cycle step` matches the boxes. These STATE writes are silent (posture rule 7).
+   Each surface carries all four elements:
+
+   1. **The reading, stated plainly** — the question, its independent Direct count, and that its evidence has stopped changing across independent origins. Give the saturation figure once; do not re-derive it.
+   2. **The three legitimate outcomes, enumerated.** A route that is not enumerated collapses into "this is stuck," which is the state the commissioner is already in:
+      - **Accept the gap** — proceed to synthesis carrying the limitation into the draft's Methodology & Limitations. This is step 7b: their acknowledgment, in their words, ledgered as an `acceptance`.
+      - **Change the question** — a question the available evidence cannot answer may be the wrong question for this phase. Re-scope it in `research-plan.md`.
+      - **Change the channels** — saturation is measured over the channels discovery actually mapped. An unmapped one may still yield: paywalled or subscription sources, offline and archival material, an expert conversation, a direct request for primary data.
+   3. **Your recommendation, with its reason.** Name which of the three the evidence favors and why, in one or two sentences. Then stop — the decision is theirs, and you do not proceed on any of the three until they choose.
+   4. **The standing limit on the claim.** Saturation says the mapped channels have stopped producing new information. It never says the evidence does not exist. Carry that sentence whenever saturation is what justifies stopping; without it "saturated" reads as "exhausted," which is a claim about the world that no amount of searching can support.
+
+   Do not choose for them, do not proceed on the recommendation, and do not re-ask a question they have already answered — a recorded acceptance is a closed decision (step 7b), not an invitation to revisit.
+
+8. **Update `research/STATE.md`** — set last gap check date to today, **then update `Next Action` to the true next step** — the same command your context-sensitive ▶ NEXT block renders below (`/research-discover` or `/research-process-source <url>` if gaps remain; `/research-summarize-section` if coverage is adequate). Never leave `Next Action` pointing at the gap check that just ran: a session resuming after a clear reads this field, and a stale value sends it to the wrong step. **Reconcile the cycle state to the coverage verdict — the gap check owns this, and nothing else marks `Collect` done.** The batch finishing gathers sources; whether that is *enough* is this skill's call, so it owns the `Collect` box.
+   There are four verdicts, and each has exactly one cycle state. Two of them advance the phase, one sends it back, and one holds it still — the state a phase is in when it can neither proceed nor usefully collect:
+
+   - **Coverage adequate** (every question clears both tests): the phase's evidence gathering is complete. Check `Collect`, `Connect`, and `Assess` in `Current Phase Cycle`, set `Cycle step` to `Synthesize (4 of 5)`, and point `Next Action` at `/research-summarize-section`.
+   - **Coverage adequate given accepted gaps** (the only questions short of the bar are ones the commissioner has accepted, step 7b): the phase proceeds carrying them. Same cycle state as adequate — checked boxes, `Synthesize (4 of 5)`, `Next Action` at synthesis. The gaps stay visible in the Accepted gaps list; the phase moving on is what acceptance *means*.
+   - **Gaps remain, collection still viable** (at least one question routes to collect-more under step 6h): the phase is still gathering — it cannot be past Collect. Uncheck `Collect`, `Connect`, **and** `Assess`, set `Cycle step` to `Collect (1 of 5)`, and point `Next Action` at discovery. **`Connect` comes off too:** it means "cross-ref run, `cross-reference.md` current," and sending the phase back for more sources makes it not current. Leaving it checked puts a finished Connect above an unfinished Collect, which is a position no project can be in.
+   - **Collection exhausted, decision pending** (step 7c is on the table and unanswered): the phase holds. Leave `Assess` unchecked and `Cycle step` at `Assess (3 of 5)` — assessment is what produced the open question, and it is not finished until the question is answered. Point `Next Action` at the decision itself, naming the question awaiting it, not at a command. Do not advance and do not send the phase back to collect: both would be answering on the commissioner's behalf, in opposite directions.
+
+   This is what stops a `Collect [x]` box from sitting next to a `Next Action` that says "go find more sources": the box, the `Cycle step`, and `Next Action` must all agree, and this reconciliation is what makes them. The rule underneath all four rows is that the boxes run in order — every step before the active one checked, the active one and everything after it not. After the edit, re-read STATE.md and confirm the gap-check date is today, `Next Action` names the next step (not this one), and the `Cycle step` matches the boxes. These STATE writes are silent (posture rule 7).
 
 ## Guardrails
 
@@ -123,6 +165,8 @@ Assess research coverage against the research plan and identify what's missing.
 7a. Exclusions and non-selections are reported neutrally, never contested — and never hidden. If a question's only potential counter-evidence sits in the exclusion ledger OR unselected in a candidates file, the coverage report says so in the per-question detail. The user's curation is legitimate; invisible curation is the defect — and a candidate skipped by simply never picking it is curated exactly as effectively as one formally declined.
 8. Lopsided coverage flag triggers at exactly 1 independent Direct source — not 0 (that is Not Started) and not 2+ (that is adequate for non-Complete status).
 9. Full regeneration: gaps.md is rebuilt from scratch each run. Never append to or patch an existing gaps.md — stale entries from deleted or reprocessed sources would persist.
+9a. **Saturation routes; it never scores.** A saturated question is not a covered question. Coverage status is counted over independent Direct sources and nothing else — the saturation record changes which route an under-covered question takes, never what its status is. The reverse error is equally banned: an under-covered verdict does not suppress the saturation reading. They are two facts about the same question, and the commissioner needs both.
+9b. **Never send a question back to discovery when your own record says discovery has stopped paying.** The treadmill is the failure this contract exists to end: gaps remain → collect → the batch returns confirmations → gaps remain → collect. Each step is correct and the loop is the defect. When step 6h routes a question to the collection-exhausted decision, the phase stops there until the commissioner answers — a `Next Action` naming a discovery command is that answer, made on their behalf.
 10. Contradicts classification is not a subcategory of Adjacent. A source that actively opposes the research question's hypothesis is Contradicts — not Adjacent. Adjacent means "related but different topic." Contradicts means "same topic, opposing conclusion." Do not collapse the two. A question with 1 Direct and 1 Contradicts source is "Addressed but unbalanced" (the contradiction is surfaced, not hidden in Adjacent).
 
 ## Common Failure Modes
@@ -132,6 +176,9 @@ Assess research coverage against the research plan and identify what's missing.
 | Declaring coverage when sources only tangentially mention a question | For each question, identify the specific claim or data point in the source note that answers it. If you cannot point to a specific passage, the question is not addressed. |
 | Confusing quantity of sources with quality of coverage | Three sources that all repeat the same press release provide one data point, not three. Count independent evidence, not source count. |
 | Marking a phase complete when gaps are documented but unresolved | "Documented gap" is not "acceptable gap." A gap is acceptable only when the user has explicitly acknowledged it (recorded per step 7b) or no public sources exist after a thorough search. |
+| The collection treadmill — a saturated, under-covered question sent back to discovery every run | Read the saturation record (step 4a) and route through step 6h. Saturated + inadequate is a decision, not a discovery target: name it, present the three outcomes, recommend one, and hold the cycle at `Assess (3 of 5)` until the commissioner answers. A question that has been through this loop twice will go through it forever, because nothing in the loop changes. |
+| Treating a saturated question as adequately covered | Saturation measures whether the evidence is still changing; adequacy measures whether there is enough of it. One independent Direct source that nobody has contradicted in three discovery rounds is saturated and lopsided at the same time. Promoting it on the strength of the saturation figure is how a phase closes on a single interested source. |
+| Reading an absent or stale `saturation.json` as "not saturated" | Absent means cross-ref has not run; stale means sources landed after it did. Neither is a verdict. Route the ordinary way and say the reading was unavailable — inferring "not saturated" manufactures a collect-more instruction out of missing data and hides the fact that Connect needs re-running. |
 | Re-flagging a gap the commissioner already accepted — or silently dropping it | An accepted gap (step 7b) moves to the Accepted gaps list: reported with its recorded rationale every run, never counted as an open hole, never invisible. Re-litigating it wastes the commissioner's attention; hiding it erases their decision. |
 | Missing thin coverage on critical questions | Flag any question answered by only one source. Single-source coverage on a phase's central question is a gap, not partial coverage. |
 | Inflating coverage with Adjacent matches | Adjacent sources address related topics, not the specific question. A question about "AWS market share" with 3 sources about "cloud market size" has 0 Direct sources — coverage is Not Started, not Complete. |
@@ -176,7 +223,19 @@ Note: "Not Started" questions are discovery targets — run /research-discover t
 
 **Context-sensitive next-action block:**
 
-If discoverable gaps exist (Not Started, Lopsided, or Addressed-but-unbalanced questions). **`Evidence Against` is not a discoverable gap** — active counter-evidence is not resolved by finding more sources, so it never triggers this discovery branch on its own (it routes to synthesis below). If a discoverable gap AND an `Evidence Against` question are both open, render this block for the discoverable gap and name the `Evidence Against` question(s) as a synthesis task to address when the draft is written, not a discovery target:
+If any question is **collection-exhausted with the decision pending** (step 6h routed it to step 7c and the commissioner has not answered). This branch outranks every branch below it: a phase with an unanswered decision on the table does not get a command as its next action, because every available command answers the decision by proceeding as if it had been made:
+
+───────────────────────────────────────────────────────────
+
+**▶ NEXT:** Your decision on [question] — collecting has stopped paying and the coverage is still short. The three ways forward are above; [name the one you recommend] is the one I'd take, for [reason in a clause]. Nothing proceeds until you choose.
+
+**Also available:**
+- `/research-phase-insight` — Review exactly what the existing sources do and don't establish before deciding.
+- `/research-discover` — If you want to try channels discovery hasn't mapped; the mapped ones have stopped yielding.
+
+───────────────────────────────────────────────────────────
+
+If discoverable gaps exist (Not Started, Lopsided, or Addressed-but-unbalanced questions). Two kinds of open question are **not** discoverable gaps and never trigger this discovery branch on their own: **`Evidence Against`** questions, where active counter-evidence is not resolved by finding more sources (they route to synthesis below), and **collection-exhausted** questions, where the mapped channels have stopped yielding (they route to the decision above). If a discoverable gap is open alongside either kind, render this block for the discoverable gap and name the others in their own terms — a synthesis task to confront in the draft, or a decision awaiting the commissioner — never as discovery targets:
 
 ───────────────────────────────────────────────────────────
 

@@ -2,6 +2,64 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.11.0] — 2026-08-09
+
+**W2 — saturation to the stop decision (Seam 1).** The most-felt gap: on a live run the
+agent stalls. `/research-cross-ref` computed saturation, `/research-check-gaps` owned the
+stop, and the gap check never opened the saturation summary. So a question that was
+*saturated* (the last discovery rounds returned confirmations of what was already there) and
+*inadequate* (one independent Direct source) routed back to Collect — every run, forever.
+Every skill did its job correctly at every step. The loop was the defect, and no gate could
+see it, because each individual state was well-formed.
+
+The fix is a precedence contract, not a merged score. Saturation and adequacy answer
+different questions — "is more collecting going to change this?" and "is there enough here to
+write from?" — and merging them fails in both directions. Merged one way, a lopsided
+single-origin question gets promoted because nobody new showed up, which is how a project
+closes on one interested source. Merged the other way, you get the stall back.
+
+### Added
+
+- **`research/reference/saturation.json`** — the machine-readable half of cross-ref's
+  saturation verdict (new step 7a), per phase question, alongside the prose summary that
+  stays the human working view. Two renderings of one judgment, never two judgments.
+- **The precedence contract** in `/research-check-gaps` (new step 6h). Adequacy governs the
+  stop: saturation never promotes a question to covered, never checks the `Collect` box,
+  never advances `Cycle step`. Saturation governs the route inside the gaps-remain branch,
+  where it decides whether "go collect more" is honest advice or a treadmill.
+- **The collection-exhausted decision** (new step 7c) — the saturated-and-inadequate cell,
+  which has no automatic answer. The skill reaches it, names it, enumerates three outcomes
+  (accept the gap, re-scope the question, open a channel discovery never mapped), gives a
+  recommendation with its reason, and stops. The contract binds the `gaps.md` entry and the
+  user-facing turn, each carrying it in full. Accepted gaps (step 7b) are now reachable by
+  computation instead of only when the commissioner volunteers.
+- **A fourth cycle state** in step 8: *collection exhausted, decision pending* holds the
+  phase at `Assess (3 of 5)` with `Next Action` naming the decision rather than a command.
+  Advancing or rolling back would both answer on the commissioner's behalf, in opposite
+  directions — which is why the stall previously had nowhere to live.
+- **Synthesis pre-check 3a** — an unanswered collection decision blocks
+  `/research-summarize-section`, the same way an unresolved core contradiction does. An
+  *accepted* gap is an outcome and does not block; that is what acceptance is for.
+
+### Changed
+
+- **The gaps-remain rollback now unchecks `Connect`.** It means "cross-ref run,
+  `cross-reference.md` current," and sending the phase back for more sources makes it not
+  current. The previous text unchecked `Collect` and `Assess` and forgot `Connect`, leaving a
+  finished Connect sitting above an unfinished Collect. Found by the eval harness's new
+  `state_cycle_coherent` gate across iterations 20–22.
+- **Saturation staleness is a first-class state.** An absent or stale record (sources
+  processed since it was written) reads as *no reading available*, never as "not saturated."
+  The turn says so rather than implying a reading was consulted.
+- Cross-ref guardrail 8 keeps saturation non-blocking and adds what changed: not blocking is
+  not the same as not consulted.
+- `coverage-assessment-guide.md` — "When to Accept Gaps" records how its first condition now
+  gets reached, and the standing limit: saturation supports "not found where we looked," never
+  "does not exist."
+
+Design and the three resolved author forks: `dev/researcher/w2-design.md`. Map updated in the
+same change (`dev/researcher/ARCHITECTURE.md` — Seam 1 closed).
+
 ## [1.10.0] — 2026-08-06
 
 **W6a/b — the prevention layer.** W7 (v1.8.0) built the authority that refuses completion

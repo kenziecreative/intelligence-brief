@@ -79,6 +79,19 @@ A gap is **acceptable** when:
 - The user has explicitly acknowledged the gap and decided to proceed
 - The question is peripheral to the phase's core objective
 
+**How the first condition gets reached in practice.** "Not found via the mapped channels
+after actual searching" used to depend on the commissioner volunteering that judgment.
+`/research-check-gaps` now computes the situation: when `/research-cross-ref`'s saturation
+record says a question has stopped producing new information across independent origins, and
+its independent Direct coverage is still below the bar, the gap check names the state and puts
+three outcomes to the commissioner — accept the gap, re-scope the question, or open a channel
+discovery never mapped. Acceptance is one of three answers, never the default and never the
+agent's to choose.
+
+Note what saturation licenses and what it does not. It supports "not found where we looked."
+It never supports "does not exist" — which is why *change the channels* is always on the table
+and why an accepted gap is recorded in found-where-we-looked terms.
+
 A gap is **NOT acceptable** just because:
 - It is documented in gaps.md (documenting a gap does not resolve it)
 - The phase has "enough" sources overall (coverage is per-question, not per-phase)

@@ -29,6 +29,22 @@ Before writing anything, verify:
 
    Do not proceed until all core contradictions are resolved. Peripheral contradictions (those not directly addressing a current phase question) should be noted in the draft but do not block synthesis.
 
+3a. **`research/gaps.md` has no collection-exhausted question awaiting the commissioner's decision.** Read the coverage entries. If a question on this phase is recorded as saturated with coverage still below the bar and no recorded outcome — no acceptance, no re-scope, no new channel — stop and tell the user:
+
+   ```
+   Synthesis blocked — a coverage decision is open on this phase:
+
+   - [Question]: [N] independent Direct source(s); the mapped channels have stopped
+     producing new information on it.
+
+   The three ways forward are in the gap report: accept the gap and carry it into the
+   draft's limitations, re-scope the question, or open a channel discovery hasn't
+   mapped. Run /research-check-gaps to see the recommendation, and record your decision
+   there. Drafting now would answer it by proceeding.
+   ```
+
+   Do not proceed until the decision has an outcome. **An accepted gap is an outcome and does not block** — that is what acceptance is for: the phase proceeds carrying the limitation, and the draft's Methodology & Limitations section states it in the commissioner's recorded terms. What blocks is the *unanswered* question, for the same reason an unresolved core contradiction blocks: the corpus needs a decision it does not have, and drafting past it makes the decision silently and in one direction.
+
 4. **Source staleness advisory.** Read `research/research-plan.md` to identify the research type, then read the corresponding type template in `${CLAUDE_PLUGIN_ROOT}/reference/templates/types/` to get the **Staleness Threshold** value. Read all source notes in `research/notes/` relevant to this section. For each source note, compare its **data year** (not publication year — a 2025 article citing 2021 data uses 2021) against `current year minus threshold`. If any sources exceed the threshold, display a staleness advisory before proceeding:
 
    ```

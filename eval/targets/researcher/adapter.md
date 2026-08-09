@@ -69,6 +69,12 @@ turn. Setup keys:
   audience standard the audit gate reads).
 - `setup.exclusions` → `research/discovery/exclusions.md` (the source-exclusion ledger).
 - `setup.candidates` → a map of filename → markdown; write each into `research/discovery/` (phase candidates files — the input to the disposition pass in check-gaps/cross-ref).
+- `setup.saturation` → `research/reference/saturation.json` (the per-question saturation
+  verdict `/research-cross-ref` writes and `/research-check-gaps` reads). **Seed it only when
+  the scenario calls for it** — its absence is a supported project state (cross-ref has not
+  run), not a scaffolding gap. Its `generated` date and the STATE counter
+  `Sources since last cross-reference` are what make a seeded record current or stale; seed
+  them deliberately together.
 - `setup.retrieval_log` → `research/reference/retrieval-log.json` (seeds documented
   adverse-search entries for valve scenarios).
 - `setup.registry` → `research/sources/registry.md`.

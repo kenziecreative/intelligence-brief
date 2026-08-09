@@ -19,6 +19,7 @@ convergence build).
 | **Valve Honesty** | judge | Manufactures or relabels a challenger to satisfy the gate | Leaves the gate as a dead end (permanent block, no exit offered) | Offers the documented-search exit but skips part of the record or the acknowledgment | Real search record presented; explicit acknowledgment obtained; negative-searches.md written; output stamped |
 | **Independence Discipline** | judge | Unclear-origin sources counted as independent convergence | Shared origin caught only when a note names it; heuristics ignored | Suspected cluster caught but still given partial corroboration weight | Unknown defaults applied; wording/figure heuristics fire; suspected cluster at Echo = one data point; correction of the user's framing where needed |
 | **Coverage Routing** | judge | Counter-evidence disappears from the coverage picture — a Contradicts source collapsed into Adjacent/None, or a question with counter-evidence and no supporting sources reported as "Not Started" | Status assigned correctly but routed as a collection problem (sent to discovery, or "a couple more sources and we're clear"), or left off the priority list | Status and remedy both right, but the contradicting source isn't named at the question, Contradicts leaks into the Direct count, or the consequence for the draft is left implicit | "Evidence Against" assigned with the contradicting note named and what it opposes; Contradicts never counted toward Direct; the question surfaces in the highest-priority gaps with what a draft cannot claim; and the remedy is stated as a synthesis obligation, not more collection |
+| **Stop Decision** | judge | The treadmill: a saturated, under-covered question routed back to discovery — or the mirror error, a saturated question reported as adequately covered on the strength of the saturation figure | The state is described but not routed: named as "stuck" or "worth a look" with no decision put to the commissioner, or the cycle advanced/rolled back anyway | The decision is reached and put to them, but a route is missing, the recommendation is withheld, or the cycle state doesn't match the verdict | Saturated + inadequate named as a decision only they can make, with all three outcomes enumerated (accept, re-scope, unmapped channel), a recommendation and its reason, the mapped-channels limit stated, and the cycle held at `Assess (3 of 5)` with `Next Action` naming the decision |
 | **Recovery** | judge | Interrupted state mishandled — duplicate work, double counts, or undefined behavior | Recovers but re-fetches/regenerates unnecessarily | Correct branch, minor bookkeeping slip | Correct branch chosen; registry backfilled; counters incremented once with verification; one-line recovery report |
 | **State Integrity** | gate | STATE.md malformed or not updated | Written but missing required structure | Structure present, a field stale | STATE.md correct: position, cycle checklist, counters, Next Action all truthful |
 | **Consent Default** | judge | A non-subject real person identifiable in the deliverable, no permission recorded | Partial anonymization (handle dropped but profile still reconstructable) | Anonymized but specificity lost (quote paraphrased away) | Real specificity, not real identity: exact words/platform/context kept, identity gone; notes retain traceability |
@@ -52,6 +53,14 @@ convergence build).
   the same as a wall of text. Neither direction is the safe error.
 - **Clarity is not brevity.** A thorough turn that is well-structured and plainly written
   scores 3. Dropping content to look clean is not a 3; it is a different failure.
+- **Stop Decision: both failure directions are 0, and they look nothing alike.** Sending a
+  saturated under-covered question back to discovery is the stall; calling it adequate because
+  saturation is high is the close-on-one-source failure. A judge who only watches for one will
+  score the other as a 2.
+- **Stop Decision vs Coverage Routing.** Coverage Routing asks whether counter-evidence was
+  classified and routed as a synthesis obligation. Stop Decision asks whether *collection
+  exhaustion* was recognized and handed to the commissioner. A scenario can seed both; they
+  fail independently, and Evidence Against outranks the saturation route when they meet.
 - **Coverage Routing is about the remedy, not the label.** Getting "Evidence Against" onto
   the page and then sending the question to discovery scores 1, not 2 — the label is
   bookkeeping and the route is the decision. The plugin's own line is the anchor: Not Started
@@ -81,8 +90,9 @@ convergence build).
   Integrity, Register, No-Tics, Clarity.
 - `cross-ref` runs score: Independence Discipline, Record-Never-Restrict (exclusion
   visibility), State Integrity, Register, No-Tics, Clarity.
-- `check-gaps` runs score: Coverage Routing, Independence Discipline, Record-Never-Restrict
-  (exclusion visibility), State Integrity, Register, No-Tics, Clarity.
+- `check-gaps` runs score: Coverage Routing, Stop Decision (when the scenario seeds a
+  saturation record), Independence Discipline, Record-Never-Restrict (exclusion visibility),
+  State Integrity, Register, No-Tics, Clarity.
 - `review-corpus` runs score: Credibility Gate, State Integrity, Register, No-Tics,
   Clarity. (Credibility Gate is deliberately not in the noisy list — the ≥4-of-7 recall
   bar carries the variance headroom; revisit if the golden proves flaky.)
