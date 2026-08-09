@@ -1,132 +1,118 @@
 # Stream: researcher
 
-**Status:** live — researcher **v1.10.0** committed + tagged on `researcher-w6ab`; **not pushed, not merged to main** (Kelsey's call).
-**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `researcher-w6ab`
-**Last touched:** 2026-08-06
+**Status:** live, nothing red — **v1.10.0 merged to `main` and pushed**. No uncommitted or
+unpushed researcher work. Three of eight workstreams complete; **W2 is next**, but see Next
+Steps: the eval harness has known blind spots that should be closed before W2 leans on it.
+**Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
+**Last touched:** 2026-08-09
 
-> **Provenance.** This file was split out of the monolithic `dev/STATE.md` on 2026-08-07, when
-> main merged into `convergence/goal-setting`. Everything below is main's `dev/STATE.md` body
-> carried over **verbatim** — the researcher stream's own snapshot, moved to where the
-> per-worktree architecture says it belongs. Nothing was edited, so read it as a 2026-08-06
-> snapshot, not as current fact. Note it is internally stale in places: the header says v1.10.0
-> while the body below still describes v1.7.0/W7 and a pending `researcher-v1.8.0` push. That
-> inconsistency is main's, and it is exactly the lost-update bug the split exists to prevent.
+## Where it stands
 
----
+**v1.10.0** (tag `researcher-v1.10.0`, release commit `2546e3f`, merged as `715ba13`, now an
+ancestor of `main`). Full history in [researcher/CHANGELOG.md](../../researcher/CHANGELOG.md);
+the architecture map is [dev/researcher/ARCHITECTURE.md](../researcher/ARCHITECTURE.md).
 
+Program-level view — the plan's status block at
+`~/.claude/plans/shimmying-sauteeing-storm.md` (local, not in-repo):
 
-**Last updated:** 2026-08-06 · **Session focus:** W6a/b COMPLETE — the prevention layer
-for the credibility gate. Released as **researcher v1.10.0**, committed + tagged on
-`researcher-w6ab`. NOT pushed, and NOT merged to main — that's Kelsey's call. Design +
-fork record: `dev/researcher/w6ab-design.md` (all 4 forks resolved per recommendation).
-Shipped: append-only decision ledger with per-skill writers; B13 disposition conformance;
-criteria preflight (hard stop, evidence-named); advisory criteria trajectory; settled-framing
-guard. Regression: iterations 21→23. **Iteration 21 found 4 red goldens** (2 of them the new
-mechanisms); all 4 green by iteration 23, incl. a post-decision-re-argument defect open since
-iteration 4. **The durable lesson: every fix in 22 and 23 was to how a result is REPORTED,
-not to a detection mechanism — and both reporting failures traced to instruction wording.
-Specifying a rule for an internal step does not bind the turn; saying a contract "binds the
-turn, not just the report" de-emphasised the report into neglect. State two-surface contracts
-symmetrically; enumerate multi-part routes.** Open harness debt (logged, not done): no gate
-sees a STATE write during a write-free preflight, none sees cycle-step/checkbox incoherence,
-and one capture editorialized a turn upward and distorted its score.
-
-## Where things stand
-
-- **researcher (1.7.0 released; W7 on branch `researcher-w7`, stages 3–4 done)** —
-  Commits this arc: `7135d13` (stage 3 build) → `2a630bf` (stage-3 hardening from the
-  golden campaign) → `562bcbd` (stage 4 gate wiring). The credibility gate is now
-  **wired**: audit-claims' final closeout is the validator-owned three-stage sequence
-  (with a mutation-free closeout-only re-entry), side doors are closed, sentinel readers
-  validate completion claims (verdict outranks STATE text), and init installs/adopts the
-  full protocol kit (`/research-init upgrade` for existing projects). Validator battery
-  **71/71**, contract hash current. No version bump yet — release is stage 5.
-- **Eval record:** iterations 10–18 = the corpus-scale golden campaign (both goldens
-  judged PASS; every red a true positive — 6 fixture defects, 1 register deficiency, 3
-  phrasing gaps). Iteration 19 = audit-entry regression, all three goldens PASS
-  multi-sampled, zero stage-4 leakage. New harness pieces: `command_exit0` gate type in
-  `eval/lib/run-gates.mjs`, `review_receipt_validates` gate, Credibility Gate rubric
-  dimension, fixtures `corpus-a`/`corpus-b` (neutral names — blind-runner leak defense).
-- **The map** — ARCHITECTURE Layer 9 current (stages 3–4 built/proven; stage 5
-  proposed); Layer 2 gained the runner/validator ownership rows.
-- **Other plugins** — unchanged.
+| Workstream | State |
+|---|---|
+| W7 — adversarial corpus review (the credibility gate) | **done**, v1.8.0 |
+| /upskill constraint pass | **done**, v1.9.0 |
+| W6a + W6b — completion integrity + cross-phase consistency | **done**, v1.10.0 |
+| W2 — saturation → stop decision (Seam 1) | next |
+| W3 (conclusion-vs-brief), W1 (note fidelity), W4, W5, W6c–f | not started |
 
 ## Done this session
 
-- Stage 3: runner skill + command, brief (C15 + required-evidence + frozen deltas),
-  Tier-2 agent, additive `validate-receipt` mode, corpus-scale fixtures + scenarios +
-  rubric dimension + deterministic receipt gate; two Codex fix-first reviews applied
-  (stage 3: 5 blockers/5 majors; stage 4: 4 blockers/5 majors/1 minor).
-- Stage 4: three-stage closeout, side doors, sentinel readers, init kit + adoption path,
-  tools-guide Codex section, workflow-ownership stop item, validator archive
-  drift-check (battery 69→71).
-- Verification green at every step: self-test 71/71, contract hash matches, plugin
-  validate ×2, check-version-prefix, golden set green (see `_eval/iteration-19/scores.md`).
+- **v1.9.0** — `/upskill` constraint audit applied across all 12 surfaces (ten author
+  decisions; audit at `dev/researcher/constraint-audit.md`).
+- **v1.10.0 — W6a/b, the prevention layer.** Append-only decision ledger (corrections,
+  resolutions, accepted gaps, directives; each written by the skill that owns the decision),
+  B13 disposition conformance, criteria preflight with a hard stop, advisory criteria
+  trajectory in phase debriefs, settled-framing guard. Design + the four resolved author
+  forks: [dev/researcher/w6ab-design.md](../researcher/w6ab-design.md).
+- Eval iterations 21–23. **Iteration 21 found four red goldens**; all four green by 23.
 
 ## In flight / uncommitted
 
-None. Working tree clean at `562bcbd`.
+None.
 
 ## Next steps (in order)
 
-0. **Push** (Kelsey): `git push origin main researcher-v1.8.0` publishes v1.8.0 to the
-   marketplace. Also Cowork-side verification of the review/closeout surfaces (build
-   model: each surface tested by the tool that sees it) — structural checks done here
-   (no hook dependencies; plain python3), live Cowork pass still open.
-0a. **Kelsey's engine corpus has 8 open material findings** from the live dual-tier
-   review (t1: 6 — incl. OD-6 ownership contradiction, $29 floor-vs-top residue,
-   WTP-spec rule conflict; t2: 2 — stale 05a scope-limitation paragraph, 11:353
-   floor-of-class reintroduction; full receipts/reports in the session scratchpad's
-   live-run/ + live-remediated/research/reviews/, which are SESSION-TEMPORARY — the
-   durable record is this list + the readout). To act on them properly: in the real
-   repo, `/research-init upgrade` then `/research-review-corpus final`, then adjudicate
-   via the new ledger procedure in audit-claims.
-1. **(retired) W7 stage 5 — done:** dual-tier review (`/research-review-corpus
-   final`, t1+t2) of the remediated engine corpus (repo
-   `~/Projects/_shared/helloalice-research`, project
-   `projects/engine-vs-harness-owner-pricing`; known-bad `2ab9f25`, remediated
-   `93ec4fc`+; snapshot via `git archive`); the validator against the pre-remediation
-   snapshot must block; Cowork path test; Codex review of the whole W7 change; five
-   version surfaces + CHANGELOG + tag `researcher-v1.8.0` (or as decided); merge
-   `researcher-w7`.
-2. **Then the plan queue** (`~/.claude/plans/shimmying-sauteeing-storm.md`, program-status
-   block current): W6a/b → W2 → W3 → W1 → rest. Chips pending: audit-register cleanup
-   (`task_73dee9b0`), Evidence-Against golden (`task_c631be46`), FAIL-branch durable
-   manifest (`task_d6b356eb`, new this session).
+1. **Close the eval-harness blind spots before starting W2.** Iterations 21–23 showed the
+   deterministic gates went **16/16 clean through an iteration with four red goldens** —
+   every red was judgment-sourced. Three judges independently named the same gaps:
+   - No gate detects a **STATE write during a write-free preflight**. The iteration-21
+     criteria-preflight run closed a project and wrote completion state; `state_active_phase`
+     passed anyway. Cheapest fix: assert `research/STATE.md` is byte-identical to seed on any
+     run whose expected terminus is a preflight.
+   - No gate detects **cycle-step / checkbox incoherence** (`Cycle step: Connect (2 of 5)`
+     with Connect checked; Collect unchecked with Connect checked). Hit 3× in one iteration.
+   - **Capture fidelity is unenforced.** One capture attributed file paths to the assistant
+     that its transcript did not contain, inflating a score. Add an explicit
+     runner instruction (and ideally a check) that `capture.md` may not exceed `transcript.md`.
+   Grounding: `eval/targets/researcher/_eval/iteration-21/scores.md` § gate-coverage gaps
+   (local only — `eval/**/_eval/` is gitignored, so these exist only in this checkout).
+2. **Build the Evidence-Against eval golden** — chip `task_c631be46`. It exists specifically
+   to protect W2, and the plan says do it early. Belongs with step 1 as one short pass.
+3. **Open W2** (saturation → the stop decision, Seam 1 — the most-felt gap; cross-ref computes
+   saturation and check-gaps, which owns the stop, never reads it). Design fork is already
+   resolved on paper by the Codex correction: **do not merge saturation and adequacy** —
+   they answer different questions. Build a precedence/routing contract, and wire the
+   accepted-gap state to a real route (it now has a durable home in the decision ledger).
+   Grounding: the plan file § W2.
+4. **Init eval scenario** — `/research-init` still ships behaviorally unverified (structural
+   validation only; no scenario exercises the challenge-first intake). Carried since v1.9.0.
 
 ## Open questions / decisions pending
 
-- **Spec calls for Kelsey to eyeball** (all recorded in-protocol with rationale):
-  additive `validate-receipt` mode (§9, stage 3); archive drift-check tightening of
-  `check-completion` (stage 4 — spec-compliance reading of §1.4/§6.4); rubric kept
-  strict on clean-run gate-semantics close (skill emits it unconditionally).
-- Eval-harness follow-ups (non-blocking, from iteration 19): runner scenario-extractor
-  must project only entry/setup/user_messages (one runner accidentally printed
-  judge-only fields; judge adjudicated the capture clean); No-Tics rubric question
-  (within-turn vs cross-turn recurrence); assorted surface-for-decision items in
-  `_eval/iteration-19/scores.md`.
+- **Kelsey's engine corpus has 8 open material findings** from the W7 live proof. Path:
+  `/research-init upgrade` then `/research-review-corpus final` in that repo. Also the best
+  real-world test of whether W6a/b's in-line checks would have caught what Codex caught by
+  hand — genuinely unanswered.
+- **Two goldens pass on a single sample** while their critical dimensions are noisy
+  (`adv-audience-standard-waiver`, `adv-exclusion-visibility`); the rubric wants 3×. Their
+  green is unconfirmed.
+- **Three goldens went unrun** in iterations 21–23 (`adv-independence-unknown`,
+  `adv-unselected-invisible`, `adv-mid-source-recovery`). Not counted as passing anywhere.
+- Whether B13's four-element supersession route should sanction a **short-form second
+  statement** — stating it in full for each reversal reads as a repeated template (No-Tics 2).
 
 ## Session knowledge worth keeping
 
-- **Branch `researcher-w7`** until stage-5 release; STATE.md commits ride it.
-- **Contract-hash sync rule** unchanged (validator edit → regenerate contract from
-  `hash-self`).
-- **Codex background gotchas:** always `< /dev/null`; if a large argv prompt dies
-  instantly (exit 1, empty streams) while tiny prompts work, feed the prompt via stdin
-  (`codex exec ... "Follow the instructions on stdin." < prompt.md`).
-- **Eval blind-runner surfaces:** fixture names, adapter prose, and dir names must not
-  encode expected outcomes; judge-only truth lives in coverage.md / rubric /
-  expected_behavior / seed_notes. Sampler variance is real: a clean corpus must be
-  *actually* clean, not clean-on-one-roll — the seven-repair corpus-b saga (iterations
-  10–17) is the case study.
-- **Multi-sample rule bites:** goldens whose critical dimensions are noisy run 3×,
-  worst sample decides — iteration 19 honored it (waiver + override 3×, manifest 1×).
+- **The durable authoring lesson from W6a/b.** Every fix across eval iterations 22 and 23 was
+  to *how a result is reported*, never to a detection mechanism — everything caught what it
+  should on first build. Both reporting failures traced to instruction wording:
+  (a) specifying a requirement for an internal step **does not bind the user-facing turn**;
+  (b) writing "this binds the turn, not just the report" caused the next run to fix the turn
+  and leave the report failing exactly as before. **Emphasis functions as exclusion.** A
+  contract covering two surfaces must state both symmetrically, and a multi-part route must
+  enumerate its parts or "state the route" collapses into "state what's missing."
+- **Criteria wording invites vacuous satisfaction.** A criterion phrased as a conditional
+  ("*any* single-figure cost carries a recorded decision rule") is vacuously true over an
+  empty set, and a run cleared it that way, then fell through to a branch that legitimately
+  writes completion. Nothing errored — the downstream machinery working correctly is what
+  made the wrong ending look orderly. Both the skill (general rule) and the scenario
+  (positive phrasing) were fixed; watch for this shape in W2/W3 criteria.
+- **corpus-b (the "clean" fixture) took nine repair rounds** to actually review clean. Every
+  round the cold reviewer found a true positive, including one pre-existing defect
+  (`CLAUDE.md` summarized 2 of 3 compiled evidence rules) that survived eight earlier rounds.
+  A clean-corpus fixture proves nothing unless it is genuinely clean; expect to repair it
+  again whenever it changes.
+- **Contract-hash sync rule:** any edit to `researcher/reference/validate-corpus-review.py`
+  requires regenerating `review-protocol-contract.json` from `hash-self`. The contract stores
+  it at `protocols.1.validator_sha256` (not a top-level key — a naive grep for "hash" finds
+  nothing and looks like a mismatch). Battery is **74/74**.
+- **`dev/STATE.md` is an index, not a snapshot.** Sessions before 2026-08-07 wrote snapshots
+  into its body; that body was split verbatim into this file, which is why its old content was
+  internally inconsistent. Write here, touch only the researcher row there.
+- Eval runs are local-only (`eval/**/_eval/` is gitignored). Iterations 21–23 scorecards exist
+  only in this checkout — the committed record is the CHANGELOG, the design doc, and this file.
 
 ## How to resume
 
-1. Read `AGENTS.md`, then this file. Confirm branch `researcher-w7`.
-2. For stage 5: protocol §§6, 8, 9 + the runner skill's `final` mode; engine-corpus
-   coordinates above; release ritual in researcher/AGENTS.md ("Maintaining this
-   plugin"); update the plan file's program-status block at every stage move.
-3. Build discipline (standing): one change at a time; Codex-review before ship; eval
-   regression on changed skills; sync ARCHITECTURE in the same change.
+1. Read `AGENTS.md`, then `dev/STATE.md` (index), then this file.
+2. Read `~/.claude/plans/shimmying-sauteeing-storm.md` § Program status for the program view
+   (local file, not in the repo).
+3. Start at Next Steps 1+2 as one pass (harness gaps + Evidence-Against golden), then W2.
