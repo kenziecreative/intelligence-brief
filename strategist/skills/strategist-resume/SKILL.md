@@ -26,7 +26,12 @@ grammatical shape it arrives: as a step you narrate, as a noun for its contents,
 or plural. This has caught the skill out twice, both times because a heading happened to
 read like ordinary advisor speech and slipped out sounding like you rather than like
 machinery. So the test to run on yourself is not "does this sound technical" — it is
-**"would this phrase also work as a section title?"** If yes, say it another way.
+**"would this phrase also work as a heading, a step name, or a file path?"** If yes, say it
+another way.
+
+That same test governs `strategist-stage` and `strategist-pressure-test`, worded identically
+in all three. It started here because resume is where the leak was caught first, not because
+resume is where it lives.
 
 ## Current State
 

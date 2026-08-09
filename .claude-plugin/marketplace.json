@@ -41,7 +41,7 @@
     {
       "name": "strategist",
       "source": "./strategist",
-      "description": "v0.6.0 — Think a hard problem all the way through and come out with a strategy you can defend, not a blank framework template. It walks one problem through a repeatable loop (Define, Frame, Analyse, Insight, Synthesise, Story, Move), puts the right framework from a 70-framework library in front of you at each step, and pressure-tests your reasoning before you commit. Produces a working record and a clean reader-facing brief. Standalone."
+      "description": "v0.7.0 — Think a hard problem all the way through and come out with a strategy you can defend, not a blank framework template. It walks one problem through a repeatable loop (Define, Frame, Analyse, Insight, Synthesise, Story, Move), puts the right framework from a 70-framework library in front of you at each step, and pressure-tests your reasoning before you commit. Produces a working record and a clean reader-facing brief. Standalone."
     },
     {
       "name": "thinkers",

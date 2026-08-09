@@ -58,6 +58,23 @@ turn, so the run starts from that state:
 When there is no `setup`, scaffold a minimal fresh `strategy/STATE.md` + `brief.md` (as
 `strategist-init` would) with the scenario's implied problem, then run the entry stage.
 
+**The scaffold is built from `user_messages[0]` only.** Nothing from a later message may
+appear in the pre-turn-1 files — not a figure, not a name, not a detail the user has not
+said yet. The runner holds the whole `user_messages` array so it can play the turns in
+order, which makes this easy to get wrong: "the scenario's implied problem" reads like the
+whole scenario, and the scaffolded `problem:` line is the natural place for it to leak.
+
+Iteration 10 hit exactly that. `rep-define-scq`'s first user message says only "renewals
+held steady for two years"; the scaffolded STATE.md said "steady renewals near **90%**", a
+figure that appears only in message 2. The plugin then quoted "~90%" back before the user
+had ever said it, and the judge scored it as invented data. It was not invented — it was
+read out of a state file the harness had pre-loaded with the answer.
+
+This is the same class of bug as the iteration-5 blindness leak: the harness handing the
+runner something the scenario meant to withhold. It lands on fabrication, which is the one
+dimension the deterministic gates cannot check at all (`framework_in_library` inspects
+framework *names*, never data), so nothing downstream catches it.
+
 ## User-turn protocol
 
 The runner plays the assistant by following the skill; it consumes `user_messages` in

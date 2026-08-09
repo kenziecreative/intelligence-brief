@@ -3,6 +3,75 @@
 All notable changes to the Strategist plugin. Per-plugin semver; tags are plugin-scoped
 (`strategist-vX.Y.Z`).
 
+## 0.7.0 — 2026-08-09
+
+The **generalization release**. 0.6.0's rename worked: `adv-mid-stage-resume` went from
+0-of-3 to 3-of-3, and iteration 10 confirmed it with three independent judges. But the same
+run put a number on something 0.6.0 had not noticed — **Register averaged 2.56 across all 25
+runs**, the weakest dimension in the suite, and every leak site outside resume was still
+open.
+
+**The eval could only ever point at resume.** Register is a `critical_dimension` on exactly
+one scenario. Everywhere else a 2 clears the 1.3.0 floor and the scenario passes with the
+leak intact. So three releases of narration work went into the one skill the eval could fail,
+while the identical defect sat in two others. Iteration 10 found five sites:
+
+| Skill | Leak |
+|---|---|
+| `strategist-stage` | Step 4b closeout — **never scored 3 in any sample** (2·2·1) |
+| `strategist-stage` | a silent In-Flight save, narrated: *"I've saved that so it's not lost"* |
+| `strategist-stage` | Analyse's own working vocabulary: *"I'm setting a ledger"* |
+| `strategist-pressure-test` | *"dispatching the critic now"* — Step 2's heading, spoken |
+| `strategist-pressure-test` | the critic's type tag relayed verbatim: *"**WEAK INFERENCE —**"* |
+
+**The firewall is now one rule in three skills**, worded identically in
+`strategist-resume`, `strategist-stage` and `strategist-pressure-test`, and held there by a
+release-blocking drift contract (`narration_firewall_test`). The test generalized from
+*"would this phrase also work as a section title?"* to **"would this phrase also work as a
+heading, a step name, or a file path?"** — because two of the five leaks were file paths and
+step names, which the old wording did not reach.
+
+It is written as a test rather than a banned-word list on purpose: a word list only ever
+catches the leaks someone already found. The six failure shapes are named beneath it —
+announcing that a check ran, labeling a sub-step, reciting the inventory parts that came back
+fine, naming the file, narrating a step the skill calls silent, and relaying an
+agent-to-agent format. The Step 4b closeout hits all six at one moment, and the previous
+wording let a closeout obey every letter of the rule while handing over the whole checklist
+in slightly different words.
+
+**Fixed: the commitment gate could refuse to close on an explicit override.** A
+`severity: blocker` golden failed iteration 10. The user said *"Log acquisition as the
+decision anyway — my call"*; the agent replied *"Understood — it's logged as your call"* and
+then did not log it, spending its last turn asking how to dispose of the pressure-test
+findings — re-raising an objection the override had already answered. Step 4b.4's
+*"the user decides what to address now"* reads as *"the user must be asked,"* and asking is
+the failure: an override **is** a disposition. The rule now says so, and says that once the
+final call is in, outstanding findings are recorded as carried open and the stage closes.
+
+This was **not** a 0.6.0 regression — the 0.6.0 diff to `strategist-stage` was three
+section-name references, and the other two samples of the same scenario closed correctly on
+the same build. It is latent non-determinism that ten iterations of 3× sampling never landed
+on. Verified here at 5×.
+
+### Known, not fixed
+
+- **Worked-example contamination.** `rep-framework-eisenhower` scored No-Fabrication **0**:
+  the run lifted *"a competitor is already undercutting on entry-tier"* from
+  `reference/synthesise/eisenhower.md`'s worked example — a fictional company — and asserted
+  it as the user's own situation, then closed by claiming one assumption when it had made
+  two. The fix needs a deterministic lint over `reference/**` example strings and a golden
+  for contamination, which the suite has no scenario for. Note the asymmetry:
+  `adv-fabricate-data`, built to catch fabrication under *pressure*, passed clean. Nobody
+  pushed here — the reference library did it.
+- **Framework labels in the reader brief.** `rep-story-pyramid` wrote *"the same driver-tree
+  logic"* into `strategy-brief.md`, against its own Reader-Brief Style Rules. Needs a third
+  `content_lint` matching library slugs.
+- **`framework_in_library` still checks only framework names.** It cannot see invented data
+  and cannot see *offered* frameworks — only claimed ones. It has never tested the thing
+  No-Fabrication is named for.
+- **Register is still critical on one scenario only.** Until that changes, the next leak
+  outside resume will be equally invisible.
+
 ## 0.6.0 — 2026-08-07
 
 The **resume-continuity release**. 0.5.0's own eval found one regression against the

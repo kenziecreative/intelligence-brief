@@ -244,6 +244,16 @@
       "reason": "honest advance-past-done-bar status (0.4.1, pass-2 F5): written by the engine, defined at init, surfaced by progress and resume; strategist-save writes these cells at checkpoint and must use the same vocabulary"
     },
     {
+      "id": "narration_firewall_test",
+      "pattern": "would\\s+this\\s+phrase\\s+also\\s+work\\s+as\\s+a\\s+heading,\\s+a\\s+step\\s+name,\\s+or\\s+a\\s+file\\s+path\\?",
+      "files": [
+        "skills/strategist-resume/SKILL.md",
+        "skills/strategist-stage/SKILL.md",
+        "skills/strategist-pressure-test/SKILL.md"
+      ],
+      "reason": "the narration firewall is one rule in three skills (0.7.0): the speakability test must be worded identically wherever it appears, or the copies drift and the weakest one sets the plugin's actual behavior — which is how five leak sites survived ten eval iterations while only resume was being fixed"
+    },
+    {
       "id": "open_n_pressure_vocabulary",
       "pattern": "open \\(n\\)",
       "files": [
