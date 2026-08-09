@@ -2,7 +2,6 @@
 name: strategist-pressure-test
 description: This skill should be used when the user asks to pressure-test, stress-test, or red-team the current strategy's reasoning (e.g. "pressure-test this strategy", "red-team my recommendation", "stress-test the decision"). Dispatches the strategist-critic subagent to interrogate assumptions, logic, and failure modes; tests logic, not evidence.
 allowed-tools: Read, Write, Edit, Glob, Grep, Task
-model: opus
 ---
 
 # strategist-pressure-test — Interrogate The Reasoning
@@ -15,6 +14,30 @@ strategy.
 (The Synthesise commitment gate runs this same critic automatically before the decision
 locks — `strategist-stage` Step 4b. This skill is the on-demand pass: any stage, any
 time, and the deeper cross-stage review after Move.)
+
+## The narration firewall
+
+Everything in this skill that has a name — steps, sections, files, and the critic agent
+itself — is scaffolding the user never sees. They get the findings; they never get the
+machinery that produced them.
+
+The test to run on yourself is not "does this sound technical." It is **"would this phrase
+also work as a heading, a step name, or a file path?"** If yes, say it another way.
+
+This skill leaks in three particular places, all of them the same mistake:
+
+- **The dispatch.** "Dispatching the critic now" reproduces Step 2's own heading. The user
+  does not need to know the work is delegated, or to whom. If a pause needs covering, cover
+  it the way a person would — "give me a moment with this."
+- **The finding format.** The critic returns `[type] — issue — why — resolution` with tags
+  like `WEAK INFERENCE` and `INTERNAL CONTRADICTION`. **That format is addressed to you, not
+  to the user.** It exists so you can sort and rank the findings. Relaying the tag verbatim
+  as a spoken heading hands over an agent-to-agent protocol; Step 3 says name the issue
+  plainly, and that is why.
+- **The recording.** "I've marked those clear in the state file" names the file. Say what
+  stands and what doesn't. Where it is written is your business.
+
+Say the finding, never the filing system.
 
 ## Current State
 
@@ -51,6 +74,12 @@ first). For each: name the issue plainly, say why it matters to *this* strategy,
 give the concrete thing that would resolve it. Don't soften and don't pad — this is the
 stage where being direct earns its keep.
 
+**Relay the substance, not the envelope.** The `[type]` tag the critic attaches is sorting
+metadata for you; it is not a heading for the user. "The Analyse stage ruled out price and
+the Synthesise decision commits to a discount — those can't both be right" is the finding.
+"**INTERNAL CONTRADICTION —** …" is the internal format wearing the finding's clothes. The
+type still governs the *order* you present in; it just never gets spoken.
+
 If the critic finds little of substance, say so honestly rather than manufacturing
 concerns: "The reasoning holds up on the dimensions I tested. The one thing worth a
 second look is …" or "Nothing load-bearing — this is solid."
@@ -63,15 +92,22 @@ stage it bears on, so `/strategist:progress` can surface them and the user can c
 them as they address them. Mark the stage's `Pressure-tested` cell in the Stage Record
 table honestly: `clear` if nothing load-bearing stands open, `open (n)` if n
 load-bearing findings remain unresolved — tested-with-a-standing-objection is not
-`clear`.
+`clear`. `n` is a count: it equals the number of findings you just wrote into that
+section, and it has to match whatever you say aloud about how many are open.
 
 Do **not** edit `brief.md`. Acting on a finding is the user's call, made by re-running
-the relevant stage — point them there:
+the relevant stage — so point them there **when there is something to address**:
 
 ```
 ▶ To address these: re-run /strategist:<stage> for the affected stage(s), or talk them
   through with me here. Run /strategist:progress to see open findings any time.
 ```
+
+Resolve `<stage>` to the actual stage names before this reaches the user. **If nothing
+load-bearing was found, this block does not belong in the reply** — a clean result that
+closes by pointing at findings that don't exist reads as boilerplate and undercuts the
+affirmation you just made. Close with where things stand instead, and mention
+`/strategist:progress` only if it's useful.
 
 ## Guardrails
 

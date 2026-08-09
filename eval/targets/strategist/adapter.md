@@ -49,8 +49,8 @@ turn, so the run starts from that state:
   Dynamic` (for calibration scenarios).
 - `setup.state_extra` → mid-stage state for `entry: resume` scenarios, seeded into the
   scaffolded `strategy/STATE.md` **before** the first turn. Each field maps to its
-  STATE.md section: `working_dynamic` → `## Working Dynamic`; `working_read` (list of
-  hypothesis lines) → `## Working Read`; `in_flight` (framework, answered, open,
+  STATE.md section: `working_dynamic` → `## Working Dynamic`; `open_questions` (list of
+  hypothesis lines) → `## Open Questions Under Test`; `in_flight` (framework, answered, open,
   provisional) → `## In-Flight`; `backstage_tasks` → `## Backstage Tasks`. For
   `entry: resume`, `current_stage` is the stage named in `in_flight.framework` (e.g.
   "Waterfall (Analyse)" → `analyse`), not the entry name.
@@ -58,12 +58,47 @@ turn, so the run starts from that state:
 When there is no `setup`, scaffold a minimal fresh `strategy/STATE.md` + `brief.md` (as
 `strategist-init` would) with the scenario's implied problem, then run the entry stage.
 
+**The scaffold is built from `user_messages[0]` only.** Nothing from a later message may
+appear in the pre-turn-1 files — not a figure, not a name, not a detail the user has not
+said yet. The runner holds the whole `user_messages` array so it can play the turns in
+order, which makes this easy to get wrong: "the scenario's implied problem" reads like the
+whole scenario, and the scaffolded `problem:` line is the natural place for it to leak.
+
+Iteration 10 hit exactly that. `rep-define-scq`'s first user message says only "renewals
+held steady for two years"; the scaffolded STATE.md said "steady renewals near **90%**", a
+figure that appears only in message 2. The plugin then quoted "~90%" back before the user
+had ever said it, and the judge scored it as invented data. It was not invented — it was
+read out of a state file the harness had pre-loaded with the answer.
+
+This is the same class of bug as the iteration-5 blindness leak: the harness handing the
+runner something the scenario meant to withhold. It lands on fabrication, which is the one
+dimension the deterministic gates cannot check at all (`framework_in_library` inspects
+framework *names*, never data), so nothing downstream catches it.
+
 ## User-turn protocol
 
 The runner plays the assistant by following the skill; it consumes `user_messages` in
 order — emit the assistant turn the skill dictates, take the next user message as the
 reply, repeat. The run ends when messages are exhausted or the skill reaches its transition/
 handoff. Every turn is written to `transcript.md`.
+
+### Transcript convention (load-bearing — Register is scored off this)
+
+Keep runner annotation and user-facing assistant speech unambiguously separate:
+
+- **Assistant speech** goes inside the `**ASSISTANT:**` block and nowhere else.
+- **Runner annotation** — internal steps taken, files written, "user messages exhausted" —
+  goes on its own line, **outside** the speaker block, prefixed `(Runner note: …)`.
+- Never wrap both in the same italic-parenthetical form inside an `ASSISTANT:` block.
+
+This is not cosmetic. Register scores 0 when the machinery is spoken to the user, so a
+transcript that cannot distinguish "the agent said this" from "the runner noted this" makes
+the dimension unscoreable. In iteration 1, three judges scored the *same behavior* 0, 2 and 3
+purely on how they parsed that ambiguity, and one capture's score swung two full anchors on it.
+Two judges independently found the only reliable tell — **grammatical person**: third-person
+past ("the run recorded X") is annotation, second-person present ("you took two direct pushes")
+is speech. Encoding the prefix removes the guesswork; the person test remains the fallback for
+older captures.
 
 ## Artifacts the judge reads
 
@@ -90,16 +125,46 @@ absent before Story): no `_Not yet started._` residue, no `[TODO]`/`[placeholder
 (→ Brief Coherence).
 
 **What the runner must record** (`gate-inputs.json`, since the script can't see them):
-`entry`, `baseline_completed_stages` (from `setup`), `claimed_frameworks` (every framework the
-assistant said it was applying — the decisive input to the fabrication gate), and
-`expected_no_advance`.
+`entry`, `baseline_completed_stages` (from `setup`), and `claimed_frameworks` (every framework
+the assistant said it was applying — the decisive input to the fabrication gate).
 
-### `expected_no_advance` scenarios
+The runner does **not** record `expected_no_advance` — see below.
+
+### `expected_no_advance` scenarios (set by the orchestrator, never the runner)
 
 Some adversarial scenarios are *supposed* to end with the stage not completing — a
 stonewalling user who only gives non-answers, where the correct behavior is to keep pushing
-and **refuse** to capture a result. A scenario sets `"expected_no_advance": true`, the runner
-copies it into `gate-inputs.json`, and `run-gates.mjs` **inverts** `single_stage_advance` and
-`brief_section_filled`: not advancing is a `pass`, advancing is a `fail`. Without this, those
-gates penalize correct refusal-to-capture — the harness false-negative the first strategist
-run exposed.
+and **refuse** to capture a result. A scenario sets `"expected_no_advance": true`, and
+`run-gates.mjs` **inverts** `single_stage_advance` and marks `brief_section_filled` n/a: not
+advancing is a `pass`, advancing is a `fail`. Without this, those gates penalize correct
+refusal-to-capture — the harness false-negative the first strategist run exposed.
+
+### Judge-only fields — never in the runner's payload
+
+Three fields in `scenarios.jsonl` are written for the judge and the gate script. **None of
+them may reach the runner:**
+
+| Field | Why it must be withheld |
+| --- | --- |
+| `expected_behavior` | the rubric's answer key — `must_include` / `must_not_do` |
+| `expected_no_advance` | tells the runner not to advance, immediately before it decides |
+| `end_state` | prose description of the correct ending |
+
+`end_state` is the easiest to miss because it appears on **exactly one scenario**
+(`adv-preference-over-evidence`) and reads like scene-setting rather than an answer key. It
+is not. It says *"the override recorded and the loop advanced … never held mid-stage"* — the
+precise behavior that scenario exists to test, and the precise behavior that failed in
+iteration 10. A runner shown that field is being told the answer.
+
+Build the blind payload by allow-list, not by deletion: `id`, `entry`, `tags`, `setup`,
+`user_messages`, `tone_notes`. Anything else is judge-side until proven otherwise. A
+deny-list only ever excludes the leaks someone already found — which is how `end_state`
+survived alongside a rule written specifically about this failure mode.
+
+**The orchestrator injects `expected_no_advance` into `gate-inputs.json` from
+`scenarios.jsonl` before running the gates.** It used to be the runner's job, which was incoherent two ways: the runner
+is specified as blind, so it cannot know the field exists — and telling it hands over the
+answer ("you are not supposed to advance") immediately before it decides whether to advance.
+Iteration 1 hit exactly that: the field was withheld to preserve blindness, three scenarios
+wrote `false`, and correct refusals were scored as gate failures. `scenarios.jsonl` is
+authoritative; the runner stays blind; the gate verdict comes out right.

@@ -70,12 +70,12 @@ Capture its JSON array (`{gate, feeds, status, evidence}`). These verdicts are i
 ### Step 4 — score each run through the judge
 Spawn an **eval-judge** per run. Pass it: `rubric.md` + `principles.md`, the **full** scenario (now including `expected_behavior` + `critical_dimensions`), the path to `capture.md` + artifacts, the **gate-results JSON** from Step 3, and `eval/reference/grade-procedure.md`. It returns a per-run scorecard, inheriting gates and judging the rest.
 
-**Judge persistence (the orchestrator writes, the judge does not).** `eval-judge` is read-only by design — it has no Write tool. Its scorecard exists only in the message it returns, so:
-- Tell every judge explicitly: **return the complete scorecard as your final message** — it is the deliverable, not a summary of one.
-- The **orchestrator** writes each returned scorecard to `<working-dir>/scorecard.md` as soon as it lands. Do not batch this to the end of the run; a judge whose card is never persisted is an ungraded run.
-- If a judge returns nothing usable, **re-ask it once** before giving up. If it still returns nothing, record the run as **ungraded** in `scores.md` with the reason — never infer a score from the other samples, and never quietly drop it from the denominator.
+**Judge persistence (the judge writes its own card; the orchestrator verifies).** As of the strategist iteration-1 run, `eval-judge` has a `Write` tool scoped to its working dir and writes `<working-dir>/scorecard.md` itself before returning. So:
+- Tell every judge: **write the scorecard to `<working-dir>/scorecard.md`, then return it as your final message too.** The file is the deliverable; the message is the convenience copy.
+- After each judge completes, **check the file exists** rather than trusting the message. If the file is missing but the message carried the card, write it yourself. If both are missing, **re-ask once**.
+- If it still produces nothing, record the run as **ungraded** in `scores.md` with the reason — never infer a score from sibling samples, and never quietly drop it from the denominator.
 
-(Both prior iterations lost a scorecard this way. It is a protocol failure, not a model quirk.)
+**Why this changed:** in strategist iteration 1, **25 of 25 judges returned nothing on first completion**. Every scorecard survived only because the orchestrator noticed an empty idle notification and re-asked — 25 times. A mitigation that fires 100% of the time is not a mitigation, and an unattended run (cron, CI) would have produced an iteration with zero scores and no error. Two earlier iterations lost cards the same way. The failure was structural: the deliverable's only channel was a message the harness did not reliably deliver.
 
 ### Step 5 — surface raw captures to the human FIRST
 Before printing any verdict, give the user the paths to this iteration's raw `transcript.md`/artifacts and a one-line "read these first." The score is a lens on the output, not a substitute for it.

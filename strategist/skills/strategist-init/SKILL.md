@@ -2,7 +2,6 @@
 name: strategist-init
 description: This skill should be used when the user asks to start, initialize, or set up a Strategist project (e.g. "start a strategy", "set up strategist here", "new strategy project"). Scaffolds the loop state, the working brief, and the per-deployment config.
 disable-model-invocation: true
-model: opus
 ---
 
 # /strategist:init — Initialize a Strategy Project
@@ -153,7 +152,7 @@ answers. Update as you learn.
 - **Notes:** (none yet) — e.g. welcomes directness, goes defensive when pushed, prefers
   to reason it through, decisive vs. deliberative.
 
-## Working Read
+## Open Questions Under Test
 
 The advisor's developing hypotheses — the mid-thought a human strategist carries
 between sessions. Update statuses as evidence arrives; rewrite at stage transitions.

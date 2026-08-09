@@ -1,7 +1,7 @@
 {
   "name": "strategist",
-  "version": "0.4.1",
-  "description": "v0.4.1 \u2014 Think a hard problem all the way through and come out with a strategy you can defend, not a blank framework template. It walks one problem through a repeatable loop (Define, Frame, Analyse, Insight, Synthesise, Story, Move), puts the right framework from a 70-framework library in front of you at each stage, and pressure-tests your reasoning before you commit. Produces a working record and a clean reader-facing brief. Standalone; runs on its own. Part of the Kenzie Creative marketplace.",
+  "version": "0.7.0",
+  "description": "v0.7.0 \u2014 Think a hard problem all the way through and come out with a strategy you can defend, not a blank framework template. It walks one problem through a repeatable loop (Define, Frame, Analyse, Insight, Synthesise, Story, Move), puts the right framework from a 70-framework library in front of you at each stage, and pressure-tests your reasoning before you commit. Produces a working record and a clean reader-facing brief. Standalone; runs on its own. Part of the Kenzie Creative marketplace.",
   "author": {
     "name": "Kelsey Ruger",
     "url": "https://github.com/kenziecreative"

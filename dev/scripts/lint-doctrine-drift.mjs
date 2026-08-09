@@ -163,6 +163,40 @@ for (const c of cfg.contracts ?? []) {
   }
 }
 
+// --- 5. Index completeness ---------------------------------------------------
+// An index that silently disagrees with the library is worse than no index: the skill
+// resolves names through it, so a missing row makes a shipped framework unreachable and a
+// stale row points at a file that no longer exists. This replaces the generated
+// `_inventory.json` manifest — the filesystem is the source of truth, not a second copy of it.
+if (cfg.indexCompleteness) {
+  const { index, entryGlob, excludeDirs = [] } = cfg.indexCompleteness;
+  const indexPath = join(pluginRoot, index);
+  if (!existsSync(indexPath)) {
+    findings.push({ file: index, line: 1, id: "index_missing", detail: "indexCompleteness is configured but the index file does not exist" });
+  } else {
+    const indexText = readFileSync(indexPath, "utf8");
+    const dir = join(pluginRoot, entryGlob);
+    const onDisk = [];
+    for (const stage of readdirSync(dir, { withFileTypes: true }).filter((d) => d.isDirectory() && !excludeDirs.includes(d.name))) {
+      for (const f of readdirSync(join(dir, stage.name)).filter((f) => f.endsWith(".md") && f !== "README.md")) {
+        onDisk.push(`${stage.name}/${f.replace(/\.md$/, "")}`);
+      }
+    }
+    for (const entry of onDisk) {
+      const slug = entry.split("/")[1];
+      if (!new RegExp(`\\b${slug.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`).test(indexText)) {
+        findings.push({ file: index, line: 1, id: "index_missing_entry", detail: `${entry}.md ships but no row in the index mentions its slug — the framework skill resolves through this index, so the entry is unreachable by name` });
+      }
+    }
+    const linked = [...indexText.matchAll(/\(\.?\/?([a-z-]+)\/([a-z0-9-]+)\.md\)/g)].map((m) => `${m[1]}/${m[2]}`);
+    for (const l of new Set(linked)) {
+      if (!onDisk.includes(l)) {
+        findings.push({ file: index, line: 1, id: "index_dangling_row", detail: `the index links ${l}.md but no such entry file exists` });
+      }
+    }
+  }
+}
+
 // --- Report ------------------------------------------------------------------
 for (const w of warnings) console.error(`WARNING: ${w}`);
 if (findings.length) {

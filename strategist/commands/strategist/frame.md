@@ -5,7 +5,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Run the **Frame** stage of the Strategy Spine.
 
-Use the `strategist-stage` skill for the **frame** stage and follow its steps exactly.
+Use the `strategist-stage` skill for the **frame** stage and follow its steps.
 It presents this stage's framework menu from the library
 (`${CLAUDE_PLUGIN_ROOT}/reference/frame/`), helps the user pick the framework that fits
 their situation, applies it with them, writes the result into `strategy/brief.md` under

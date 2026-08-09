@@ -5,7 +5,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep
 
 Run the **Define** stage of the strategy loop.
 
-Use the `strategist-stage` skill for the **define** stage and follow its steps exactly.
+Use the `strategist-stage` skill for the **define** stage and follow its steps.
 It presents this stage's framework menu from the library
 (`${CLAUDE_PLUGIN_ROOT}/reference/define/`), helps the user pick the framework that fits
 their situation, applies it with them, writes the result into `strategy/brief.md` under

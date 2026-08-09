@@ -1,11 +1,11 @@
 ---
 description: Synthesise — build the insights into a coherent whole, then commit (Evaluation, Eisenhower, Bezos, SPADE)
-allowed-tools: Read, Write, Edit, Glob, Grep
+allowed-tools: Read, Write, Edit, Glob, Grep, Task
 ---
 
 Run the **Synthesise** stage of the Strategy Spine.
 
-Use the `strategist-stage` skill for the **synthesise** stage and follow its steps exactly.
+Use the `strategist-stage` skill for the **synthesise** stage and follow its steps.
 It presents this stage's framework menu from the library
 (`${CLAUDE_PLUGIN_ROOT}/reference/synthesise/`), helps the user reconcile the insights into
 one coherent through-line, prioritise what matters, and pass the **commitment gate** that

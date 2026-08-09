@@ -42,7 +42,7 @@ template.
 ## Key mechanics
 
 - **The loop is the spine.** `strategy/STATE.md` holds loop position (stage record,
-  completed/active/pending, open pressure-test findings, Working Dynamic, Working Read,
+  completed/active/pending, open pressure-test findings, Working Dynamic, Open Questions Under Test,
   In-Flight, Backstage Tasks); `strategy/brief.md` is the
   evolving working record, one section per stage; `strategy/strategy-brief.md` is the clean
   reader-facing deliverable, spun out at Story and refreshed through Move. Sequential
@@ -69,7 +69,7 @@ template.
   why each alternative lost, not just the winner; charter check; Rumelt-kernel check in
   recording form (E3); DECISION.md written.
 - **The return restores stance.** `strategist-save` captures position + debrief
-  (Working Dynamic / Working Read / Backstage Tasks / In-Flight, mid-stage);
+  (Working Dynamic / Open Questions Under Test / Backstage Tasks / In-Flight, mid-stage);
   `strategist-resume` re-adopts them, continues in-flight work without re-asking, and
   runs additive-only schema migration. Since 0.4.1 the engine also refreshes In-Flight
   after each substantive answer, so an *unsaved* stop (auto-compaction, closed laptop)
@@ -165,7 +165,7 @@ template.
     Its two newest checks (fabricated/unowned premise, agent-introduced keystone) are
     load-bearing; preserve them.
   - The `reference/` library is namespaced `strategist:reference/<stage>/<slug>` and indexed
-    in `INDEX.md`; adding a framework is an entry + diagram + index update, no skill change.
+    in `INDEX.md`; adding a framework is an entry (the six standard sections) + index update, no skill change.
 - See **Locked decisions** above before changing the loop shape, the critic's scope, or the
   two-document model. Claude Code owns the live-test of the PreCompact hook and the
   `.claude/settings.json` pre-allow (Cowork can't see them).
