@@ -26,7 +26,7 @@ and trivial; conflicts on a shared body were not.
 | **goal-setting** | merged to `main` 2026-08-09 | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-08-07 |
 | **researcher** | merged to `main` | [dev/state/researcher.md](state/researcher.md) | 2026-08-06 |
 | **strategist** | merged to `main` 2026-08-09 | [dev/state/strategist.md](state/strategist.md) | 2026-08-09 |
-| **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-07-12 |
+| **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-08-09 |
 
 A stream is **live** until its own file says otherwise. Silence in this table is not a signal.
 
