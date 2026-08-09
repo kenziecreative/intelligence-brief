@@ -1,0 +1,63 @@
+# {{PROJECT_NAME}} — identity and access
+
+<!-- trailhead v{{VERSION}} -->
+
+Who can act on this system, how they prove who they are, and what each is allowed to do.
+
+This file exists because identity is the decision most often deferred and most expensive
+to revisit. A build that shipped a single federated login as the only way in needed an
+amendment and a subsystem rewrite six deliverables later, when it turned out the product
+had to work for people outside one organization. Nobody made a bad call — nobody was
+asked.
+
+## The rule that catches the subtle one
+
+> **A stable internal identity is not a login credential. Name both, separately.**
+
+If a user's row is keyed by their email address, then changing an email is either
+impossible or silently hands the account to whoever holds the new address. The same
+applies to a username, a phone number, or an external provider's subject claim: they are
+all *attributes that can be reassigned*, and none of them is an identity.
+
+An identity is an opaque, permanent, internal key. Credentials — a password, a passkey, a
+federated login, an API token — **link to** it, one identity to many. Getting this right
+on day one costs one column. Retrofitting it costs a migration, and until that migration
+lands, every provenance record you have written is attributed to something mutable.
+
+## Principals
+
+Every kind of actor, including the non-human ones. Machine and agent clients are where
+authorization models usually leak, because they are added after the human model is
+settled and inherit permissions nobody re-examined.
+
+| Principal | Who or what | Credential | May do | May never do |
+|---|---|---|---|---|
+| | | | | |
+
+<!-- Include, where they apply: interactive humans; administrators; service accounts;
+     CI; agent clients acting on a human's behalf; anonymous or public readers. For each
+     agent or machine principal, "May never do" is the important column — write it before
+     the code exists. -->
+
+## Stable identity
+
+- **Identity key:** <opaque, permanent, internal — e.g. a UUID>
+- **Never used as an identity key:** email, username, phone, external provider subject
+- **Credential kinds that link to it:** <password, passkey, OIDC, PAT, …>
+
+## Authentication
+
+<!-- How each credential kind is verified. Where secrets are stored and in what form.
+     What happens on failure — and specifically whether a failed sign-in reveals that an
+     account exists, since that answer is a design decision either way. -->
+
+## Authorization
+
+<!-- What decides whether an action is allowed, and where that decision is made. One
+     place, ideally, so a new surface cannot accidentally get a different answer than an
+     existing one. If two surfaces resolve permissions through different code, say why. -->
+
+## Sessions and revocation
+
+<!-- Lifetime, renewal, and how access is taken away — including for a credential that
+     has already been issued and is currently in use. -->

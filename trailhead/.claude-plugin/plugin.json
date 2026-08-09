@@ -1,0 +1,20 @@
+{
+  "name": "trailhead",
+  "version": "0.1.0",
+  "description": "v0.1.0 — Start a project with its checks already installed, so the things that quietly rot fail loudly instead of drifting — QA specs that never run, a linter nobody added, a design system copied as colors instead of composition, an architecture decision nobody made until it got expensive. A short interview, then it writes the contract, the running-state file, and a gate script you can run from any terminal — Claude Code, Codex, Gemini CLI, or CI. Questions you can't answer yet become scheduled interrupts instead of forgotten assumptions. /trailhead:audit runs the same checks read-only against a repo you already have. Standalone.",
+  "author": {
+    "name": "Kelsey Ruger",
+    "url": "https://github.com/kenziecreative"
+  },
+  "homepage": "https://github.com/kenziecreative/kenzie-creative/tree/main/trailhead",
+  "repository": "https://github.com/kenziecreative/kenzie-creative",
+  "license": "MIT",
+  "keywords": [
+    "project-setup",
+    "scaffolding",
+    "quality-gates",
+    "qa-cadence",
+    "multi-cli",
+    "audit"
+  ]
+}

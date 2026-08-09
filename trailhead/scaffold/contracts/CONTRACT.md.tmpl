@@ -1,0 +1,68 @@
+# {{PROJECT_NAME}} — contract
+
+<!-- trailhead v{{VERSION}} -->
+
+**This file states what must be true. It does not track where the work is.**
+
+That lives in `.planning/STATE.md`. The separation is the point: a document edited every
+deliverable stops being an authority, because its claims drift while the prose around
+them stays accurate. If you find yourself adding a status column here, you are writing
+STATE.md in the wrong file.
+
+**Amend, don't edit.** Changing an invariant is a decision with consequences upstream and
+down. Add a dated amendment section at the bottom rather than rewriting the line, so the
+change is visible in a diff and reviewable as a change rather than as prose that has
+always said this.
+
+**Keep it under {{CONTRACT_LINE_CAP}} lines.** Past that, nobody reads it, and an unread
+contract is worse than none — it gives the appearance of governance while providing none.
+If it is growing, that is usually state or rationale trying to live here; move state to
+`.planning/STATE.md` and rationale to the decision log.
+
+---
+
+## 1. What this is
+
+{{PROJECT_DESCRIPTION}}
+
+## 2. Invariants
+
+<!-- Things that must be true of any correct version of this system, phrased so a
+     violation is recognizable. Not goals, not preferences. Number them; they get cited.
+
+     A good invariant can fail a test. "The system is fast" cannot. "No request handler
+     may read from the filesystem outside VAULT_ROOT" can. Where an invariant cannot be
+     mechanized, say so explicitly and name the human review that stands in for it — an
+     expectation with neither a check nor a named reviewer is not an invariant, it is a
+     hope, and it will be complied with in letter. -->
+
+1.
+
+## 3. Boundaries
+
+<!-- What this system is NOT responsible for, and what it must never do. Cheap to write
+     now, expensive to reconstruct later when someone asks "was that always out of
+     scope?" -->
+
+## 4. Definition of done
+
+<!-- What "verified" means for THIS project beyond the shared vocabulary in AGENTS.md.
+     Which surfaces need a human driving them? Which need assistive-technology
+     evaluation? Which need a design verdict? Name them; the gate reads this. -->
+
+## 5. Decision authority
+
+<!-- What an agent may decide alone, and what stops and asks. Default: reversible
+     implementation choices proceed; anything that changes an invariant, an external
+     contract, or a stored data shape stops.
+
+     Keep this short. The mechanism that actually protects you is
+     contracts/OPEN-DECISIONS.md, which asks at the right moment rather than asking about
+     everything all the time. -->
+
+---
+
+## Amendments
+
+<!-- ### Amendment 01 — <title> (YYYY-MM-DD)
+     What changed, why, and which sections it supersedes. -->

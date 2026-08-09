@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      { "filePath": ".env*", "operations": ["Write", "Edit"] },
+      { "filePath": "**/*.pem", "operations": ["Write", "Edit"] },
+      { "filePath": "**/*.key", "operations": ["Write", "Edit"] },
+      { "filePath": "**/*credentials*", "operations": ["Write", "Edit"] },
+      { "filePath": "**/*secret*", "operations": ["Write", "Edit"] },
+      { "filePath": "**/id_rsa*", "operations": ["Write", "Edit"] },
+      { "filePath": "**/id_ed25519*", "operations": ["Write", "Edit"] },
+      { "filePath": ".gates/verdicts/**", "operations": ["Write", "Edit"] }
+    ]
+  },
+  "env": {
+    "TRAILHEAD_VERSION": "{{VERSION}}"
+  }
+}

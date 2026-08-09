@@ -1,0 +1,44 @@
+# {{PROJECT_NAME}} — state
+
+<!-- trailhead v{{VERSION}} -->
+
+**Where the work actually is.** Updated every session. The contract lives in
+`contracts/CONTRACT.md` and does not change at this pace.
+
+## Current position
+
+Project initialized {{DATE}}. No deliverables started.
+
+## Last activity
+
+{{DATE}} — trailhead scaffolding installed. First gate run is expected to be red; that is
+the point. See `.gates/last-run.json`.
+
+## Deliverables
+
+Status uses exactly three words — **built**, **verified**, **accepted** — defined in
+`AGENTS.md`. `scripts/checks/status-lint.mjs` fails on anything else, and on a `verified`
+or `accepted` row that cites no evidence path that exists.
+
+| # | Deliverable | Definition of done | Status | Evidence |
+|---|---|---|---|---|
+| 0 | <first deliverable> | <what must be true to call it done> | not started | |
+
+## Open items
+
+- [ ] Fill in the deliverable table above
+- [ ] Complete `contracts/CONTRACT.md` §2 invariants
+- [ ] Answer or schedule every row in `contracts/OPEN-DECISIONS.md`
+
+## Session continuity
+
+**What a new session needs to know:** the project was just scaffolded. Read
+`contracts/CONTRACT.md` for what must be true, this file for where things are, and
+`contracts/OPEN-DECISIONS.md` for what is not yet decided. Run `node scripts/gate.mjs`
+before reporting anything as verified.
+
+**In progress:** nothing yet.
+
+**Next:** define the first deliverable.
+
+**Blocked on:** nothing yet.

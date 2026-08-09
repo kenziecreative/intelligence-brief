@@ -1,0 +1,108 @@
+# {{PROJECT_NAME}}
+
+{{PROJECT_DESCRIPTION}}
+
+This file is the agent-facing contract for this repository, and it is the **only** one
+with substance in it. `CLAUDE.md` and `.gemini/settings.json` point here. It is written
+flat and standalone on purpose — Codex and Gemini do not follow `@imports`, so anything
+that matters has to be in this file, not linked from it.
+
+## Before you report anything as done
+
+```
+node scripts/gate.mjs
+```
+
+That is the gate. It exits non-zero when a blocking stage has not demonstrably passed.
+Run it before claiming a deliverable is verified, and paste the banner rather than
+summarizing it. In CI, use `node scripts/gate.mjs --strict`, where every stage blocks.
+
+**Read the result word, not just the exit code.** They are not the same claim:
+
+| Result | Means |
+|---|---|
+| `pass` | every stage green — the only one that supports a `verified` claim |
+| `advisory` | blocking stages green, something reporting is red; exits 0 |
+| `partial` | only the `--stage` you named ran; cannot support a whole-deliverable claim |
+| `paused` | a real failure, deliberately suspended by `.gates/pause`; exits 0 |
+| `fail` | a blocking stage is red |
+
+Four rules it enforces that are easy to talk your way around:
+
+1. **Unknown is never pass.** A stage that never ran, whose check crashed, or whose human
+   verdict is missing counts as a failure. Whether that failure *blocks* depends on the
+   project's stage level. Those are two different questions and collapsing them is how
+   unverified work accumulates while every individual status report stays accurate.
+2. **Coverage counts, not just outcome.** "The tests that ran, passed" is true of a suite
+   with one trivial spec and fourteen that never ran. Every check reports how much has
+   never run, and `.gates/ratchet.json` — which the runner writes, so do not hand-edit it
+   except to raise a ceiling deliberately — refuses to let that number grow.
+3. **Absent is not not-applicable.** A check whose input file is gone reports
+   `missing_input` and blocks; a stage deleted from `gate.config.json` reports
+   `removed_from_config`. Deleting `.qa/`, `.planning/STATE.md`, or the stage itself does
+   not make a red gate disappear; it makes it worse.
+4. **Evidence is bound, not cited.** A human verdict records the tree it described and
+   expires when that tree changes. A `verified` row needs a path in its Evidence column
+   that exists. An `accepted` row needs every human gate to hold a verdict.
+
+If the gate is inconveniently red, the honest moves are: fix it, record a deferral in
+`contracts/OPEN-DECISIONS.md`, or `touch .gates/pause` and say so out loud. Pause does not
+cover a ratchet regression or a removed input. Editing `gate.config.json` to downgrade a
+stage is a decision, not a cleanup — treat it like one.
+
+## Status vocabulary
+
+Deliverable status in `.planning/STATE.md` uses these three words and no others:
+
+- **built** — the code exists and the deterministic suite passes.
+- **verified** — built, **and** its QA specs have run against a real running instance,
+  **and** someone drove the interface directly rather than only asserting about it in
+  tests.
+- **accepted** — verified, and every human gate has a recorded verdict.
+
+**"Implemented" is not a status**, and neither are "done", "complete", or "finished".
+Each collapses the built/verified distinction, which is the distinction that matters.
+`scripts/checks/status-lint.mjs` fails on all of them, and on a `verified` row that cites
+no evidence path that exists.
+
+## Where things live
+
+| Path | What it is | Who edits it |
+|---|---|---|
+| `contracts/CONTRACT.md` | What must be true. Amendable, not editable in passing. | Humans, deliberately |
+| `contracts/OPEN-DECISIONS.md` | What has not been decided, and when it comes due | Both |
+| `contracts/identity.md` | Principals, credentials, and the stable-identity rule | Humans |
+{{DESIGN_CONTRACT_ROW}}| `.planning/STATE.md` | Where the work actually is right now | Agents, every session |
+| `.qa/` | QA specs and the run ledger | The QA engine |
+| `scripts/gate.mjs` | The gate | Nobody, casually |
+
+**The contract and the running state are separate files on purpose.** A document that
+gets edited every deliverable stops being an authority — its status table drifts while
+the prose around it stays accurate, and by the time anyone notices, the drift is the
+record. Put invariants in `CONTRACT.md`. Put "where we are" in `STATE.md`. Never a status
+table in the contract.
+
+## Session protocol
+
+**Starting:** read `.planning/STATE.md` for position and open items, then
+`contracts/OPEN-DECISIONS.md` for anything now due. Do not re-derive the project from the
+source tree; that is what these files are for.
+
+**Ending:** update `.planning/STATE.md` — current position, what changed, anything newly
+undecided. A session that ends without this leaves the next one blind.
+
+**After compaction:** re-read `.planning/STATE.md` immediately. Do not assume
+pre-compaction context survived.
+
+## Conventions
+
+{{CONVENTIONS}}
+
+## Surface differences
+
+Hooks, `.claude/settings.json` permissions, and subagents are Claude Code affordances and
+do nothing under Codex or Gemini. **Nothing in this project depends on them.** The gate is
+a script for exactly that reason: whatever is running, `node scripts/gate.mjs` behaves
+identically, including in CI.
+
+<!-- trailhead v{{VERSION}} -->

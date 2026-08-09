@@ -18,8 +18,10 @@ Once a tool is installed, it shows up as commands and skills you can run in any 
 | Photo Generator | 1.2.0 | Get a professional-grade photo from a plain-language description, without knowing what a key light or an 85mm prime is | [guide](./photo-generator/README.md) |
 | Researcher | 1.10.0 | Research you can stand behind — every claim audited back to its source note, and every note to a declared source | [guide](./researcher/README.md) |
 | Sage | 0.2.0 | Always know where a decision landed and who owes what, across a whole week of meetings | [guide](./sage/README.md) |
+| Security | 0.1.0 | Read the code the way someone trying to get at the data would read it — security and PII findings, not a compliance table | [guide](./security/README.md) |
 | Strategist | 0.7.0 | Think a hard problem all the way through, and come out with a strategy you can defend | [guide](./strategist/README.md) |
 | Thinkers | 0.1.0 | Make sense of a confusing situation — what's really going on, where your own thinking might be off, and what to do | [guide](./thinkers/README.md) |
+| Trailhead | 0.1.0 | Start a project with checks that actually fail, so QA, linting, design, and deferred decisions can't quietly rot | [guide](./trailhead/README.md) |
 
 Each version mirrors that plugin's `plugin.json`, which is the source of truth for updates.
 
@@ -61,6 +63,12 @@ Each version mirrors that plugin's `plugin.json`, which is the source of truth f
 
 → **[Read the Sage guide](./sage/README.md)** for setup, supported services, and the round-up structure.
 
+### Security
+
+**Read the code the way someone trying to get at the data would read it.** An adversarial security and privacy reviewer that runs alongside development rather than auditing at the end. It hunts the endpoint nobody remembered, the helper everyone uses except here, the log line that seemed harmless, and the personal data no deletion path reaches — then reports findings with the attack path as read, the input that exercises it, the blast radius, and the fix. Eleven check families cover authorization, PII data flow, injection, authentication, secrets, XSS, SSRF, crypto, config, audit trails and dependencies. The design is asymmetric on purpose: a missed vulnerability leaves you where you were, but three false ones get the tool switched off, so confidence is welded to evidence type — it cannot claim exploitability without naming a concrete input, seven known-benign classes stop a fixture credential reading as a leak, and every discard is reported so you can audit the filter. Scripts locate candidates and say plainly what they could not read; the agent judges. It never probes, never holds a credential, and never touches a network.
+
+→ **[Read the Security guide](./security/README.md)** for the check families, how it avoids crying wolf, and — first — what it cannot establish.
+
 ### Strategist
 
 **Think a hard problem all the way through and come out with a strategy you can actually defend, not a blank framework template.** It walks one problem through a single repeatable loop — Define → Frame → Analyse → Insight → Synthesise → Story → Move — and at each step puts the right framework from a 70-framework library in front of you, helps you apply it to your actual situation, and writes the result into one living strategy brief. A critic can pressure-test your reasoning whenever you want it — testing the logic, not the evidence.
@@ -72,6 +80,12 @@ Each version mirrors that plugin's `plugin.json`, which is the source of truth f
 **Make sense of a confusing situation — what's actually happening, whether your own thinking is off, and what to do about it.** Describe what you're dealing with and it names the pattern at work (a bias, a fallacy, a persuasion or manipulation tactic, a strategic move) from a 243-pattern library, carefully — it draws the line between, say, real gaslighting and an ordinary disagreement before it ever hands you a heavy label. Five ways in: `identify` what's going on, `explain` a named pattern, `practice` spotting them, `decide` a tough call, or `spar` to stress-test your thinking. It talks like a counselor, not a textbook, and tells you the honest thing rather than the flattering one.
 
 → **[Read the Thinkers guide](./thinkers/README.md)** for the five skills and the pattern library.
+
+### Trailhead
+
+**Start a project with its checks already installed, so the things that quietly rot fail loudly instead of drifting.** It comes out of one observation from a long build: every requirement that had a mechanical check held, and every requirement that existed only as prose drifted — while being complied with in letter. Eighteen QA specs, one of them ever run. `eslint-disable` comments in five files and no linter installed. A pinned design system applied as color tokens over layouts that ignored it. All written down; none of it able to fail. `/trailhead:init` asks four questions, then writes the contract, the running state, and a `scripts/gate.mjs` you can run from any terminal — Claude Code, Codex, Gemini CLI, or CI. Questions you can't answer yet don't get dropped; they become rows that fail the gate at the moment the decision stops being cheap. `/trailhead:audit` runs the same checks read-only against a repo you already have.
+
+→ **[Read the Trailhead guide](./trailhead/README.md)** for the seven gates and the staged posture.
 
 ## Install
 
@@ -91,11 +105,13 @@ Each version mirrors that plugin's `plugin.json`, which is the source of truth f
 /plugin install photo-generator@kenzie-creative
 /plugin install researcher@kenzie-creative
 /plugin install sage@kenzie-creative
+/plugin install security@kenzie-creative
 /plugin install strategist@kenzie-creative
 /plugin install thinkers@kenzie-creative
+/plugin install trailhead@kenzie-creative
 ```
 
-Once a tool is installed, open the project where you want to use it and follow that tool's guide — for the brief, run `/intel-setup`; for research, run `/research:init`; for the meeting round-up, run `/sage:setup`; for a strategy, run `/strategist:init`; for goals, run `/goal-setting:init`; for photos, run `/photo-setup`. Thinkers needs no setup — just describe a situation or run `/thinkers:identify`.
+Once a tool is installed, open the project where you want to use it and follow that tool's guide — for the brief, run `/intel-setup`; for research, run `/research:init`; for the meeting round-up, run `/sage:setup`; for a strategy, run `/strategist:init`; for goals, run `/goal-setting:init`; for photos, run `/photo-setup`; for project gates, run `/trailhead:init` (or `/trailhead:audit` on a repo you already have). Thinkers needs no setup — just describe a situation or run `/thinkers:identify`.
 
 ## Updates
 
@@ -112,8 +128,10 @@ New versions arrive only when one is published — nothing changes under you.
 /plugin update photo-generator
 /plugin update researcher
 /plugin update sage
+/plugin update security
 /plugin update strategist
 /plugin update thinkers
+/plugin update trailhead
 /reload-plugins
 ```
 

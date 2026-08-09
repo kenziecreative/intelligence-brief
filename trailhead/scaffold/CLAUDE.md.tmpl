@@ -1,0 +1,20 @@
+# {{PROJECT_NAME}}
+
+@AGENTS.md
+
+`AGENTS.md` is the contract for this repository and it is complete on its own. This file
+exists because Claude Code reads `CLAUDE.md`; it deliberately adds nothing substantive,
+so that a Codex or Gemini session — which reads `AGENTS.md` and never sees this file — is
+working from the same instructions rather than a subset.
+
+## Claude Code affordances
+
+Hooks, `.claude/settings.json` permissions, and subagents work here and do nothing on the
+other CLIs. Nothing in this project's gates depends on them: `node scripts/gate.mjs` is
+the gate, and it behaves identically everywhere including CI.
+
+If you add something Claude-only that a reviewer would need, it belongs in `AGENTS.md`
+with a note that it is Claude-only — not here, where two thirds of the tools cannot see
+it.
+
+<!-- trailhead v{{VERSION}} -->
