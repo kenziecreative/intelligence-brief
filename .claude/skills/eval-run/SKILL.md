@@ -58,7 +58,16 @@ NL mapping: "run the eval" / "the full set" → golden. "adversarial only" → `
 ### Step 2 — run each (scenario × sample) through the blind runner
 For each run, spawn an **eval-runner**. Pass it — **in the dispatch message, as text** — the `adapter`, the scenario's `entry`/`setup`/`user_messages` **only** (never the rubric or `expected_behavior` — the runner is blind), `PLUGIN_ROOT`, and the working dir:
 `PACK/_eval/iteration-N/<scenario-id>/` (single-sample) or `…/<scenario-id>/run-k/` (noisy).
-The runner writes `transcript.md`, `capture.md`, and `gate-inputs.json`.
+The runner writes `transcript.md`, `capture.md`, `spoken.md`, and `gate-inputs.json`.
+
+**Check the four files exist before moving on, and re-ask once for any that don't.** Same
+lesson as the judge scorecards in Step 4: a deliverable whose only enforcement is an
+instruction in an agent file is a deliverable that quietly stops arriving. Across researcher
+iterations 1–23, **every one of 40 captures was missing `spoken.md`** — mandated in the
+runner spec since it was written, never produced, never noticed, so the register and no-tics
+lints it exists to feed had nothing to read for twenty-three iterations. If a file is still
+missing after one re-ask, record the run as **partially captured** in `scores.md` and name
+which checks that blinds.
 
 > **Staging rule — the runner's working dir contains only the slice it is allowed to see.**
 > Never write the full scenario object (expectations included) into the runner's working dir,
@@ -79,11 +88,30 @@ that are declared by the *scenario*, not observed by the runner. Write
 ```
 This is the orchestrator's job precisely because the runner is blind: a scenario-declared fact
 must not depend on a blind runner noticing it (iteration-1 false-failed six runs when it did).
-Writing it after the run keeps it out of the runner's way. Then:
+Writing it after the run keeps it out of the runner's way.
+
+**Then stage the seed baselines for any `file_unchanged` gate.** Read the pack's `gates.json`
+for gates of type `file_unchanged` whose `applies_when` key this scenario declares. For each,
+write the file's **seeded** content — straight from the scenario's `setup` block, or copied
+from `fixtures/<name>/` for a `setup.fixture` scenario — to `<working-dir>/_seed/<file>`
+(e.g. `_seed/research/STATE.md`). Stage it **after the run, never before**: the runner must
+not learn that a file is being watched, or "don't touch this" becomes an instruction it can
+follow instead of a property of its behavior. A gate whose baseline is missing fails loudly
+rather than skipping, so a forgotten stage shows up as a red row, not a silent hole.
+
+Then:
 ```
 node eval/lib/run-gates.mjs --working-dir <working-dir> --gates PACK/gates.json --plugin-root PLUGIN_ROOT
 ```
 Capture its JSON array (`{gate, feeds, status, evidence}`). These verdicts are inherited as-is; the judge never recomputes them. `gate-context.json` overlays `gate-inputs.json`, so the `expected_no_advance` inversion and every `applies_when` gate resolve automatically.
+
+**Rows with `kind: "integrity"` are about the capture, not the plugin.** They ask whether the
+run was recorded faithfully — is the transcript there, do the artifacts the runner declared
+actually exist, is `spoken.md` verbatim. A red one invalidates the capture: **re-run that
+scenario and grade the new one; do not send the capture to a judge and do not count the run.**
+Never report an integrity failure as a target finding — the plugin didn't do it, the harness
+did. (Researcher iterations 21–23: a capture that attributed to the assistant file paths its
+own transcript did not contain, scored as-is, and nothing anywhere went red.)
 
 ### Step 4 — score each run through the judge
 Spawn an **eval-judge** per run. Pass it: `rubric.md` + `principles.md`, the **full** scenario (now including `expected_behavior` + `critical_dimensions`), the path to `capture.md` + artifacts, the **gate-results JSON** from Step 3, and `eval/reference/grade-procedure.md`. It returns a per-run scorecard, inheriting gates and judging the rest.

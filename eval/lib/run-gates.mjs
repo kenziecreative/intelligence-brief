@@ -32,8 +32,16 @@
 // Output: a JSON array of { gate, type, feeds, status, evidence } to stdout
 // (status ∈ pass | fail | n/a), plus a human table on stderr. Exit 0 always —
 // this reports; it does not decide the build. No dependencies (Node 18+).
+//
+// Three kinds of row come back, and the difference matters when one goes red:
+//   kind "gate" / "lint" — the plugin's behavior. A red here is a finding about
+//     the target.
+//   kind "integrity"     — the CAPTURE's trustworthiness (built-in, every target,
+//     no pack config). A red here says the run was not recorded faithfully, so
+//     the scores computed from it mean nothing. It is not a mark against the
+//     plugin; it is an instruction to re-run. See "capture integrity" below.
 
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, statSync } from "node:fs";
 import { execSync } from "node:child_process";
 import { resolve, join, dirname } from "node:path";
 
@@ -208,6 +216,37 @@ function evalGate(gate) {
       }
       return invertIfNoAdvance(ok, `completed_stages ${baseline}→${finalCount} (Δ${delta})`);
     }
+    case "file_unchanged": {
+      // "This run was not allowed to touch this file." Some runs are supposed to
+      // end having written nothing: a preflight the skill declares write-free, a
+      // ledger only the commissioner may append to. Every content-shaped gate
+      // reads such a run as fine, because the file it checks is still the seeded
+      // file and still well-formed — which is exactly how researcher iteration-21
+      // let a run close a project and write completion state into STATE.md while
+      // `state_active_phase` went green. "Still contains 'Active phase:'" cannot
+      // see a write; only the baseline can.
+      //
+      // The baseline is staged by the ORCHESTRATOR after the run, from the
+      // scenario's own setup (`_seed/<file>` by convention) — never by the runner,
+      // which must not learn that a file is being watched. A missing baseline is
+      // an orchestrator bug and FAILS loudly rather than going n/a: a watch that
+      // silently stops watching is worse than no watch.
+      const baselineRel = gate.baseline ?? join("_seed", gate.file);
+      const baseline = readIf(join(workingDir, baselineRel));
+      if (baseline == null) {
+        return fail(`baseline not staged at ${baselineRel} — orchestrator must stage it from the scenario's setup`);
+      }
+      if (text == null) return fail(`missing file ${gate.file} (baseline exists, so it was deleted)`);
+      // Trailing whitespace at EOF is normalized away: a writer that re-serializes
+      // the seed with a final newline has changed nothing anyone cares about, and
+      // failing that is the harness inventing red. Everything else is byte-exact.
+      const norm = (s) => s.replace(/\s+$/, "");
+      if (norm(text) === norm(baseline)) return pass(`${gate.file} byte-identical to seed`);
+      const a = baseline.split("\n"), b = text.split("\n");
+      let i = 0;
+      while (i < Math.max(a.length, b.length) && a[i] === b[i]) i++;
+      return fail(`${gate.file} MODIFIED — first difference at line ${i + 1}: seed "${(a[i] ?? "<eof>").slice(0, 60)}" → run "${(b[i] ?? "<eof>").slice(0, 60)}"`);
+    }
     case "framework_in_library": {
       const claimed = Array.isArray(inputs.claimed_frameworks) ? inputs.claimed_frameworks : [];
       if (!claimed.length) return pass("no framework claimed in this run");
@@ -242,11 +281,19 @@ function evalGate(gate) {
       // checker (e.g. researcher's validate-corpus-review.py validating a receipt) —
       // a runner-reported boolean is not a gate. Commands must be deterministic and
       // read-only over the capture.
+      //
+      // `${PACK_ROOT}` resolves to the pack dir (where gates.json lives), so a pack
+      // can also ship its OWN checkers under `checks/` for invariants the target
+      // itself has no reason to validate at runtime — e.g. "the cycle-step field and
+      // the checkbox list agree." That check belongs to the eval, not to the plugin,
+      // and it must not live in eval/lib/, which is the plugin-agnostic engine.
       if (!gate.command) return fail("command_exit0 gate has no command");
       if (gate.command.includes("${PLUGIN_ROOT}") && !pluginRoot) {
         return fail("no --plugin-root given for ${PLUGIN_ROOT} substitution");
       }
-      const cmd = gate.command.replaceAll("${PLUGIN_ROOT}", pluginRoot ? resolve(pluginRoot) : "");
+      const cmd = gate.command
+        .replaceAll("${PLUGIN_ROOT}", pluginRoot ? resolve(pluginRoot) : "")
+        .replaceAll("${PACK_ROOT}", dirname(resolve(gatesPath)));
       try {
         const out = execSync(cmd, { cwd: workingDir, encoding: "utf8",
                                     stdio: ["ignore", "pipe", "pipe"], timeout: 60000 });
@@ -281,6 +328,75 @@ function evalLint(rule) {
 function pass(evidence) { return { status: "pass", evidence }; }
 function fail(evidence) { return { status: "fail", evidence }; }
 
+// --- capture integrity (built-in; every target, no pack config) -------------
+//
+// Everything downstream — every gate above, every judgment the judge makes — is
+// computed from files the runner wrote about its own run. That makes the capture
+// the one input nothing else can check, and a capture that overstates the run
+// inflates a score with no red anywhere. Researcher iteration-21/23 hit exactly
+// this: a capture attributed file paths to the assistant that its own transcript
+// did not contain, and the scores stood.
+//
+// The rule these enforce is simply: **capture.md may not exceed transcript.md.**
+// The transcript is the record; the capture is a reading of it. A reading that
+// introduces facts is not a reading.
+//
+// They check *declared* facts, never prose. The first version of this scanned
+// capture.md for file paths and asked whether each traced to disk, transcript, or
+// seed; it red-flagged 25 of 41 real captures, because a capture legitimately
+// names plugin-root files it read (`reference/posture-register.md`) and
+// legitimately reports files that are *absent* ("no decision-ledger.md exists").
+// Prose cannot distinguish an invented artifact from a correctly-reported absence,
+// and a check that cries wolf 60% of the time is one people learn to skip. So the
+// runner declares what it wrote, in a list, and the list is what gets checked.
+//
+// A red here means "re-run this scenario," not "the plugin regressed."
+
+function captureIntegrity() {
+  const rows = [];
+  const transcript = readIf(join(workingDir, "transcript.md"));
+  const capture = readIf(join(workingDir, "capture.md"));
+  const spoken = readIf(join(workingDir, "spoken.md"));
+
+  const add = (name, r) => rows.push({ gate: name, type: "capture_integrity", feeds: null, kind: "integrity", ...r });
+
+  if (transcript == null || capture == null) {
+    add("capture_complete", fail(`missing ${transcript == null ? "transcript.md" : ""}${transcript == null && capture == null ? " and " : ""}${capture == null ? "capture.md" : ""} — nothing downstream can be trusted`));
+    return rows;
+  }
+  add("capture_complete", pass("transcript.md and capture.md present" + (spoken == null ? " (no spoken.md)" : ", spoken.md present")));
+
+  // 1. Every artifact the runner says the run PRODUCED must actually be on disk.
+  //    An artifact claimed but absent has no innocent reading — unlike a path in
+  //    prose, which may be a file the run correctly reported as missing. This is
+  //    the mechanical half of "capture.md may not exceed transcript.md": the
+  //    runner's prose is free, but its declared produce-list is checked.
+  const written = inputs.artifacts_written;
+  if (!Array.isArray(written)) {
+    add("capture_artifacts_exist", { status: "n/a", evidence: "runner recorded no `artifacts_written` list — produced-artifact claims are unverifiable in this capture" });
+  } else {
+    const phantom = written.filter((p) => !existsSync(join(workingDir, p)));
+    add("capture_artifacts_exist", phantom.length
+      ? fail(`${phantom.length} of ${written.length} declared artifact(s) do not exist: ${phantom.slice(0, 4).join(", ")}`)
+      : pass(`all ${written.length} declared artifact(s) exist on disk`));
+  }
+
+  // 2. spoken.md is supposed to be the assistant's turns copied verbatim — it is
+  //    what the register/no-tics lints read, so a runner that tidies while copying
+  //    launders the very defect being measured. Substring containment in the
+  //    transcript is the cheap, false-positive-free version of "verbatim."
+  if (spoken == null) {
+    add("spoken_verbatim", { status: "n/a", evidence: "no spoken.md in this capture" });
+  } else {
+    const lines = spoken.split("\n").map((l) => l.trim()).filter((l) => l.length > 24);
+    const invented = lines.filter((l) => !transcript.includes(l));
+    add("spoken_verbatim", invented.length
+      ? fail(`${invented.length}/${lines.length} substantive line(s) in spoken.md are not in transcript.md: "${invented[0].slice(0, 70)}…"`)
+      : pass(`all ${lines.length} substantive line(s) of spoken.md appear verbatim in transcript.md`));
+  }
+  return rows;
+}
+
 // When a scenario is supposed to end WITHOUT advancing (a stonewalling user the
 // plugin must keep pushing rather than capture), the advance/fill gates invert:
 // not advancing is the pass.
@@ -300,15 +416,26 @@ for (const rule of spec.content_lint ?? []) {
   const r = evalLint(rule);
   results.push({ gate: rule.name, type: "content_lint", feeds: rule.feeds ?? null, kind: "lint", ...r });
 }
+results.push(...captureIntegrity());
 
 // Human table on stderr; machine JSON on stdout.
 const pad = (s, n) => String(s).padEnd(n);
 console.error(`\nGATES — ${spec.target ?? "?"}  (entry: ${entry ?? "?"}${expectedNoAdvance ? ", expected_no_advance" : ""})`);
 for (const r of results) {
   const mark = r.status === "pass" ? "OK  " : r.status === "n/a" ? "n/a " : "FAIL";
-  console.error(`  ${mark}  ${pad(r.gate, 24)} ${pad("→ " + (r.feeds ?? ""), 18)} ${r.evidence}`);
+  const feeds = r.kind === "integrity" ? "→ CAPTURE" : "→ " + (r.feeds ?? "");
+  console.error(`  ${mark}  ${pad(r.gate, 24)} ${pad(feeds, 18)} ${r.evidence}`);
 }
 const failed = results.filter((r) => r.status === "fail");
-console.error(`  ${failed.length} fail(s), ${results.filter((r) => r.status === "pass").length} pass, ${results.filter((r) => r.status === "n/a").length} n/a\n`);
+console.error(`  ${failed.length} fail(s), ${results.filter((r) => r.status === "pass").length} pass, ${results.filter((r) => r.status === "n/a").length} n/a`);
+// Called out separately because the response is different: a red integrity row
+// means the capture is untrustworthy, so every score computed from it — including
+// the green gates above — has to be thrown away and the scenario re-run. Rolling
+// it into the fail count invites treating it as one more finding about the plugin.
+const badCapture = results.filter((r) => r.kind === "integrity" && r.status === "fail");
+if (badCapture.length) {
+  console.error(`  !! CAPTURE INTEGRITY: ${badCapture.map((r) => r.gate).join(", ")} — re-run this scenario; do not grade this capture.`);
+}
+console.error("");
 
 process.stdout.write(JSON.stringify(results, null, 2) + "\n");

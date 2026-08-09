@@ -4,7 +4,7 @@ The engine is plugin-agnostic. Everything specific to *what* is being evaluated 
 **target pack** under `eval/targets/<name>/`. To evaluate a new plugin, write a pack; the
 engine doesn't change. (Scaffold one with the `eval-new-target` skill if present.)
 
-A pack is six files:
+A pack is six files, plus two optional directories:
 
 ```
 eval/targets/<name>/
@@ -14,6 +14,8 @@ eval/targets/<name>/
   scenarios.jsonl   representative + adversarial cases (goldens = invariants)
   gates.json        machine-readable deterministic gate + content-lint specs (run-gates.mjs)
   coverage.md       the scenario-class checklist a dev set must cover, mapped to ids
+  checks/           (optional) the pack's own deterministic checkers, run via ${PACK_ROOT}
+  fixtures/         (optional) whole-project trees a scenario seeds with setup.fixture
 ```
 
 ## adapter.md
@@ -68,6 +70,19 @@ Supported types:
 - `section_filled` — the `## <section>` for the run's entry is not the `placeholder`.
 - `completed_stages_delta` — the frontmatter list grew by `delta` (honors `expected_no_advance` inversion).
 - `framework_in_library` — every `claimed_frameworks` entry (from `gate-inputs.json`) resolves to a slug in the target's `index` file.
+- `file_unchanged` — the file is byte-identical to its staged baseline (`_seed/<file>` by
+  default; override with `baseline`). For runs that are supposed to write **nothing**: a
+  write-free preflight, an append-only ledger the target may not edit. Every other gate type
+  reads such a run as fine, because the file it checks is still the seeded file and still
+  well-formed — which is how researcher iteration-21 let a run close a project and write
+  completion state while `state_active_phase` went green. Pair it with `applies_when`, and
+  see "staging the baseline" below.
+- `command_exit0` — run a command with cwd = the working dir; pass iff it exits 0.
+  `${PLUGIN_ROOT}` and `${PACK_ROOT}` are substituted. Use `${PLUGIN_ROOT}` when the
+  invariant lives behind a checker the *target* ships (researcher's
+  `validate-corpus-review.py`). Use `${PACK_ROOT}` when the check belongs to the **eval**
+  and the plugin has no reason to run it at runtime — put those in the pack's own
+  `checks/` dir, never in `eval/lib/`, which is the plugin-agnostic engine.
 
 ### Applicability — the thing that bites
 
@@ -104,6 +119,42 @@ the split is load-bearing:
 
 `gate-context` overlays `gate-inputs`. A scenario-declared fact must never depend on a blind
 runner remembering to copy it — that is exactly how six runs were lost.
+
+### Staging the baseline for `file_unchanged`
+
+The orchestrator writes `<working-dir>/_seed/<file>` from the scenario's own `setup` (or from
+`fixtures/<name>/`) **after the run finishes** — never before. Staging it early would tell a
+blind runner that a file is being watched, and "don't touch this file" is an instruction a
+runner can follow, which turns a property of the plugin's behavior into a property of the
+harness's hint. A gate whose baseline is missing **fails** rather than going n/a: a watch that
+silently stops watching is worse than no watch.
+
+### Capture integrity (built-in, no pack config)
+
+`run-gates.mjs` always emits a few rows with `kind: "integrity"`. They score the **capture**,
+not the plugin: is the transcript there, do the artifacts the runner declared in
+`artifacts_written` exist, is `spoken.md` verbatim against the transcript. The rule behind
+them is *capture.md may not exceed transcript.md* — the judge never re-runs anything, so a
+capture that credits the assistant with work it didn't do produces a score for a run that
+never happened. A red integrity row means **re-run the scenario and discard this capture**; it
+is never reported as a target finding.
+
+Note what these check and what they don't: they check *declared* facts, never prose. An early
+version scanned capture.md for file paths and asked whether each traced to disk, transcript,
+or seed — it red-flagged 25 of 41 real captures, because a capture legitimately names
+plugin-root files it read and legitimately reports files that are *absent*. If you extend this
+layer, extend the machine-readable declarations, not the prose parsing.
+
+### Gates on behavior belong judge-side
+
+The applicability levers above decide *when* a gate fires. This decides *where it is written
+down*. A gate that checks structure (does the file exist, does it have the section) can sit in
+the runner-visible `adapter.md` table safely. A gate that checks **behavior** — did the skill
+reconcile two representations of its own state, did it leave a file alone — must not, because
+the runner reads that file, and a runner that knows cycle coherence is gated will tidy the
+checkboxes the skill forgot to tidy. That is the defect, laundered by the harness. Document
+those in `coverage.md` (judge-only), and leave a line in `adapter.md` saying the table is
+partial and deliberately so, or the next maintainer will "fix" it.
 
 **`adapter.md` is runner-visible. Keep it mechanism-only.** The runner must read the adapter —
 it's how it knows which skill to execute and what to capture — so anything written there has

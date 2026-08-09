@@ -77,6 +77,12 @@ of it would.
    verbatim — extraction is the one thing only you can see). Be literal: list a framework
    only if the assistant claimed to use it; copy the setup baseline exactly.
 
+   Also write **`artifacts_written`** — the working-dir-relative path of every file the run
+   *produced or modified*, and nothing else. A file the setup seeded and the run left alone is
+   not an artifact of the run; a file you mention in prose because the assistant looked for it
+   and it wasn't there is certainly not. A script checks that every path on this list exists,
+   so a list padded with files that were never written comes back red.
+
    Record **what you observed**, never what you think the run was supposed to do. Whether a
    run was *expected* to end without a capture is a property of the scenario, and the run
    skill writes it to `gate-context.json` after you finish — you neither see it nor write it.
@@ -96,6 +102,19 @@ of it would.
 6. **Write the capture.** Produce `<working-dir>/capture.md` with two sections:
    `## Transcript` (or a pointer to transcript.md) and `## Artifacts` (the paths written and
    a short note on each). Gate results come from the script, not from you.
+
+   **`capture.md` may not exceed `transcript.md`.** The transcript is the record; the capture
+   is a reading of it. Every action you attribute to the assistant — a file read, a file
+   written, a check performed — must be visible in the transcript you just wrote. Do not
+   round up: an assistant that named two of three criteria did not name three, and a turn
+   that mentioned a file did not necessarily read it. If the capture says something the
+   transcript doesn't show, the transcript is right and the capture is wrong.
+
+   This is the one failure only you can commit and nobody downstream can detect. The judge
+   never re-runs the plugin; it reads what you wrote. A capture that credits the assistant
+   with work it didn't do produces a score for a run that never happened — and in researcher
+   iteration-21 it did exactly that, with every gate green. Summarize freely, characterize
+   nothing, and if you are unsure whether the transcript supports a sentence, cut it.
 
 ## Output
 
