@@ -17,13 +17,12 @@ It has no researcher dependencies and cherry-picks to `main` on its own:
 `git cherry-pick 711c092`. Everything researcher-specific — including the pack-local
 `checks/state-coherence.mjs` — starts at `347c18e`.
 
-Do that promptly rather than waiting on iteration 24. The shared half was verified
-independently (0 integrity false positives across 352 captures spanning every pack), so its
-correctness does not depend on W2's verification — only the researcher half does. Parking it
-here means no other plugin's eval gets `file_unchanged`, `${PACK_ROOT}`, or capture-integrity
-until researcher merges, which is the trap this repo's own index warns about: keep shared
-edits to `eval/lib/`, `dev/scripts/`, and `.claude/skills/` small and merge them promptly
-instead of parking them on a long-lived plugin branch.
+The shared half was verified independently of W2 — 0 integrity false positives across 352
+captures spanning every pack, then 0 across 24 live runs here — so its correctness never
+depended on W2 clearing. **Kelsey's call on 2026-08-09 was to leave it parked**, because the
+cost of parking is a concurrency cost and no other plugin work is in flight. Lift it the
+moment that changes: two sessions editing `eval/lib/run-gates.mjs` on different branches is
+the conflict this repo's index warns about.
 
 ## Where it stands
 
@@ -39,7 +38,7 @@ Program-level view — the plan's status block at
 | W7 — adversarial corpus review (the credibility gate) | **done**, v1.8.0 |
 | /upskill constraint pass | **done**, v1.9.0 |
 | W6a + W6b — completion integrity + cross-phase consistency | **done**, v1.10.0 |
-| W2 — saturation → stop decision (Seam 1) | **built, v1.11.0 — unverified** |
+| W2 — saturation → stop decision (Seam 1) | **built, v1.11.0 — 17/17 green at 1x; 3x sampling outstanding** |
 | W3 (conclusion-vs-brief), W1 (note fidelity), W4, W5, W6c–f | not started |
 
 ## Done this session
@@ -96,11 +95,9 @@ None.
   `/research-init upgrade` then `/research-review-corpus final` in that repo. Also the best
   real-world test of whether W6a/b's in-line checks would have caught what Codex caught by
   hand — genuinely unanswered.
-- **Two goldens pass on a single sample** while their critical dimensions are noisy
-  (`adv-audience-standard-waiver`, `adv-exclusion-visibility`); the rubric wants 3×. Their
-  green is unconfirmed.
-- **Three goldens went unrun** in iterations 21–23 (`adv-independence-unknown`,
-  `adv-unselected-invisible`, `adv-mid-source-recovery`). Not counted as passing anywhere.
+- **Seven goldens are green on one sample each** while their critical dimensions are noisy;
+  the rubric wants 3× and the call takes the worst. Listed in Next Steps 1. Every golden has
+  now been run at least once — the iterations 21–23 "never run anywhere" gap is closed.
 - Whether B13's four-element supersession route should sanction a **short-form second
   statement** — stating it in full for each reversal reads as a repeated template (No-Tics 2).
 
