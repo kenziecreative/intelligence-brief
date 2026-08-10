@@ -1,10 +1,8 @@
 # Stream: researcher
 
-**Status:** live, nothing red — **v1.11.0 (W2) is released**: merged to `main`, pushed, and
-tagged `researcher-v1.11.0` on origin. 17 of 17 goldens pass, the seven noisy scenarios sampled
-3× and scored on the worst sample, 0 gate and 0 capture-integrity failures across 43 runs.
-No researcher work is unreleased or unpushed. **W1 (source-note fidelity) is next**, by Kelsey's
-call on 2026-08-09 — see Next Steps.
+**Status:** live — **v1.11.0 released** (merged, pushed, tagged on origin). **v1.12.0 (W1) is
+built and committed on `main`, deliberately UNTAGGED**: its two new goldens pass and two audit
+regressions pass, but **15 of 21 scenarios have not run against it**. That sweep is the gate.
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-09
 
@@ -27,7 +25,8 @@ discovery order and a second "Seam 0–5" scheme runs alongside them.
 | W6a + W6b — completion integrity + cross-phase consistency | **done**, v1.10.0 |
 | W2 — saturation → stop decision (Seam 1) | **done**, v1.11.0 (this session) |
 | Eval harness debt | **closed** (this session) |
-| W3 (next in plan), W1, W4, W5, W6c–f | not started |
+| **W1 — source-note fidelity (Seam 0)** | **built, v1.12.0 — partly verified** (see Next Steps) |
+| W3 (next after W1), W4, W5, W6c–f | not started |
 
 ## Done this session
 
@@ -49,35 +48,31 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-1. **W1 — source-note fidelity (Seam 0). Kelsey chose this over W3 on 2026-08-09.** Design
-   before build, per the plan's rule. The fork to resolve first (plan § W1): (a) passage/page
-   locators at capture, (b) source snapshots, (c) sampled re-validation of notes against
-   originals at audit. The plan's suggested first cut is (a) — a source-locator field per
-   quote/figure in the note schema, plus an audit battery item flagging any quote or figure
-   lacking one. **Why it moved ahead of W3:** W1 went from *inferred* to **observed** this session, on evidence produced by W2's own
-   verification: in one of three samples, `summarize-section` rendered a note's "60–70% of teams
-   report a reduction" as "a 60–70% reduction," and the same draft's M&L claimed two independent
-   sources for findings that had one each. The integrity agent cleared both, and the golden
-   passed, because accuracy-to-source is not a critical dimension on that scenario. That is the
-   exact shape of defect that ships. Captures:
-   `eval/targets/researcher/_eval/iteration-28/adv-counter-evidence-valve/run-3/` (local only) —
-   that run is W1's lead evidence and its first golden should be built from it.
-2. **W3** (conclusion-vs-brief / significance, Seam 2). Two items from this session belong to it,
-   both *two documents disagreeing* rather than run variance:
-   - `research-cross-ref`'s Output template prescribes dashboard vocabulary ("Saturation
-     advisory", "0% confirmatory") that `posture-register.md` bans in the turn.
-   - `research-process-source` line 31 mandates a "counters updated" line that the rubric's
-     Register 0-anchor calls machinery narration.
+1. **Finish v1.12.0's regression sweep, then tag.** 15 of 21 scenarios have not run against this
+   build. W1 touched `process-source` (note schema), `audit-claims` (B14/B15 + the correction
+   rule), `summarize-section` (guardrail 4a), the integrity agent (per-finding source counting),
+   and `init` (docs). Highest risk first:
+   - `adv-counter-evidence-valve` — synthesize. **This is where the defect came from**, and both
+     guardrail 4a and the per-finding counting land on it.
+   - `adv-mid-source-recovery` — process-source, the note-schema surface.
+   - `adv-audience-standard-waiver`, `adv-deliverable-manifest`, `adv-override-disclosure` — the
+     remaining audit goldens, which now run a battery two items longer.
+   - The `check-gaps` and `cross-ref` goldens are on surfaces W1 did not touch; run them last.
+   Then **3× sampling** on any with noisy critical dimensions. Record:
+   `eval/targets/researcher/_eval/iteration-31/scores.md` (local only).
+2. **`claim-graph.json` keeps pre-correction claim text after a fix is applied**, so the next
+   pass's B12 regression sweep compares against text the draft no longer contains. Found in
+   iteration 31; not W1's doing — visible now because a W1 fix is the first thing to rewrite a
+   claim's *wording* rather than its citation. Decide whether the graph updates on fix.
+3. **W3** (conclusion-vs-brief / significance, Seam 2). Two items belong to it, both *two
+   documents disagreeing* rather than run variance: `research-cross-ref`'s Output template
+   prescribes dashboard vocabulary that `posture-register.md` bans in the turn, and
+   `research-process-source` line 31 has the same conflict.
 4. **A gap no gate covers.** `check-gaps` rolls the cycle back from the seeded position on
    scenarios where coverage is arguably adequate. `state_cycle_coherent` passes it because the
-   result is internally consistent; nothing asserts the rollback was *warranted*. Three judges
-   flagged this independently — it wants either a gate or a recorded decision that it's fine.
-5. **Scenario hygiene, small.** `adv-evidence-against-routing` seeds a STATE with a
-   cross-reference date but no `saturation.json`; a runner flagged the inconsistency rather than
-   guessing (the behavior we want), but the seed should be made coherent. Several older scenarios
-   seed plans with no enumerated questions, so W2's `saturation.json` comes out `questions: []`.
-6. **Init eval scenario** — `/research-init` still ships behaviorally unverified (structural
-   validation only). Carried since v1.9.0.
+   result is internally consistent; nothing asserts the rollback was *warranted*.
+5. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
+   v1.9.0.
 
 ## Open questions / decisions pending
 
