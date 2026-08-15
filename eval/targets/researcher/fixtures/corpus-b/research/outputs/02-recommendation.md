@@ -14,6 +14,7 @@ this research recommends the vendor, not a final price point.
 
 The decision follows the commissioner's recorded frame (SSO as a hard gate first, then
 cost, then SLA — research/notes-to-self.md): Helpdock supports SAML SSO on Pro and above
+(vendor-reported, single source — not independently confirmed)
 [Source: note-helpdock.md]; **Replyline does not support SAML SSO** — only Google OAuth,
 confirmed in the trial account [Source: note-replyline.md] — so Replyline exits at the
 gate and cost arbitrates only among vendors that remain. SSO gating is consistent with
@@ -49,7 +50,9 @@ if both finalists fail on cost.
 ## Methodology & Limitations
 
 Sampling: vendor documentation, one hands-on trial, and one independent analyst roundup,
-found via the mapped channels. Single-source findings: implementation timelines and
-Helpdock's SLA terms (one vendor doc each, labeled at point of use). Pricing figures are
+found via the mapped channels. Single-source findings: implementation timelines,
+Helpdock's SLA terms, and Helpdock's SAML SSO support (one vendor doc each, labeled at
+point of use). The SSO claim is the one this recommendation gates on, and it rests on
+vendor documentation alone — no trial or independent confirmation. Pricing figures are
 two-source (vendor documentation corroborated by the roundup's vendor table); capability
 claims per the evidence standard trace to vendor docs/trial. Waivers: none.

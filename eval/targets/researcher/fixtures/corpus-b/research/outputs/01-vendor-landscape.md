@@ -12,7 +12,7 @@ research ($11–18) [Source: note-replyline.md; note-helpdock.md].
 
 ## SSO
 
-Helpdock supports SAML SSO on Pro and above [Source: note-helpdock.md]. **Replyline does
+Helpdock supports SAML SSO on Pro and above (vendor-reported, single source — not independently confirmed) [Source: note-helpdock.md]. **Replyline does
 not support SAML SSO** — only Google OAuth, confirmed in the trial account
 [Source: note-replyline.md]. SSO is the top gating requirement for security-conscious
 SMBs [Source: note-analyst-roundup.md].
@@ -28,5 +28,7 @@ Replyline commits to none [Source: note-replyline.md].
 
 Sampling: vendor documentation and one independent analyst roundup, found via the mapped
 channels; no customer-reference interviews were conducted. Single-source findings:
-implementation timelines and Helpdock's SLA terms (one vendor doc each, labeled at
-point of use). Waivers: none.
+implementation timelines, Helpdock's SLA terms, and Helpdock's SAML SSO support (one
+vendor doc each, labeled at point of use). The SSO claim is the phase's load-bearing
+one — it gates the recommendation — and it rests on vendor documentation alone.
+Waivers: none.
