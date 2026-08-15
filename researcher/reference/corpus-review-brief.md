@@ -71,6 +71,25 @@ Each check names its primary finding class and its **required evidence** — wha
 that class must cite to count. A finding whose evidence does not meet its check's
 required-evidence bar is an assertion, not a finding.
 
+**A finding whose required evidence you cannot produce is not a finding.** Every check below
+names the evidence its findings must carry, in the form `file:line`. That list is not a
+formatting convention — it is the check's *predicate*. If you cannot point at the record the
+check requires, the check did not fire; it found nothing, and "nothing" is the honest result.
+Do not file it as material and let the verdict follow.
+
+This is the failure mode that costs a credibility gate its authority, and it is worse than
+missing a defect. A review that misses something is incomplete; a review that manufactures
+something teaches the commissioner that a not-ready verdict may be noise, and after that a true
+finding reads the same as a false one. When a check's evidence is absent, say in the coverage
+note what you looked for and did not find. That is a real result and it belongs in the record.
+
+Before filing any finding as **material**, re-read your own evidence array against the check's
+required-evidence line. If an element is missing, or if a cited line does not say what the
+finding says it says, the finding does not go in at that severity. Read the *whole* cited
+passage, including the lines around your citation: a range resolved one line below the line you
+quoted is resolved, and a finding that steps over the resolution is an invention with a citation
+attached.
+
 - **C1 Completion integrity** (`completion-integrity`). If
   `research/reference/completion-criteria.md` exists, it is canonical: enumerate **every**
   criterion ID it defines and assign each a disposition — `met`, `unmet` (linked to a
