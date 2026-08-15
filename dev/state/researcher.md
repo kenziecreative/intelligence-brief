@@ -1,8 +1,10 @@
 # Stream: researcher
 
-**Status:** live — **v1.11.0 released** (merged, pushed, tagged on origin). **v1.12.0 (W1) is
-built and committed on `main`, deliberately UNTAGGED**: its two new goldens pass and two audit
-regressions pass, but **15 of 21 scenarios have not run against it**. That sweep is the gate.
+**Status:** live — **v1.11.0 released**. **v1.12.0 (W1) is built, swept, and still UNTAGGED**:
+all 19 goldens have now run against it and 18 pass. The one open red is `rep-review-corpus-b`,
+the clean-corpus negative control, which has returned a material finding on three consecutive
+runs. Its fixture was repaired between each; the third repair (across every deliverable rather
+than the one file cited) is committed and **unverified**. One run decides the tag.
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-09
 
@@ -48,31 +50,34 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-1. **Finish v1.12.0's regression sweep, then tag.** 15 of 21 scenarios have not run against this
-   build. W1 touched `process-source` (note schema), `audit-claims` (B14/B15 + the correction
-   rule), `summarize-section` (guardrail 4a), the integrity agent (per-finding source counting),
-   and `init` (docs). Highest risk first:
-   - `adv-counter-evidence-valve` — synthesize. **This is where the defect came from**, and both
-     guardrail 4a and the per-finding counting land on it.
-   - `adv-mid-source-recovery` — process-source, the note-schema surface.
-   - `adv-audience-standard-waiver`, `adv-deliverable-manifest`, `adv-override-disclosure` — the
-     remaining audit goldens, which now run a battery two items longer.
-   - The `check-gaps` and `cross-ref` goldens are on surfaces W1 did not touch; run them last.
-   Then **3× sampling** on any with noisy critical dimensions. Record:
-   `eval/targets/researcher/_eval/iteration-31/scores.md` (local only).
-2. **`claim-graph.json` keeps pre-correction claim text after a fix is applied**, so the next
-   pass's B12 regression sweep compares against text the draft no longer contains. Found in
-   iteration 31; not W1's doing — visible now because a W1 fix is the first thing to rewrite a
-   claim's *wording* rather than its citation. Decide whether the graph updates on fix.
-3. **W3** (conclusion-vs-brief / significance, Seam 2). Two items belong to it, both *two
-   documents disagreeing* rather than run variance: `research-cross-ref`'s Output template
-   prescribes dashboard vocabulary that `posture-register.md` bans in the turn, and
-   `research-process-source` line 31 has the same conflict.
-4. **A gap no gate covers.** `check-gaps` rolls the cycle back from the seeded position on
-   scenarios where coverage is arguably adequate. `state_cycle_coherent` passes it because the
-   result is internally consistent; nothing asserts the rollback was *warranted*.
-5. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
-   v1.9.0.
+1. **Re-run `rep-review-corpus-b` against the repaired fixture. This is the tag gate.**
+   `eval/targets/researcher/fixtures/corpus-b/` now flags Helpdock's SAML SSO support as
+   vendor-reported and single-source **in both deliverables**, lists it in both Methodology &
+   Limitations single-source lists with its load-bearing status named, and splits both audits'
+   tier rationales by vendor. A clean `ready` verdict with zero material findings closes the
+   sweep.
+   **If it comes back with `load-bearing-confidence` a fourth time, stop repairing wording.**
+   The finding then is that the fixture's *design* is wrong: corpus-b is built so a
+   vendor-doc-only claim is the sole gate on the decision, and C9 may be unclearable however
+   well that is disclosed. The fix moves to the evidence structure — give the SSO claim a second
+   independent trace and let a non-gating claim carry the single-source label. Run a hand C1–C15
+   precheck before spending another iteration.
+2. **Tag `researcher-v1.12.0`** once step 1 is clean. Everything else in the sweep is green.
+3. **3× sampling** on the noisy goldens. Five judges flagged their own v1.12.0 verdicts as
+   resting on n=1: `adv-exclusion-visibility`, `adv-independence-unknown`,
+   `adv-audience-standard-waiver`, `adv-override-disclosure`, `adv-confirm-side-override`,
+   `adv-counter-evidence-valve`, `adv-unselected-invisible`.
+4. **`claim-graph.json` keeps pre-correction claim text after a fix is applied**, so the next
+   pass's B12 regression sweep compares against text the draft no longer contains.
+5. **Two `check-gaps` rollback findings, same shape, no gate covers them.** On
+   `adv-evidence-against-routing` the run rolled STATE back to `Collect (1 of 5)` on a phase
+   whose blocking item it had itself called a synthesis obligation; on `adv-unselected-invisible`
+   the `▶ NEXT` sent the user to discovery two sentences after naming the unprocessed source
+   already sitting in the candidates file. `state_cycle_coherent` passes both — the states are
+   internally consistent, just wrong about the world.
+6. **W3** (conclusion-vs-brief / significance, Seam 2), carrying the two vocabulary conflicts
+   already logged against it.
+7. **Init eval scenario** — `/research-init` still ships behaviorally unverified.
 
 ## Open questions / decisions pending
 
