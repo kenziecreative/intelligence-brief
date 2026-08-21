@@ -82,7 +82,14 @@ Before writing anything, verify:
 
    **Name each bucket by its disposition, never by what its items said.** A disposition group is heterogeneous by construction: "did not qualify as counter-evidence" legitimately holds an article that endorsed the finding, one that took no position, and a study that measured no effect at all. Any verb that fits one of them misdescribes the others — and the verb that gets reached for is invariably the agreeable one, so the group reads as support when part of it is silence and part of it is a null result. "Four did not qualify as counter-evidence" is true by construction and needs no defending. "Four affirmed the benefit" is a fresh content claim about four different things, and it is a claim the log does not make. If an item deserves characterizing, characterize *it*, on its own line.
 
-   **One line per result, and no descriptor covers more than one item at any level.** Not the bucket, and not a sub-group inside it — "two items with no position either way" fails exactly as "four affirmed the benefit" does, and it is the same move: one phrase stretched across things that differ. There is no grouping level at which this becomes safe, because the whole difficulty is that a disposition group is defined by what its items are *not*, which tells you nothing about what each of them is. Give the count, then give each result its own line and its own description. Nine results is nine lines; that is not verbosity, it is the record.
+   **The label may cover the group. The reason may not.** This is the whole distinction, and it is narrow:
+
+   - **A disposition name covers its members legitimately.** "Four did not qualify as a challenger", "Three were off-topic", "Two fell below the credibility floor" — these are the log's own classifications, true by construction, and you do not need to defend them. Give the count with the label.
+   - **A reason attached to that label is a per-item claim wearing a group's clothes.** "Three were off-topic — *a different sense of the word*" asserts one explanation for three separate items, and it only takes one of them to have been off-topic for a different reason. Same for "four did not qualify — *they restated the same benefit*", and same in the generous direction for "two — *with no position either way*". The group is defined by what its members are **not**; that tells you nothing about why each one is that way, and the why is what a reason claims to know.
+
+   So: label the group, count it, then **give every result its own line and its own reason, lifted from its own triage entry**. Nine results is nine lines. That is not verbosity — the itemization *is* the record, and the roll-up is only an index to it.
+
+   Watch the sub-group especially. "Three were off-topic, two of them about HR onboarding" is the same move one level down, and it is the one that survives the obvious version of this rule.
 
    The same wording goes into `research/discovery/negative-searches.md`, so an inaccurate summary does not just mislead the turn — it becomes the durable record of what the search found, and every later reader inherits it.
 
