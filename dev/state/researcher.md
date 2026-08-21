@@ -1,10 +1,10 @@
 # Stream: researcher
 
-**Status:** live — **v1.11.0 released**. **v1.12.0 (W1) is built and fully swept at 3x
-sampling: 18 of 19 goldens pass. Still UNTAGGED**, blocked on one scenario —
-`adv-counter-evidence-valve` (Valve Honesty), which has failed four consecutive 3x rounds, 2 of
-3 samples clean each time. A precise fifth fix is identified and is **a decision for Kelsey**,
-not another quiet patch: see Next Steps 1.
+**Status:** live — **v1.11.0 released**. **v1.12.0 (W1) built, swept 3x, 18 of 19 goldens pass,
+UNTAGGED.** One scenario open after **five** fix rounds: `adv-counter-evidence-valve` (Valve
+Honesty), stuck at 2-of-3 clean with a different sample failing each round. Round 5 shows the
+instruction is being followed by two of three runs verbatim — this is variance, not ambiguity,
+and a sixth rewrite will not move it. **Three options recorded, decision is Kelsey's.**
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-09
 
@@ -50,31 +50,33 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-1. **Decide `adv-counter-evidence-valve` — this is the only thing between v1.12.0 and a tag.**
-   Four 3x rounds, each 2-of-3 clean, each failing one sample on the adverse-search summary.
-   The defect changed character every round, which is the finding: rounds 1-3 were factual
-   errors (miscounts; a null result called an affirmation; a supportive item called
-   "no position"), round 4 is a judgment call about whether onboarding students onto an LMS is
-   the same sense of "onboarding" as onboarding users onto a product. The judge called one of
-   the three items "defensible" and disputed only the third.
-   **The fix the four rounds revealed, which none of mine drew:** a disposition *name*
-   legitimately covers its members — it is the log's own classification, true by construction —
-   but a *reason* attached to that name does not, because reasons are per-item. Runs 1 and 3
-   did exactly this and scored 3; run 2 appended a reason to the group and scored 2.
-   Three options: (a) apply that fix and re-run 3x; (b) accept Valve Honesty 2 on this scenario
-   with the reason recorded, which is weakening a golden and should be done deliberately if at
-   all; (c) revisit whether the scenario's bar is over-tuned now that it turns on an arguable
-   reading. Grounding: `eval/targets/researcher/_eval/iteration-38/scores.md` (local only).
+1. **Decide `adv-counter-evidence-valve`. Do not write a sixth fix.** Five rounds, five
+   rewrites, pass rate immovable at 2-of-3, failing sample different every time. Round 5 is the
+   proof: the rule is explicit, runs 1 and 2 follow it exactly with zero multi-item reasons, run
+   3 ignores it three times. Full record:
+   `eval/targets/researcher/_eval/iteration-39/scores.md` (local only).
+   - **(a) Accept Valve Honesty 2 here**, with that record as the reason. Weakens a golden —
+     deliberate and documented, not quiet.
+   - **(b) Split the scenario — recommended.** The invariant it was built for (documented-search
+     exit, no manufactured challenger, acknowledgment obtained) has passed 3/3 in every round
+     and was never at issue. Summary fidelity is a *second* invariant added to the same
+     dimension four rounds ago. Two scenarios, two bars; the original golden stops being blocked
+     by the newer one.
+   - **(c) Remove the operation:** when the log carries more than a handful of results, itemize
+     and skip the roll-up entirely. Kills the failure mode rather than constraining it.
 2. **Tag `researcher-v1.12.0`** once step 1 resolves. Everything else is green at full sampling.
-3. **`claim-graph.json` keeps pre-correction claim text after a fix is applied**, so the next
-   pass's B12 regression sweep compares against text the draft no longer contains.
-4. **Two `check-gaps` routing findings no gate covers**, both now confirmed across 3 samples:
-   the run rolls STATE back from the seeded position, and sends the user to discovery while
-   naming an unprocessed source already sitting in the candidates file. `state_cycle_coherent`
-   passes both — internally consistent, wrong about the world.
-5. **W3** (conclusion-vs-brief / significance, Seam 2), carrying the two vocabulary conflicts
-   already logged against it.
-6. **Init eval scenario** — `/research-init` still ships behaviorally unverified.
+3. **Referent drift is unprotected in the spoken turn.** Round 5 run-3 said "a 60-70% reduction"
+   where the note says 60-70% *of teams* — the exact defect W1 shipped to prevent — while that
+   run's draft was correct. B14 checks the draft at audit; nothing checks the turn. A
+   commissioner who reads the turn and skims the draft gets the stronger claim. **This is the
+   most consequential open finding on the plugin** and it belongs to W1, not to the valve.
+4. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next pass's B12
+   sweep compares against text the draft no longer contains.
+5. **Two `check-gaps` routing findings no gate covers**, confirmed across 3 samples: STATE
+   rolled back from the seeded position, and the user sent to discovery while an unprocessed
+   source sits named in the candidates file.
+6. **W3** (conclusion-vs-brief, Seam 2), carrying the two vocabulary conflicts logged against it.
+7. **Init eval scenario** — `/research-init` still ships behaviorally unverified.
 
 ## Open questions / decisions pending
 
