@@ -67,6 +67,8 @@ Assess research coverage against the research plan and identify what's missing.
 
    **An accepted gap (step 7b) is already routed.** It carries the commissioner's recorded acknowledgment, so it does not re-enter this table and does not block a coverage-adequate verdict. It appears in the Accepted gaps list with its rationale, as it does every run.
 
+6i. **Before regenerating, verify the classification is complete — count, do not recall.** Walk `research/notes/` and confirm every note appears somewhere in the per-question detail you are about to write. A note relevant to two questions appears under both; a note relevant to none appears in neither and that is fine. **The failure this catches is the note filed once under the question it fits best**, which leaves a second question's coverage picture missing a source the reader can see sitting in `research/notes/`. The rule for this is in step 6d and it is easy to *hold* and easy to *forget*, because the natural way to write the output is note-by-note while the correct way is question-by-question. So do not rely on holding it: count the notes, count their appearances, and reconcile the two before you write.
+
 7. **Regenerate `research/gaps.md`** with the following structure (full regeneration each run — read all notes and rebuild, consistent with cross-ref pattern):
 
    **Dashboard** (at top of file):
