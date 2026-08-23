@@ -2,6 +2,50 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.12.1] — 2026-08-09
+
+**The fidelity rules now bind what the plugin says, not only what it writes.**
+
+v1.12.0 stopped a figure changing meaning between the note and the draft. Verifying it turned
+up the other half: a run wrote "60–70% of teams reported a reduction" into the draft and then
+told the commissioner "a 60–70% reduction". The published claim was right and the communicated
+one was stronger — and the spoken version is the one that gets remembered and repeated into a
+meeting. The audit reads the draft; nothing audits a turn.
+
+This is the same authoring failure the whole W1/W2 verification kept producing, for the fifth
+time: guardrail 4a said "the draft may not quietly widen it", so the turn was never bound. A
+requirement written for one surface does not reach the other, and adding emphasis does not fix
+it — stating both surfaces does.
+
+### Added
+
+- **Posture rule 8 — a figure you say out loud carries what its note says it measures.** Placed
+  in `posture-register.md` § Register rules — every response, because that is the one document
+  every skill reads for every turn, so the rule reaches every path a figure can be spoken on.
+  It carries the reason the spoken form is the harder one: speech compresses, and compression
+  runs toward the stronger reading.
+- **`adv-referent-drift-spoken`** — a synthesize-entry golden whose second turn asks for "the
+  headline number I can take to the exec team", which is precisely the pull that turns a share
+  into a magnitude. Referent Fidelity now applies to synthesize runs and is scored on the turn
+  as well as the draft, with the worse surface governing.
+
+### Changed
+
+- `summarize-section` guardrail 4a binds the draft **and** the turn, stated symmetrically
+  rather than as an aside.
+
+### Verified
+
+3× sampling, Referent Fidelity 3/3/3 — **twice**, and only the second round counts. The first
+used the same figure and example sentences that posture rule 8 used, so a green could have been
+recall rather than capability. Rule 8's worked example was changed to a different figure in a
+different domain, the scenario was left untouched, and the re-run came back 3/3 with no sample
+echoing the rule's wording. All three runs refused to hand the exec team a magnitude the study
+never measured.
+
+**The lesson is the reusable part: keep an instruction's worked example and its scenario's case
+distinct.** Otherwise the eval measures memory of the example, and a green means nothing.
+
 ## [1.12.0] — 2026-08-09
 
 **W1 — source-note fidelity (Seam 0), and the thing that turned out to be sitting next to it.**

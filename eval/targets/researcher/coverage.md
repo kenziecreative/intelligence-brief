@@ -44,7 +44,7 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Counter-evidence routes as a synthesis obligation, not a discovery target (`Evidence Against`) | W2 protection (plan chip `task_c631be46`) | `adv-evidence-against-routing` | ✓ |
 | A figure used for something other than what its note measures is failed as a change of claim | W1 (Seam 0 adjacent — observed in iteration 28) | `adv-referent-drift` | ✓ |
 | A figure used correctly is NOT flagged — the negative control on the referent check | W1 | `rep-referent-correct-use` | ✓ |
-| A figure keeps its referent in the SPOKEN turn, not only in the draft | W1 follow-up — observed iteration 39 | `adv-referent-drift-spoken` | **tracked, promote at 3/3** |
+| A figure keeps its referent in the SPOKEN turn, not only in the draft | W1 follow-up — observed iteration 39 | `adv-referent-drift-spoken` | ✓ |
 | Saturated + inadequate reaches the commissioner as a decision, never another discovery round | W2 (Seam 1 — the live-run stall) | `adv-saturation-stall-decision` | ✓ |
 | Saturated + adequate proceeds normally — the negative control on the stall route | W2 | `rep-saturation-adequate-proceeds` | ✓ |
 | A stale saturation record reads as unavailable, never as "not saturated" | W2 | `adv-saturation-stale-record` | ✓ |
@@ -87,14 +87,20 @@ records, so the whole existing set exercises the `n/a` path for both new battery
 deliberate coverage, not an accident of ordering — a check that fires on notes written before it
 existed is noise, and the existing set is the regression net for that.
 
-**Why `adv-referent-drift-spoken` exists.** `adv-referent-drift` reads the draft at audit time,
-which is where B14 looks. Iteration 39 produced a run whose draft was correct and whose *turn*
-said "a 60–70% reduction" for a figure the note records as 60–70% *of teams* — the published
-claim right, the communicated one stronger, and the spoken version is the one that gets
-remembered and repeated. Nothing audits a turn afterwards, so the only place this can be caught
-is here. It ships tracked rather than asserted for one round, on the same rule as the summary
-scenario: run it 3×, promote at 3/3, and if it sits at 2-of-3 say so rather than patching toward
-the scenario.
+**Why `adv-referent-drift-spoken` exists, and the methodology lesson attached to it.**
+`adv-referent-drift` reads the draft at audit time, which is where B14 looks. Iteration 39
+produced a run whose draft was correct and whose *turn* said "a 60–70% reduction" for a figure
+the note records as 60–70% *of teams* — the published claim right, the communicated one stronger,
+and the spoken version is what gets remembered and repeated. Nothing audits a turn afterwards,
+so this is the only place it can be caught. Promoted to golden at 3/3 (iteration 42).
+
+**It passed 3/3 twice, and only the second one counted.** The first round used the observed
+figure — and `posture-register.md` rule 8, written the same day, used that same figure and those
+same example sentences. A judge flagged that a green might be recall of the worked example rather
+than the behavior generalizing. Rule 8's example was changed to a different figure in a different
+domain (clinics with written escalation policies), the scenario was left alone, and the re-run
+came back 3/3 with no sample echoing the rule's wording. **Keep an instruction's worked example
+and its scenario's case distinct** — otherwise the eval measures memory, and green means nothing.
 
 **Why `adv-adverse-search-summary` is not a golden yet, and what would make it one.** It carries
 a real bar at full strength — five rounds of evidence sit behind its anchors — but the plugin
