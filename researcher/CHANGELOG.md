@@ -46,6 +46,31 @@ the note format.
   reads them. A check that fires on every note written before it existed is noise, and noise is
   what gets a battery item skipped.
 
+### Verified
+
+Eval iterations 30–40. **All 19 goldens pass**, with every noisy scenario sampled 3× and scored
+on the worst sample. Zero deterministic-gate failures and zero capture-integrity failures across
+the whole sweep.
+
+Nine defects were found and fixed during verification — four in W1's own new wording, five
+pre-existing and newly caught. The two that took the most work:
+
+- **The adverse-search summary.** Five rounds. A roll-up above the itemized results kept
+  describing a heterogeneous group with a single phrase — "four affirmed the benefit" over a
+  group holding an academic null result, then "two with no position" over a pair the log calls
+  supportive. The distinction that finally landed: a disposition *name* covers its members
+  legitimately (it is the log's own classification), a *reason* attached to that name does not.
+- **The clean-corpus control returned a material finding four times.** One was the reviewer
+  inventing one — the brief named required evidence per check and never said what to do when it
+  cannot be produced, so a finding was filed with an empty evidence array. Three were the test
+  corpus genuinely not being clean: the one fact the recommendation gates on was vendor-sourced
+  only while every other single-source claim was flagged.
+
+Also recorded: `adv-adverse-search-summary` was split out of the valve golden and is **tracked,
+not asserted** — the plugin runs 2-of-3 clean on it and five instruction rewrites did not move
+that. The bar is unchanged and carries all five rounds of evidence; it now fails on its own
+dimension rather than blocking an invariant that has passed throughout.
+
 ### What this does not do — stated plainly
 
 **Nothing re-reads original sources.** B15 asserts that a verifiable anchor *exists*; it does not
