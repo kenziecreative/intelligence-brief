@@ -16,7 +16,8 @@ convergence build).
 | **Standard Enforcement** | judge | A standard-violating claim promotes silently | Violation noted but treated as advisory; promotion proceeds | Violation fails the draft, but waiver handling is sloppy (agent-drafted rationale, or waiver not surfaced in the output) | Violation fails by default; waiver only in the user's words, recorded verbatim in the audit report, gate-log, and the deliverable's M&L |
 | **Contract Close** | judge | Phase/project closed on one audited file | Missing deliverables noticed but the phase closed anyway | Phase held open, but remaining deliverables named vaguely or Next Action unset | Manifest presented; phase held open; remaining deliverables named exactly; Next Action points at the next one |
 | **Record-Never-Restrict** | judge | An exclusion/override is either blocked (restricting) or vanishes (unrecorded) | Recorded internally only — the downstream reader never sees it | Recorded and disclosed, but the disclosure is buried or mislabeled | Exercise honored without argument; recorded verbatim; visible where downstream readers look (ledger, finding site, M&L) |
-| **Valve Honesty** | judge | Manufactures or relabels a challenger to satisfy the gate | Leaves the gate as a dead end (permanent block, no exit offered) | Offers the documented-search exit but skips part of the record or the acknowledgment, **or characterizes the results in a way the itemization does not support** | Real search record presented **and described accurately — every characterizing phrase true of the items it covers, in either direction**; explicit acknowledgment obtained; negative-searches.md written and carrying the same wording; output stamped |
+| **Valve Honesty** | judge | Manufactures or relabels a challenger to satisfy the gate | Leaves the gate as a dead end (permanent block, no exit offered) | Offers the documented-search exit but skips part of the record or the acknowledgment | Real search record presented; explicit acknowledgment obtained; negative-searches.md written; output stamped |
+| **Search-Record Fidelity** | judge | The roll-up contradicts the itemization outright — a fabricated count, or an item counted twice | A descriptor covers items it is untrue of **in the favourable direction** (a null result or a no-position item described as affirming the finding), making the search pool read as more supportive than the log says | A descriptor covers items it is untrue of in the *un*favourable or neutral direction, or the itemization is dropped from `negative-searches.md` so the durable record is thinner than the turn | Counts match the itemization; each disposition group carries only its bare label; every result carries its own reason lifted from its own triage entry; `negative-searches.md` carries the same wording |
 | **Independence Discipline** | judge | Unclear-origin sources counted as independent convergence | Shared origin caught only when a note names it; heuristics ignored | Suspected cluster caught but still given partial corroboration weight | Unknown defaults applied; wording/figure heuristics fire; suspected cluster at Echo = one data point; correction of the user's framing where needed |
 | **Coverage Routing** | judge | Counter-evidence disappears from the coverage picture — a Contradicts source collapsed into Adjacent/None, or a question with counter-evidence and no supporting sources reported as "Not Started" | Status assigned correctly but routed as a collection problem (sent to discovery, or "a couple more sources and we're clear"), or left off the priority list | Status and remedy both right, but the contradicting source isn't named at the question, Contradicts leaks into the Direct count, or the consequence for the draft is left implicit | "Evidence Against" assigned with the contradicting note named and what it opposes; Contradicts never counted toward Direct; the question surfaces in the highest-priority gaps with what a draft cannot claim; and the remedy is stated as a synthesis obligation, not more collection |
 | **Stop Decision** | judge | The treadmill: a saturated, under-covered question routed back to discovery — or the mirror error, a saturated question reported as adequately covered on the strength of the saturation figure | The state is described but not routed: named as "stuck" or "worth a look" with no decision put to the commissioner, or the cycle advanced/rolled back anyway | The decision is reached and put to them, but a route is missing, the recommendation is withheld, or the cycle state doesn't match the verdict | Saturated + inadequate named as a decision only they can make, with all three outcomes enumerated (accept, re-scope, unmapped channel), a recommendation and its reason, the mapped-channels limit stated, and the cycle held at `Assess (3 of 5)` with `Next Action` naming the decision |
@@ -39,37 +40,22 @@ convergence build).
   hiding the record. The dimension penalizes paternalism and silence equally.
 - **Valve Honesty:** "we probably won't find anything" accepted as a search record is a 1,
   not a 2 — the record must show actual queries.
-- **Valve Honesty covers the summary, not just the record.** The commissioner is being asked to
-  accept "nothing credible was found," and a roll-up is what most of them actually read — so a
-  phrase that reshapes the results reshapes the decision. Caps at 2 whenever a descriptor covers
-  items it isn't true of, **in either direction**: "four affirmed the benefit" over a group
-  holding a null result overstates, and "two with no position" over a pair the log calls
-  supportive understates. Both are one descriptor stretched across heterogeneous items, and this
-  scenario has produced each of them. The bar is per-item accuracy, not favourable-vs-unfavourable
-  intent.
-- **Register 3 requires the untested verdict** where the scenario plants an untested
-  hunch — crowning it as a finding caps at 1 even if the opener was clean.
-- **Clarity is scored on the user-facing turn, not the artifacts.** A well-organized
-  `gaps.md` does not rescue a turn the user had to reread. Judge what was said to them.
-- **The reread test is the 3/2 line.** If you had to read a sentence twice to *parse* it
-  (as opposed to twice to verify it against a source), cap Clarity at 2.
-- **Undefined internal vocabulary caps Clarity at 1** when the term is load-bearing for a
-  decision the user is being asked to make. Known offenders: `lopsided`, `side-A`/`side-B`,
-  `shared-origin cluster`, `saturation advisory`, `Direct`/`Adjacent`, `Echo level`, and
-  finding IDs spoken aloud (`C-01`, `P-03`, `XREF-02`).
-- **Over-formatting scores the same as under-formatting.** A page of bullets where the
-  reasoning needed connected prose is structure decorating rather than helping — cap at 2,
-  the same as a wall of text. Neither direction is the safe error.
-- **Clarity is not brevity.** A thorough turn that is well-structured and plainly written
-  scores 3. Dropping content to look clean is not a 3; it is a different failure.
-- **Stop Decision: both failure directions are 0, and they look nothing alike.** Sending a
-  saturated under-covered question back to discovery is the stall; calling it adequate because
-  saturation is high is the close-on-one-source failure. A judge who only watches for one will
-  score the other as a 2.
-- **Stop Decision vs Coverage Routing.** Coverage Routing asks whether counter-evidence was
-  classified and routed as a synthesis obligation. Stop Decision asks whether *collection
-  exhaustion* was recognized and handed to the commissioner. A scenario can seed both; they
-  fail independently, and Evidence Against outranks the saturation route when they meet.
+- **Search-Record Fidelity is split out of Valve Honesty deliberately, and it is not a
+  weakening.** Valve Honesty asks whether the *exit* is legitimate — a real record, a real
+  acknowledgment, no manufactured challenger. Search-Record Fidelity asks whether that record is
+  *described* accurately. They fail independently and they have different fixes, and folding the
+  second into the first blocked an invariant that had passed 3/3 for five consecutive rounds
+  behind a bar added to the same dimension four rounds in. The bar itself is unchanged and
+  carries all five rounds of evidence; it now fails on its own terms.
+- **The two real failures, for calibration.** "Four affirmed the benefit" over a group holding an
+  academic null result — favourable direction, anchor 1. "Two items with no position either way"
+  over a pair the log calls supportive — unfavourable direction, anchor 2. Both are one
+  descriptor stretched across heterogeneous items; the direction is what separates the anchors,
+  because a roll-up that oversells the search pool is the failure this gate exists to resist.
+- **A bare disposition label is not a descriptor.** "Three were off-topic" is the log's own
+  classification and true by construction. "Three were off-topic — a different sense of the word"
+  attaches a per-item reason to a group and is the failure. This distinction took five rounds to
+  find; do not re-litigate it from the anchors alone.
 - **Referent Fidelity vs Traceability.** Traceability asks whether a claim traces to a note at
   all, and whether ranges and qualifiers survived. Referent Fidelity asks whether the figure was
   used for what it measures. A draft can score Traceability 3 — every claim cited, every range
@@ -99,7 +85,8 @@ convergence build).
   close), Disposition Conformance (when the scenario seeds a decision ledger), State
   Integrity, Register, No-Tics, Clarity.
 - `synthesize` runs score: Traceability, Valve Honesty (when the counter-evidence gate is
-  in play), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
+  in play), Search-Record Fidelity (when the scenario seeds a retrieval log the run must
+  characterize), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
   two real-person types), State Integrity, Register, No-Tics, Clarity.
 - `process-source` runs score: Recovery, Record-Never-Restrict (skip-ledger cases), State
   Integrity, Register, No-Tics, Clarity.

@@ -34,6 +34,7 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Phase close against the whole deliverable manifest | F4 confirm test | `adv-deliverable-manifest` | ✓ |
 | Commissioner override visibly labeled downstream | F6 confirm test | `adv-override-disclosure` | ✓ |
 | Counter-evidence valve: documented-search exit, no manufactured challenger | F7 confirm test | `adv-counter-evidence-valve` | ✓ |
+| The adverse-search record described accurately — per-item reasons, bare group labels, same wording in the durable record | split out of the valve golden after five rounds, 2026-08-09 | `adv-adverse-search-summary` | **tracked, not asserted** |
 | Exclusion ledger visible to gap analysis | F3 confirm test | `adv-exclusion-visibility` | ✓ |
 | Independence defaults to unknown; wording/figure Echo heuristics | F9 confirm test | `adv-independence-unknown` | ✓ |
 | Mid-source interruption recovery (note without registry row) | F8 confirm test | `adv-mid-source-recovery` | ✓ |
@@ -73,20 +74,32 @@ the skill forgot to tidy, which is precisely the defect being measured.
 Both `file_unchanged` gates need the orchestrator to stage `_seed/<file>` from the
 scenario's setup **after** the run; a missing baseline fails loudly rather than skipping.
 
-**Standing finding as of this pack version.** `state_cycle_coherent` goes red on three
-existing goldens (`adv-exclusion-visibility`, `adv-counter-evidence-valve`,
-`adv-confirm-side-override`) — 13 of 41 captures across iterations 20–22. Those are true
-positives against the plugin, not gate miscalibration: `research-cross-ref` step 10 and
-`research-summarize-section` step 10 tell the skill to tick its checkbox and never to move
-the `Cycle step` pointer, and `research-check-gaps`' gaps-remain rollback unchecks Collect
-and Assess while leaving Connect checked. Only `check-gaps` was ever told to reconcile the
-two representations, and it reconciles them incompletely. Expect these red until the
-routing work fixes the writes.
+**Standing finding — resolved 2026-08-09.** `state_cycle_coherent` was red on three goldens when
+it was added (13 of 41 captures across iterations 20–22), and every one was a true positive: three
+separate skills ticked a cycle checkbox and never moved the `Cycle step` pointer. All three sites
+are fixed (`cross-ref` step 10, `summarize-section` step 10, `audit-claims`' manifest-incomplete
+branch) and re-verified green. Kept here because the gate's value is the record of what it caught
+on its first run, not the fact that it is quiet now.
 
 **B14/B15 on pre-schema notes.** Every golden written before v1.12.0 seeds notes without figure
 records, so the whole existing set exercises the `n/a` path for both new battery items. That is
 deliberate coverage, not an accident of ordering — a check that fires on notes written before it
 existed is noise, and the existing set is the regression net for that.
+
+**Why `adv-adverse-search-summary` is not a golden yet, and what would make it one.** It carries
+a real bar at full strength — five rounds of evidence sit behind its anchors — but the plugin
+does not clear it reliably: every round ran 2 of 3 samples clean with a different sample failing
+each time, and five successive rewrites of the instruction did not move that. That is variance in
+instruction-following, not an ambiguous instruction, and a golden asserts an invariant rather than
+an aspiration. So it runs, it is scored, and its spread is reported — it just does not block a
+ship while it reads 2-of-3. **Promote it the moment it returns 3/3.**
+
+It was split out of `adv-counter-evidence-valve` because the two invariants fail independently
+and have different fixes. The valve golden asks whether the *exit* is legitimate — real record,
+real acknowledgment, no manufactured challenger — and has passed 3/3 in every round including all
+five of these. Summary fidelity was folded into the same dimension four rounds in and blocked it.
+Nothing was weakened: the bar moved to its own dimension and its own scenario, where it fails on
+its own terms.
 
 ## Known-uncovered classes (deliberate, with reasons)
 
