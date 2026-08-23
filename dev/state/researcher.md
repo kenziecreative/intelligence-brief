@@ -1,9 +1,8 @@
 # Stream: researcher
 
-**Status:** live, nothing red — **v1.11.0 and v1.12.0 both released**: merged, pushed, tagged on
-origin. v1.12.0 verified over eval iterations 30–40 with **all 19 goldens passing**, every noisy
-scenario at 3× sampling scored on the worst sample, 0 gate and 0 capture-integrity failures.
-No researcher work is unreleased or unpushed. **W3 is next.**
+**Status:** live, nothing red — **v1.11.0, v1.12.0 and v1.12.1 all released**: merged, pushed,
+tagged on origin. **20 goldens, all passing**, every noisy scenario at 3× scored on the worst
+sample. No researcher work is unreleased or unpushed. **W3 is next.**
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-09
 
@@ -26,7 +25,7 @@ discovery order and a second "Seam 0–5" scheme runs alongside them.
 | W6a + W6b — completion integrity + cross-phase consistency | **done**, v1.10.0 |
 | W2 — saturation → stop decision (Seam 1) | **done**, v1.11.0 (this session) |
 | Eval harness debt | **closed** (this session) |
-| **W1 — source-note fidelity (Seam 0)** | **done**, v1.12.0 — referent drift closed; Seam 0 itself still open by design |
+| **W1 — source-note fidelity (Seam 0)** | **done**, v1.12.0 + v1.12.1 — referent drift closed in the draft *and* the spoken turn; Seam 0 itself still open by design |
 | W3 — conclusion-vs-brief (Seam 2) | **next** |
 | W4, W5, W6c–f | not started |
 
@@ -50,27 +49,25 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-1. **Referent drift is unprotected in the spoken turn — the most consequential open finding.**
-   B14 checks the *draft* at audit time. A run in iteration 39 said "a 60–70% reduction" where
-   the note says 60–70% *of teams*, while that same run's draft was correct. Someone who reads
-   the turn and skims the draft gets the stronger claim. W1 closed this for what gets written
-   down and not for what gets said; the fix belongs with W1's machinery, not with the scenario
-   that surfaced it.
-2. **W3** (conclusion-vs-brief / significance, Seam 2 — *observed*). Two items already belong to
-   it, both *two documents disagreeing* rather than run variance: `research-cross-ref`'s Output
-   template prescribes dashboard vocabulary that `posture-register.md` bans in the turn, and
-   `research-process-source` line 31 has the same conflict.
-3. **Promote `adv-adverse-search-summary` to golden when it returns 3/3.** It ships tracked, not
+1. **W3** (conclusion-vs-brief / significance, Seam 2 — *observed*). The last seam with evidence
+   behind it. Two items already belong to it, both *two documents disagreeing* rather than run
+   variance: `research-cross-ref`'s Output template prescribes dashboard vocabulary that
+   `posture-register.md` bans in the turn, and `research-process-source` line 31 has the same
+   conflict. Design before build, per the plan's rule.
+2. **Promote `adv-adverse-search-summary` to golden when it returns 3/3.** Ships tracked, not
    asserted: five instruction rewrites left the plugin at 2-of-3 clean with a different sample
-   failing each round. Full record: `eval/targets/researcher/_eval/iteration-39/scores.md`.
-4. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next pass's B12
+   failing each round. Record: `eval/targets/researcher/_eval/iteration-39/scores.md`.
+3. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next pass's B12
    sweep compares against text the draft no longer contains.
-5. **Two `check-gaps` routing findings no gate covers**, confirmed across 3 samples: STATE rolled
+4. **Two `check-gaps` routing findings no gate covers**, confirmed across 3 samples: STATE rolled
    back from the seeded position, and the user sent to discovery while an unprocessed source sits
-   named in the candidates file. `state_cycle_coherent` passes both — internally consistent,
-   wrong about the world.
-6. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
-   v1.9.0, and now the oldest open item on the stream.
+   named in the candidates file.
+5. **Init eval scenario** — `/research-init` still ships behaviorally unverified. Carried since
+   v1.9.0 and now the oldest open item on the stream.
+6. **Two watch items from iteration 42**, recorded not chased: all three samples opened with a
+   near-identical "One thing before the draft" caveat lead (no tic inside any one run, but
+   three-for-three is a template forming), and two left a bracketed waiver-template line in the
+   draft's M&L instead of the skill's `Waivers: none` placeholder.
 
 ## Open questions / decisions pending
 
