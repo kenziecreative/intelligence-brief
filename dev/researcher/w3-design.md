@@ -122,7 +122,7 @@ corpus." Today the question lives in `research-plan.md` § The Core Question and
 be *stated*, or B17 will read whichever it finds first. Name both, in that precedence: the plan
 is the original commission; a directive supersedes it for whatever it touches.
 
-## Author forks
+## Author forks — all four resolved 2026-08-09 (Kelsey took the recommendation on each)
 
 **Fork 1 — where the label lives in the deliverable.**
 (a) Inline, in the sentence: "*(analyst inference)*" after the statement.

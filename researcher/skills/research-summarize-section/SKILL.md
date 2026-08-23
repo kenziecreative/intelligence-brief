@@ -147,7 +147,33 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
    - Cite sources inline using `[Source: <note-filename>]`
    - Use prose paragraphs, not bullet lists (except for data tables and key findings)
    - Present contradictions when sources disagree
-   - No orphan claims — if it can't be cited, flag it as inference
+   - No orphan claims — if it can't be cited, label it (below) or cut it
+   - **Label every load-bearing "so what" with where it comes from.** A finding states what the
+     evidence says; a "so what" states what it means, and the two have different warrants. Three
+     labels, and they are fixed — the corpus reviewer uses these exact words, so a different
+     wording here makes its check unrunnable against your output:
+     - **evidence-supported implication** — a reader can follow the cited notes to this
+       conclusion without supplying anything themselves.
+     - **analyst inference** — reasoning past what any source states. This is legitimate and is
+       often the most valuable thing in the report. It simply may not present as established.
+     - **commissioner priority** — it follows from a stated preference, constraint or directive
+       rather than from the evidence. Cite the directive.
+
+     **Load-bearing** means a reader acting on this report would act on this statement. Not every
+     sentence: a label on everything stops carrying signal. But the test cuts the other way too —
+     if a sentence reads like a recommendation and carries no label, that is the sentence most in
+     need of one, and the audit treats its absence as a finding rather than a formatting nit.
+
+     **The label goes in the sentence**, not in a block at the end: "…which points to a Q3
+     cutover *(analyst inference)*." The reader who most needs to know a conclusion is a judgment
+     call is the one reading it and deciding whether to act on it, and a provenance section near
+     the end is read by someone who has already decided.
+
+     **Say the provenance in the turn as well.** The same rule as posture rule 8 and for the same
+     reason: the draft is audited and the turn is not, and the turn is what gets repeated. You do
+     not have to speak the label as a label — "that last part is my read, not something the
+     sources say" carries it in plain words. What is not allowed is describing an inference to
+     the commissioner in the grammar of an established finding.
    - **End every draft with a `## Methodology & Limitations` section.** This section is part of the deliverable, not backstage — it is what keeps the output honest to a reader who wasn't in the engagement. It contains:
      1. **Sampling disclosure:** "Sources were gathered by purposive sampling through mapped discovery channels, not exhaustive literature coverage. Where this report notes that evidence was not found, that means 'not found via the mapped channels,' not 'does not exist.'" (Adapt the wording to the project; keep the substance.)
      2. **Single-source findings:** list each finding resting on one independent source (or "none").

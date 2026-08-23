@@ -2,6 +2,60 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.13.0] — 2026-08-09
+
+**W3 — conclusion exceeds evidence, and drifts from the brief (Seam 2).**
+
+A finished pricing project produced four of these, and its gates passed on all four: a range
+became a single number; an option was "ruled out" on the *absence* of evidence for it; the
+recommendation drifted from leadership's stated frame; a constraint was asserted as immovable
+that the research had found was not a lever. **None was a citation error.** Every one traced to a
+note. Tracing a claim and licensing a conclusion are different things, and only the first was
+being checked.
+
+**The taxonomy for this already existed one tier up**, in the corpus reviewer's C2
+(conclusion-vs-brief) and C14 (recommendation provenance) — which between them name all four
+failures. So this release is the in-line prevention layer for checks that until now only ran as
+end-of-project review, the same relationship v1.10.0 has to v1.8.0. It uses C14's three labels
+verbatim rather than a parallel taxonomy, because C14's failure condition is "inference *dressed
+as* evidence-supported", and that means nothing unless the writer and the reviewer use the same
+three words.
+
+### Added
+
+- **Provenance labels at synthesis.** Every load-bearing "so what" — anything a reader would act
+  on — is labelled inline, in the sentence: **evidence-supported implication** (a reader can
+  follow the cited notes there), **analyst inference** (reasoning past what any source states —
+  legitimate, often the most valuable thing in the report, simply not established), or
+  **commissioner priority** (follows from a stated preference or directive; cite it). Inline
+  rather than in a block at the end, because the reader who most needs the label is the one
+  deciding whether to act on the sentence. The provenance is carried into the spoken turn too —
+  the draft is audited and the turn is not.
+- **B16 — provenance conformance.** Each label checked against what stands behind it. An
+  implication's chain gets walked; an inference is asked for no evidence but is checked for
+  established-fact grammar; a priority must trace to a real `directive`. **The set is judged as
+  well as the labels** — a recommendation-shaped statement carrying no label is the one most in
+  need of one. A wrong label is high severity; a missing label is moderate, because an older
+  project has simply not met the convention yet and a check that fires high on every legacy draft
+  is one people learn to skip.
+- **B17 — conclusion vs. brief.** Compares the conclusion against the plan's Core Question and
+  any `directive` ledger entries, which supersede the plan for whatever they touch. A range stays
+  a range unless a decision rule on disk converts it. "Ruled out" requires affirmative evidence.
+  Drift is not a defect — evidence sometimes lands somewhere better than the brief expected — but
+  *undisclosed* drift is, and the finding names both questions and leaves the choice with the
+  commissioner. Runs at **every phase close**, not only the final one, because drift accumulates
+  while each phase stays individually defensible.
+
+### Changed
+
+- `writing-standards.md`'s two-way split ("cite it or flag it as inference") becomes the
+  three-way one, so the two documents do not contradict each other. That rule keyed on whether a
+  citation exists, which is exactly why it missed all four failures — they were all cited.
+- The corpus-review brief's C14 gains a line: where labels are present, check them rather than
+  trust them; where they are absent, identify provenance as before and do not report the absence
+  as a finding. **No protocol version change, no validator change** — the contract hash is
+  untouched and the battery still self-tests 74/74.
+
 ## [1.12.1] — 2026-08-09
 
 **The fidelity rules now bind what the plugin says, not only what it writes.**

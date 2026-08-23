@@ -7,7 +7,8 @@ Reference standards for writing research outputs and naming files.
 - Lead with the finding, support with evidence. Not the reverse.
 - Every finding must answer "so what does this mean for the project?"
 - Be specific: not vague hedging, but "The [document/thesis/company] assumes X, but evidence shows Y."
-- No orphan claims. If you can't cite it, flag it as inference or cut it.
+- No orphan claims. If you can't cite it, label it or cut it.
+- **Label every load-bearing "so what" with where it comes from** — the statements a reader would act on. Three labels, fixed, and shared with the corpus reviewer so both use the same words for the same distinction: **evidence-supported implication** (a reader can follow the cited notes there), **analyst inference** (reasoning past what any source states — legitimate, often the best thing in the report, simply not established), **commissioner priority** (follows from a stated preference or directive; cite it). The label goes inline in the sentence, not in a block at the end: the reader who most needs it is the one deciding whether to act. Citing a source is not the same as licensing a conclusion — all four failures this rule exists to stop were properly cited.
 - Use prose paragraphs in outputs. Reserve bullet lists for data tables and key findings sections only.
 - Use people's names, not titles. "Carolyn" not "the CEO." "Elizabeth" not "the co-founder." Establish the name-title mapping once in the first phase output, then use names throughout.
 

@@ -153,7 +153,7 @@ evidence-search discipline. Design each in its own place; do not build "one judg
 | **Position** ("where am I") | STATE.md + `where-am-i.py` + candidates ledger | **Shipped** (1.6.0). Computable **with a legacy/fallback path** — not "fully computable": untagged legacy ledgers and helper failure fall back to manual file derivation. **[enforced]** |
 | **Sufficiency / saturation** ("enough to stop") | cross-ref XREF-02 computes per-question confirmatory ratio over independent origins and writes `saturation.json`; check-gaps reads it and owns the stop verdict | **Reconciled in v1.11.0 (W2)** by a precedence contract: adequacy governs the stop, saturation governs the route. The collection-exhausted state is a commissioner decision with three enumerated outcomes, and it holds the cycle at `Assess (3 of 5)` until answered. Accepted gaps are wired to it. Seam 1 closed. |
 | **What matters / triangulation** | cross-ref: "a pattern from one source is a claim" (guardrail 1), echo detection, independence-defaults-unknown | Fires in the pipeline *before* synthesis **[enforced]**. The concern that significance gets elevated in conversation *before* cross-ref runs is **[inferred]**, not demonstrated. See Seam 3. |
-| **Significance / interpretive license** ("this is a priority for us") | summarize-section generates "so what"; guards are evidentiary + `assumptions.md` + integrity | A **design exposure [inferred]**: audit/integrity check facts, not normative leaps, so a sourced fact can carry an uncited priority. Related failures are **[observed]** in live runs (priority-injection; the audit feedback's "research quoted its own prose as a citation"). Track 2's battery B2/B7 now catch the *self-sourced-quote* and *constructed-bracket* forms. See Seam 2. |
+| **Significance / interpretive license** ("this is a priority for us") | summarize-section labels each load-bearing "so what" inline (implication / inference / commissioner priority — W3); audit enforces per label via B16, and B17 checks the conclusion against the Core Question + ledger directives | **Closed in v1.13.0 (W3).** Was a design exposure: audit and integrity checked facts, not normative leaps, so a properly cited fact could carry an uncited priority. The three labels are C14's, verbatim, so the corpus reviewer's end-of-project check reads the writer's own labels instead of reconstructing them. See Seam 2. |
 | **Disconfirmation / confirmation bias** | counter-evidence gate (summarize, **PRD/Exploratory only**); `negative-searches.md`; `Evidence Against` (all types); `assumptions.md` "what would challenge" | The **mandatory adverse-search gate** is type-limited **[enforced]**; contradiction detection + `Evidence Against` exist for **all** types (v2 correction — v1 overstated this). Gap: no general standing falsification loop. See Seam 4. |
 
 ---
@@ -292,13 +292,25 @@ blind spots; those are noted.
   step 8 gained the cycle state that decision lives in. Accepted gaps are now reached by
   computation rather than only by volunteer. Design: `dev/researcher/w2-design.md`.
 
-- **Seam 2 — Significance has no synthesis-time control.** "So what" is generated at
-  `summarize-section` **[enforced]**; audit/integrity check facts, not normative leaps
-  **[enforced]**, leaving room for an uncited priority **[inferred]**. Related failures
-  **[observed]**. **Fix belongs at synthesis** (label implication vs. inference vs. commissioner
-  priority, with audit rules) — **not** a capture-time wall (capture doesn't even ask for
-  significance). Track 2 already catches the self-sourced-quote (B2) and constructed-bracket (B7)
-  forms.
+- **Seam 2 — Significance has no synthesis-time control — CLOSED in v1.13.0 (W3).** Was: "so
+  what" generated at `summarize-section` with audit and integrity checking *facts* rather than
+  normative leaps, so a properly cited fact could carry an uncited priority. **[observed]** in a
+  finished project four ways — a range became a point, an option was "ruled out" on the absence
+  of evidence for it, the recommendation drifted from leadership's stated frame, and a constraint
+  was asserted as immovable that the research found was not a lever. None was a citation error;
+  all four traced.
+
+  **Fix as built, and the shape of it matters:** the taxonomy and the failure patterns already
+  existed one tier up, in the corpus reviewer's **C2** (conclusion-vs-brief) and **C14**
+  (recommendation provenance). W3 is the Tier-1 prevention layer for them, exactly as W6a/b is
+  for W7 — so it adopts C14's three labels verbatim rather than inventing a parallel taxonomy,
+  because C14's failure condition ("inference *dressed as* evidence-supported") is unrunnable if
+  writer and reviewer use different words. `summarize-section` labels each load-bearing "so what"
+  inline (evidence-supported implication / analyst inference / commissioner priority) and carries
+  the provenance into the turn as well; **B16** checks each label against what stands behind it,
+  with a wrong label high and a missing one moderate; **B17** compares the conclusion against the
+  Core Question plus any `directive` ledger entries, at every phase close rather than only the
+  final one, because drift accumulates. Design: `dev/researcher/w3-design.md`.
 
 - **Seam 3 — Significance-before-triangulation.** In the pipeline, triangulation fires before
   synthesis **[enforced]**, so v1's "triangulation fires too late" was **wrong**. The residual

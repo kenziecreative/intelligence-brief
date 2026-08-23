@@ -45,6 +45,8 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | A figure used for something other than what its note measures is failed as a change of claim | W1 (Seam 0 adjacent — observed in iteration 28) | `adv-referent-drift` | ✓ |
 | A figure used correctly is NOT flagged — the negative control on the referent check | W1 | `rep-referent-correct-use` | ✓ |
 | A figure keeps its referent in the SPOKEN turn, not only in the draft | W1 follow-up — observed iteration 39 | `adv-referent-drift-spoken` | ✓ |
+| A conclusion that outruns its evidence or drifts from the brief is failed — range→point, "ruled out" on absence, constraint asserted, drift undisclosed | W3 (Seam 2 — all four observed in the engine corpus) | `adv-conclusion-exceeds-evidence` | ✓ |
+| A correctly labelled draft passes untouched — the negative control on the provenance check | W3 | `rep-provenance-labelled-clean` | ✓ |
 | Saturated + inadequate reaches the commissioner as a decision, never another discovery round | W2 (Seam 1 — the live-run stall) | `adv-saturation-stall-decision` | ✓ |
 | Saturated + adequate proceeds normally — the negative control on the stall route | W2 | `rep-saturation-adequate-proceeds` | ✓ |
 | A stale saturation record reads as unavailable, never as "not saturated" | W2 | `adv-saturation-stale-record` | ✓ |

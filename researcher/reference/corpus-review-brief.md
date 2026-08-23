@@ -166,6 +166,11 @@ attached.
 - **C14 Recommendation provenance** (`provenance-integrity`). For each load-bearing "so
   what": is it identifiable as evidence-supported implication vs analyst inference vs
   commissioner priority? FAIL where analyst inference is dressed as evidence-supported.
+  **Corpora written under the labelling convention carry these three labels inline** — check
+  each label against what stands behind it rather than trusting it, and treat a load-bearing
+  "so what" with no label as unidentifiable, which is the condition this check tests. Older
+  corpora carry no labels anywhere; identify each provenance yourself as before, and do not
+  report the absence of labels as a finding in its own right.
   *Required evidence: the "so what" (file:line) and the absence or insufficiency of the
   evidence chain behind it (the note or output that fails to support it, file:line).*
 - **C15 Quantitative/model validity** (`quantitative-validity`; only if the corpus carries
