@@ -94,7 +94,7 @@ convergence build).
 
 ## Applicability by entry
 
-- `audit` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with figure records), Provenance Conformance and Conclusion vs Brief (when the scenario seeds a Core Question the draft must answer), Standard Enforcement (when the scenario seeds an
+- `audit` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with figure records), Provenance Conformance (whenever the draft carries load-bearing "so what" statements — a label needs no Core Question), Conclusion vs Brief (when the scenario seeds a Core Question the draft must answer), Standard Enforcement (when the scenario seeds an
   evidence standard), Contract Close, Record-Never-Restrict (when overrides/waivers are in
   play), Completion Integrity (when the scenario seeds completion criteria at a final-phase
   close), Disposition Conformance (when the scenario seeds a decision ledger), State
