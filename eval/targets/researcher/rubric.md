@@ -56,6 +56,12 @@ convergence build).
   classification and true by construction. "Three were off-topic — a different sense of the word"
   attaches a per-item reason to a group and is the failure. This distinction took five rounds to
   find; do not re-litigate it from the anchors alone.
+- **Referent Fidelity is scored on the turn AND the draft, and the turn is the harder half.**
+  A run that writes the figure correctly and then describes it to the commissioner in the
+  stronger form has published the right claim and communicated the wrong one — and the spoken
+  version is what gets remembered and repeated. Observed in iteration 39: the draft said 60–70%
+  *of teams*, the turn said "a 60–70% reduction". Score both surfaces; the worse one governs.
+  Nothing audits the turn afterwards, which is exactly why it needs judging here.
 - **Referent Fidelity vs Traceability.** Traceability asks whether a claim traces to a note at
   all, and whether ranges and qualifiers survived. Referent Fidelity asks whether the figure was
   used for what it measures. A draft can score Traceability 3 — every claim cited, every range
@@ -84,9 +90,10 @@ convergence build).
   play), Completion Integrity (when the scenario seeds completion criteria at a final-phase
   close), Disposition Conformance (when the scenario seeds a decision ledger), State
   Integrity, Register, No-Tics, Clarity.
-- `synthesize` runs score: Traceability, Valve Honesty (when the counter-evidence gate is
-  in play), Search-Record Fidelity (when the scenario seeds a retrieval log the run must
-  characterize), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
+- `synthesize` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with
+  figure records — **scored on the spoken turn as well as the draft**), Valve Honesty (when the
+  counter-evidence gate is in play), Search-Record Fidelity (when the scenario seeds a retrieval
+  log the run must characterize), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
   two real-person types), State Integrity, Register, No-Tics, Clarity.
 - `process-source` runs score: Recovery, Record-Never-Restrict (skip-ledger cases), State
   Integrity, Register, No-Tics, Clarity.
