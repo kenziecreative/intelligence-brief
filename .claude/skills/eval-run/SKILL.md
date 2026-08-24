@@ -90,6 +90,17 @@ This is the orchestrator's job precisely because the runner is blind: a scenario
 must not depend on a blind runner noticing it (iteration-1 false-failed six runs when it did).
 Writing it after the run keeps it out of the runner's way.
 
+> **"After the run" is load-bearing, and it has been violated by someone who had just read this
+> line.** Researcher iteration 57 staged `gate-context.json` during setup alongside
+> `blind-scenario.json`. **14 of 23 runners opened it and disclosed doing so**, and every one of
+> those runs had to be thrown away and re-run. Two of them had read a scenario-specific key —
+> `write_free_run` and `ledger_frozen` — each of which states its scenario's entire invariant and is
+> exactly what that scenario's critical dimension measures; a green from either would have meant
+> nothing. Generate this file immediately before `run-gates.mjs`, per run, and stage **nothing** into
+> a runner's working dir but `blind-scenario.json`. The staging rule in Step 2 and this one are the
+> same rule; both exist because the cheap ordering feels harmless right up until it costs an entire
+> iteration.
+
 **Then stage the seed baselines for any `file_unchanged` gate.** Read the pack's `gates.json`
 for gates of type `file_unchanged` whose `applies_when` key this scenario declares. For each,
 write the file's **seeded** content — straight from the scenario's `setup` block, or copied

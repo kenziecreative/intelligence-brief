@@ -221,3 +221,37 @@ dimensions that must hold in `critical_dimensions`. Add scenarios with the meta-
 The checklist of scenario classes a dev set must include (one representative per entry, plus
 each adversarial invariant), each mapped to the scenario id(s) that cover it, with gaps named
 explicitly. This is what stops silent coverage holes.
+
+
+## A deterministic check may assert only what the target's spec guarantees
+
+Written after `claim_graph_source_count` was built, corrected, and retired inside one session.
+
+It compared a claim node's `source_count` against the length of its `source_files`. Both the
+original equality form and the "inflation only" correction were wrong, because the target's own
+spec defines the two fields over different populations: `source_files` is "note filenames traced in
+step 5" (**per claim**) while `source_count` is "independent sources from step 8a", and step 8a
+computes a **per-section** tier. A single-source claim inside a two-source section correctly records
+2 and 1. No inequality between them holds in either direction.
+
+Worse, the defect it was built from — an M&L claiming "two independent sources" over two one-source
+findings — was real, but lived in the **prose**. The graph's `source_count: 2` was correct at section
+scope. The check caught a shadow of the defect, and its apparent true positive was a coincidence of
+granularity.
+
+**The trap: a backtest over real captures cannot distinguish "this invariant holds" from "these
+samples happen to agree."** 100 archived graphs agreed, because in the common case the two scopes
+coincide. It took a live scenario where they genuinely differed to expose that the invariant had been
+borrowed from sample data rather than derived from the spec.
+
+So, before adding a check:
+
+1. **Quote the target's own definition of every field you compare.** If the definitions do not
+   entail your invariant, you do not have one — you have a correlation.
+2. **Find a legitimate case where they diverge.** If you cannot construct one, you have not
+   understood the fields well enough to gate on them.
+3. **A backtest is a floor, not evidence.** It can only refute an invariant, never establish it.
+4. **When the fields are genuinely ambiguous, that is a finding about the target**, not a licence to
+   gate. Say so and route it to design — an ambiguous field invites misreading by the target's own
+   skills, which is what happened here: an audit report's tier line repeated the section count as if
+   it were a per-claim fact.
