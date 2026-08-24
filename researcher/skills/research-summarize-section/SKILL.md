@@ -105,12 +105,18 @@ Before writing anything, verify:
 
    On acknowledgment: append the record (phase, date, queries, channels, results reviewed, outcome, acknowledgment) to `research/discovery/negative-searches.md` (create with a one-line header if absent), then proceed to synthesis and include the stamp in the draft's Methodology & Limitations section.
 
-   e. If no credible counter-evidence exists AND no adverse search has been run, block synthesis:
+   e. **Block only when none of the three outcomes is available.** If no credible source disputes the claim (Outcome 1), no adverse search is on record (Outcome 2), **and the claim is not one you can honestly place under Outcome 3**, then synthesis blocks. Work the outcomes in order and reach this step last — it is the failure branch, not the default.
+
+      **Outcome 3 is a real exit and this step must not swallow it.** Observed across three samples of the same scenario: two runs correctly stated a "the subject said this, sourced to a recording of them saying it" claim as not disconfirmable and drafted, and one blocked instead — because this step, written when the gate had only two exits, says block whenever a source and a search are both missing. Two rules disagreed and the run picked one. If the claim genuinely cannot be refuted through the mapped channels, take Outcome 3, say why and what would have been needed, and proceed. Blocking a claim nothing could ever disconfirm is the ritual this gate is supposed to avoid.
+
+      When you do block:
 
    ```
-   Synthesis blocked — no counter-evidence found for [research type], and no adverse search is on record.
+   [Say this in substance, not in gate voice — posture rule 7 applies here too. Do not open with "Synthesis blocked" or name the research type as the thing imposing the requirement.]
 
-   [Research type] requires either a credible challenging source or a documented adverse search before synthesis can proceed. This ensures the research stress-tests its thesis rather than just confirming it.
+   Nothing on file pushes back on [the load-bearing claim], and there is no record of anyone having looked.
+
+   Before drafting a claim a reader would act on, one of three things has to be true: someone credible disputes it, a search for opposition came back empty and was recorded, or it is a claim nothing available could refute — and this one is refutable, so the third does not apply. This ensures the research stress-tests its thesis rather than just confirming it.
 
    Current sources all [support/validate] the position. To proceed:
    1. Run /research-discover with terms like "[negating/challenging terms for the thesis]"
@@ -118,7 +124,7 @@ Before writing anything, verify:
    3. Process any source that presents counter-evidence — or, if the search genuinely comes back empty, tell me: I'll record the negative search in research/discovery/negative-searches.md, you acknowledge it, and synthesis proceeds with the output stamped "no credible counter-evidence found after documented search."
    ```
 
-   This gate applies to every phase in PRD Validation and Exploratory Thesis types, not just the final synthesis. The valve (exit d) is not a bypass: it requires an actual adverse search recorded with queries and channels, plus explicit user acknowledgment. "We probably won't find anything" satisfies nothing.
+   This gate applies to every phase of every research type, not just the final synthesis — it is keyed on the load-bearing claim, and every type has those. The valve (exit d) is not a bypass: it requires an actual adverse search recorded with queries and channels, plus explicit user acknowledgment. "We probably won't find anything" satisfies nothing.
 
 6. **Pre-check 6 — Lopsided coverage advisory.** Read `research/gaps.md` and find the questions relevant to this section. If any question has a lopsided coverage flag (only 1 independent Direct source), display an advisory:
 
