@@ -24,7 +24,7 @@ and trivial; conflicts on a shared body were not.
 | Stream | Worktree / branch | State | Last touched |
 |---|---|---|---|
 | **goal-setting** | merged to `main` 2026-08-09 | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-08-07 |
-| **researcher** | `main` — v1.12.1 released; v1.13.0 (W3) built, untagged pending sweep | [dev/state/researcher.md](state/researcher.md) | 2026-08-09 |
+| **researcher** | merged to `main` 2026-08-09 — through v1.13.0 released; W1/W2/W3/W7 closed | [dev/state/researcher.md](state/researcher.md) | 2026-08-09 |
 | **strategist** | merged to `main` 2026-08-09 | [dev/state/strategist.md](state/strategist.md) | 2026-08-09 |
 | **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-08-09 |
 
