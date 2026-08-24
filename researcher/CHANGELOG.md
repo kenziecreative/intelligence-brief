@@ -55,6 +55,20 @@ three words.
   trust them; where they are absent, identify provenance as before and do not report the absence
   as a finding. **No protocol version change, no validator change** — the contract hash is
   untouched and the battery still self-tests 74/74.
+- `check-gaps` gains a count-and-reconcile step before regenerating `gaps.md`: walk the notes and
+  confirm each appears in the per-question detail. The rule it protects is easy to hold and easy
+  to forget for a structural reason now stated in the instruction — the natural way to write the
+  output is note-by-note while the correct way is question-by-question.
+
+### Fixed
+
+- The immovable-constraint case is routed to B17 at high severity rather than B16 at moderate. It
+  *looks* like a labelling problem because such a sentence is usually also unlabelled, so the rule
+  carries a test: if adding the right label would leave the sentence still wrong, it is a B17
+  finding. "The $20 floor cannot move (commissioner priority)" is still wrong.
+- B16 reports a census line before its findings. Three statements each drawing a finding is a
+  different message from "three load-bearing statements, none labelled", and a reader given only
+  the findings can reasonably infer the others were labelled wrongly rather than not at all.
 
 ## [1.12.1] — 2026-08-09
 
@@ -168,6 +182,24 @@ Also recorded: `adv-adverse-search-summary` was split out of the valve golden an
 not asserted** — the plugin runs 2-of-3 clean on it and five instruction rewrites did not move
 that. The bar is unchanged and carries all five rounds of evidence; it now fails on its own
 dimension rather than blocking an invariant that has passed throughout.
+
+### Verified
+
+Eval iterations 43–50. **All 22 goldens pass**, with every noisy scenario sampled 3× and scored on
+the worst sample. Zero deterministic-gate failures and zero capture-integrity failures across the
+whole sweep.
+
+Three regressions specifically re-confirmed at 3×: post-decision re-argument (open from iteration
+4, closed in v1.11.0), claim-site disclosure carrying its content rather than pointing at
+Methodology & Limitations (v1.12.1), and the counter-evidence valve's exit, now scored separately
+from the accuracy of its summary.
+
+**Four times during this verification a failing test turned out to be the test's fault, not the
+plugin's** — a fixture asserted clean that was not, a seeded draft missing a required section, a
+scenario expecting a note under the wrong question, and an expectation that turned on an arguable
+reading. The tell was identical every time: most samples doing the thing the expectation forbade.
+Recorded because it cost real time: when the majority of runs disagree with the test, read the
+test first.
 
 ### What this does not do — stated plainly
 
