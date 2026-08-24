@@ -119,6 +119,13 @@ calibration aids, not categories the user must select.
   block. Carry a visible assumption into the proposed plan unless different plausible answers
   would materially change the sources, evidence standard, or deliverable. Ask only in that
   material case.
+
+  **And you may not do both.** If you have written the gap into the plan's Assumptions, or given
+  a phase the job of resolving it, you have already judged that it does not block — asking about
+  it anyway hands the user a question your own plan has answered, and it arrives in the same
+  shape as a genuinely blocking one, so they cannot tell the difference. Decide once: carry it,
+  or ask it. The tell is a turn that presents an assumption and a question about that same
+  assumption, and a STATE file that says "ready to start" underneath.
 - Do not ask the user to choose a research type merely because more than one type could apply.
 
 **Form a provisional internal research profile:**
@@ -334,7 +341,7 @@ If the inferred research profile includes a material secondary lens, also read t
 The plan is grounded in:
 - The inferred research profile: one primary type, any material secondary lenses, the intended deliverable, and the rationale
 - The user's research challenge and verbal context (preserved verbatim)
-- The full contents of `research/source-material-digest.md` if it exists (the structured facts extracted from every file in `source-material/` during Step 2). If no digest exists because `source-material/` was empty, note this and proceed using the user's research challenge and preliminary research only.
+- The full contents of `research/source-material-digest.md` if it exists (the structured facts extracted from every file in `source-material/` during Step 2). If no digest exists because `source-material/` was empty, say so plainly in the plan and proceed on the user's research challenge alone. **Do not write that the plan is grounded in preliminary research, background reading, or a look at the subject's public presence — init performs none of those.** It has no discovery step and fetches nothing beyond source material the user supplied. A plan that claims a grounding it does not have is a fabrication in the project's very first artifact, and it is the one every later phase is built on. "No source material supplied; this plan is derived from your description of the challenge" is the honest sentence, and it costs nothing.
 - The supplied files themselves, available whenever the digest needs verification or added context
 - The primary type template content and any material secondary template content
 - The audience, intended use, and evidence calibration
