@@ -151,6 +151,14 @@ Company Research (For-Profit), Company Research (Non-Profit), Person Research, M
 Research, Presentation Research, Curriculum Research, Opportunity Discovery, and Customer
 Safari.
 
+**Do not infer a type whose defining artifact the project does not have.** PRD Validation
+validates a PRD; without one there is nothing to validate, and choosing it ships that type's
+finding tags (`VALIDATED` / `CHALLENGED` / `MISSING` / `OUTDATED`) and its "does the PRD address…"
+source standards into `CLAUDE.md`, where every phase inherits them for the life of the project.
+The same test applies across the set: Person Research needs a person, Customer Safari needs a
+customer population, Competitive Analysis needs named competitors. Routing metadata still has to
+be true — and this one is durable and rarely revisited, so a wrong inference is not self-correcting.
+
 Do not ask the user to confirm this provisional profile before proceeding unless two plausible
 profiles would produce materially different deliverables or evidence rules and the user's
 stated use does not resolve the choice. The type is routing metadata, not the research question.
@@ -354,6 +362,8 @@ The plan is grounded in:
 **State the grounding you actually have, and never more.** Step 4 asks you to do preliminary research before deriving phases, and where you do it, saying the plan is grounded in it is correct. What is forbidden is claiming it when it did not happen — "grounded in preliminary research into the subject's public presence, repository, and release history" written by a run that searched nothing. Retrieval is not always available: a sandbox may have no web tool, a CLI may be missing, a source may be unreachable. That is a fine outcome and an honest sentence covers it — *"no source material was supplied and preliminary research was not available in this environment; this plan derives from your description of the challenge."*
 
 This matters more here than anywhere else in the plugin. A plan that claims a grounding it lacks is a fabrication in the project's very first artifact, it is the one every later phase is built on, and nothing downstream ever re-checks it.
+
+**And the same rule governs every result you report, not only the grounding.** Report the result you actually got, from the invocation you actually ran. If a check needed a flag or an environment variable supplied by hand to succeed, that is part of the result and it goes in the report — "the gate returned 12 once I pointed it at the plugin root" is honest; "the gate returned 12, the protocol is intact" is not, when the plain invocation returned 11. Observed: a run reported exit 12 and protocol-intact while its own notes recorded that 12 came only from a hand-set path. The honesty rule was being held for the grounding line and not generalized, which is how a rule stated for one surface leaves the next one uncovered.
 - The supplied files themselves, available whenever the digest needs verification or added context
 - The primary type template content and any material secondary template content
 - The audience, intended use, and evidence calibration
