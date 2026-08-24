@@ -186,7 +186,7 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
    For every factual claim traced in step 5, construct a claim node using the data already in context:
    - `id` — sequential prefix (c001, c002, ...) + slug from first 4-5 words of claim text (lowercase, hyphenated, non-alphanumeric stripped). Example: `"c001-market-size-exceeds-four"`. Sequential prefix guarantees uniqueness; slug makes IDs human-scannable.
-   - `text` — the claim text as traced in step 5
+   - `text` — the claim **as it stands in the draft at the moment you write this node**, not as traced in step 5. Where this pass applied a fix, the fixed wording is what goes in. The graph is the durable record the next audit compares against, so a node holding pre-fix text points the next B12 regression sweep at a sentence the draft no longer contains — it will either report a defect that was already corrected, or fail to recognise the corrected claim as the same claim. Measured on a real capture: three nodes, none of their text present in the draft the same run had just fixed.
    - `phase` — current phase number (read from `research/STATE.md` `Active phase` field)
    - `section` — section name from the audit pass
    - `confidence_tier` — tier computed in step 8a for this claim's section (High / Moderate / Low / Insufficient)
@@ -198,6 +198,8 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
    Read `research/reference/claim-graph.json`. If the file does not exist, create it with `{"claims": []}`. If it exists but fails to parse as JSON, log a warning in the audit report and skip the graph write — do not fail the audit.
 
    For claims already present in the graph (matched by `phase` + `section` + `text` equality), overwrite the existing node with the new data. For new claims, append to the `claims` array.
+
+   **A claim whose text this pass changed is still the same claim — update its node, never append a second one.** Text equality is the match key and a fix is exactly what breaks it, so the naive read appends a duplicate and leaves the pre-fix node behind as an orphan. You know which claims you fixed and what they said before: match the *old* text to find the node, then rewrite it in place with the new text and a regenerated `id`. Two nodes for one claim is worse than a stale one — the next pass sees a contradiction in its own record and has no way to tell which half is current.
 
    **Drift warning lifecycle:** On re-audit, the drift detection pass in step 6a evaluates all figure_ids against the current canonical registry before step 8b runs. If a previously drifted figure now matches (drift resolved), the node written here will have no `drift_warning` field. If drift persists, the `drift_warning` set by step 6a will be included in the overwritten node. Step 8b does not independently manage drift_warning — it inherits whatever state step 6a established for each node.
 
