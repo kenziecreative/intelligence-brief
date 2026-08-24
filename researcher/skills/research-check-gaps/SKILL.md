@@ -28,8 +28,15 @@ Assess research coverage against the research plan and identify what's missing.
 
    **One sentence, in substance, with no machinery in it** — this disclosure is subject to posture rule 7 exactly like every other write this skill performs. Say that the cross-reference is out of date (or was never run) and that re-running it is what would tell them whether more searching is still worth it. Do not name `saturation.json`, `STATE.md`, or `cross-reference.md`; do not explain which command writes which file; do not narrate your own routing ("so I'm routing this the ordinary way"). The commissioner needs the fact and its consequence, not the plumbing that produced it.
 
-   - Not: "No saturation record exists at `research/reference/saturation.json`. That file is written by `/research-cross-ref`, and `STATE.md` shows the last cross-reference was 2026-07-11, so I have no current reading and I'm routing this the ordinary way."
-   - Say: "Worth knowing: the cross-reference is a few sources out of date, so I can't tell you yet whether more searching would still turn anything up. Re-running it would answer that."
+   **Say the sentence that matches the cause. There are three, and they are not interchangeable.** Step 4a already told them apart — stale, absent-with-a-prior-cross-ref, absent-entirely — and the disclosure has to keep them apart, because each one points the commissioner somewhere different.
+
+   - **Stale** (sources processed since the record was written — the STATE counter is above zero): "The cross-reference is a few sources behind, so I can't tell you yet whether more searching would still turn anything up. Re-running it would answer that."
+   - **Absent, but a cross-reference has run** (the counter is zero and there is a last-cross-reference date — an older project from before this record existed): one clause, not a warning. "This project doesn't carry a saturation read yet; the next cross-reference will add one." Do not tell them the cross-reference is out of date — it is not, and saying so invents a fact their own state file contradicts.
+   - **Absent, and no cross-reference has run at all**: that is a cycle-order problem worth naming, because Connect should precede Assess. "Cross-ref hasn't run on this phase yet, so this coverage read is the only signal you have."
+
+   **Do not reach for the stale sentence when the record is merely absent.** It is the most quotable of the three and the easiest to attach to the wrong case, and it asserts that sources have accumulated since the last cross-reference — a claim about the project's own counter. A run that says "a few sources out of date" where the counter reads zero has invented a state fact, which is worse than saying nothing.
+
+   - Not: "No saturation record exists at `research/reference/saturation.json`. That file is written by `/research-cross-ref`, and `STATE.md` shows the last cross-reference was 2026-07-11, so I have no current reading and I'm routing this the ordinary way." (machinery, and it names three files)
 
    The tempting error is to reason "coverage came out adequate, so the routing was the same either way, so the staleness didn't matter" — and then say nothing. That reasoning is wrong twice. The commissioner learns their cross-reference is out of date only if you tell them, and a reader who is not told assumes a current reading was consulted. Silence here is a claim.
 
