@@ -40,3 +40,29 @@ regression would be a real bug. Goldens are few and consensus, not a wishlist. A
 update the target's `coverage.md` so the new class is recorded.
 
 Output only the new JSONL lines, ready to append. No preamble.
+
+
+## Before you add a scenario: run the setup lint
+
+```bash
+node eval/lib/lint-scenarios.mjs eval/targets/<target>/scenarios.jsonl
+```
+
+It asks one question — **does this scenario seed what its same-entry siblings seed?** — and it is
+advisory: it always exits 0 and never blocks, because deliberately omitting a key is how several
+goldens test the absent case. It cannot tell a deliberate omission from a forgotten one, so it
+points and you decide.
+
+**Why it exists.** The commonest fixture defect by a wide margin is a setup that cannot reach the
+behaviour the scenario exists to test. Five instances in a single session, the worst being a
+`synthesize` scenario missing `gaps` and `cross_reference`: the run stopped at a mandatory
+pre-check and never reached the gate under test. That cost two full runs and two judges to
+discover something visible straight off the fixture.
+
+**If an omission is deliberate, say so in `tone_notes`.** The lint reads that field and softens its
+note when it finds absence language there, and more importantly the next human reader looks there
+first. An unexplained gap between a scenario and its siblings is indistinguishable from a mistake.
+
+The invariant comes from the pack comparing against itself, never from the target's skills — see
+`target-pack-spec.md`, *"A deterministic check may assert only what the target's spec guarantees."*
+A lint that encoded the plugin's own pre-check rules would drift out of sync with the plugin.
