@@ -131,6 +131,60 @@ disposition stops being used honestly.
 its outcome across two files is the exact shape that made the saturation record unreadable to
 `check-gaps` before W2 wired it. One file, one record.
 
+## Author forks — DECIDED 2026-08-24
+
+Recorded as decisions of record. The fork text above is left intact; where a decision departs from
+the recommendation written with it, the reason is stated.
+
+### Fork 1 — what triggers the requirement → **(a) every load-bearing claim**, with a phase-level record
+
+**This reverses the original recommendation of (b), the phase's central claim only.** Two reasons the
+first pass under-weighted:
+
+1. **(b) introduces a selection judgment nothing else in the plugin makes.** There is no existing
+   definition of "the phase's central claim", so the gate would have to invent one — and a run that
+   picks a convenient central claim satisfies the gate cheaply. (a) reuses **B16's load-bearing bar**,
+   which is already written, already applied per claim at audit, and already verified in production.
+   Adding a check is cheaper than adding a concept.
+2. **The narrow-scope trap is the same one Fork 2 rejects.** Fork 2's reasoning is that a narrow gate
+   beside a wide question is how a project satisfies the narrow one and believes it is done. Choosing
+   a deliberately narrow trigger invites that from the other direction — "the central claim cleared
+   disconfirmation" reads as "the phase cleared disconfirmation."
+
+**The cost objection was the real content of (b), and it is answered by the record's shape rather
+than by the trigger's scope.** A per-claim obligation reads as expensive because it sounds like one
+adverse search per claim. It is not: M1's outcome 2 is a *documented adverse search*, and one search
+against the phase's subject can legitimately discharge several claims at once. So the requirement is
+per load-bearing claim; the **record** is a phase-level pass that lists each load-bearing claim and
+its disposition, with a shared search record where one genuinely covers several.
+
+That keeps the honest third exit doing its job — a claim not disconfirmable through the mapped
+channels is stated as such, per claim, and not hidden inside a phase-level summary.
+
+### Fork 2 — do the two typed gates survive? → **(a) absorb them**
+
+Unchanged, and this session strengthened it. v1.9.0 already demoted research type to internal routing
+metadata; a discipline gated on a tag set is gated on routing metadata. Two gates asking one question
+with different scopes is how a project satisfies the narrow one and stops.
+
+### Fork 3 — does an `open` assumption block promotion? → **(b) disclose, never block**
+
+Unchanged, and it is now the doctrine rather than a preference. v1.14.0 shipped and verified the
+**stop, not block** pattern for the stale-saturation decision: present what is known, give the
+routes, recommend, and stop — the phase proceeds the moment the commissioner says so. W4's closeout
+question (M3) should be written in that same shape and wording, so the plugin has one way of handing
+a decision back rather than three.
+
+Blocking would also make M2's honest `untestable via mapped channels` disposition feel like a
+punishment, which is how a disposition stops being used honestly.
+
+### Fork 4 — where the disconfirmation record lives → **(a) `assumptions.md`**
+
+Unchanged, and this session produced direct evidence for it. Both v1.14.0 defects were the same
+failure — a fact that reached the conversation and not the durable record. Splitting a criterion from
+its outcome across two files is that failure with extra steps: the next reader opens one file and
+sees a challenge criterion with no result, or a result with no criterion. One file, one record.
+
 ## Touches
 
 - `researcher/skills/research-summarize-section/SKILL.md` — pre-check 5 rescoped (M1), the
