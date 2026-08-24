@@ -124,6 +124,14 @@ attached.
   show it WRONG, and can some planned measurement produce that evidence? FAIL if no planned
   measurement could refute the core recommendation. *Required evidence: the recommendation
   (file:line) and, where one exists, the measurement plan that cannot refute it (file:line).*
+  **A Tier-1 record may now exist for this — check it, do not trust it.** As of v1.14.x the
+  writing side keeps a disconfirmation disposition per load-bearing claim (synthesis pre-check 5)
+  and a `Status` per assumption with four values including `Tested — broke` and `Untestable via
+  mapped channels` (`research/assumptions.md`). Read those as *claims about what was done*, and
+  verify them the way you verify any other claim in the corpus: a `Tested — held` with nothing
+  named behind it, or a not-disconfirmable statement that names no channel it would have needed,
+  is itself the finding. The record existing is not the check passing — same posture C14 takes
+  toward provenance labels, and for the same reason.
 - **C6 Prerequisite honesty** (`prerequisite-honesty`). Does any recommendation rest on an
   unmade decision or an unbuilt/uncosted dependency presented as actionable? FAIL if so,
   naming it. *Required evidence: the recommendation (file:line) and the corpus's own record

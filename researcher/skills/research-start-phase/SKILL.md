@@ -68,10 +68,23 @@ Users sometimes drop files into `source-material/` mid-project. If an unprocesse
 3. **Read `research/gaps.md`** to check if any gaps from previous phases are relevant to this phase.
 4. **Read `research/cross-reference.md`** to identify any patterns from earlier phases that inform this one.
 5. **Check for skipped or folded phases** in STATE.md. If any exist, report them to the user with context.
-5a. **Read `research/assumptions.md`** (if it exists) and identify any Open assumptions whose "What would validate" or "What would challenge" criteria overlap with this phase's questions. An assumption is relevant if:
+5a. **Read `research/assumptions.md`** (if it exists) and identify any `Open` assumptions whose "What would validate" or "What would challenge" criteria overlap with this phase's questions. An assumption is relevant if:
     - Its topic directly relates to a question this phase will investigate
     - This phase's source collection could plausibly produce evidence that validates or challenges it
     - It was logged in a prior phase (not the current one)
+
+    **Say how long each has been open, in phases.** An assumption logged last week and one that has
+    been `Open` across four phase starts are different facts, and the count is the only thing that
+    distinguishes them — the entry's `Added` date and `Phase` field give it to you. "Open since phase
+    1, so this is the fourth phase that could have tested it" is a fact about the project the
+    commissioner is entitled to; "there is an open assumption about warranty thresholds" is the same
+    sentence they have now read four times and can safely ignore. **Repetition without a count reads
+    as noise, and noise is how a standing item becomes invisible** — which is the failure this step
+    exists to prevent, not one it is allowed to cause.
+
+    This step opens the loop. `Status` closes it (see `research-summarize-section` step 8a's four
+    values) — surfacing a criterion is not the same as recording that it was run, and until v1.14.x
+    only the first half existed.
 5b. **Read `research/gaps.md`** (if it exists) and extract the Coverage Dashboard for the current phase. If gaps.md has been generated for any prior phases, show a coverage snapshot so the user can see existing coverage status and lopsided flags before deciding what to collect.
 5c. **Read `research/commonplace.md`** (if it exists) and scan it for entries from prior phases whose subject or observation overlaps with this phase's questions. **Working Read entries** (hook: "Working Read at [step] boundary") from the current or immediately prior phase are always relevant — silently re-adopt their hypotheses and half-formed reads as the current working stance rather than merely listing them; the point of those entries is that the return feels like continuity, not a cold start. Surface up to 3 most relevant entries as part of the briefing. Entries are indexed by date and phase in the H2 headers — use those plus the body text to judge relevance. An entry is relevant if its subject matches a question in the current phase, if it flagged a cross-cutting issue that affects the current phase, or if the user explicitly asked to remember something that connects to current work. If the file is empty or no entries are relevant, surface nothing — do not mention the commonplace book at all.
 5d. **Read `research/reference/backstage-tasks.md`** (if it exists) and work through any unchecked items relevant to this phase — silently. These are the agent's own prep queue (a figure to re-verify, a suspected shared-origin cluster to trace, a source type to prioritize), written at prior phase closes. Fold their outcomes into the briefing where they matter (e.g., a re-verified figure shows up as a prior finding with its check noted; a source-type priority shapes the discovery recommendation) and check items off in the file with a one-line outcome. Do not narrate the queue to the user or announce that you are "processing backstage tasks" — the user sees the results, not the machinery. Items that need the user's decision are surfaced as part of the briefing content on their own merits.

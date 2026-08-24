@@ -58,11 +58,19 @@ Before writing anything, verify:
 
    This is a **warning, not a gate** — synthesis proceeds after displaying the advisory. If no sources exceed the threshold, skip the advisory silently.
 
-5. **Counter-evidence gate (PRD Validation and Exploratory Thesis only).** Read `research/research-plan.md` to determine the research type. If the type is PRD Validation or Exploratory Thesis:
-   a. Scan all processed source notes in `research/notes/` for this phase.
-   b. Look for findings tagged CHALLENGED (PRD Validation) or CONTRADICTED (Exploratory Thesis) from sources with credibility tier above "blog/opinion" level (official docs, analyst reports, peer-reviewed, industry data, developer community).
-   c. If at least one credible source has a CHALLENGED or CONTRADICTED finding, the gate passes — proceed.
-   d. If no credible counter-evidence exists, check for a **documented adverse search** — the gate's second legitimate exit. Read `research/reference/retrieval-log.json` and the phase's candidates file(s) in `research/discovery/` and identify queries that specifically sought opposing evidence (negating/challenging terms, counter-viewpoint channels). If such a search was run and surfaced nothing credible, present the record for acknowledgment:
+5. **Counter-evidence gate — keyed on the claim, not the research type.** Every load-bearing claim this draft makes must show that someone looked for evidence against it. **Load-bearing** is B16's bar and no new one: a statement a reader acting on this report would act on. Reuse the audit's reading of it rather than inventing a second definition.
+
+   **Why this is not scoped by research type.** Until v1.14.x this gate read "PRD Validation and Exploratory Thesis only", because it worked by looking for a source note tagged `CHALLENGED` or `CONTRADICTED` — and those tags exist only in those two types' tag sets. So the discipline was coupled to a tag, the tag was coupled to a type, and **nine of eleven research types had no disconfirmation requirement of any kind**. A Competitive Analysis or a Market study could reach a promoted deliverable with nothing having asked whether its central claim could be wrong. v1.9.0 already settled the principle this violated: research type is internal routing metadata, not a classification that decides which disciplines apply. Every type has load-bearing claims that could be false. **The two tags stay as tags** — they are still how those two types mark a challenge — but they stop being the trigger.
+
+   For each load-bearing claim, one of three outcomes must be on the record. The third is new and is the honest exit this gate previously lacked:
+
+   a. **A credible source disputes it.** Scan the processed source notes in `research/notes/` for this phase for a finding that opposes the claim, from a source above "blog/opinion" credibility (official docs, analyst reports, peer-reviewed, industry data, developer community). **Whatever tag the project's set happens to use, or none** — a note that plainly contradicts the claim qualifies whether or not it carries `CHALLENGED`/`CONTRADICTED`.
+   b. **A documented adverse search came back empty** — the existing exit, unchanged, below.
+   c. **The claim is not disconfirmable through the mapped channels, stated as such with the reason.** Some claims genuinely cannot be refuted by what discovery mapped — no channel produces evidence against them, or the claim is definitional, or the disconfirming evidence would sit behind a source type this project has no access to. **Saying so is a real result**, and it is what stops the gate becoming a ritual people route around. It must be stated per claim, with what would have been needed, and it is never a summary that covers several claims at once — a phase-level "none of these are disconfirmable" is the ritual, not the exit.
+
+   **The requirement is per claim; the record is one phase-level pass.** List every load-bearing claim with its disposition (a, b, or c). Where a single adverse search genuinely covers several claims — one search against the phase's subject, not one per sentence — cite that one record against each claim it covers. This is the whole cost answer: the obligation is per claim so that nothing slips through, while the *work* is per search so the gate stays affordable.
+
+   d. For outcome (b): check for a **documented adverse search** — a legitimate exit. Read `research/reference/retrieval-log.json` and the phase's candidates file(s) in `research/discovery/` and identify queries that specifically sought opposing evidence (negating/challenging terms, counter-viewpoint channels). If such a search was run and surfaced nothing credible, present the record for acknowledgment:
 
    ```
    No credible counter-evidence exists in the processed sources — but an adverse search was run and came back empty:
@@ -178,7 +186,7 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
      1. **Sampling disclosure:** "Sources were gathered by purposive sampling through mapped discovery channels, not exhaustive literature coverage. Where this report notes that evidence was not found, that means 'not found via the mapped channels,' not 'does not exist.'" (Adapt the wording to the project; keep the substance.)
      2. **Single-source findings:** list each finding resting on one independent source (or "none").
      3. **Commissioner overrides:** each `user_override=true` resolution, labeled, with the evidence assessment it overrode (or "none").
-     4. **Counter-evidence status** (types with the counter-evidence gate): either the credible challenger(s) cited, or the adverse-search stamp from pre-check 5's documented-adverse-search exit.
+     4. **Counter-evidence status** (every type — see pre-check 5): per load-bearing claim, one of the credible challenger(s) cited, the adverse-search stamp, or the not-disconfirmable statement with what would have been needed. A load-bearing claim with no disposition here is the gate not having run.
      5. **Waivers:** left as a placeholder line — `/research-audit-claims` inserts any commissioner waivers verbatim at audit time.
 8a. **Log assumptions to `research/assumptions.md`.** While writing the draft, identify any judgment or finding that meets these criteria:
     - Based on a single source (already flagged with "single source suggests" per guardrail 5)
@@ -198,6 +206,30 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
     - **What would challenge:** [What kind of evidence would overturn this]
     - **Added:** [date]
     ```
+
+    **`Status` carries the outcome, and it has four values — not two.** The criterion above was
+    always written down and, until v1.14.x, nothing ever recorded that it had been *tested*. An
+    assumption could sit `Open` from the phase that logged it through to the final deliverable, with
+    its falsification criterion on file, noticed at every phase start, and never once run. That is a
+    state with no route out, which is the same defect W2 closed for accepted gaps.
+
+    - **`Open`** — logged, not yet tested. Still the default, and now meaningfully different from
+      the three below rather than being the only value.
+    - **`Tested — held`** — the challenge criterion was run and the assumption survived. **Name what
+      was run**, in the entry. "Tested" with nothing behind it is the same empty claim as an
+      adverse-search stamp with no search record.
+    - **`Tested — broke`** — the assumption failed. This is the valuable one and it does not stop
+      here: it must propagate to anything resting on it, which is a **`correction` entry in
+      `research/reference/decision-ledger.md`** citing this assumption, exactly as an audit
+      correction does. An assumption that broke silently is worse than one never tested, because the
+      record now says someone checked.
+    - **`Untestable via mapped channels`** — the criterion cannot be run with what discovery mapped.
+      Record **what would have been needed**. This is an honest result, not a failure, and it is the
+      same exit pre-check 5's outcome (c) gives a claim — for the same reason: a disposition with no
+      honest option stops being used honestly.
+
+    Whichever step tests a criterion writes the outcome. Do not leave a tested assumption reading
+    `Open` because the testing happened somewhere other than where it was logged.
 
     The file header (create only if file does not exist):
     ```markdown

@@ -346,6 +346,32 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      receipt freezes to the corpus hash, so spending it on a self-detectably unmet
      criterion wastes the run.
 
+     **Stage 1 also asks the standing-assumption question.** Read `research/assumptions.md`
+     (absent file → nothing to ask; never treat absence as an error). **Does any load-bearing
+     conclusion in the promoted outputs rest on an assumption whose `Status` is still `Open`?**
+     If so, name them: the assumption, the conclusion resting on it, and how many phases it has
+     been open.
+
+     **This is a stop, not a block — the same shape as the gap check's stale-reading decision, and
+     for the same reason.** Shipping on an untested assumption is a legitimate call that researchers
+     make knowingly and constantly; what is not legitimate is shipping on one silently. So this does
+     not end the turn the way a plain unmet criterion does. Present the list, say plainly that the
+     project can close on them, and ask. The commissioner says the word and closeout proceeds.
+
+     Two constraints carried over from that decision, because the same failure modes apply:
+
+     - **Do not predict what testing the assumption would have found.** "Probably wouldn't change the
+       conclusion" answers the exact question an `Open` status says nobody answered, and it makes the
+       disclosure hollow. Recommend on cost and context — the deadline is real, the conclusion holds
+       on its other support — never on a forecast of the untested result.
+     - **`Untestable via mapped channels` is not `Open`.** An assumption whose criterion genuinely
+       could not be run has been dispositioned honestly and does not belong in this list; putting it
+       there turns the honest exit into a penalty and teaches the next run to write `Open` instead.
+
+     This is the Tier-1 half of the corpus reviewer's **C5 Falsifiability**, which asks the same
+     question once at the end. Use C5's framing rather than a parallel one, so the reviewer reads
+     this record instead of reconstructing it.
+
      **`met` requires a thing you can point at.** A criterion is met when you can name
      the artifact that satisfies it — this output, that audit, this ledger entry. It is
      **not** met by the absence of a violation. Criteria are routinely written as

@@ -154,7 +154,7 @@ evidence-search discipline. Design each in its own place; do not build "one judg
 | **Sufficiency / saturation** ("enough to stop") | cross-ref XREF-02 computes per-question confirmatory ratio over independent origins and writes `saturation.json`; check-gaps reads it and owns the stop verdict | **Reconciled in v1.11.0 (W2)** by a precedence contract: adequacy governs the stop, saturation governs the route. The collection-exhausted state is a commissioner decision with three enumerated outcomes, and it holds the cycle at `Assess (3 of 5)` until answered. Accepted gaps are wired to it. Seam 1 closed. |
 | **What matters / triangulation** | cross-ref: "a pattern from one source is a claim" (guardrail 1), echo detection, independence-defaults-unknown | Fires in the pipeline *before* synthesis **[enforced]**. The concern that significance gets elevated in conversation *before* cross-ref runs is **[inferred]**, not demonstrated. See Seam 3. |
 | **Significance / interpretive license** ("this is a priority for us") | summarize-section labels each load-bearing "so what" inline (implication / inference / commissioner priority — W3); audit enforces per label via B16, and B17 checks the conclusion against the Core Question + ledger directives | **Closed in v1.13.0 (W3).** Was a design exposure: audit and integrity checked facts, not normative leaps, so a properly cited fact could carry an uncited priority. The three labels are C14's, verbatim, so the corpus reviewer's end-of-project check reads the writer's own labels instead of reconstructing them. See Seam 2. |
-| **Disconfirmation / confirmation bias** | counter-evidence gate (summarize, **PRD/Exploratory only**); `negative-searches.md`; `Evidence Against` (all types); `assumptions.md` "what would challenge" | The **mandatory adverse-search gate** is type-limited **[enforced]**; contradiction detection + `Evidence Against` exist for **all** types (v2 correction — v1 overstated this). Gap: no general standing falsification loop. See Seam 4. |
+| **Disconfirmation / confirmation bias** | counter-evidence gate (summarize, **claim-keyed, all types**); `negative-searches.md`; `Evidence Against` (all types); `assumptions.md` "what would challenge" + a four-value `Status` | **Seam 4 CLOSED (W4, v1.14.x).** The gate keys on the load-bearing claim rather than the research type, with three dispositions including an honest not-disconfirmable exit; the assumption loop now records outcomes, not just criteria, and a break propagates as a ledger `correction`. Tier-1 layer for the reviewer's C5. |
 
 ---
 
@@ -317,10 +317,25 @@ blind spots; those are noted.
   concern — that significance gets elevated *in conversation* before cross-ref runs — is
   **[inferred]** and unproven. Keep as a watch item, not a confirmed seam.
 
-- **Seam 4 — Disconfirmation is partly type-limited.** Only the **mandatory adverse-search gate**
-  is limited to PRD/Exploratory **[enforced]**; contradiction detection + `Evidence Against` run
-  for all types. Gap: no general falsification loop; `assumptions.md`'s "what would challenge"
-  field exists but isn't wired into one.
+- **Seam 4 — Disconfirmation is partly type-limited.** **CLOSED — W4, v1.14.x.** The
+  counter-evidence gate is now keyed on the **claim**, not the research type: every load-bearing
+  claim (B16's bar, reused rather than redefined) must carry one of three dispositions — a credible
+  disputing source, a documented adverse search that came back empty, or an explicit statement that
+  the claim is not disconfirmable through the mapped channels, with what would have been needed.
+  The `CHALLENGED`/`CONTRADICTED` tags survive as tags and stop being the trigger, so the nine types
+  that previously had no disconfirmation requirement now have the same one as the other two.
+
+  The falsification loop is closed at the other end too. `assumptions.md`'s "what would challenge"
+  was always *read* — `start-phase` step 5a surfaces relevant Open assumptions — but nothing ever
+  recorded that a criterion had been **tested**. `Status` now carries four values (`Open`,
+  `Tested — held`, `Tested — broke`, `Untestable via mapped channels`), a break propagates as a
+  `correction` in the decision ledger, and closeout asks whether any load-bearing conclusion rests
+  on a still-`Open` assumption — as a **stop, not a block**, in the shape v1.14.0 verified.
+
+  This is the Tier-1 prevention layer for the corpus reviewer's **C5 Falsifiability**, the third
+  instance of the program-level pattern that the reviewer already carries the check one tier up
+  (W6a/b→closeout classes, W3→C2/C14, W4→C5). C5's brief now says a Tier-1 record may exist and to
+  **check it rather than trust it**.
 
 - **Seam 5 — Source-level quantitative reasoning is thin.** The quantitative assessment criteria
   live in a guide but are **not wired into the note schema**, and integrity runs on drafts, not
