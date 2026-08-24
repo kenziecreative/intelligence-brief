@@ -51,30 +51,25 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-Kelsey's call on 2026-08-09: **work the observed-findings queue before the remaining
-workstreams.** W4, W5 and W6c–f are prevention against failures never seen in use.
-
-1. **Finish `/research-init` — 3× sample both scenarios and promote them to golden.** Init is now
-   a runnable entry (the adapter records why the old exclusion was wrong) and has been tested
-   twice, finding two defects, both fixed and verified. Record:
-   `eval/targets/researcher/_eval/iteration-52/scores.md`.
-2. **Nothing scores fabrication on the `init` entry.** The worse of the two defects — a plan
-   claiming it was "grounded in preliminary research" that never happened — was caught by a judge
-   going beyond the rubric, not by the rubric. A plan claiming work it did not do is init's
-   highest-consequence failure and no dimension covers it. Add one before promoting.
-3. **B11 certifies a false Methodology statement**, with a deterministic gate sitting inside it:
+1. **Judge iteration-54's six init captures, then promote both scenarios to golden.** The runs
+   are complete and gated — 0 gate failures, 0 capture-integrity failures — and judging was
+   blocked by four consecutive API 529s, not by anything in the work. Mechanically all six look
+   right (honest grounding in every plan, no spurious follow-up in the control, the scaffold
+   reached in all three adversarial samples), but a green needs a judge rather than a grep.
+   Record: `eval/targets/researcher/_eval/iteration-54/scores.md`.
+2. **B11 certifies a false Methodology statement**, with a deterministic gate inside it:
    `claim-graph.json` carried `source_count: 2` beside a one-entry `source_files`, so
    `source_count == len(source_files)` is a check waiting to be written.
-4. **The saturation caveat has become a scripted insert** — all six `check-gaps` turns in
+3. **The saturation caveat has become a scripted insert** — all six `check-gaps` turns in
    iteration 50 carried a near-identical unrequested "I can't tell you whether more searching
    would help", on scenarios seeding no saturation record. The unconditional disclosure from
    v1.11.0 is doing it; decide whether "never written" deserves the same sentence as "stale".
-5. **Add the B16 finding to two scenarios' expected sets** (`adv-override-disclosure`,
-   `adv-disposition-reversal`) — B16 correctly fires moderate on both.
-6. **`init`'s step 0b protocol-adoption path is uncovered** — the branch the engine corpus needs.
-7. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next B12 sweep
+4. **Add the B16 finding to two scenarios' expected sets** (`adv-override-disclosure`,
+   `adv-disposition-reversal`).
+5. **`init`'s step 0b protocol-adoption path is uncovered** — the branch the engine corpus needs.
+6. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next B12 sweep
    compares against text the draft no longer contains.
-8. **W4, W5, W6c–f** — the remaining workstreams, deprioritised below this queue.
+7. **W4, W5, W6c–f** — the remaining workstreams, deprioritised below this queue.
 
 ## Open questions / decisions pending
 
