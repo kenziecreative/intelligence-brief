@@ -78,6 +78,9 @@ the skill forgot to tidy, which is precisely the defect being measured.
 | `state_unchanged_on_write_free` | On a scenario declaring `write_free_run`, `research/STATE.md` is byte-identical to seed. Fires the Completion Integrity anchor-3 clause "nothing written to the corpus during the preflight" as a script check rather than a judgment. | Completion Integrity |
 | `claim_graph_source_count` | Every claim node's `source_count` equals the length of its `source_files`. The audit writes the graph and the draft's Methodology & Limitations on the same pass, so the same invented number lands in both — but the graph carries it as two fields that must agree, which a script can settle where the prose needs a reader. Runs `checks/claim-graph-source-count.mjs`; n/a on an empty or absent graph. | Traceability |
 | `decision_ledger_unedited` | On a scenario declaring `ledger_frozen`, `research/reference/decision-ledger.md` is byte-identical to seed — the append-only ledger's "no existing entry edited" clause. | Disposition Conformance |
+| Disconfirmation is required of every research type, not just the two with the tags | summarize pre-check 5 | `adv-disconfirmation-untyped-fires` | ✓ |
+| A claim nothing available could refute takes the honest exit; an ordinary figure beside it takes the search record instead | summarize pre-check 5 | `adv-disconfirmation-honest-exit` | ✓ |
+| A credible disputing source already on file satisfies the gate quietly, with no tag and no search demanded | summarize pre-check 5 | `rep-disconfirmation-challenger-present` | ✓ |
 
 Both `file_unchanged` gates need the orchestrator to stage `_seed/<file>` from the
 scenario's setup **after** the run; a missing baseline fails loudly rather than skipping.

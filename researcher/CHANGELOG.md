@@ -2,6 +2,70 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.15.0] — 2026-08-24
+
+**W4 — someone has to have looked for evidence against it, whatever kind of research this is.**
+
+Until now the counter-evidence gate ran for **two of eleven research types**. It worked by looking
+for a source note tagged `CHALLENGED` or `CONTRADICTED`, and those tags exist only in PRD Validation
+and Exploratory Thesis. So the discipline was coupled to a tag, the tag was coupled to a type, and a
+Competitive Analysis or a Market study could reach a promoted deliverable with nothing having asked
+whether its central claim could be wrong. v1.9.0 had already settled the principle that made this
+indefensible: research type is internal routing metadata, not a decision about which disciplines
+apply.
+
+**The gate now keys on the claim.** Every load-bearing claim — B16's existing bar, reused rather
+than redefined — needs one of three things on the record:
+
+- a credible source that disputes it,
+- a documented adverse search that came back empty, or
+- a statement that the claim is not disconfirmable through the mapped channels, with what would
+  have been needed.
+
+The third is new, and it is the honest option the gate lacked. Some claims genuinely cannot be
+refuted by what discovery mapped — a standard's definition of its own term is not the kind of thing
+an outside source can contradict. Saying so is a real result, and it is what stops the gate becoming
+a ritual people route around. **A challenger must dispute the same claim measured the same way** —
+same quantity, same population, same clock. A source reporting a different figure for a different
+quantity is a second finding about a second thing, and taking it as opposition is the
+manufactured-challenger move wearing a real citation.
+
+The requirement is per claim; the record is one phase-level pass, so a single adverse search can
+discharge several claims and the gate stays affordable.
+
+**And the assumption loop finally closes.** `assumptions.md` has always recorded "what would
+challenge this," and `research-start-phase` has always surfaced the relevant ones at phase start —
+but nothing ever recorded that a criterion had been **tested**. An assumption could sit `Open` from
+the phase that logged it through to the final deliverable, with its falsification criterion on file,
+noticed at every phase start, and never once run. `Status` now carries four values: `Open`,
+`Tested — held` (naming what was run), `Tested — broke` (which propagates as a `correction` in the
+decision ledger), and `Untestable via mapped channels` (recording what would have been needed).
+Phase start reports how many phases each open assumption has survived, because an assumption open
+across four phases is a different fact from one logged last week.
+
+At closeout, the audit asks whether any load-bearing conclusion rests on a still-`Open` assumption.
+**It is a stop, not a block** — shipping on an untested assumption is a legitimate call researchers
+make knowingly; shipping on one silently is not. The same shape v1.14.0 introduced for the stale
+saturation reading, including its ban on predicting what the untested result would have been.
+
+This is the in-line half of the corpus reviewer's C5 Falsifiability check, which asks the same
+question once at the end. C5's brief now says a Tier-1 record may exist and to **check it rather
+than trust it** — the posture C14 already takes toward provenance labels.
+
+**Also in this release**
+
+- **Pronouns are a sourced fact.** A Person Research run wrote eighteen gendered pronouns into a
+  draft whose entire corpus contained none. That is an unsourced claim about a real, named person,
+  asserted on every line of a document written about them. they/them is now the default for the
+  subject and everyone who surfaces, in Person Research and Customer Safari, unless a source records
+  that person's own usage — a name is not a source, and neither is a photo, a voice, or a job title.
+  The audit battery checks it alongside identity exposure, as a named defect class with a mechanical
+  fix.
+- An assumption entry now carries its referent, so a note recording that 60–70% of teams *reported*
+  a reduction cannot become an assumption that the reduction *was* 60–70%.
+- A block turn can no longer offer to log an empty search. At block time nobody has looked, so that
+  offered to write a finding about an event that had not happened.
+
 ## [1.14.0] — 2026-08-24
 
 **The gap check stops handing you a caveat and then deciding anyway.**
