@@ -14,6 +14,7 @@ eval/targets/<name>/
   scenarios.jsonl   representative + adversarial cases (goldens = invariants)
   gates.json        machine-readable deterministic gate + content-lint specs (run-gates.mjs)
   coverage.md       the scenario-class checklist a dev set must cover, mapped to ids
+  briefs/           (optional) runner/judge dispatch briefs — MUST live outside `_eval/`
   checks/           (optional) the pack's own deterministic checkers, run via ${PACK_ROOT}
   fixtures/         (optional) whole-project trees a scenario seeds with setup.fixture
 ```
@@ -144,6 +145,19 @@ version scanned capture.md for file paths and asked whether each traced to disk,
 or seed — it red-flagged 25 of 41 real captures, because a capture legitimately names
 plugin-root files it read and legitimately reports files that are *absent*. If you extend this
 layer, extend the machine-readable declarations, not the prose parsing.
+
+### Dispatch briefs must not live under `_eval/`
+
+Shared runner/judge briefs cut dispatch cost sharply — a two-line dispatch instead of four
+hundred tokens, across dozens of calls. Put them in the pack (`targets/<name>/briefs/`), **never
+under `_eval/`**. The runner's own guardrails say "if you catch yourself reaching for `_eval/`,
+you are in the wrong directory", so a brief stored there orders the runner to break its isolation
+rule in the first instruction it reads. One did exactly that, refused the path, and ran from its
+system prompt instead — correct behavior, and only visible because it said so.
+
+Related, and worth stating in the brief itself: **the runner must never open `scenarios.jsonl`.**
+Each scenario's `expected_behavior` sits on the same line as its `setup`, so a grep for setup
+fields puts the answer key on screen whether or not that was the intent.
 
 ### Gates on behavior belong judge-side
 
