@@ -22,6 +22,7 @@ and update this file.
 | `cross-ref` (normal patterns) | — | **gap** |
 | `check-gaps` (normal coverage map) | — | **gap** |
 | `review-corpus` (clean corpus → zero material findings; fixture `corpus-b`) | `rep-review-corpus-b` | ✓ |
+| `init` (specific challenge → plan without a second intake round) | `rep-init-specific-challenge` | **tracked, promote at 3/3** |
 
 Representative gaps are acceptable for the proof set — the adversarial goldens exercise
 the load-bearing behaviors — but they're the first scenarios to add when broadening.
@@ -119,6 +120,18 @@ five of these. Summary fidelity was folded into the same dimension four rounds i
 Nothing was weakened: the bar moved to its own dimension and its own scenario, where it fails on
 its own terms.
 
+**`init` was uncovered for six releases, and the reason it was uncovered was wrong.** The adapter
+excluded it alongside `discover` as "interactive scaffolding" — but multi-turn interaction is
+precisely what a scenario scripts, and unlike `discover` nothing about init needs the live web.
+The result: the command every user runs first was the only entry never behaviourally tested,
+while everything downstream of it was tested repeatedly. Two scenarios now cover it, and they
+target the distinction init's own guardrails draw and nothing else enforced —
+**subject ambiguity blocks, scope ambiguity does not.** `adv-init-ambiguous-subject` gives a
+genuinely ambiguous subject (two plugins share a name) inside an otherwise clear challenge;
+`rep-init-specific-challenge` gives a challenge so complete that any follow-up question is a
+failure. Both ship tracked rather than asserted for their first round: an entry that has never
+run once should not become a ship-blocker on the strength of its first green.
+
 ## Known-uncovered classes (deliberate, with reasons)
 
 - **F1 — note-against-source fidelity.** The blind review's Critical, and **still uncovered
@@ -137,4 +150,9 @@ its own terms.
 - **Consent default (Person Research / Customer Safari anonymization).** Ported in
   v1.5.0; needs a synthesize-entry scenario with seeded community quotes.
 - **Discovery entries.** `discover` is not runnable in the eval clean room (live web);
-  its ledger/floor behaviors are covered indirectly via seeded artifacts.
+  its ledger/floor behaviors are covered indirectly via seeded artifacts. This is the *only*
+  entry that is genuinely unrunnable — `init` was wrongly grouped with it until 2026-08-09.
+- **`init`'s protocol-adoption path (step 0b)** — the upgrade branch for existing projects.
+  Not covered: the two new scenarios both exercise the fresh-project path, and the upgrade path
+  needs a seeded pre-protocol project, which is a different setup shape. Worth adding, and it is
+  the path Kelsey's own engine corpus needs.

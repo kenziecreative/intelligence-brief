@@ -21,9 +21,16 @@ in-repo: `PLUGIN_ROOT` is the repo-root `researcher/` directory, resolved by `/e
 - `<root>/agents/research-integrity.md` — when a skill invokes the integrity agent, the
   runner plays it by reading the agent file and producing exactly the findings it would
 
-`/research-init` and `/research-discover` are not run per-scenario: init is interactive
-scaffolding, and discover reaches the live web. The runner establishes prior state
-directly from the scenario's `setup` block, which is faster and fully controlled.
+`/research-discover` is not run per-scenario: it reaches the live web. The runner establishes
+prior state directly from the scenario's `setup` block, which is faster and fully controlled.
+
+**`/research-init` WAS excluded on the same line, and that was wrong.** The stated reason —
+"interactive scaffolding" — describes multi-turn behavior, which is exactly what scenarios
+script. Nothing about init needs the live web or a real project: it reads the user's turns,
+writes a tree into the working dir, copies its kit from `PLUGIN_ROOT`, and runs its own
+validator self-test, all of which work in a capture dir. The consequence of the exclusion was
+that **the command every user runs first shipped behaviourally unverified across six releases**,
+while every skill downstream of it was tested repeatedly. It is now a runnable entry.
 
 ## Invocation by `entry`
 
@@ -34,6 +41,7 @@ directly from the scenario's `setup` block, which is faster and fully controlled
 | `process-source` | `research-process-source` SKILL | Sources are seeded LOCAL files (under `source-material/` in the working dir) so no live web access is needed. |
 | `cross-ref` | `research-cross-ref` SKILL | Operates on seeded notes. |
 | `check-gaps` | `research-check-gaps` SKILL | Operates on seeded notes + plan + exclusion ledger. |
+| `init` | `research-init` SKILL | Scaffolds a project from the user's research challenge. **No `setup` block** — the point is the empty directory: init's own step 0 guard refuses to run where a project already exists, so seeding one would test the guard instead of the intake. The runner supplies the working dir empty and plays the scripted turns. Init copies its review-protocol kit from `PLUGIN_ROOT` and runs the real `validate-corpus-review.py --self-test`; let it, and record the result. |
 | `review-corpus` | `research-review-corpus` SKILL | The credibility-gate runner (W7). Scenario seeds a whole mini-corpus via `setup.fixture`; scenarios pin **tier t2 only** (Codex CLI is not assumed in the eval environment). The runner plays the Tier-2 reviewer by reading `<root>/agents/corpus-reviewer.md` + `<root>/reference/corpus-review-brief.md` — **from the four inputs only**: when playing the reviewer, judge the corpus strictly from what is on the fixture's disk against the brief; never from the scenario, the fixture's name, or the runner-skill context. Everything else executes the skill's real machinery: manifest build and `validate-receipt` run the actual `<root>/reference/validate-corpus-review.py`. **Honesty note (for maintainers/judges):** in-context play is structurally weaker than production coldness (production dispatches a fresh agent); these scenarios prove the mechanical seam (brief → result schema → validator → receipt) and defect recall, while genuinely cold reviewer behavior is proven by the W7 stage-5 live dual-tier run. |
 
 ## Working dir and setup
