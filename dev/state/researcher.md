@@ -52,31 +52,29 @@ None. Tree clean, everything committed, tag applied.
 ## Next steps (in order)
 
 Kelsey's call on 2026-08-09: **work the observed-findings queue before the remaining
-workstreams.** W4, W5 and W6c–f are all prevention against failures never seen in use; everything
-below has actually happened.
+workstreams.** W4, W5 and W6c–f are prevention against failures never seen in use.
 
-1. **`/research-init` has never been behaviourally tested.** The command every user runs first,
-   unverified across six releases, and the oldest open item on this stream. Head of the queue.
-2. **B11 certifies a false Methodology statement, and there is a ready-made gate in it.** On
-   `adv-referent-drift` the M&L claimed "both findings rest on two independent sources" over two
-   findings with one source each and B11 passed it clean — the same defect v1.12.0 fixed in the
-   *integrity agent*, existing separately in the *audit*. The same fiction reached
-   `claim-graph.json` as `source_count: 2` beside a one-entry `source_files`, so
-   `source_count == len(source_files)` is a deterministic check waiting to be written.
-3. **The saturation caveat has become a scripted insert.** All six `check-gaps` turns in
+1. **Finish `/research-init` — 3× sample both scenarios and promote them to golden.** Init is now
+   a runnable entry (the adapter records why the old exclusion was wrong) and has been tested
+   twice, finding two defects, both fixed and verified. Record:
+   `eval/targets/researcher/_eval/iteration-52/scores.md`.
+2. **Nothing scores fabrication on the `init` entry.** The worse of the two defects — a plan
+   claiming it was "grounded in preliminary research" that never happened — was caught by a judge
+   going beyond the rubric, not by the rubric. A plan claiming work it did not do is init's
+   highest-consequence failure and no dimension covers it. Add one before promoting.
+3. **B11 certifies a false Methodology statement**, with a deterministic gate sitting inside it:
+   `claim-graph.json` carried `source_count: 2` beside a one-entry `source_files`, so
+   `source_count == len(source_files)` is a check waiting to be written.
+4. **The saturation caveat has become a scripted insert** — all six `check-gaps` turns in
    iteration 50 carried a near-identical unrequested "I can't tell you whether more searching
-   would help" sentence, on scenarios seeding no saturation record at all. The unconditional
-   disclosure added in v1.11.0 is doing this. Decide whether "no record was ever written" deserves
-   the same sentence as "the record is stale" — they are different facts.
-4. **Add the B16 finding to two scenarios' expected sets** — `adv-override-disclosure` and
-   `adv-disposition-reversal` seed drafts carrying unlabelled recommendations, so B16 correctly
-   fires moderate on both and the scenarios should expect it.
-5. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next pass's B12
-   sweep compares against text the draft no longer contains.
-6. **Two `check-gaps` routing findings no gate covers**: STATE rolled back from the seeded
-   position, and a run inventing a state fact ("the cross-reference is a few sources out of date"
-   where the counter reads 0).
-7. **W4, W5, W6c–f** — the remaining workstreams, deprioritised below the queue above.
+   would help", on scenarios seeding no saturation record. The unconditional disclosure from
+   v1.11.0 is doing it; decide whether "never written" deserves the same sentence as "stale".
+5. **Add the B16 finding to two scenarios' expected sets** (`adv-override-disclosure`,
+   `adv-disposition-reversal`) — B16 correctly fires moderate on both.
+6. **`init`'s step 0b protocol-adoption path is uncovered** — the branch the engine corpus needs.
+7. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next B12 sweep
+   compares against text the draft no longer contains.
+8. **W4, W5, W6c–f** — the remaining workstreams, deprioritised below this queue.
 
 ## Open questions / decisions pending
 
