@@ -71,25 +71,28 @@ None. Tree clean, everything committed, tag applied.
 
 ## Next steps (in order)
 
-1. **Judge iteration-54's six init captures, then promote both scenarios to golden.** The runs
-   are complete and gated — 0 gate failures, 0 capture-integrity failures — and judging was
-   blocked by four consecutive API 529s, not by anything in the work. Mechanically all six look
-   right (honest grounding in every plan, no spurious follow-up in the control, the scaffold
-   reached in all three adversarial samples), but a green needs a judge rather than a grep.
+**The observed-findings queue is cleared except for judging.** Everything on it that could be
+done without dispatching a judge has been done; five defects were found and fixed, one
+deterministic gate added, and init's coverage taken from zero to all three of its step-0 branches.
+
+1. **Judge the init captures — the only blocked item.** Six captures in `iteration-54` (both
+   scenarios, 3× each), complete and gated, 0 gate failures, 0 capture-integrity failures.
+   Judging failed on **eleven consecutive API 529s** — a sustained outage, not anything in the
+   work. Mechanically all six look right: honest grounding in every plan, no spurious follow-up
+   in the control, the scaffold reached in all three adversarial samples. A green still needs a
+   judge rather than a grep. Then promote both to golden at 3/3.
    Record: `eval/targets/researcher/_eval/iteration-54/scores.md`.
-2. **B11 certifies a false Methodology statement**, with a deterministic gate inside it:
-   `claim-graph.json` carried `source_count: 2` beside a one-entry `source_files`, so
-   `source_count == len(source_files)` is a check waiting to be written.
-3. **The saturation caveat has become a scripted insert** — all six `check-gaps` turns in
-   iteration 50 carried a near-identical unrequested "I can't tell you whether more searching
-   would help", on scenarios seeding no saturation record. The unconditional disclosure from
-   v1.11.0 is doing it; decide whether "never written" deserves the same sentence as "stale".
-4. **Add the B16 finding to two scenarios' expected sets** (`adv-override-disclosure`,
-   `adv-disposition-reversal`).
-5. **`init`'s step 0b protocol-adoption path is uncovered** — the branch the engine corpus needs.
-6. **`claim-graph.json` keeps pre-correction claim text after a fix**, so the next B12 sweep
-   compares against text the draft no longer contains.
-7. **W4, W5, W6c–f** — the remaining workstreams, deprioritised below this queue.
+2. **Run the two new init scenarios** — `adv-init-guard-refuses-existing-project` and
+   `adv-init-upgrade-invalid-pieces`. Never executed. The guard one's invariant is deterministic
+   (it declares `write_free_run`, so `state_unchanged_on_write_free` settles whether the guard
+   wrote anything), which makes it cheap to check even while judging is down.
+3. **W4 — disconfirmation as a standing habit (Seam 4).** Design doc first, per the plan's rule.
+   The counter-evidence gate fires for only two of the eleven research types, and
+   `assumptions.md`'s "what would challenge this?" is written and never read again.
+4. **W5** (quantitative reasoning + the specialist-bench roles fork) and **W6c–f** (status matrix,
+   instrument validity, falsifiability, recommendation prerequisites).
+5. **Promote `adv-adverse-search-summary` to golden when it returns 3/3** — still tracked, not
+   asserted.
 
 ## Open questions / decisions pending
 
