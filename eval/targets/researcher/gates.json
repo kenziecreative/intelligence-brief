@@ -15,7 +15,14 @@
       "file": "research/drafts/04-test-section.md",
       "pattern": "## Methodology & Limitations",
       "feeds": "Traceability",
-      "na_for_entries": ["audit", "process-source", "cross-ref", "check-gaps", "review-corpus"]
+      "na_for_entries": [
+        "audit",
+        "process-source",
+        "cross-ref",
+        "check-gaps",
+        "review-corpus",
+        "init"
+      ]
     },
     {
       "name": "state_cycle_coherent",
@@ -42,7 +49,14 @@
       "type": "command_exit0",
       "command": "set -e; r=$(ls research/reviews/*.receipt.json 2>/dev/null | head -1); test -n \"$r\"; python3 \"${PLUGIN_ROOT}/reference/validate-corpus-review.py\" validate-receipt --root . --receipt \"$r\" --filename \"$(basename \"$r\")\"",
       "feeds": "Credibility Gate",
-      "na_for_entries": ["audit", "synthesize", "process-source", "cross-ref", "check-gaps"]
+      "na_for_entries": [
+        "audit",
+        "synthesize",
+        "process-source",
+        "cross-ref",
+        "check-gaps",
+        "init"
+      ]
     }
   ],
   "content_lint": [
