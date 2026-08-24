@@ -122,11 +122,12 @@ Before writing anything, verify:
 
    Before drafting a claim a reader would act on, one of three things has to be true: someone credible disputes it, a search for opposition came back empty and was recorded, or it is a claim nothing available could refute — and this one is refutable, so the third does not apply. This ensures the research stress-tests its thesis rather than just confirming it.
 
-   Current sources all [support/validate] the position. To proceed:
-   1. Run /research-discover with terms like "[negating/challenging terms for the thesis]"
-   2. Look for sources from [suggest specific channels: academic databases, industry analysts, competing viewpoints]
-   3. Process any source that presents counter-evidence — or, if the search genuinely comes back empty, tell me: I'll record the negative search in research/discovery/negative-searches.md, you acknowledge it, and synthesis proceeds with the output stamped "no credible counter-evidence found after documented search."
+   Nothing on file disputes it. Two ways forward:
+   1. Look for opposition — [negating/challenging terms], in [specific channels: academic databases, industry analysts, competing viewpoints]. If something credible turns up, it goes in the draft as a real qualification. If the search genuinely comes back empty, that empty result is itself the record and I'll write it down.
+   2. Tell me this is a claim nothing available could refute, and why — then I'll carry that, name what would have been needed, and draft.ve-searches.md, you acknowledge it, and synthesis proceeds with the output stamped "no credible counter-evidence found after documented search."
    ```
+
+   **Do not offer to record an empty search from a block turn — there is no search to record yet.** At block time nobody has looked, so "I'll just log that a search came back empty" offers to write a finding about an event that has not happened. Observed on one sample in three: a block that was otherwise correct closed with "if you'd rather I just log that a search was run and came back empty, say so and I'll record it" — turning the valve into precisely the bypass this gate exists to prevent, on the menu, as the cheaper option. **Outcome 2 becomes available only once a search has actually run**; from here it is a destination, never a choice. The two offers above are the only two, and neither of them is "skip it."
 
    This gate applies to every phase of every research type, not just the final synthesis — it is keyed on the load-bearing claim, and every type has those. The valve (exit d) is not a bypass: it requires an actual adverse search recorded with queries and channels, plus explicit user acknowledgment. "We probably won't find anything" satisfies nothing.
 
