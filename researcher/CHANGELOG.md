@@ -2,6 +2,103 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.14.0] — 2026-08-24
+
+**The gap check stops handing you a caveat and then deciding anyway.**
+
+Found by a regression sweep before what was meant to be a patch release. Three defects in
+`research-check-gaps`, and the first two share an anatomy: **the spoken turn was right and the
+durable record was wrong.** In each case the run followed the instruction exactly — the instruction
+only bound one surface.
+
+**A stale saturation reading now stops the phase and puts the decision to you.** When the record
+that answers "would more searching turn anything up?" is out of date and coverage otherwise looks
+adequate, the gap check used to say so and then, three lines later, recommend drafting and advance
+the cycle. The disclosure was true and changed nothing, which is the shape of a caveat that exists
+to be stepped over — and drafting is the phase's expensive, hard-to-unwind step. Now it presents
+what is known, the two legitimate routes (re-run the cross-reference, or proceed and carry the
+limitation into Methodology & Limitations), and its recommendation, then stops. **This is a stop,
+not a block:** say the word and the phase proceeds. The point is that proceeding is something you
+chose rather than something that happened while you were being told a caveat. Same shape as the
+collection-exhausted decision the skill already presents this way.
+
+The staleness sentence also carries the **count** again — "three sources have landed since the last
+cross-reference," not "a few sources behind." Naming the file is plumbing; how far behind the record
+is, is a fact about your project and the input that tells you whether re-running matters. The
+earlier wording drew the wrong lesson from the no-machinery rule: strip the mechanism, keep the
+substance.
+
+**And the disclosure reaches `gaps.md`, not just the conversation.** It was unconditional "in the
+turn" and bound to nothing else, so a run could disclose the staleness accurately while writing a
+`gaps.md` that closed "None — every question in the active phase meets the coverage bar." The turn
+scrolls away; the file is what the next person opens, and it read clean.
+
+**Counter-evidence can no longer fall off the priority list.** An Evidence Against question — one
+where a credible source contradicts the claim — only reached `gaps.md`'s Highest-Priority Gaps when
+synthesis was imminent. Every other status had a non-imminent route, so counter-evidence more than
+one step from synthesis appeared in the per-question detail and nowhere the reader actually looks.
+It now has its own bucket, ranked **above** thin coverage: thin coverage is a claim weakly supported
+and collecting fixes it, while counter-evidence is a claim the draft cannot make at all and no
+amount of collecting resolves.
+
+### Also in this release: eight fixes that had been sitting unreleased
+
+All found by running the plugin rather than by designing anything new. These were staged as a
+1.13.1 patch; the sweep that was meant to verify them found the three defects above, so they ship
+here instead.
+
+`/research-init` is the centre of gravity here. It had shipped through six releases without a
+single eval run, because it is the one command that runs *before* a project exists and the
+harness had no way to reach it. Making it runnable found two defects on its first two runs and
+six more over the following rounds.
+
+**Init reported results it did not get.**
+
+- **A missing environment variable was read as validator drift.** With `CLAUDE_PLUGIN_ROOT` set,
+  the gate check exits 12; unset, it exits 11 — `validator-mismatch` — on a completely intact
+  install. Step 3a said 11 means the kit is partial and to fix it before reporting. A fresh
+  project told its validator is mismatched gets distrusted for the life of the project over an
+  unset variable. Step 3a now passes `--plugin-root` explicitly and distinguishes exit 11's two
+  causes.
+- **A run reported "exit code 12, the protocol is intact"** when the plain invocation returned 11,
+  and its own notes conceded the 12 came from a hand-set path. The honesty rule was being held for
+  the grounding line and never generalized: report the result you got from the invocation you ran,
+  and if a flag or variable was supplied by hand to make it succeed, that is part of the result.
+- **The same rule, running the other way.** Runs told the user retrieval was unavailable with no
+  attempted call anywhere behind the claim, while a sibling run made the search for real and got
+  results. "No retrieval was available" is a claim about the environment and needs an attempt
+  behind it exactly as "grounded in preliminary research" needs research. An under-claim is
+  friendlier than an over-claim and it is the same defect.
+- **A false claim about init's own capabilities**, written into the skill by its author and caught
+  by a runner reading the steps literally.
+
+**Init inferred routing metadata it could not know.**
+
+- **A project with no PRD was typed as PRD Validation**, which ships that type's finding tags and
+  its "does the PRD address…" source standards into `CLAUDE.md`, where every later phase inherits
+  them. A type is not inferable without its defining artifact — Person Research needs a person,
+  Competitive Analysis needs named competitors. Durable, rarely revisited metadata does not
+  self-correct when it is wrong.
+- **Adoption's criteria branch had two cases and needed three.** It branched on "already carries
+  SC-N IDs" and "is prose", and a plan with no success-criteria section at all fell through both.
+  Absent is not a formatting gap; it means the project never wrote down what finishing looks like.
+  The new branch says so and forbids inventing criteria unasked — a completion gate bound to
+  criteria the agent wrote for itself checks nothing, and is worse than no gate because it reads
+  like one.
+
+**Two fixes outside init.**
+
+- **The saturation disclosure had one worked example for three different causes**, and the example
+  was the stale-record wording. Runs copied it onto the absent case and asserted the cross-
+  reference was "a few sources out of date" where the counter reads zero — inventing a state fact.
+  Now one sentence per cause. Step 4a's classification, which had drifted two-way against a
+  three-way disclosure in the same step, was reconciled with it.
+- **The claim graph recorded pre-fix claim text by instruction**, so the next audit's regression
+  sweep compares against sentences the draft no longer contains. It compounds: node matching is by
+  text equality and a fix is exactly what breaks it, so the naive read appends a duplicate and
+  orphans the original. The graph now records post-fix text, and a fixed claim updates its node
+  rather than gaining a second one.
+
 ## [1.13.0] — 2026-08-09
 
 **W3 — conclusion exceeds evidence, and drifts from the brief (Seam 2).**
