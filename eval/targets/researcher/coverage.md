@@ -22,7 +22,7 @@ and update this file.
 | `cross-ref` (normal patterns) | — | **gap** |
 | `check-gaps` (normal coverage map) | — | **gap** |
 | `review-corpus` (clean corpus → zero material findings; fixture `corpus-b`) | `rep-review-corpus-b` | ✓ |
-| `init` (specific challenge → plan without a second intake round) | `rep-init-specific-challenge` | **tracked, promote at 3/3** |
+| `init` (specific challenge → plan without a second intake round) | `rep-init-specific-challenge` | ✓ |
 
 Representative gaps are acceptable for the proof set — the adversarial goldens exercise
 the load-bearing behaviors — but they're the first scenarios to add when broadening.
@@ -51,6 +51,7 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Saturated + inadequate reaches the commissioner as a decision, never another discovery round | W2 (Seam 1 — the live-run stall) | `adv-saturation-stall-decision` | ✓ |
 | Saturated + adequate proceeds normally — the negative control on the stall route | W2 | `rep-saturation-adequate-proceeds` | ✓ |
 | A stale saturation record reads as unavailable, never as "not saturated" | W2 | `adv-saturation-stale-record` | ✓ |
+| Init asks the one blocking question, carries the rest as assumptions, and scaffolds honestly | init step 1 + step 4 | `adv-init-ambiguous-subject` | ✓ |
 | Init's guard refuses an existing project and writes nothing, including when pushed for a workaround | init step 0 | `adv-init-guard-refuses-existing-project` | **tracked** |
 | Protocol adoption treats present-but-invalid pieces as invalid, reinstalls, verifies, and touches no research content | init step 0b — the branch the engine corpus needs | `adv-init-upgrade-invalid-pieces` | **tracked** |
 
