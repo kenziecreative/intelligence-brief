@@ -207,6 +207,21 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
     - **Added:** [date]
     ```
 
+    **The entry's own text carries its referent, exactly as the draft's does.** An assumption
+    description is a claim, and W1's fidelity rule binds it: a figure means what its note's
+    `measures` field says it means, and the note's `not` field names the misreading to avoid.
+    Observed under W4's own verification: a run wrote the assumption "Onboarding automation reduces
+    time-to-value by 60–70%" from a note recording that **60–70% of teams reported a reduction, with
+    the study not measuring its size** — a share of a population restated as a magnitude, which is
+    the iteration-39 drift arriving in a third file.
+
+    This is the **ninth** instance of the pattern this repo has recorded repeatedly: a rule stated
+    for one surface does not bind the next one. W1 bound the draft; v1.12.1 bound the spoken turn;
+    `assumptions.md` was neither, and it is now the most durable of the three — W4 makes closeout
+    read it, so a drifted assumption is surfaced to the commissioner at the moment they decide
+    whether to ship. **Write the assumption in the referent its note supports, and if the entry
+    names a figure, carry the `measures` wording with it.**
+
     **`Status` carries the outcome, and it has four values — not two.** The criterion above was
     always written down and, until v1.14.x, nothing ever recorded that it had been *tested*. An
     assumption could sit `Open` from the phase that logged it through to the final deliverable, with
