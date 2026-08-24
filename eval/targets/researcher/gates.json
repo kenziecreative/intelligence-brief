@@ -22,7 +22,8 @@
         "check-gaps",
         "review-corpus",
         "init"
-      ]
+      ],
+      "na_when": "expected_block_before_draft"
     },
     {
       "name": "state_cycle_coherent",

@@ -125,6 +125,21 @@ function naForContext(gate) {
   return inputs[gate.applies_when] !== true;
 }
 
+// The inverse of `applies_when`: a gate that is n/a precisely BECAUSE the scenario
+// declared something. `applies_when` says "skip unless declared"; `na_when` says
+// "skip when declared". Both triggers are scenario-declared rather than run-observed,
+// so a plugin still cannot dodge a gate by not doing the thing.
+//
+// Proof case (researcher iteration-63, adv-disconfirmation-untyped-fires): the scenario
+// exists to check that synthesis is BLOCKED before anything is written, the run blocked
+// correctly and wrote no draft — and `draft_methodology_section` went red for a missing
+// draft. The gate read the correct behavior as a failure. A scenario whose whole point is
+// "produce nothing" needs a way to say so.
+function naWhenDeclared(gate) {
+  if (!gate.na_when) return false;
+  return inputs[gate.na_when] === true;
+}
+
 // Some gates presuppose the run produced steps. When a scenario legitimately
 // ends with none — the interview never reached a walkthrough, and the target
 // correctly refused to invent one — a gate like "autonomy ratings present"
@@ -142,6 +157,9 @@ function evalGate(gate) {
   if (naForEntry(gate)) return { status: "n/a", evidence: `n/a for entry '${entry}'` };
   if (naForContext(gate)) {
     return { status: "n/a", evidence: `n/a — scenario did not declare '${gate.applies_when}'` };
+  }
+  if (naWhenDeclared(gate)) {
+    return { status: "n/a", evidence: `n/a — scenario declared '${gate.na_when}'` };
   }
   if (naForZeroSteps(gate)) return { status: "n/a", evidence: "n/a — run captured zero steps; nothing to rate" };
   // Write-shaped gates on a run that is SUPPOSED to end without a capture. A skill
