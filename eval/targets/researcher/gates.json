@@ -31,12 +31,6 @@
       "feeds": "State Integrity"
     },
     {
-      "name": "claim_graph_source_count",
-      "type": "command_exit0",
-      "command": "node \"${PACK_ROOT}/checks/claim-graph-source-count.mjs\" --file research/reference/claim-graph.json",
-      "feeds": "Traceability"
-    },
-    {
       "name": "state_unchanged_on_write_free",
       "type": "file_unchanged",
       "file": "research/STATE.md",

@@ -24,7 +24,9 @@ Assess research coverage against the research plan and identify what's missing.
 
    **Classify the record before you use it, and treat unusable as unavailable — never as "not saturated."** It is **current** when it names the active phase and `Sources since last cross-reference` in STATE.md is 0. It is **stale** when sources have been processed since it was written (the STATE counter is above zero). It is **absent** in two different situations that matter later: cross-ref has run but wrote no record (an older project from before this record existed — the counter is zero and a last-cross-reference date exists), or cross-ref has not run on this phase at all. All three mean the same thing for *routing*: you have no saturation reading. They mean three different things for what you **say**, so keep them apart — see the disclosure below. Route every under-covered question the ordinary way — collect more — because that is what this skill did before any saturation record existed.
 
-   **Say so in the turn whenever the reading is stale or absent. This is unconditional.** It holds no matter what the coverage assessment later turns out to be — adequate, short, or mixed — and no matter whether the missing reading would have changed any routing. It is not a clause attached to the under-covered branch; it is a standing disclosure about the state of the project's own records, and the commissioner is entitled to it in every case.
+   **Disclose it whenever the reading is stale or absent. This is unconditional.** It holds no matter what the coverage assessment later turns out to be — adequate, short, or mixed — and no matter whether the missing reading would have changed any routing. It is not a clause attached to the under-covered branch; it is a standing disclosure about the state of the project's own records, and the commissioner is entitled to it in every case.
+
+   **This contract binds two surfaces and each carries it in full: `research/gaps.md` and the user-facing turn.** Neither is a summary of the other, and neither is the "real" one — the same rule step 7c applies to the collection-exhausted decision, for the same reason. In `gaps.md` it is a `**Saturation reading:**` line directly under the Coverage Dashboard. Observed: a run put the caveat in its turn alone and wrote a `gaps.md` closing "None — every question in the active phase meets the coverage bar", with the saturation reading unmentioned anywhere in the file. The turn is spoken once and scrolls away; `gaps.md` is what the next person opens, and it said coverage was settled. A disclosure that lives only in conversation has not been recorded, and the next reader — including the next run of this skill — inherits a file that reads clean.
 
    **One sentence, in substance, with no machinery in it** — this disclosure is subject to posture rule 7 exactly like every other write this skill performs. Say the fact and its consequence for them, in the wording that matches the cause (below). Do not name `saturation.json`, `STATE.md`, or `cross-reference.md`; do not explain which command writes which file; do not narrate your own routing ("so I'm routing this the ordinary way"). The commissioner needs the fact and its consequence, not the plumbing that produced it.
 
@@ -92,6 +94,16 @@ Assess research coverage against the research plan and identify what's missing.
    - **Excluded candidates:** N (user-declined — see research/discovery/exclusions.md)
    - **Unprocessed candidates:** N (discovered, never selected — still in the candidates files)
    ```
+
+   Directly beneath the dashboard, when step 4a classified the saturation reading **stale or absent**,
+   add the disclosure line — the same fact the turn carries, in the wording step 4a's three-case list
+   assigns to that cause:
+   ```
+   **Saturation reading:** <the sentence for this cause — stale / absent-with-prior-cross-ref / never run>
+   ```
+   Omit the line only when the reading is **current**. Its absence then means a current reading was
+   consulted, which is exactly what a reader is entitled to infer from silence — so it may never be
+   omitted in the other three cases.
 
    **Per-question detail** (for each phase, for each question):
    ```
@@ -241,7 +253,8 @@ Criticality order for the list:
 3. Lopsided (Thin) questions on any active or upcoming phase.
 4. **Addressed but unbalanced questions on any active or upcoming phase** — Direct sources exist, and there may be several, but they all speak from one perspective or source type. This bucket exists because such a question passes a source count and still cannot support a defensible claim: three documents published by the research subject are three documents and one point of view. Without a bucket here, a question can be flagged unbalanced in the per-question detail and still never reach this list, which is where the user actually looks.
 5. Not Started questions on upcoming phases (beyond the next Verify).
-6. Adjacent-only questions on any phase.
+6. **Evidence Against questions on any other active or upcoming phase** — everything rule 2 covers, minus the imminence. Rule 2 admits an Evidence Against question only when Verify is the *next* step, and until this bucket existed that was its only route onto the list: a phase three steps from synthesis carried active counter-evidence that appeared in the per-question detail and nowhere the reader looks. Every other status has a non-imminent bucket — Not Started has rule 5, Lopsided and unbalanced are "any active or upcoming phase" — and Evidence Against was the one left with a single conditional entry. It is also the status with the least reason to wait: it cannot be resolved by collecting, so surfacing it late buys nothing and costs the commissioner the time they would have had to think about it.
+7. Adjacent-only questions on any phase.
 
 Note: "Not Started" questions are discovery targets — run /research-discover to fill them. "Evidence Against" questions are synthesis challenges — the user must address the contradiction in the draft, not find more sources.
 
