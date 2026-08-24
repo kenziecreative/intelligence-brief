@@ -79,6 +79,13 @@ the skill forgot to tidy, which is precisely the defect being measured.
 Both `file_unchanged` gates need the orchestrator to stage `_seed/<file>` from the
 scenario's setup **after** the run; a missing baseline fails loudly rather than skipping.
 
+**Two goldens now expect a B16 finding, deliberately.** `adv-override-disclosure` and
+`adv-disposition-reversal` both seed drafts written before the labelling convention, so each
+carries an unlabelled recommendation and B16 correctly fires moderate on it. Two judges confirmed
+it disturbs neither scenario's invariant. Expecting it beats treating it as noise: an unexpected
+finding that recurs every run is the kind a reader learns to skip past, and the day it means
+something nobody will notice.
+
 **What `claim_graph_source_count` was built from.** Iteration 45 produced a draft whose
 Methodology & Limitations said "both findings rest on two independent sources" over two findings
 with one source each — and **B11 certified it clean.** The same fiction reached the graph as
