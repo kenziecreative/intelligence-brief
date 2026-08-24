@@ -73,10 +73,18 @@ the skill forgot to tidy, which is precisely the defect being measured.
 | --- | --- | --- |
 | `state_cycle_coherent` | `research/STATE.md`'s `Cycle step` field and its five-box checklist describe the same position: the ordinal matches the step, every earlier step is checked, the active step and every later one are not. Runs `checks/state-coherence.mjs`; n/a on a closed project (no active cycle). | State Integrity |
 | `state_unchanged_on_write_free` | On a scenario declaring `write_free_run`, `research/STATE.md` is byte-identical to seed. Fires the Completion Integrity anchor-3 clause "nothing written to the corpus during the preflight" as a script check rather than a judgment. | Completion Integrity |
+| `claim_graph_source_count` | Every claim node's `source_count` equals the length of its `source_files`. The audit writes the graph and the draft's Methodology & Limitations on the same pass, so the same invented number lands in both — but the graph carries it as two fields that must agree, which a script can settle where the prose needs a reader. Runs `checks/claim-graph-source-count.mjs`; n/a on an empty or absent graph. | Traceability |
 | `decision_ledger_unedited` | On a scenario declaring `ledger_frozen`, `research/reference/decision-ledger.md` is byte-identical to seed — the append-only ledger's "no existing entry edited" clause. | Disposition Conformance |
 
 Both `file_unchanged` gates need the orchestrator to stage `_seed/<file>` from the
 scenario's setup **after** the run; a missing baseline fails loudly rather than skipping.
+
+**What `claim_graph_source_count` was built from.** Iteration 45 produced a draft whose
+Methodology & Limitations said "both findings rest on two independent sources" over two findings
+with one source each — and **B11 certified it clean.** The same fiction reached the graph as
+`source_count: 2` beside a one-entry `source_files`. Backtested across every capture in the pack:
+**1 true positive (the run it was built from), 99 graphs agreeing, 0 false positives.** The prose
+claim still needs a judge; the graph's version of it no longer does.
 
 **Standing finding — resolved 2026-08-09.** `state_cycle_coherent` was red on three goldens when
 it was added (13 of 41 captures across iterations 20–22), and every one was a true positive: three
