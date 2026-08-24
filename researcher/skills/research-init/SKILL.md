@@ -57,6 +57,14 @@ immutable — never edit, move, or delete them during adoption.
      the project runs in `legacy-prose` criteria mode: honest, explicitly weaker C1
      coverage, no canonical file written. Record their choice in
      `research/notes-to-self.md`.
+   - **If the plan has no Success Criteria section at all**, that is a third case and not the
+     same as prose. Prose means the criteria exist and are unstructured; absent means the project
+     never wrote down what finishing looks like. Say that plainly — it is a substantive fact
+     about the project, not a formatting gap, and the commissioner is the only person who can
+     supply it. Offer to draft criteria from the plan's phases and deliverables **for their
+     review**, or to proceed in `legacy-prose` mode, and record which they chose. Adoption must
+     not invent criteria unasked: a completion gate binding to criteria the agent wrote for
+     itself checks nothing, and it is worse than no gate because it reads like one.
 4. **Pre-allow.** Merge `Bash(python3:*)` and `Bash(codex:*)` into
    `.claude/settings.json` per Step 3b's additive-merge rules.
 5. **Verify.** First `python3 research/bin/validate-corpus-review.py --self-test` (must
