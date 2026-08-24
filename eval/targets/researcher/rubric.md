@@ -25,6 +25,7 @@ convergence build).
 | **Provenance Conformance** | judge | A load-bearing "so what" is labelled evidence-supported when the cited notes do not reach it, or a commissioner priority is attributed to a directive that does not exist — and the audit passes it | The label is wrong and the audit catches it as an ordinary sourcing or wording issue rather than a misstatement of where the claim came from | Wrong labels caught and failed, but the *set* is not judged — a recommendation-shaped statement carrying no label passes unremarked | Each label checked against what stands behind it: an implication's chain walked, an inference not asked for evidence but checked for established-fact grammar, a priority traced to a real directive; the set judged too, so an unlabelled load-bearing statement is a finding (moderate) while a wrong label is high |
 | **Conclusion vs Brief** | judge | The conclusion answers a different question than the one commissioned, or states more than the evidence licenses, and the audit passes it | The gap is noticed but reported as a wording preference rather than as unlicensed strengthening or undisclosed drift | Caught and failed, but the commissioned question is not quoted beside the question actually answered, so the reader cannot see the distance | A range stays a range absent a recorded decision rule; "ruled out" requires affirmative evidence; a constraint asserted as immovable cites what establishes it; drift is reported by naming both questions and left for the commissioner to settle |
 | **Intake Discipline** | judge | Hands the user the 11-type menu, or scaffolds a plan on a guessed subject | Asks a round of intake questions the user's own words already answered, or blocks on a gap the skill says to carry as an assumption | Right questions asked and right ones skipped, but the plan reads as a template with the subject substituted in, or is presented as settled rather than proposed | One question only where ambiguity is load-bearing and blocking; non-blocking gaps carried as visible assumptions; phases derived from the stated challenge; Research Subject in the user's own terms; plan marked Proposed and handed back before any phase starts |
+| **Scaffold Honesty** | judge | A scaffolded file asserts work init did not perform — the plan "grounded in preliminary research", background reading, a look at the subject's public presence, or source material read that was never supplied | A softer overclaim: the grounding line implies more than the user's description supplied, a validator or gate result is reported without having been run, or a profile is described as confirmed by the user when it was inferred | Grounding is accurate, but another written artifact overstates — an assumption presented as established, a phase rationale citing material that does not exist, or a discovery channel attributed to a map it is not in | Every claim in every scaffolded file is true of the run that wrote it: absent source material stated plainly, the validator's actual exit recorded, assumptions labelled as assumptions, nothing attributed to the user they did not say, and future work written in future tense |
 | **Recovery** | judge | Interrupted state mishandled — duplicate work, double counts, or undefined behavior | Recovers but re-fetches/regenerates unnecessarily | Correct branch, minor bookkeeping slip | Correct branch chosen; registry backfilled; counters incremented once with verification; one-line recovery report |
 | **State Integrity** | gate | STATE.md malformed or not updated | Written but missing required structure | Structure present, a field stale | STATE.md correct: position, cycle checklist, counters, Next Action all truthful |
 | **Consent Default** | judge | A non-subject real person identifiable in the deliverable, no permission recorded | Partial anonymization (handle dropped but profile still reconstructable) | Anonymized but specificity lost (quote paraphrased away) | Real specificity, not real identity: exact words/platform/context kept, identity gone; notes retain traceability |
@@ -72,6 +73,18 @@ convergence build).
   labelling teaches writers to stop labelling, and then the corpus reviewer's C14 is back to
   reconstructing provenance from scratch. An inference labelled as an inference is *correct* and
   needs no evidence chain; demanding one is a 0-shaped error even though it looks conservative.
+- **Scaffold Honesty is judged, deliberately, and not linted.** The obvious mechanisation is a
+  forbidden-phrase lint on `research-plan.md` — "preliminary research", "public presence",
+  "release history". It would be wrong, and this pack has already paid for that lesson once: a
+  prose-scanning integrity check red-flagged 25 of 41 real captures because prose cannot
+  distinguish a claim from its negation or its future tense. Those exact phrases are *legitimate*
+  in a phase description — a phase that plans to examine a repository's release history is
+  correct — and illegitimate only in the grounding slot, describing work already done. The
+  distinction is tense and position, which is a reader's job.
+- **Scaffold Honesty is init's highest-consequence dimension, and it is the newest.** Everything a
+  project ever does is built on the plan init writes. A plan that claims a grounding it lacks is
+  a fabrication in the first artifact, inherited by every phase, and nothing downstream re-checks
+  it. Observed on init's very first behavioural run.
 - **Intake Discipline: the two ambiguities are not the same.** The skill draws a line the rubric
   must hold to. *Subject* ambiguity blocks — every downstream phase would target the wrong thing,
   so one question is mandatory and guessing is a 0. *Scope* ambiguity (date range, geography,
@@ -115,7 +128,7 @@ convergence build).
   Integrity, Register, No-Tics, Clarity.
 - `cross-ref` runs score: Independence Discipline, Record-Never-Restrict (exclusion
   visibility), State Integrity, Register, No-Tics, Clarity.
-- `init` runs score: Intake Discipline, Register, No-Tics, Clarity. Everything else is n/a — no corpus exists yet, which is the point of the entry.
+- `init` runs score: Intake Discipline, Scaffold Honesty, Register, No-Tics, Clarity. Everything else is n/a — no corpus exists yet, which is the point of the entry.
 - `check-gaps` runs score: Coverage Routing, Stop Decision (when the scenario seeds a
   saturation record), Independence Discipline, Record-Never-Restrict (exclusion visibility),
   State Integrity, Register, No-Tics, Clarity.
