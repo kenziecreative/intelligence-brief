@@ -33,17 +33,37 @@ discovery order and a second "Seam 0–5" scheme runs alongside them.
 
 ## Done this session
 
-- **Eval harness debt closed** (`711c092` engine + `347c18e` pack). New `file_unchanged` gate
-  type, `${PACK_ROOT}` so a pack ships its own `checks/`, an always-on capture-integrity layer,
-  and three researcher gates: `state_cycle_coherent`, `state_unchanged_on_write_free`,
-  `decision_ledger_unedited`. All three named blind spots now go red where they went green.
-- **Evidence-Against golden** (`adv-evidence-against-routing`) + a Coverage Routing rubric
-  dimension — chip `task_c631be46`, landed deliberately **before** W2.
-- **W2 built and released as v1.11.0** (design `da43b9e`, build `9342cd9`, release `38ce0e8`,
-  tagged `researcher-v1.11.0`).
-- **Seven defects found and fixed** across eval iterations 24–29 — see CHANGELOG § Fixed.
-- **`/eval-run` readout contract rewritten** (`06588dc`) after Kelsey flagged that eval readouts
-  come back as unreadable machinery. Step 7 now requires behavior language.
+- **Eval harness debt closed**; `file_unchanged` gate type, `${PACK_ROOT}`, capture-integrity
+  layer, and three researcher gates.
+- **W2 → v1.11.0**, **W1 → v1.12.0 + v1.12.1**, **W3 → v1.13.0** — all released and tagged, all
+  22 goldens green at 3× sampling.
+- **`/research-init` made runnable and tested for the first time in six releases.** Two defects
+  found on its first two runs, both fixed.
+- **Five more defects found and fixed after the v1.13.0 tag**, all from the observed-findings
+  queue rather than from designing anything new:
+  1. **init misread a missing env var as validator drift.** Measured: with
+     `CLAUDE_PLUGIN_ROOT` set the gate check exits 12; unset, it exits 11
+     (`validator-mismatch`) on an intact install — and step 3a said 11 means the kit is partial,
+     "fix it before reporting." A fresh project told its validator is mismatched gets distrusted
+     for life over a missing variable.
+  2. **The saturation disclosure had one worked example for three different causes**, and the
+     example was the *stale* wording. Six samples copied it onto absent cases; two asserted "the
+     cross-reference is a few sources out of date" where the seeded counter reads zero — an
+     invented state fact. Now three sentences, one per cause.
+  3. **Step 4a then contradicted itself** — a two-way classification sitting on top of the new
+     three-way disclosure, in the same step. Reconciled.
+  4. **The claim graph recorded pre-fix claim text by instruction**, so the next audit's
+     regression sweep compares against sentences the draft no longer contains. Measured: three
+     nodes, none of their text in the draft the same run had just fixed. It compounded, because
+     node matching is by text equality and a fix is exactly what breaks it — the naive read
+     appends a duplicate and orphans the old node. Both halves fixed.
+  5. **`claim_graph_source_count`** — a new deterministic gate, built from the B11 miss where
+     an M&L claimed "two independent sources" over two one-source findings and the audit
+     certified it. The prose needs a judge; the graph carries the same claim as two fields that
+     must agree. Backtest: 1 true positive, 99 graphs agreeing, **0 false positives**.
+- **Two goldens now expect their correct B16 finding** rather than tolerating it as noise.
+- **`/eval-run` readout contract rewritten** in behavior language, after Kelsey flagged that eval
+  readouts came back as unreadable machinery.
 
 ## In flight / uncommitted
 
