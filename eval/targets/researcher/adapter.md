@@ -41,7 +41,7 @@ while every skill downstream of it was tested repeatedly. It is now a runnable e
 | `process-source` | `research-process-source` SKILL | Sources are seeded LOCAL files (under `source-material/` in the working dir) so no live web access is needed. |
 | `cross-ref` | `research-cross-ref` SKILL | Operates on seeded notes. |
 | `check-gaps` | `research-check-gaps` SKILL | Operates on seeded notes + plan + exclusion ledger. |
-| `init` | `research-init` SKILL | Scaffolds a project from the user's research challenge. **No `setup` block** — the point is the empty directory: init's own step 0 guard refuses to run where a project already exists, so seeding one would test the guard instead of the intake. The runner supplies the working dir empty and plays the scripted turns. Init copies its review-protocol kit from `PLUGIN_ROOT` and runs the real `validate-corpus-review.py --self-test`; let it, and record the result. |
+| `init` | `research-init` SKILL | Three paths, and the `setup` block is what selects which one the run takes — init's step 0 branches on whether `research/STATE.md` exists. **Fresh-project scenarios carry no `setup` block at all:** the empty directory *is* the condition, and seeding anything would send the run down the guard instead of the intake. **Guard and upgrade scenarios seed an existing project** (`state`, `plan`, `notes`, and for the upgrade path `files` for a drifted kit), because that is the condition those paths require. Init copies its review-protocol kit from `PLUGIN_ROOT` and runs the real `validate-corpus-review.py --self-test`; let it, and record the result — including its exit code, which is load-bearing. |
 | `review-corpus` | `research-review-corpus` SKILL | The credibility-gate runner (W7). Scenario seeds a whole mini-corpus via `setup.fixture`; scenarios pin **tier t2 only** (Codex CLI is not assumed in the eval environment). The runner plays the Tier-2 reviewer by reading `<root>/agents/corpus-reviewer.md` + `<root>/reference/corpus-review-brief.md` — **from the four inputs only**: when playing the reviewer, judge the corpus strictly from what is on the fixture's disk against the brief; never from the scenario, the fixture's name, or the runner-skill context. Everything else executes the skill's real machinery: manifest build and `validate-receipt` run the actual `<root>/reference/validate-corpus-review.py`. **Honesty note (for maintainers/judges):** in-context play is structurally weaker than production coldness (production dispatches a fresh agent); these scenarios prove the mechanical seam (brief → result schema → validator → receipt) and defect recall, while genuinely cold reviewer behavior is proven by the W7 stage-5 live dual-tier run. |
 
 ## Working dir and setup
@@ -92,6 +92,10 @@ turn. Setup keys:
 - `setup.completion_criteria` → `research/reference/completion-criteria.md` (the canonical SC-N list the closeout preflight reads).
 - `setup.decision_ledger` → `research/reference/decision-ledger.md` (the append-only disposition record B13 enforces). **Seed it only when the scenario calls for it** — its absence is a supported project state, not a scaffolding gap, and B13 reports `n/a (no ledger)` there.
 - `setup.source_files` → map of filename → content; write into `source-material/`.
+- `setup.files` → a generic map of **working-dir-relative path** → content, written verbatim. For
+  state no typed key covers: a drifted validator under `research/bin/`, a malformed protocol
+  marker, a duplicated STATE line. Use a typed key where one exists — this is the escape hatch,
+  not the default, and a scenario leaning on it heavily is usually asking for a new typed key.
 - Always scaffold empty `research/outputs/`, `research/audits/gate-log.md` (header only,
   from the init template), `research/reference/canonical-figures.json` (`{"figures": {}}`
   unless seeded), and `research/reference/claim-graph.json` (`{"claims": []}`) so gates

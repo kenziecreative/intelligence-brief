@@ -51,6 +51,8 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Saturated + inadequate reaches the commissioner as a decision, never another discovery round | W2 (Seam 1 — the live-run stall) | `adv-saturation-stall-decision` | ✓ |
 | Saturated + adequate proceeds normally — the negative control on the stall route | W2 | `rep-saturation-adequate-proceeds` | ✓ |
 | A stale saturation record reads as unavailable, never as "not saturated" | W2 | `adv-saturation-stale-record` | ✓ |
+| Init's guard refuses an existing project and writes nothing, including when pushed for a workaround | init step 0 | `adv-init-guard-refuses-existing-project` | **tracked** |
+| Protocol adoption treats present-but-invalid pieces as invalid, reinstalls, verifies, and touches no research content | init step 0b — the branch the engine corpus needs | `adv-init-upgrade-invalid-pieces` | **tracked** |
 
 **Why the Evidence-Against golden exists, and why it landed before W2.** W2 builds the
 saturation → stop-decision routing contract, and `Evidence Against` is the state where the
