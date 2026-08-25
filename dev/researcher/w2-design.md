@@ -200,7 +200,8 @@ the question has not made a decision, and nothing should record one.
   computed route in.
 - `researcher/reference/templates/decision-ledger.md` — confirm the `acceptance` class
   grammar covers a saturation-sourced acceptance.
-- `dev/researcher/ARCHITECTURE.md` — ownership + judgment map, in the same change (plan rule 1).
+- `dev/researcher/MAINTAINERS.md` — Layer 2 ownership rows + Layer 4 judgment map, in the same
+  change (plan rule 1). Seam 1 in Layer 8.
 
 ## Verification
 

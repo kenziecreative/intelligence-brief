@@ -153,7 +153,8 @@ finding across two lines.
 ## Touches
 `research-summarize-section` (6e + 6f at synthesis) · `research-audit-claims` (the closeout status
 question, and one battery item for 6e/6f) · `corpus-review-brief.md` (C4/C5/C6 each gain the
-check-it-don't-trust-it line, the C14 pattern) · `dev/researcher/ARCHITECTURE.md`.
+check-it-don't-trust-it line, the C14 pattern) · `dev/researcher/MAINTAINERS.md` (the
+recommendation-serviceability entry in Layer 8).
 
 ## Why 6d is not here
 

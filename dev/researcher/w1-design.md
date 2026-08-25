@@ -150,7 +150,8 @@ reporting once, not a finding to repeat every pass.
 - `researcher/skills/research-audit-claims/SKILL.md` — B14, B15 (M2, M3).
 - `researcher/agents/research-integrity.md` — check 7 per-finding counting (M4).
 - `researcher/skills/research-init/SKILL.md` — scaffold + docs for the new note shape.
-- `dev/researcher/ARCHITECTURE.md` — ownership + judgment map, same change (plan rule 1).
+- `dev/researcher/MAINTAINERS.md` — Layer 2 ownership rows + Layer 4 judgment map, same change
+  (plan rule 1). Seam 0's partial-mitigation entry in Layer 8.
 
 ## Verification
 

@@ -145,8 +145,9 @@ re-adjudicates it.
 - `research-summarize-section` — ledger read before drafting (M6)
 - `research-init` — completion-criteria template note, ledger template + install +
   upgrade path (M4, adoption)
-- `dev/researcher/ARCHITECTURE.md` — Layer 2 ownership rows (ledger writers), Layer 3
-  artifact table (decision-ledger.md: durable), Layer 8 seam updates, same change
+- `dev/researcher/MAINTAINERS.md` — Layer 2 ownership rows (ledger writers), Layer 3
+  artifact table (decision-ledger.md: durable), Layer 8 seam updates, Layer 9 prevention
+  half, same change
 - corpus-review-brief: reviewers already read everything; note the ledger as a named
   input for C-checks (additive, no protocol bump — confirm against frozen contract
   before touching)

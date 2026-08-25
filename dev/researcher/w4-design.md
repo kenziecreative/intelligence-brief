@@ -195,7 +195,8 @@ sees a challenge criterion with no result, or a result with no criterion. One fi
   being the gate's trigger.
 - `researcher/reference/corpus-review-brief.md` — C5 gains a line noting a Tier-1 record may now
   exist, to be checked rather than trusted (the C14 pattern). No protocol version change.
-- `dev/researcher/ARCHITECTURE.md` — Seam 4, same change (plan rule 1).
+- `dev/researcher/MAINTAINERS.md` — Seam 4 (Layer 8) + the disconfirmation row in Layer 4, same
+  change (plan rule 1).
 
 ## Verification
 

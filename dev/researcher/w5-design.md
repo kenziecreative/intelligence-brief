@@ -135,4 +135,5 @@ surface does not bind the next.
 `research-process-source` (two fields, and the note-level integrity invocation) ·
 `agents/research-integrity.md` (the note-level pass) · `research-summarize-section` (M3, one
 sentence) · `reference/source-assessment-guide.md` (§2 and §4 now feed fields rather than only a
-tier) · `dev/researcher/ARCHITECTURE.md` (Seam 5).
+tier) · `dev/researcher/MAINTAINERS.md` (Seam 5 in Layer 8, the quantitative-basis row in Layer 4,
+and the `notes/` row in Layer 3).

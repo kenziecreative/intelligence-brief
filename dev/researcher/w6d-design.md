@@ -95,6 +95,10 @@ reconstructing it. Same constraint that governed W3→C2/C14, W4→C5, W6c/e/f�
 - **Register:** stated as part of the finding, never as a labelled compliance section. No `##
   Instrument validity` heading, never the check's name. Constraint stated explicitly because a
   requirement added without one defaults to narrating its own mechanism.
+- **Map sync:** `dev/researcher/MAINTAINERS.md` — the instrument-validity entry in Layer 8, the
+  judgment row in Layer 4, and step 7b + B19 in the Layer 2 ownership rows, in the same change
+  (plan rule 1). This line was missing when W6d shipped, and the map went a full release without
+  it — which is what the rule exists to prevent.
 
 ## Fork left open deliberately
 

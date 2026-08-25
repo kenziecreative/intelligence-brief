@@ -7,6 +7,15 @@ untracked — SKILL-daft evaluated as a proposed rewrite, not as shipped surface
 parallel surface auditors + one integrating pass; per-section "not read" lists are the
 uncovered claims · baseline for any apply step: v1.8.0, eval iterations 10–19 green.
 
+> **Reading this after the map split (2026-08-25).** Every `ARCHITECTURE L<n>` reference below
+> was written when one file held both the explanation and the maintainer's map. The layer
+> numbers are unchanged and still resolve, but they now live in
+> [MAINTAINERS.md](MAINTAINERS.md); `ARCHITECTURE.md` is the plain-language explanation and has
+> no layers. These lines are left as written because they record what each auditor actually read
+> on 2026-08-06, and a provenance list that gets edited later is not a provenance list. Treat
+> substantive claims here as dated too: the "accepted gaps have no state" finding, for one, was
+> wired by W2 in v1.11.0.
+
 **Verdict: audited in full at `636bc89` — the plugin is not fossil-riddled; it is
 unusually contract-dense and history-backed. The genuine capability pile is small and
 specific (see PLUGIN VERDICT at the end), and nothing should be cut before the ten

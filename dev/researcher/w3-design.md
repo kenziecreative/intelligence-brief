@@ -165,7 +165,8 @@ that question plus the arc so far.
 - `researcher/reference/corpus-review-brief.md` — C2 and C14 gain a line noting that labels may
   now be present, and that a present label is checked rather than trusted. **No protocol version
   change and no validator change**, so the contract hash is untouched.
-- `dev/researcher/ARCHITECTURE.md` — Seam 2, same change (plan rule 1).
+- `dev/researcher/MAINTAINERS.md` — Seam 2 (Layer 8) + the significance row in Layer 4, same
+  change (plan rule 1).
 
 ## Verification
 

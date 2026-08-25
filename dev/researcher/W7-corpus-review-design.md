@@ -261,8 +261,9 @@ C1–C14 as in v2, plus:
   CHANGELOG, five version surfaces, migration note (re-init required for the gate; un-migrated
   projects keep pre-W7 behavior *plus* a visible "no credibility gate" notice — they do not
   silently hard-gate, and they cannot claim the validated completion state).
-- **Map sync:** `dev/researcher/ARCHITECTURE.md` — Tier-2 review layer, ownership rows
-  (runner owns review artifacts; validator owns the completion verdict), seam updates.
+- **Map sync:** `dev/researcher/MAINTAINERS.md` — Layer 9 (the Tier-2 review layer and its
+  build status), Layer 2 ownership rows (runner owns review artifacts; validator owns the
+  completion verdict), seam updates.
 
 ## 10. Build order (v2-review's revision, spike stage done)
 
