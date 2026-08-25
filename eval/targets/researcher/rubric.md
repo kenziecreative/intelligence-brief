@@ -24,6 +24,7 @@ convergence build).
 | **Referent Fidelity** | gate+judge | A figure is used for something other than what its note says it measures, and the audit passes it | The drift is noticed but scored as an ordinary citation or wording issue rather than a change of claim | Caught and failed, but the report states only that the use is wrong — the reader is not told which reading the note supports and which the draft asserted | Every figure used for what its note's `measures` field says it measures; drift caught, failed high-severity, and reported with BOTH readings side by side; a `not`-field match named as the misreading it was written to catch; correct uses not flagged |
 | **Provenance Conformance** | judge | A load-bearing "so what" is labelled evidence-supported when the cited notes do not reach it, or a commissioner priority is attributed to a directive that does not exist — and the audit passes it | The label is wrong and the audit catches it as an ordinary sourcing or wording issue rather than a misstatement of where the claim came from | Wrong labels caught and failed, but the *set* is not judged — a recommendation-shaped statement carrying no label passes unremarked | Each label checked against what stands behind it: an implication's chain walked, an inference not asked for evidence but checked for established-fact grammar, a priority traced to a real directive; the set judged too, so an unlabelled load-bearing statement is a finding (moderate) while a wrong label is high |
 | **Recommendation Serviceability** | judge | A recommendation ships with no refutation and no prerequisite disclosure, and the audit passes it — or a vacuous refutation ("further research may refine this") is accepted as one | The gap is noticed but recorded as an ordinary wording nit rather than a finding, or the prerequisite disclosure is accepted where it is buried in a limitations section | Caught and classified, but only one half — the refutation checked and the prerequisites not, or vice versa | **Whichever the recommendation needs, complete.** A named refutation with whether anything planned could produce it; prerequisites disclosed **at the claim site**, checked against the ledger's record of what is still open; a vacuous refutation rejected as vacuous; and a recommendation nothing observable could refute **passing** when it says so. A descriptive output with no recommendation is n/a and silent. |
+| **Instrument Validity (Tier 1)** | judge | A decision rule is stated and passed over though no figure measures the quantity it thresholds — or two figures with overlapping populations sit side by side implying arithmetic nobody established | The problem is noticed but recorded as a wording nit rather than named at the rule, or the draft answers one half and the audit accepts it as complete | Caught and stated, but the escape hatch is misused: methodology beyond the two named patterns is **settled** rather than routed as `needs-domain-expert` | **Whichever the draft needs, complete, and no more.** A rule whose quantities are unmeasured is named at the rule with what would be needed; overlapping populations state their relationship, with **"unknown" accepted and silence not**; anything beyond the two patterns is written `needs-domain-expert` and left unsettled. A draft stating no decision rule is n/a and silent. |
 | **Conclusion vs Brief** | judge | The conclusion answers a different question than the one commissioned, or states more than the evidence licenses, and the audit passes it | The gap is noticed but reported as a wording preference rather than as unlicensed strengthening or undisclosed drift | Caught and failed, but the commissioned question is not quoted beside the question actually answered, so the reader cannot see the distance | A range stays a range absent a recorded decision rule; "ruled out" requires affirmative evidence; a constraint asserted as immovable cites what establishes it; drift is reported by naming both questions and left for the commissioner to settle |
 | **Intake Discipline** | judge | Hands the user the 11-type menu, or scaffolds a plan on a guessed subject | Asks a round of intake questions the user's own words already answered, or blocks on a gap the skill says to carry as an assumption | Right questions asked and right ones skipped, but the plan reads as a template with the subject substituted in, or is presented as settled rather than proposed | One question only where ambiguity is load-bearing and blocking; non-blocking gaps carried as visible assumptions; phases derived from the stated challenge; Research Subject in the user's own terms; plan marked Proposed and handed back before any phase starts |
 | **Scaffold Honesty** | judge | A scaffolded file asserts work init did not perform — the plan "grounded in preliminary research" by a run that searched nothing, or source material read that was never supplied. **Init IS asked to do preliminary research (step 4); the defect is claiming it, not doing it** | A softer overclaim: the grounding line implies more than the user's description supplied, a validator or gate result is reported without having been run, or a profile is described as confirmed by the user when it was inferred | Grounding is accurate, but another written artifact overstates — an assumption presented as established, a phase rationale citing material that does not exist, or a discovery channel attributed to a map it is not in | Every claim in every scaffolded file is true of the run that wrote it: absent source material stated plainly, the validator's actual exit recorded, assumptions labelled as assumptions, nothing attributed to the user they did not say, and future work written in future tense |
@@ -43,6 +44,18 @@ convergence build).
   the agent wrote the rationale or the deliverable doesn't carry it verbatim, cap at 2.
 - **Record-Never-Restrict 0 covers both poles** — restricting the user IS a zero, same as
   hiding the record. The dimension penalizes paternalism and silence equally.
+- **Timing-sensitive obligations: a thing that arrives after the decision it exists to inform has
+  not been delivered.** Several checks in this plugin are offers, not notices — the lopsided-coverage
+  advisory, the stale-reading stop, the counter-evidence pause. Their value is entirely in preceding
+  an expensive, hard-to-unwind step. When the substance is present but landed *after* the draft
+  existed, score it as a miss on the dimension that owns it, not as present-with-a-nit. Three judges
+  read one such case three different ways (non-capping / capping / not flagged), which is variance
+  the anchors should absorb rather than leave to the reader.
+
+- **Instrument Validity (Tier 1):** the failure mode to watch is **over-reach**, not under-reach.
+  This check is deliberately two of C7's four patterns; a run that critiques study design beyond
+  them has failed it, not exceeded it. Score `needs-domain-expert` as the correct answer wherever
+  the concern is real and outside the two patterns.
 - **Recommendation Serviceability:** the honest exit and the vacuous answer look similar and are
   opposites. "Nothing we could observe would refute this, because it is a compliance requirement" is
   a **3** — it names why refutation is impossible. "Further research may refine this" is a **0** when
@@ -148,16 +161,18 @@ convergence build).
   Integrity, Register, No-Tics, Clarity.
 - `synthesize` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with
   figure records — **scored on the spoken turn as well as the draft**), Valve Honesty (when the
-  counter-evidence gate is in play), **Recommendation Serviceability (when the draft makes a
+  counter-evidence gate is in play), **Instrument Validity (only when the draft states a decision rule, or uses two figures whose populations overlap — a draft with neither is `n/a`, never 3; a dimension scored 3 for the absence of its subject inflates the scorecard)**, **Recommendation Serviceability (when the draft makes a
   recommendation — step 7a requires it to carry its refutation and prerequisites)**, Search-Record Fidelity (when the scenario seeds a retrieval
   log the run must characterize), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
   two real-person types), State Integrity, Register, No-Tics, Clarity.
 - `process-source` runs score: Recovery, Record-Never-Restrict (skip-ledger cases),
   **Referent Fidelity (when the run *writes* a figure record — the note's `basis` and
   `carries-to` fields and the spoken turn must both hold the figure at the width its source
-  licenses). Keyed on what the run writes, not on what the source contains: the recovery
-  branch is forbidden to rewrite an existing note, so a seeded note's figures give the
-  dimension no surface and it is n/a**,
+  licenses). Keyed on what the run writes, not on what the source contains: a
+  seeded note's figures alone give the dimension no surface. Note that the recovery branch
+  *can* write one — `research-process-source` SKILL.md:115 has a pre-schema note gain its
+  figure records on contact when the source material is still on disk — so score it whenever
+  a record is actually written, on that branch or any other**,
   State Integrity, Register, No-Tics, Clarity.
 - `cross-ref` runs score: Independence Discipline, Record-Never-Restrict (exclusion
   visibility), State Integrity, Register, No-Tics, Clarity.

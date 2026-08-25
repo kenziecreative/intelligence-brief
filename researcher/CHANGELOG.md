@@ -2,6 +2,72 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.18.0] — 2026-08-25
+
+**W6d — instrument validity, and the last workstream closes.**
+
+A decision rule is only as good as the quantities it references. "Adopt where picking error falls
+below 0.5%" reads as rigour because it contains an operator, but if every figure measures *the share
+of sites reporting any reduction*, no figure measures the error rate the rule needs, and the rule
+cannot be evaluated at all. Synthesis now checks that at the rule, names what would be needed, and
+still writes the section.
+
+**Two of the corpus reviewer's four patterns, deliberately — not four.** C7 is scoped to "ONLY these
+named patterns", which is its author conceding that unbounded study-design critique failed even at
+the end of a project with the whole corpus in view. A check running earlier, on one section, has
+less context and more chances to fire. So it takes the two that survive the move — a decision rule
+referencing unmeasured quantities, and two figures whose populations overlap without their
+relationship stated — and leaves the other two where they work.
+
+**An unknown relationship constrains the prose around it.** Writing "whether the 890 sit inside the
+1,240 is not established" and then calling one a "narrower slice of that broader population" asserts
+the containment the sentence just refused. The disclaimer is a constraint, not a paragraph to
+discharge.
+
+**Anything outside those two patterns is routed to a person and left unsettled.** Not adjudicated —
+and equally not retired as unanswerable. "No mapped channel can settle this" says nobody can know;
+"a statistician should look at this" hands it to someone who can. The first quietly converts an open
+question into an accepted limitation, and the end-of-project reviewer never receives it.
+
+**Fixes found by running the set, not by reading it.**
+
+- **An audit reported "clean" over a live breach and promoted the draft.** The standing-provision
+  check verified the one compliant claim it read and never enumerated the rest; a single-source
+  claim missing its required flag went to `outputs/`. It now enumerates the governed claims and
+  reports the count, so a clean result says how much was examined.
+- **The adverse-search itemization leaked through four surfaces.** The rule was written per-surface
+  — turn, then durable record — and every surface it did not name lost the per-item reasons: the
+  draft's prose, and a closing recap. It now binds every surface that carries a disposition.
+- **A phase closed without showing the contract it closed against.** The deliverable manifest is the
+  result, not the pipeline; it reaches the user every time.
+- **`/research-init upgrade` reported step 5's verification while standing at step 3**, and never
+  told the user their existing work survived — one ordering defect with two opposite symptoms. The
+  untouched-content report now lands the moment the writes do, and no step may report a later step's
+  result.
+- **The fresh-project guard offered to run the destructive `mv` itself.** It now states that the
+  `mv` and `rm -rf` are the user's to run.
+- **A stop-and-ask that arrives after the draft is a caveat, not a choice.** The lopsided-coverage
+  advisory now rides the same pause as the counter-evidence gate, before anything is written — the
+  same failure the stale-reading stop was built to prevent.
+- A corrupted line in the counter-evidence block template had re-created the fabrication path: it
+  offered output stamped "no credible counter-evidence found after documented search" for a search
+  nobody ran.
+- The audit report's check-list enumerated "B1–B17", so B18 had been invisible since v1.16.0.
+
+**New deterministic gate.** A draft claiming a documented adverse search must be accompanied by the
+record it refers to. Found once in nine runs, which is exactly why it belongs in a gate: a rule
+catches it when the run remembers.
+
+**Correction to v1.17.0.** That entry said W5 "does not reach" notes arriving through the
+interrupted-processing branch. That was wrong — `research-process-source` has a pre-schema note gain
+its figure records on contact when the source material is still on disk, and that rule reaches this
+branch. The real finding is narrower: it fires inconsistently (0 of 3 runs before this release's
+recovery change, 2 of 3 after).
+
+The eval set is **45 of 45 golden**, every scenario verified 3× against this build. The five that
+had been tracked-not-golden were each blocked by a fixture or a skill defect rather than by the
+behaviour they tested.
+
 ## [1.17.0] — 2026-08-24
 
 **W5 — a figure carries the population it was measured on.**

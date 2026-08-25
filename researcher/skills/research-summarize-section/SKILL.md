@@ -90,7 +90,7 @@ Before writing anything, verify:
    Acknowledge, or direct further search?
    ```
 
-   **Present it as the record it is, not as work you just did.** These queries come out of `retrieval-log.json`; they were run when they were run, and the commissioner is being asked to accept a *record*. Attribute it — "the adverse searches logged for this phase, run [date]" — and carry the dates into the turn, not only into the artifact. Never write it in the first-person present ("I went looking… and came back empty") when what happened is that you read a log. The distinction is the whole point of this exit: recency is what decides whether "none found" still holds, and a commissioner who is not told the search is four weeks old cannot make that call. If the log's searches are old enough that the answer might have changed, say so and offer to re-run before asking for the acknowledgment.
+   **Present it as the record it is, not as work you just did.** These queries come out of `retrieval-log.json`; they were run when they were run, and the commissioner is being asked to accept a *record*. Attribute it — "the adverse search logged for this phase, run [date]" / "the three adverse searches logged for this phase, run [dates]" — and carry the dates into the turn, not only into the artifact. **Make the number agree with the log.** A single logged query described as "the searches" overstates the record in the flattering direction, and it is the phrasing here that causes it: observed once, where the artifact and the M&L stamp both correctly said one query and only the spoken turn said "searches". Never write it in the first-person present ("I went looking… and came back empty") when what happened is that you read a log. The distinction is the whole point of this exit: recency is what decides whether "none found" still holds, and a commissioner who is not told the search is four weeks old cannot make that call. If the log's searches are old enough that the answer might have changed, say so and offer to re-run before asking for the acknowledgment.
 
    **Any summary line you put above the itemization must be true of the items below it.** The commissioner is being asked to accept "nothing credible was found," and a summary is what most of them will actually read — so a roll-up that reshapes the results reshapes the decision. Count the dispositions before you characterize them: a result that found *no effect* is not a result that *affirmed* the finding while criticizing something else, and an item already counted under one disposition is not counted again under another. Errors here run one direction — toward making the evidence look stronger than the log says it is — which is exactly the direction this gate exists to resist.
 
@@ -99,15 +99,32 @@ Before writing anything, verify:
    **The label may cover the group. The reason may not.** This is the whole distinction, and it is narrow:
 
    - **A disposition name covers its members legitimately.** "Four did not qualify as a challenger", "Three were off-topic", "Two fell below the credibility floor" — these are the log's own classifications, true by construction, and you do not need to defend them. Give the count with the label.
-   - **A reason attached to that label is a per-item claim wearing a group's clothes.** "Three were off-topic — *a different sense of the word*" asserts one explanation for three separate items, and it only takes one of them to have been off-topic for a different reason. Same for "four did not qualify — *they restated the same benefit*", and same in the generous direction for "two — *with no position either way*". The group is defined by what its members are **not**; that tells you nothing about why each one is that way, and the why is what a reason claims to know.
+   - **A reason attached to that label is a per-item claim wearing a group's clothes.** "Three were off-topic — *each about a different subject entirely*" asserts one explanation for three separate items, and it only takes one of them to have been off-topic for a different reason. Same for "four did not qualify — *they restated the same benefit*", and same in the generous direction for "two — *with no position either way*". The group is defined by what its members are **not**; that tells you nothing about why each one is that way, and the why is what a reason claims to know.
 
    So: label the group, count it, then **give every result its own line and its own reason, lifted from its own triage entry**. Nine results is nine lines. That is not verbosity — the itemization *is* the record, and the roll-up is only an index to it.
 
-   Watch the sub-group especially. "Three were off-topic, two of them about HR onboarding" is the same move one level down, and it is the one that survives the obvious version of this rule.
+   Watch the sub-group especially. "Three were off-topic, two of them from the same trade publication" is the same move one level down, and it is the one that survives the obvious version of this rule.
 
-   The same wording goes into `research/discovery/negative-searches.md`, so an inaccurate summary does not just mislead the turn — it becomes the durable record of what the search found, and every later reader inherits it.
+   **This binds every surface that carries a disposition, not just the turn.** The spoken turn,
+   `research/discovery/negative-searches.md`, and any draft prose describing the adverse search all
+   carry the same itemization; a surface not named here is still bound — **including a closing recap.** Restating the dispositions
+   later in the session is still stating them: a wrap-up turn that says "three were about a different
+   subject entirely" has done the forbidden thing at the end, after doing it correctly at the start.
+   Observed on a run whose acknowledgment turn, durable record, and draft were all clean. **The pull
+   is that a recap feels like a summary and summaries compress** — but the compression is the defect,
+   and this is the fourth distinct surface on which this one rule has leaked. If you are restating
+   what the search found, restate the labels bare and leave the reasons on their own items, or point
+   at the record instead of re-summarizing it. **Naming surfaces one at a
+   time is how this rule leaks** — four runs across two scenarios each glossed on whichever surface
+   the rule did not happen to mention, and the durable record is the worst place to lose it, because
+   every later reader inherits it and the acknowledgment attests to an itemization the file no
+   longer holds.
 
-   On acknowledgment: append the record (phase, date, queries, channels, results reviewed, outcome, acknowledgment) to `research/discovery/negative-searches.md` (create with a one-line header if absent), then proceed to synthesis and include the stamp in the draft's Methodology & Limitations section.
+   **A group descriptor that is true of every member, with each member's own reason still present,
+   is fine.** The failure is a roll-up that *replaces* the per-item reasons or claims more than the
+   log supports — not an accurate sentence sitting above a complete list.
+
+   On acknowledgment: append the record to `research/discovery/negative-searches.md` — phase, date, queries, channels, results reviewed, outcome, acknowledgment, **and the per-item lines exactly as you gave them in the turn** (this list is the whole record, and the itemization is the part of it that carries the finding) (create with a one-line header if absent), then proceed to synthesis and include the stamp in the draft's Methodology & Limitations section.
 
    e. **Block only when none of the three outcomes is available.** If no credible source disputes the claim (Outcome 1), no adverse search is on record (Outcome 2), **and the claim is not one you can honestly place under Outcome 3**, then synthesis blocks. Work the outcomes in order and reach this step last — it is the failure branch, not the default.
 
@@ -124,7 +141,7 @@ Before writing anything, verify:
 
    Nothing on file disputes it. Two ways forward:
    1. Look for opposition — [negating/challenging terms], in [specific channels: academic databases, industry analysts, competing viewpoints]. If something credible turns up, it goes in the draft as a real qualification. If the search genuinely comes back empty, that empty result is itself the record and I'll write it down.
-   2. Tell me this is a claim nothing available could refute, and why — then I'll carry that, name what would have been needed, and draft.ve-searches.md, you acknowledge it, and synthesis proceeds with the output stamped "no credible counter-evidence found after documented search."
+   2. Tell me this is a claim nothing available could refute, and why — then I'll carry that, name what would have been needed, and draft.
    ```
 
    **Do not offer to record an empty search from a block turn — there is no search to record yet.** At block time nobody has looked, so "I'll just log that a search came back empty" offers to write a finding about an event that has not happened. Observed on one sample in three: a block that was otherwise correct closed with "if you'd rather I just log that a search was run and came back empty, say so and I'll record it" — turning the valve into precisely the bypass this gate exists to prevent, on the menu, as the cheaper option. **Outcome 2 becomes available only once a search has actually run**; from here it is a destination, never a choice. The two offers above are the only two, and neither of them is "skip it."
@@ -143,6 +160,18 @@ Before writing anything, verify:
    ```
 
    This is a **warning, not a gate** — synthesis proceeds after displaying the advisory. If no questions have lopsided coverage, skip the advisory silently.
+
+   **It has to reach the user before the draft exists, or it is not the thing it claims to be.**
+   The advisory's whole content is an offer: run `/research-discover` first, or proceed knowing
+   the coverage is thin. Delivered after the draft is written, that offer is gone and what remains
+   is a caveat about work already done. **If pre-check 5 pauses for acknowledgment, this advisory
+   rides in that same turn** — one pause, both things the user needs in order to choose. If nothing
+   else pauses, display it and wait before drafting.
+
+   Observed on two runs of one scenario: the substance arrived in the post-draft turn, correctly
+   worded, and the user never got the choice. **This is the same failure the stale-reading stop in
+   `research-check-gaps` step 7d was built to prevent** — a decision point that arrives after the
+   decision has been made is a caveat wearing a question's clothes.
 
 If any pre-check fails, do not proceed. Tell the user which check failed and what to run. Note: pre-checks 4 and 6 are advisories that do not block synthesis — they display warnings and then allow synthesis to proceed.
 
@@ -170,12 +199,89 @@ If any pre-check fails, do not proceed. Tell the user which check failed and wha
 
    **Register — say it as part of the recommendation, never as a labelled compliance section.** "We'd drop this if onboarding time doesn't fall below X in the first quarter, and it assumes the migration budget gets approved" is the shape. Never a `## Falsifiability` heading, never the check's name, never "prerequisite" as a bureaucratic noun. This constraint is stated here rather than left to the register section because a requirement added without one defaults to narrating its own mechanism — recorded in this repo more times than it should have been.
 
+7b. **If this draft states a decision rule, the rule has to be computable from what the evidence
+   measures.** Scope: a **decision rule** — a sentence that turns a quantity into an action or a
+   verdict. A threshold ("adopt if X exceeds 40%"), a cutoff, a score, a comparison that decides
+   something. Descriptive prose stating a figure is not a decision rule. When the draft states none,
+   this step is **n/a and silent** — no empty section, no "not applicable" line.
+
+   This is the writing side of the corpus reviewer's **C7 Instrument validity**, and it uses C7's
+   framing on purpose so the end-of-project review reads what was written here.
+
+   **Two patterns, and only these two.** C7 checks four and is explicit that it checks *only* named
+   patterns; two of its four need an instrument in full view and do not survive the move to a single
+   section. Do not extend this list.
+
+   **The rule's quantities must be measured.** Every quantity the rule references traces to a figure
+   record whose `measures` field actually covers it. The failure is a rule that thresholds or
+   compares something no figure measures: the number is real, and it is not the number the rule
+   needs. "Adopt when time-to-value drops below 30 days" cannot be evaluated against a figure that
+   measures *the share of teams reporting any reduction* — that figure's `not:` field says the size
+   of the reduction is exactly what it does not carry. Say so plainly in the draft, at the rule:
+   the rule as written cannot be evaluated from this evidence, and name what would be needed.
+
+   **Two figures whose populations overlap need their relationship stated.** When the draft uses two
+   or more figures whose `measures` describe overlapping populations, say how they relate — subset,
+   superset, a different slice, or unknown. The failure is two counts side by side implying
+   arithmetic nobody established. **"Unknown" is a legitimate answer and silence is not**: a recorded
+   unknown survives into the draft, a blank one is lost. Same principle as a figure's `basis`.
+
+   **An unknown relationship constrains every later sentence about those figures; it is not a
+   paragraph you discharge once.** Having written "whether the 890 sit inside the 1,240 is not
+   established", you may not then call one a "narrower slice of that broader population", say
+   "within that broader population", or describe either as a share of the other — in the draft or
+   in the spoken turn. Those phrasings assert the containment the disclaimer refused, and a reader
+   who meets them first never reaches the retraction. **Check the sentences around the disclaimer,
+   and check the turn, before calling this done.** Observed: a run stated the relationship as
+   unestablished in one paragraph while an earlier paragraph and the spoken turn had already
+   asserted it — written as an obligation to satisfy rather than a constraint to hold.
+
+   **Anything else about the instrument is `needs-domain-expert`, and you do not settle it.** If
+   something about how the evidence was produced looks wrong but is not one of the two patterns
+   above, say so in the draft, in plain language, and stop there — **"this needs a domain expert's eye
+   before the finding is leaned on" is the register**, not the literal token. C7's term
+   `needs-domain-expert` is the corpus reviewer's filing vocabulary, and printing it in a draft is
+   naming machinery, which the Register rule below forbids; what carries to Tier 2 is the
+   *substance* — the concern named precisely, and the fact that this draft did not settle it. **The routing sentence is required, and it names a person.** The draft must contain, in
+   substance, "this needs a domain expert's eye before X is leaned on" — an actual hand-off to
+   someone qualified. Naming what evidence would resolve it ("an independent comparison group would
+   settle this") is good writing and welcome **in addition**, but it is not the routing: it says
+   more data would help, not that judgment this analysis cannot supply is required. Observed across
+   six runs, four routed and two substituted an adjacent framing — an evidence gap in one, an
+   unanswerable-by-any-channel note in the other. Both read to Tier 2 as coverage notes.
+
+   **Route it to a person; do not retire it as unanswerable.** "That question sits
+   outside what any of the mapped channels can settle" is a *saturation* statement — it says nobody
+   can know, it belongs to a different check, and it quietly converts an open question into an
+   accepted limitation. This exit says the opposite: the question **is** answerable, by someone with
+   expertise this analysis does not have, and you are handing it to them. Name that. A concern filed
+   as a coverage dead end reaches Tier 2 looking like a sampling caveat, and C7 never learns it was
+   routed at all. Say
+   which of the two patterns it is not, so the reviewer can see the routing was deliberate rather
+   than an oversight. This is C7's own term
+   and C7's own instruction, and it is the reason this check is safe to run with less context than
+   C7 has. A Tier-1 check that starts settling methodology is the failure this scoping exists to
+   prevent.
+
+   **Register — say it as part of the finding, never as a labelled compliance section.** "We can't
+   actually test that 30-day threshold with what we have; the survey only asked whether time-to-value
+   fell, not by how much" is the shape. Never a `## Instrument validity` heading, never the check's
+   name, never "decision rule" as a bureaucratic noun.
+
 8. **Write a draft section** to `research/drafts/<part-number>-<section-slug>.md`.
 
    **Before writing, check if the target file already exists at that path.** If it does, a prior draft is already in flight — do not silently overwrite it. Present the user with three named options: **(a) overwrite** — the existing draft is replaced entirely; note that any matching audit report in `research/audits/` for the old draft becomes stale and should be deleted or renamed by the user before the new draft is audited; **(b) suffix** — write the new draft to `research/drafts/<part-number>-<section-slug>-v2.md` instead and leave the original in place; **(c) cancel** — stop the synthesis entirely; do not write anything. Wait for the user to pick one. Do not proceed on an ambiguous response — re-ask. Only after the user chooses, write the draft with these requirements:
 
    - Lead with findings, support with evidence
    - Every finding answers "so what does this mean?"
+   - **Where a number, range, date or qualifier moves from a note into the draft, it moves whole.**
+     Check endpoints against the note before writing, not after. **Errors here run one direction —
+     toward making the evidence look stronger than the note says it is** — and that direction is the
+     reason to check rather than trust your recall of it. Three observed instances all compressed
+     toward the favourable end (a 6–10 week range written as "6 to 9"; 22–38 months written as "low
+     to high 20s"; "before decommissioning the incumbent" written as "before cutover"), and in one
+     the correct range appeared correctly one paragraph below the wrong one — the right figure was
+     in hand while the wrong one was being written. Recall is the failure, so re-read the note.
    - Apply the project's finding tags to key conclusions. Tag set fallback chain: **(1)** read `CLAUDE.md` and use the Finding Tags section; **(2)** if missing, fall back to the type template at `${CLAUDE_PLUGIN_ROOT}/reference/templates/types/{research-type}.md`; **(3)** if neither source has a tag set, do not invent tags — render findings without tags and add an explicit note in the draft's opening metadata: "Finding tags unavailable for this project — CLAUDE.md and type template both missing the Finding Tags section. Tagging skipped." Do not block synthesis on missing tags.
    - Cite sources inline using `[Source: <note-filename>]`
    - Use prose paragraphs, not bullet lists (except for data tables and key findings)

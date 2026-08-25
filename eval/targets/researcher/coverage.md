@@ -38,6 +38,10 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | The adverse-search record described accurately — per-item reasons, bare group labels, same wording in the durable record | split out of the valve golden after five rounds, 2026-08-09 | `adv-adverse-search-summary` | **tracked, not asserted** |
 | Exclusion ledger visible to gap analysis | F3 confirm test | `adv-exclusion-visibility` | ✓ |
 | A figure's basis recorded as the finding when the source withholds it, never quietly omitted | W5, 2026-08-24 | `adv-basis-undisclosed-recorded` | ✓ |
+| A decision rule must be computable from what the evidence measures | W6d, 2026-08-25 | `adv-decision-rule-unmeasured` | ✓ |
+| Two figures whose populations overlap state their relationship — and the unknown constrains the surrounding prose, not one paragraph | W6d, 2026-08-25 | `adv-overlapping-populations-unstated` | ✓ |
+| Methodology beyond the two named patterns is routed to a person, not settled and not retired as unanswerable | W6d, 2026-08-25 | `adv-methodology-beyond-patterns` | ✓ |
+| A standing-provision check enumerates the claims the standard governs, rather than confirming the one it happened to read | 2026-08-25 | `adv-audience-standard-partial` | ✓ |
 | A figure held at the width its source licenses — in the spoken turn, not only the draft | W5, 2026-08-24 | `adv-carries-to-widened-in-turn` | ✓ |
 | Independence defaults to unknown; wording/figure Echo heuristics | F9 confirm test | `adv-independence-unknown` | ✓ |
 | Mid-source interruption recovery (note without registry row) | F8 confirm test | `adv-mid-source-recovery` | ✓ |
@@ -193,13 +197,25 @@ run once should not become a ship-blocker on the strength of its first green.
   out empty, and an empty field invites explanation. Fixed in v1.17.0; the scenario is
   golden, but this is the entry to watch when new machinery lands, because each new mechanism
   is a new thing a degenerate run can explain.
-- **W5 does not reach notes that arrive through the recovery branch.** `adv-mid-source-recovery`'s
-  "complete note" test predates the `basis`/`carries-to` requirement, so a pre-W5 note carrying a
-  number is waved through as complete and its registry row backfilled without the new fields.
-  Regenerating the note is an explicit `must_not_do` — the interrupted-processing branch exists so a
-  re-run neither duplicates work nor double-counts — so there is no move available inside the current
-  design. Found by a judge in iteration-81, not by a gate. **Not a regression and not a defect in the
-  run**; it is the honest boundary of what v1.17.0 guarantees: every figure record the plugin *writes*
-  carries its basis, and a corpus can still hold older notes that predate the requirement. The fix
-  needs a design call — a completeness test that knows about schema versions, or a migration pass —
-  and belongs with W6d rather than in a patch.
+- **Converge-by-contact fires inconsistently on the recovery branch.** `SKILL.md:115` says a
+  pre-schema note being read for any reason gets its figure records built then, if the source
+  material is still on disk — "the corpus converges by contact rather than by a migration event."
+  The recovery branch reads the note (to test completeness) and the fixture has the source on
+  disk, so the rule applies. Measured: **iteration-81 (pre-fix build) 0 of 3 runs built the
+  records; iteration-83 (post-fix) 2 of 3 did.** The likeliest cause of the improvement is the
+  recovery-branch change itself — rendering a source assessment requires reading the note's
+  findings, which surfaces the absent records. A side effect, not a designed one. Not a missing rule — an unreliably-fired one, and the
+  completeness test is what makes it easy to miss: it asks whether the note has its *sections*,
+  which a pre-schema note does.
+  **Correction:** an earlier version of this entry, and the v1.17.0 CHANGELOG, said W5 "does not
+  reach" notes arriving through this branch. That was wrong — generalized from a judge's accurate
+  narrower point about the completeness test without checking whether another rule covered it.
+  Line 115 covers it. Corrected in v1.18.0.
+- **The eval set is 45/45 golden as of 2026-08-25.** Every scenario is verified 3× against the
+  shipped build. The five that had been tracked-not-golden were, in every case, blocked by a
+  fixture or a skill defect rather than by the behaviour they tested:
+  `rep-audit-clean-pass` seeded a draft that violated its own evidence standard, so a correct
+  audit could never produce the clean pass it is named for; `rep-synthesize-methodology` seeded
+  two adverse searches for a three-claim corpus, so every run correctly blocked; and
+  `adv-adverse-search-summary` failed five prior rounds on a skill defect — the itemization rule
+  was written per-surface and leaked through every surface it did not name.

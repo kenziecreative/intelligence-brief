@@ -30,6 +30,15 @@ Init only runs against fresh project directories. Before asking the user any que
 
   Do not modify any files. Do not ask questions. Exit the skill.
 
+  **If the user pushes back — "can't you just work around it", "do it anyway" — hold, and say
+  plainly that the `mv` and `rm -rf` are theirs to run.** Restate the two routes and stop. Do
+  not offer to perform either one, and do not ask whether you should: "Want me to move the
+  current project to `research.old` and start fresh?" is the offer this guard exists to prevent,
+  and a user who says yes has approved a destructive move the skill was built not to make. The
+  routes are printed so the user can run one after looking at what is there. **The boundary is
+  stated here rather than left to be demonstrated** — a run that only *behaves* correctly gives
+  the next run nothing to hold onto, which is how one sample in three came to make the offer.
+
 ### Step 0b: Protocol-adoption path (existing projects only)
 
 Adoption installs review protocol v1 onto a live project **without touching any research
@@ -44,6 +53,15 @@ immutable — never edit, move, or delete them during adoption.
 
 1. **Install the validator + marker + reviews/ scaffold** exactly as Step 3a-3 (and
    write `research/reviews/.gitkeep` if the directory is missing).
+1a. **The moment the writes land, tell the user what you did NOT touch.** You have just
+   written into somebody's existing project. Before anything else, and **before any step below
+   can stop the run**, report: the plan, the notes, the registry, and the phase position are
+   unchanged; what changed is the validator, the marker, `reviews/`, and (next step) one added
+   line in `STATE.md`. This report used to live at step 5, and step 5 is past two places where a
+   correct run legitimately halts — so a run that stopped early had already written to disk and
+   told the user nothing about what survived. **Every sample of that scenario omitted it**, and
+   the fix is the ordering, not a reminder.
+
 2. **Add the STATE discriminator.** Edit `research/STATE.md`: insert the line
    `Review protocol: v1` in the header block (after the `# Research State` title, before
    the first `##` heading). Exactly one such line; nothing else in STATE changes.
@@ -67,7 +85,19 @@ immutable — never edit, move, or delete them during adoption.
      itself checks nothing, and it is worse than no gate because it reads like one.
 4. **Pre-allow.** Merge `Bash(python3:*)` and `Bash(codex:*)` into
    `.claude/settings.json` per Step 3b's additive-merge rules.
-5. **Verify.** First `python3 research/bin/validate-corpus-review.py --self-test` (must
+5. **Verify.** **Nothing before this step may report a verification result from this step.**
+   The self-test and the gate run *here*; a run standing at step 3 has not run them and may not
+   say the gate "is live", the install "verified clean", or anything equivalent. If the run stops
+   before this step — which step 3's missing-criteria case makes a legitimate outcome — say
+   exactly that: *reinstalled, not yet gate-verified, pending your decision on the criteria.*
+   Reporting an unrun check as passed is the failure this ordering exists to prevent, and it was
+   observed in two samples out of three.
+
+   **When you do run it, report the exit code, not an adjective.** "Clean" is not a state this
+   validator produces at adoption; the acceptable outcomes are **exit 12** and **exit 13**. Say
+   which one came back.
+
+   First `python3 research/bin/validate-corpus-review.py --self-test` (must
    end green), then `python3 research/bin/validate-corpus-review.py gate --root .
    --json`, and check the STATE header carries exactly one `Review protocol: v1` line.
    Acceptable gate exits, each with its honest report:

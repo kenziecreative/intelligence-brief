@@ -156,6 +156,20 @@ attached.
   patterns: report as `needs-domain-expert` in the finding's `observed` text, do not settle.
   *Required evidence: the instrument/decision-rule text (file:line) exhibiting the named
   pattern.*
+  **A Tier-1 record may now exist for this — check it, do not trust it.** As of v1.18.x synthesis
+  checks two of the four patterns above at the draft (step 7b) and B19 checks they were answered:
+  that every quantity a decision rule references traces to a figure whose `measures` covers it, and
+  that two figures with overlapping populations state how they relate. **Only those two.** The other
+  two patterns — rubrics that predetermine the result, unsupported precision in an instrument — were
+  deliberately left here, because they need the whole instrument in view and that is the context
+  Tier 1 does not have. Read the Tier-1 record as a claim about what was done: a rule declared
+  computable against a figure whose `not:` field excludes exactly the quantity it thresholds is this
+  check's fail condition wearing a Tier-1 pass. Also verify what the writing side routed to you —
+  a `needs-domain-expert` entry in the audit report is an unsettled question arriving as intended,
+  not a defect, and it is yours to carry, not to close. **In the draft itself it will read as plain
+  language** — "this needs a domain expert's eye" — because naming the check in prose the
+  commissioner reads is forbidden there; the token lives in the audit report. Do not read its
+  absence from a draft as the routing having been skipped.
 - **C8 Evidence-selection integrity** (`evidence-selection`). Read the discovery record
   (exclusions, unselected candidates, failed channels, negative searches). Do conclusions
   reflect what was left out? FAIL if a conclusion reads as settled while adverse candidates

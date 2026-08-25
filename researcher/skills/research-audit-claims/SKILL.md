@@ -43,6 +43,14 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
    **B9 — Standing-provision conformance.** Every claim complies with the project's commissioned evidence standard (step 4a) — a breach is an **Audience-standard violation** — AND with any standing project rules in the project's `CLAUDE.md` (per-section objective-divergence statements, de-identification by function, and the like). Example: if the standard says "single-source financial claims are unacceptable," a financial figure traced to one source note fails here, accurately cited or not.
 
+   **Enumerate every claim the standard governs; do not stop at the first one that complies.**
+   Report the count you checked ("4 claims against the audience standard; 1 single-sourced, flagged")
+   so a pass says how much was examined. Observed once: a draft carried two single-sourced claims,
+   one flagged and one not; the audit named the compliant one, wrote `B9 — run — clean`, and
+   promoted the draft. A check that verifies the instance it happened to look at, rather than the
+   set the rule covers, produces a clean report over a live breach — and this is the item where
+   that costs a promotion.
+
    **B10 — Override disclosure & identity.** For every contradiction resolution in `research/cross-reference.md` a claim rests on, compare the recorded `user_resolution` against `suggested_resolution`. If they differ — regardless of the `user_override` flag (the flag corroborates; the field comparison decides) — the draft must label the override at the finding site AND in Methodology & Limitations; an overridden resolution presented as if the evidence produced it is **Override undisclosed**.
 
    **The claim-site disclosure carries its content; it may not be a pointer.** "A commissioner override of the evidence assessment (see Methodology & Limitations)" is not disclosure — it is a footnote marker, and the reader who most needs the fact is the one reading the claim, who now has to go somewhere else to learn what was overridden. The site must name the value the evidence favored and say the recorded decision went the other way, in the sentence itself. A cross-reference to M&L may follow that; it may not replace it. Both surfaces carry the fact in full, which is the same rule B13's supersession route obeys and for the same reason. A resolution record missing either field is itself a finding. For Person Research and Customer Safari, every real person other than the commissioned research subject is anonymized unless a source note records explicit permission; an identifiable non-subject individual is **Identity exposure** (the fail direction is over-anonymization). **The same pass checks pronouns, because they are a sourced attribute and not a stylistic choice.** For every real individual the draft refers to — subject included — a gendered pronoun requires a source recording that person's own usage: a self-description, a byline or profile they control, an outlet quoting them. A name is not a source, and neither is a photograph, a voice, or a job title. A gendered pronoun with no such record is **Identity assertion** (moderate; high if the individual is named), and the mechanical fix is they/them. Measured on a real capture: a draft carried eighteen gendered pronouns over a corpus containing zero — an unsourced claim about a named person, repeated on every line, that reads to the commissioner as something the research established.
@@ -57,6 +65,33 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
    - **Its prerequisites, at the claim site.** A recommendation resting on an unmade decision or an unbuilt, uncosted, or unscheduled dependency must say so where the recommendation is made. Buried in a limitations section is the failure C6 names — "presented as actionable" — because the reader who acts is the reader who read the first sentence. **Check the decision ledger**: where it records a decision as open and the recommendation speaks as though it is closed, that is **Prerequisite undisclosed** (high — it is the one that gets acted on).
 
    A recommendation stated as genuinely not refutable by anything the project could observe **passes**, provided it says so. That is the honest exit, and an audit that punished it would teach the next run to write a vacuous refutation instead of an honest one.
+
+   **B19 — Decision-rule computability.** Only when the draft states a **decision rule** — a
+   sentence turning a quantity into an action or a verdict (a threshold, a cutoff, a score, a
+   comparison that decides something). Otherwise report `B19 — n/a (no decision rule)` and move on.
+
+   Like B18, this checks **presence and non-vacuity, never quality**. Whether the instrument is any
+   good is C7's call at Tier 2 with the whole corpus in view; B19's job is making sure there is
+   something there for C7 to read.
+
+   Two questions, and only these two — C7 is explicit that it checks only named patterns, and this
+   is the Tier-1 subset that survives seeing one section:
+
+   - **Does every quantity the rule references trace to a figure whose `measures` covers it?** A
+     rule that thresholds something no figure measures cannot be evaluated. If the draft has already
+     said so at the rule, that is a pass — the disclosure is the deliverable, not a clean result.
+   - **Where two figures' populations overlap, does the draft say how they relate?** Subset,
+     superset, different slice, or unknown. **"Unknown" passes; silence does not.**
+
+   **Anything else about the instrument is filed as `needs-domain-expert` and is not settled here** —
+   C7's own term, carried verbatim. **The literal token belongs in the audit report and nowhere the
+   commissioner reads**: the report is a durable internal artifact where filing vocabulary is
+   correct and greppable, while the draft says the same thing in plain language because naming the
+   check in prose is what the Register rule forbids. If the draft routed a concern to a domain
+   expert without the token, that is the draft behaving correctly — record it here with the token
+   so Tier 2 can find it.
+   An audit that starts adjudicating methodology with one section in view is the failure C7's
+   scoping already proved out.
 
    **B12 — Regression sweep (re-audits only).** On any pass after the first, for **every defect class fixed in a prior pass on this artifact**, re-scan the *whole document*, not the location that was fixed — a fix applied to one instance while an identical construction survives elsewhere is exactly what this catches. On a first audit, report `B12 — n/a (first pass)`.
 
@@ -220,7 +255,7 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
    **After writing, verify the write succeeded.** Re-read the file and confirm it parses as valid JSON with a `claims` array. If the read fails or the array is missing, log: "WARNING: claim-graph.json write failed — graph incomplete for this phase. Re-run `/research-audit-claims` to retry graph write without re-running the full audit." Do not fail the audit or block promotion.
 
-9. **Write audit report to `research/audits/<basename>-audit.md`**, where `<basename>` is the draft's filename with its `.md` extension stripped — `research/drafts/04-test-section.md` audits to `research/audits/04-test-section-audit.md`, not `04-test-section.md-audit.md`. Include: scorecard, pass/fail determination, findings table, list of claims that need correction, the confidence tier table (section name, tier, rationale) from step 8a, and a **`## Checks run this pass`** section listing every battery item B1–B17 with its result (`run — clean` or `run — N findings`; `n/a (first pass)` for B12 on a first audit, `n/a (no ledger)` for B13, `n/a (no figure records in the cited notes)` for B14, `n/a (pre-schema notes)` for B15 and `n/a (pre-convention draft)` for B16, where they apply). This section is what makes a skipped check visible at the time rather than three passes later, and lets a reader see that this pass ran the same battery as the last.
+9. **Write audit report to `research/audits/<basename>-audit.md`**, where `<basename>` is the draft's filename with its `.md` extension stripped — `research/drafts/04-test-section.md` audits to `research/audits/04-test-section-audit.md`, not `04-test-section.md-audit.md`. Include: scorecard, pass/fail determination, findings table, list of claims that need correction, the confidence tier table (section name, tier, rationale) from step 8a, and a **`## Checks run this pass`** section listing **every battery item this skill defines** with its result (`run — clean` or `run — N findings`; `n/a (first pass)` for B12 on a first audit, `n/a (no ledger)` for B13, `n/a (no figure records in the cited notes)` for B14, `n/a (pre-schema notes)` for B15, `n/a (pre-convention draft)` for B16, `n/a (no recommendation)` for B18 and `n/a (no decision rule)` for B19, where they apply). **Take the list from the battery above, not from a number range quoted here** — a hardcoded range silently omits every item added after it was written, which is exactly how B18 went unlisted from v1.16.0 until it was noticed. This section is what makes a skipped check visible at the time rather than three passes later, and lets a reader see that this pass ran the same battery as the last.
 
 
 ## Pass/Fail Criteria
@@ -261,7 +296,12 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
          The gate hook authorizes a write to `research/outputs/<filename>` only when the most recent gate-log row's timestamp is within 120 seconds, the result column is `pass`, and the file column matches the write target. Append the row immediately before the move — any delay risks the 120s window expiring.
 
      1b. **Move the file from `research/drafts/<filename>` to `research/outputs/<filename>`.** Prefer Bash `mv` (single operation, atomic on the same filesystem) over a Read+Write+delete sequence. The hook gates Write/Edit/MultiEdit, not Bash, so `mv` proceeds without consulting the gate-log — the row written in 1a is the durable audit record of the authorization decision regardless.
-  2. **Deliverable manifest check — close against the whole contract.** Read `research/research-plan.md` and list every output the current phase promises: the phase's `**Output:**` line, or the full `**Outputs:**` list for a synthesis phase (e.g., executive summary + final report + recommendations). For each promised deliverable, check two things: the file exists in `research/outputs/`, and a passing audit report for it exists in `research/audits/`. Present the manifest as a short table: deliverable | in outputs/ | audited.
+  2. **Deliverable manifest check — close against the whole contract.** Read `research/research-plan.md` and list every output the current phase promises: the phase's `**Output:**` line, or the full `**Outputs:**` list for a synthesis phase (e.g., executive summary + final report + recommendations). For each promised deliverable, check two things: the file exists in `research/outputs/`, and a passing audit report for it exists in `research/audits/`. Present the manifest as a short table: deliverable | in outputs/ | audited. **This table goes to
+     the user, every time — it is the contract, not the pipeline.** The Register rule below silences
+     the machinery that produced a result; the manifest *is* the result: what the phase promised
+     against what exists. A phase closed without showing it asks the commissioner to take the
+     closure on trust. Observed: a run closed Phase 1 correctly on substance and never showed the
+     contract it closed against.
 
      - **All promised deliverables exist and are audited:** the phase's contract is met — proceed to step 3 (phase closeout).
      - **Any promised deliverable is missing or unaudited:** do NOT close the phase. Leave the phase active in STATE.md: uncheck `Synthesize` and `Verify` (the cycle is not done until the whole inventory is), **and move `Cycle step` back to `Synthesize (4 of 5)` in the same edit** — the box and the pointer are one write, and leaving the pointer at `Verify (5 of 5)` above an unchecked `Synthesize` says the phase is both past that step and not done with it. Then rewrite `Next Action` to the next concrete step, e.g.: `Run /research-summarize-section <next-deliverable> for Phase N — 2 of 3 promised deliverables remain: <list>.` Tell the user exactly which deliverables remain and confirm the one just promoted. Do not present the phase debrief — the debrief marks phase completion, and the phase is not complete. Stop here.
@@ -361,7 +401,7 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
 
      **Stage 1 also asks whether the project's own documents agree about what is blocked.** Collect every blocker, dependency, and status claim across `research/outputs/`, `research/STATE.md`, and the decision ledger. **Promoted material only** — a draft in flight is allowed to disagree with the record, that is what drafting is; the contradiction matters once both statements are things the project stands behind.
 
-     **A contradiction is the finding, and it is reported as the pair.** This output says the vendor integration is blocked on a signed contract; that one says it shipped in phase 3. Name both, with their locations. **Do not resolve it** — a status claim is only wrong relative to another status claim, and the plugin has no way to know which document is current. Guessing writes a fact nobody recorded.
+     **A contradiction is the finding, and it is reported as the pair.** This output says the vendor integration is blocked on a signed contract; that one says it shipped in phase 3. Name both **by filename, with a line number where the file has one** — `research/outputs/03-vendor-landscape.md:88`, not "the vendor write-up" or "Phase 1's output". Descriptive naming reads fine in a two-output project and goes blurry in a large corpus, and **C4 requires `file:line` at Tier 2**: a contradiction reported descriptively has to be re-located by hand before the reviewer can act on it, which is work this stage already did. Same for the criteria preflight above — dispose of a criterion by its **SC-id**, not by paraphrasing what it said. **Do not resolve it** — a status claim is only wrong relative to another status claim, and the plugin has no way to know which document is current. Guessing writes a fact nobody recorded.
 
      **A stop, not a block** — the same shape as the stale-reading decision and the standing-assumption question above, which is now this skill's one way of handing a decision back. Say which claims disagree, say the project cannot close on a contradictory status picture without someone saying which holds, and ask. The commissioner answers and closeout proceeds.
 
@@ -719,6 +759,10 @@ Only after the user is done reacting to the debrief, render the transition promp
 ## Output
 
 **Register (read `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md` — this is rule 7 applied to this skill, and it governs the FAIL turn as much as the PASS turn).** The audit's *findings* are the product; the audit's *plumbing* is not. Say the verdict, the findings, what changed in the draft, and what the user has to decide. Say nothing about the pipeline that got you there.
+
+**On a FAIL, the verdict goes first — before any clean count.** Opening with what passed ("38 of 41 claims trace cleanly") and reaching the failure in paragraph three means a reader who stops early leaves believing the draft is sound. Observed on two separate scenarios. The clean figures are real and belong in the turn; they belong *after* the reader knows the draft did not pass. This is the same asymmetry the range rule names: an error here runs toward making the work look better than it is.
+
+**Never tell the user what a re-run will find.** "Re-run it and it should come back clean" pre-judges a verification that has not happened, and if it comes back dirty the promise was the finding. Say what was fixed and what the re-run will check, never how it will turn out.
 
 Backstage, always — never spoken:
 - **Write verification.** Where a step requires verifying a write (machine-parsed files, the waiver's three loci), do it silently. Never say "verified," "confirmed on disk," "all three writes re-read," or "(verified after write)."

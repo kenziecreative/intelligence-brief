@@ -58,6 +58,20 @@
         "check-gaps",
         "init"
       ]
+    },
+    {
+      "name": "stamp_implies_record",
+      "type": "command_exit0",
+      "command": "node \"${PACK_ROOT}/checks/stamp-implies-record.mjs\"",
+      "feeds": "Valve Honesty",
+      "na_for_entries": [
+        "audit",
+        "process-source",
+        "cross-ref",
+        "check-gaps",
+        "review-corpus",
+        "init"
+      ]
     }
   ],
   "content_lint": [

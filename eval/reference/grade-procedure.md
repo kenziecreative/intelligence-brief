@@ -37,7 +37,11 @@ Rules:
    you assume the plugin meant. Mark Source `judge`.
 3. **Use `expected_behavior`.** A `must_include` trait that's absent caps the relevant
    dimension. A `must_not_include` trait that's present, or a `must_not_do` action that
-   occurred, is an automatic fail of its critical dimension.
+   occurred, is an automatic fail of its critical dimension. **"Fail" here means the dimension
+   cannot be scored 3 and the run cannot pass on it — the anchors still set the number.** Do not
+   read it as an automatic 0: a judge who scores the anchor honestly (a 2, say) and one who drops
+   to 0 reach the same verdict by different arithmetic, and the gap shows up later as
+   unexplained variance between scorecards.
 4. **Pass/fail** per the rubric's thresholds — representative: every dimension ≥ 2 and
    criticals = 3; adversarial: every `critical_dimensions` entry = 3, else hard fail.
 
