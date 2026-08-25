@@ -2,6 +2,47 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.16.0] — 2026-08-24
+
+**W6c/6e/6f — a recommendation has to be usable, not just supported.**
+
+The plugin has always checked whether a conclusion is *supported* — traced to its sources, matched
+against the brief. It never asked whether a recommendation is **actionable and refutable**. Three
+checks close that, and they were built together because they share a subject and none of them had a
+home: separately they would have been three near-identical passes over the same sentences.
+
+**A recommendation names what would show it wrong.** Something that, if observed, would mean not to
+follow it — and whether anything planned could produce that observation. **A refutation that would
+survive any observation fails as vacuous**, which matters more than it sounds: "further research may
+refine this" is not a rare edge case, it is what fluent writing produces when asked this question.
+The test is whether a reader could tell what would have to happen for the recommendation to be
+wrong.
+
+**And a recommendation nothing observable could refute passes — when it says so.** A compliance
+requirement is not a falsifiable proposition. Saying that plainly is a real answer, and an audit
+that punished it would teach the next draft to invent a vacuous refutation instead of stating an
+honest one. Verified: across three samples the audit accepted the honest exit, named why, and
+declined to author a replacement refutation — *"that's not mine to invent on your behalf."*
+
+**A recommendation's prerequisites are disclosed where the recommendation is made.** If it rests on
+a decision nobody has taken or a dependency nobody has built, that belongs in the sentence a reader
+acts on — not in a limitations section they may never reach. This is judged on **position, not
+presence**: the buried disclosure is the defect, not a partial fix.
+
+**Closeout refuses to close on a corpus that contradicts itself.** Every status and blocker claim
+across promoted outputs, STATE, and the decision ledger is collected and compared. A contradiction
+is reported **as a pair, with both locations, unresolved** — the plugin cannot know which document
+is current, and guessing would write a fact nobody recorded. A stop, not a block: say which is
+current and closeout proceeds. Verified against the case that makes it necessary — every completion
+criterion genuinely met, both phase outputs individually passing their own audits, and the
+contradiction existing only *between* them, where nothing before closeout could see it.
+
+All three use the corpus reviewer's own vocabulary (C4, C5, C6), so the end-of-project review reads
+the record rather than rebuilding it — and C4/C5/C6 each now carry the instruction to **check that
+record rather than trust it**.
+
+**31 goldens**, up from 27.
+
 ## [1.15.0] — 2026-08-24
 
 **W4 — someone has to have looked for evidence against it, whatever kind of research this is.**

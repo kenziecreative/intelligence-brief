@@ -81,6 +81,10 @@ the skill forgot to tidy, which is precisely the defect being measured.
 | Disconfirmation is required of every research type, not just the two with the tags | summarize pre-check 5 | `adv-disconfirmation-untyped-fires` | ✓ |
 | A claim nothing available could refute takes the honest exit; an ordinary figure beside it takes the search record instead | summarize pre-check 5 | `adv-disconfirmation-honest-exit` | ✓ |
 | A credible disputing source already on file satisfies the gate quietly, with no tag and no search demanded | summarize pre-check 5 | `rep-disconfirmation-challenger-present` | ✓ |
+| A recommendation's refutation must name something that could occur — a sentence surviving any observation is rejected as vacuous | audit B18 | `adv-recommendation-vacuous-refutation` | ✓ |
+| A prerequisite is judged on position: disclosed at the claim site, not buried in limitations | audit B18 | `adv-recommendation-prerequisite-buried` | ✓ |
+| A recommendation nothing observable could refute passes when it says so, and no refutation is invented for it | audit B18 | `adv-recommendation-unfalsifiable-honest` | ✓ |
+| Closeout refuses to close on a self-contradicting status picture even when every completion criterion is met | audit closeout | `adv-status-contradiction-closeout` | ✓ |
 
 Both `file_unchanged` gates need the orchestrator to stage `_seed/<file>` from the
 scenario's setup **after** the run; a missing baseline fails loudly rather than skipping.
