@@ -4,6 +4,11 @@ This explains what the Researcher plugin does, how it does it, and what it adds 
 tool you are already running it in. It is written to be read start to finish by someone who
 wants to understand the system, not to be searched by someone who already does.
 
+Two sections are useful even if you never run the plugin. **The idea underneath this** covers
+what an agent harness and an agent loop actually are, since researcher is a worked example of
+both. **Two shapes of agent** sets it against a productized system like the Hello Alice AI
+Advisor, and works out what actually differs between them.
+
 If you maintain the plugin and need exact write-ownership, the current status of every known
 limit, or the version each piece landed in, that lives in
 [MAINTAINERS.md](MAINTAINERS.md). This document stays clear of all of it.
@@ -37,6 +42,33 @@ That last phrase is the whole point, so it is worth stating on its own:
 > The test for whether you can safely delegate work to an AI is not "can it do this?" It is
 > **"can I verify the result without redoing the work?"** Everything in this plugin exists to
 > make the answer yes.
+
+### The agent loop
+
+The other half of what a harness provides is a loop. The word sounds technical and the thing it
+describes is not:
+
+1. Take in a goal.
+2. Decide what to do next.
+3. Do it, usually by using a tool.
+4. Look at what happened.
+5. Decide whether to keep going, change course, ask for help, or stop.
+
+Then repeat. That cycle is the difference between an agent and a chat response. Ask a chat
+window to prepare a competitive brief and you get one answer from what the model already knows.
+An agent in a harness can search, open the strongest pages, compare them, take notes, notice
+what is missing, draft, and come back to you with a question before it goes further.
+
+**The loop does not make any of that trustworthy.** It only gives the system a way to do
+multi-step work instead of producing one answer and stopping. Whether the work is any good
+depends entirely on what surrounds the loop: the context it can see, the tools it can reach,
+the rules it follows, and the points where a person checks it. That is the rest of this
+document.
+
+One distinction worth getting straight early, because it is easy to conflate. **researcher's
+five-step cycle is not the loop.** The loop belongs to Claude Code or Cowork and it turns many
+times inside a single step. The five-step cycle is a fixed itinerary laid over the top of it, so
+that a loop which could go anywhere goes somewhere specific and checkable instead.
 
 ---
 
@@ -541,6 +573,66 @@ is the only path both surfaces can run.
 
 **Cowork gates file deletion per folder.** Approve the prompt once, or anything that needs to
 remove a file will fail.
+
+---
+
+## Two shapes of agent, and where the person sits
+
+researcher is one shape of built agent. It is not the only one, and the contrast is worth
+drawing, because the choice between them is usually made by accident.
+
+Set researcher beside a productized agent like the Hello Alice AI Advisor. That system runs a
+guided session with a business owner: a named advisor works through a structured conversation
+about their business. What drives it is a **playbook config**, a single JSON file validated
+against a schema engineering owns, stored in White Rabbit and executed by alice-ai's LangGraph
+runtime. The people who shape its behavior do so by authoring that config, chiefly through the
+system prompt override and the input and output contracts the schema leaves open.
+
+Both are agents. Both have a loop, tools, context, rules, and a quality bar. The architectural
+difference is one thing, and everything else follows from it:
+
+> **Where does the responsible person sit relative to the loop?**
+
+**In researcher, the person is inside the loop.** You are at the keyboard while it runs. It can
+stop eight enumerated times and hand you the wheel mid-run, because you are there to take it.
+The judgment stays yours at the moment it is needed.
+
+**In the advisor, the responsible person is upstream of the loop.** The human in the session is
+the customer being served, not the operator. You cannot pause a guided session to ask a small
+business owner to adjudicate a source contradiction. They came for advice about their business.
+So every judgment call has to be settled in advance, encoded in the config, and frozen before
+anyone runs it.
+
+That single difference propagates through the whole design.
+
+| | Plugin shape (researcher) | Product shape (the AI Advisor) |
+|---|---|---|
+| **Who owns the base harness** | Somebody else's. Claude Code and Cowork supply the loop, tools, and permissions. | Built in-house. The team owns the runtime as well as the behavior. |
+| **Who is in the session** | The operator, who is also accountable for the output | A customer, who is the person being served |
+| **When judgment is encoded** | At runtime, interactively, at the moment it is needed | At authoring time, then frozen |
+| **What you author** | Skills, reference guides, hooks, and templates in markdown, versioned as a plugin | One JSON file against a schema you do not own |
+| **How reach is granted** | Broad. Web search, the file system, scripts, whatever the surface allows. | Narrow and curated. Registered context sources only, with a rule against inventing anything outside them. |
+| **What the permission surface is** | Real. Tool approvals, a hook that blocks writes, an eight-item stop list. | None the customer sees. The constraints live in the prompt and the schema. |
+| **How a failure reaches you** | You watch it happen | You find it in a transcript afterward |
+
+Neither is the better architecture. They answer different questions. A plugin is right when the
+person running it is the person accountable for the result, and it buys you the ability to stop
+and ask. A product is right when the person running it is a customer, and the price is that
+every call has to be made before anyone shows up.
+
+**The thing they converge on is worth noticing.** Both refuse to make the final judgment, and
+both say so explicitly. researcher's stop list ends at promotion to `outputs/`, because that is
+the irreversible one. The advisor's grading rubric never scores whether a recommendation was
+*correct*, because that is the owner's call and not the prompt's. Two very different systems,
+built by different people for different users, drew the same line in the same place. That line
+is not a limitation of either architecture. It is the thing both were built to protect.
+
+**One clarification, because the shorthand misleads.** This is not a difference between
+organizations or repositories. Hello Alice's own marketplace carries plenty of plugin-shaped
+agents built exactly like researcher, with the same structure and the same stop-and-ask
+behavior. The distinction here is between two shapes an agent can take, and the question that
+picks between them is always the same: **when this thing hits a judgment call, is the person who
+should make it going to be in the room?**
 
 ---
 
