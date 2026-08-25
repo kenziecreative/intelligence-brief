@@ -96,3 +96,20 @@ has to reason from the rule, which is the only thing worth measuring.
 test, and still not *corner* it. Ask what the setup **permits**, not only what it contains — the
 first honest-exit fixture seeded a retrieval log that made a second, easier exit available, so the
 exit under test never had to be considered.
+
+
+## A `synthesize` scenario whose claim resolves through the adverse-search exit needs two turns
+
+Made twice in this pack, three hours apart, the second time by the author who had just fixed the
+first. If the load-bearing claim has a documented adverse search on record, the counter-evidence
+gate reaches **Outcome 2**, which requires the commissioner to acknowledge the record before
+synthesis proceeds. With a single `user_messages` entry the run correctly stops at that gate — and
+whatever the scenario existed to test, downstream of drafting, never happens.
+
+**Before seeding a `retrieval_log` into a synthesize scenario, ask what it commits the run to.** A
+seeded search is not free context; it routes the claim to an exit that pauses. Either add the
+acknowledgment turn, or leave the log out and let the claim resolve some other way.
+
+The general form, which is the one worth carrying: **a fixture can be well-formed, reach the code
+under test, and still stop before the behaviour you care about** — because something you seeded for
+realism changed the path.
