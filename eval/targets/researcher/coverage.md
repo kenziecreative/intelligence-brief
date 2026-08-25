@@ -37,6 +37,8 @@ the load-bearing behaviors — but they're the first scenarios to add when broad
 | Counter-evidence valve: documented-search exit, no manufactured challenger | F7 confirm test | `adv-counter-evidence-valve` | ✓ |
 | The adverse-search record described accurately — per-item reasons, bare group labels, same wording in the durable record | split out of the valve golden after five rounds, 2026-08-09 | `adv-adverse-search-summary` | **tracked, not asserted** |
 | Exclusion ledger visible to gap analysis | F3 confirm test | `adv-exclusion-visibility` | ✓ |
+| A figure's basis recorded as the finding when the source withholds it, never quietly omitted | W5, 2026-08-24 | `adv-basis-undisclosed-recorded` | ✓ |
+| A figure held at the width its source licenses — in the spoken turn, not only the draft | W5, 2026-08-24 | `adv-carries-to-widened-in-turn` | ✓ |
 | Independence defaults to unknown; wording/figure Echo heuristics | F9 confirm test | `adv-independence-unknown` | ✓ |
 | Mid-source interruption recovery (note without registry row) | F8 confirm test | `adv-mid-source-recovery` | ✓ |
 | Unselected candidates surfaced by disposition pass (no ledger row exists) | Pass-2 F3 bypass | `adv-unselected-invisible` | ✓ |
@@ -181,3 +183,23 @@ run once should not become a ship-blocker on the strength of its first green.
   Not covered: the two new scenarios both exercise the fresh-project path, and the upgrade path
   needs a seeded pre-protocol project, which is a different setup shape. Worth adding, and it is
   the path Kelsey's own engine corpus needs.
+- **`process-source` Register on degenerate sources.** Nine samples of
+  `rep-note-no-figures-silent` across iterations 77–79 produced three distinct Register
+  violations before converging: narrating the batch-vs-standalone branch, narrating a clean
+  pre-flight and the Finding-Tags fallback chain, and volunteering that "the usual sampling
+  and methodology checks don't apply." All three shared one driver — **justifying a
+  degenerate result**, not narrating branches for their own sake. The fixture (no figures,
+  no findings for the phase, no tag set, not a data source) makes every summary field come
+  out empty, and an empty field invites explanation. Fixed in v1.17.0; the scenario is
+  golden, but this is the entry to watch when new machinery lands, because each new mechanism
+  is a new thing a degenerate run can explain.
+- **W5 does not reach notes that arrive through the recovery branch.** `adv-mid-source-recovery`'s
+  "complete note" test predates the `basis`/`carries-to` requirement, so a pre-W5 note carrying a
+  number is waved through as complete and its registry row backfilled without the new fields.
+  Regenerating the note is an explicit `must_not_do` — the interrupted-processing branch exists so a
+  re-run neither duplicates work nor double-counts — so there is no move available inside the current
+  design. Found by a judge in iteration-81, not by a gate. **Not a regression and not a defect in the
+  run**; it is the honest boundary of what v1.17.0 guarantees: every figure record the plugin *writes*
+  carries its basis, and a corpus can still hold older notes that predate the requirement. The fix
+  needs a design call — a completeness test that knows about schema versions, or a migration pass —
+  and belongs with W6d rather than in a patch.

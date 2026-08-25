@@ -2,6 +2,48 @@
 
 Notable changes to the Researcher plugin. As of v1.3.0 it ships from the Kenzie Creative marketplace as `researcher`; prior versions shipped as a standalone clone-and-use repo named `research-agent`. This changelog starts at v1.3.0 (the first marketplace release); pre-marketplace milestones lived in the source repo's planning artifacts rather than a published changelog.
 
+## [1.17.0] — 2026-08-24
+
+**W5 — a figure carries the population it was measured on.**
+
+A number is only as wide as what it was measured against, and that width is the first thing lost
+when a figure moves from a source into a draft. "4.2% spoilage across one carrier's nine eastern
+depots over a summer quarter" becomes "regional operators see 4.2%" in a single retelling, and
+nothing in the record marks the moment it widened. This release makes the width part of the figure.
+
+**Two new fields on every figure record.** `basis` records what the number was measured on —
+sample, method, population, when it was fielded. `carries-to` records how far the source itself
+licenses it to travel. Both are recorded from the source's own words, and when a source withholds
+its methodology, **the withholding is the finding**: `basis` says so plainly rather than leaving the
+field off, because an omitted field reads as an unasked question rather than a refused answer.
+
+**The turn is bound as tightly as the draft.** The earlier failure was never that a draft got a
+figure wrong — it was that the draft stayed accurate while the spoken turn quietly widened. A
+`carries-to` now binds both surfaces, so the sentence said aloud has to hold the same population the
+record does.
+
+**Restraint is half the check.** A figure whose source generalises it — an industry panel extending
+its own sample to the sector — travels at the width the source claims, attributed as the source's
+leap rather than the analysis's. A check that flags every figure is as useless as one that flags
+none, and a lopsided-corroboration caveat must not collapse into a population hedge: "not
+independently corroborated" and "only true of the 34 measured" are different statements.
+
+**A degenerate source stays silent.** Notes with no figures skip the integrity pass without
+mentioning it. That sounds trivial and was not: nine samples produced three distinct ways of
+narrating machinery — announcing which branch the skill took, reporting a clean pre-flight, and
+volunteering that "the usual sampling and methodology checks don't apply." All three came from one
+impulse, **justifying a degenerate result**. An empty field looks like an error, so a run explains
+it. The Output rule now leads with the principle — the reader gets the pipeline's result, never its
+reasoning about itself — and treats its list of examples as illustrations rather than a boundary,
+because an enumeration of today's mechanisms silently exempts tomorrow's.
+
+One boundary worth stating plainly: this covers every figure record the plugin **writes**. A note
+that predates the requirement and arrives through the interrupted-processing branch is backfilled
+as-is — that branch is forbidden to regenerate a note, which is what stops a resumed run from
+duplicating work or double-counting. Older notes in an existing corpus keep whatever they had.
+
+Four scenarios added to the golden set (31 → 35).
+
 ## [1.16.0] — 2026-08-24
 
 **W6c/6e/6f — a recommendation has to be usable, not just supported.**

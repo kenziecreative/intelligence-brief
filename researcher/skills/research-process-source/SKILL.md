@@ -148,7 +148,7 @@ The user will provide a URL, file path, or pasted content.
 | Processing a file from source-material/ without updating the digest | When the source path begins with `source-material/`, after writing the note, update `research/source-material-digest.md` with the file's contents (add to Files Read table, append new entities/dates/credentials/facts/assumptions). The digest is the reconciliation anchor for `/research-start-phase` — drift produces false blockers or misses real drops. |
 | Silently skipping blocked or paywalled sources | Never decide on your own to skip a source you can't access. Present the access failure to the user with options: they provide the content, explicitly skip it, or offer an alternative URL. The user decides, not the agent. |
 | Sticky fallback — using a lower tier for all sources after one failure | Fallbacks are per-source, not per-session. Always start from the highest available tier (per step 1 pre-flight) on every source. A runtime failure on one URL (timeout, 403, API error) does not mean that tier won't work on the next. Reset to the highest available tier on every new source. But if step 1 confirmed a tier is missing (binary not installed), skip it for all sources — don't retry a missing binary. |
-| Assuming "command not found" means "not installed" | The harness shell has a different PATH than your terminal. Step 1's diagnostic distinguishes "not on PATH" from "not installed." If a binary exists on disk but isn't callable, tell the user which directory to add to settings.json env.PATH — don't silently degrade for the whole session. |
+| Assuming "command not found" means "not installed" | The harness shell has a different PATH than your terminal. Step 1's diagnostic distinguishes "not on PATH" from "not installed." If a binary exists on disk but isn't callable, tell the user which directory to add to settings.json env.PATH — don't silently degrade for the whole session. That disclosure fires **only on a failure**: a tier that works is not news, and a clean pre-flight is never spoken ("Tool check: tvly ✓, npx ✓" is exactly the pre-check narration the Output section forbids). |
 | Silently resolving contradictions within a source | When a source contains contradictory figures for the same metric, flag both values. Do not pick the one that fits the narrative. |
 | Missing origin chain — not recording whether a source is primary or secondary | Every source note must include an origin chain field. If the source's originality status is unclear from the content, record "Origin unclear — could not determine from extracted content" rather than omitting the field. Downstream, an unclear origin means independence is UNKNOWN, not assumed — cross-ref and check-gaps will not count the source as independent corroboration until its origin is established. |
 | Undefined recovery state after a mid-source interruption | The duplicate pre-check covers all four states: registry+note (user choice), registry+missing-note (re-process), note-without-registry (backfill the registry row from the note and update counters — do not re-fetch), and neither (proceed normally). A session dying between the note write and the registry write is expected, not exceptional — the backfill branch exists so the re-run neither duplicates work nor double-counts. |
@@ -157,13 +157,33 @@ The user will provide a URL, file path, or pasted content.
 
 ## Output
 
-**Register (read `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md` — this is rule 7 applied to this skill).** Report what the source *says* and how much weight it carries. The pipeline is silent: no pre-check narration, no registry parse, no counter arithmetic ("Total count 4 → 5"), no threshold status, no write verification. The counters below are the summary block's fields, not sentences to speak.
+**Register (read `${CLAUDE_PLUGIN_ROOT}/reference/posture-register.md` — this is rule 7 applied to this skill).** Report what the source *says* and how much weight it carries. **The pipeline is silent — the reader gets its result, never its reasoning about itself.** That covers every step below: no pre-check narration, no registry parse, no counter arithmetic ("Total count 4 → 5"), no threshold status, no write verification, and no announcing which branch you took or why ("this source was standalone, so the transition block renders below"). The batch-vs-standalone decision two paragraphs down is addressed to you, not to the user: they see a status line or a transition block, and the shape already tells them which. Treat that list as examples of the rule, not its boundary — a mechanism it does not happen to name is still silent. The counters below are the summary block's fields, not sentences to speak.
 
 **Source:** [title]
 **Credibility:** [tier]
 **Key findings:** [N] findings tagged for Phase [N]
 **Contradictions:** [N found / none]
 **Sources since last cross-ref:** [N]/5
+
+**When a field comes out empty, say what it means — never how you got there.** An empty
+field looks like an error, and the pull is to explain it. Explain the *consequence*, which
+the user needs, and not the *route*, which is machinery. "No findings speak to Phase 2 —
+this is an administrative notice, not spoilage data" is the read. "None tagged, since
+CLAUDE.md has no Finding Tags section and no `research-type` field to fall back through to
+a type template" is the fallback chain read aloud: it names steps the user has no use for
+and cannot act on. If a degenerate result means the *project* is missing something the user
+should fix, say that plainly as its own sentence — "this project has no tag set defined
+yet, so findings aren't being tagged to phases" — which is a fact about their setup, not a
+trace of which branch you took to discover it.
+
+**A check that didn't apply is not a thing to mention.** The same pull produces the
+mirror error on fields that aren't empty: justifying why some assessment *wasn't* relevant.
+"Not a data source, so the usual sampling and methodology checks don't apply" reads as
+diligence and is machinery — it tells the user a routine exists and was bypassed, which is
+the pipeline describing itself. Assess the source on what it *is*: "High for the
+administrative fact — it's the regulator speaking about its own authority" is complete.
+Nothing is owed about the criteria that went unused, and "the usual" is a tell that you are
+about to name one.
 
 **Then: are you mid-batch, or was this a standalone source?** This decides whether you stop.
 

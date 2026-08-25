@@ -152,8 +152,13 @@ convergence build).
   recommendation — step 7a requires it to carry its refutation and prerequisites)**, Search-Record Fidelity (when the scenario seeds a retrieval
   log the run must characterize), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
   two real-person types), State Integrity, Register, No-Tics, Clarity.
-- `process-source` runs score: Recovery, Record-Never-Restrict (skip-ledger cases), State
-  Integrity, Register, No-Tics, Clarity.
+- `process-source` runs score: Recovery, Record-Never-Restrict (skip-ledger cases),
+  **Referent Fidelity (when the run *writes* a figure record — the note's `basis` and
+  `carries-to` fields and the spoken turn must both hold the figure at the width its source
+  licenses). Keyed on what the run writes, not on what the source contains: the recovery
+  branch is forbidden to rewrite an existing note, so a seeded note's figures give the
+  dimension no surface and it is n/a**,
+  State Integrity, Register, No-Tics, Clarity.
 - `cross-ref` runs score: Independence Discipline, Record-Never-Restrict (exclusion
   visibility), State Integrity, Register, No-Tics, Clarity.
 - `init` runs score: Intake Discipline, Scaffold Honesty, Register, No-Tics, Clarity. Everything else is n/a — no corpus exists yet, which is the point of the entry.
