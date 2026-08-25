@@ -1,136 +1,129 @@
 # Stream: researcher
 
-**Status:** live, nothing red. **v1.14.0 released** — committed, tagged `researcher-v1.14.0`, pushed.
-Tree clean, nothing unpushed. The tag and `main` now agree for the first time since v1.13.0.
-**24 of 29 eval scenarios are goldens.** Six of nine workstreams' worth of seams closed —
-W1, W2, W3, W7 done; W4 designed but not built.
+**Status:** live, nothing red. **Three releases this session — v1.14.0, v1.15.0, v1.16.0** — all
+committed, tagged, pushed. Tree clean, `main` and the newest tag agree, nothing unreleased.
+**31 of 36 eval scenarios are goldens.** Every workstream is done except **W5** (designed, forks
+open) and **W6d** (deliberately undesigned).
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
 **Last touched:** 2026-08-24
 
 ## Where it stands
 
-Full history: [researcher/CHANGELOG.md](../../researcher/CHANGELOG.md). Architecture and seam status:
-[dev/researcher/ARCHITECTURE.md](../researcher/ARCHITECTURE.md). Program view + the plain-language
-W1–W7 legend: `~/.claude/plans/shimmying-sauteeing-storm.md` (local, not in-repo) — read the legend,
-the W-numbers are discovery order and a second "Seam 0–5" scheme runs alongside them.
+Full history: [researcher/CHANGELOG.md](../../researcher/CHANGELOG.md). Architecture and seam
+status: [dev/researcher/ARCHITECTURE.md](../researcher/ARCHITECTURE.md). Program view and the
+plain-language W1–W7 legend: `~/.claude/plans/shimmying-sauteeing-storm.md` (local, not in-repo) —
+its Program status block was brought current this session and is now trustworthy.
 
 | Workstream | State |
 |---|---|
-| W7 · /upskill · W6a+W6b · W2 · W1 · W3 | **done** — v1.8.0 through v1.13.0 |
-| Eval harness debt | **closed** |
-| **v1.14.0 — the stale-reading stop, Evidence Against ranking** | **done, this session** |
-| **W4 — disconfirmation (Seam 4)** | **designed, not built** — [w4-design.md](../researcher/w4-design.md), four author forks OPEN |
-| W5, W6c–f | not started |
+| W7 · /upskill · W6a+W6b · W2 · W1 · W3 | done — v1.8.0 → v1.13.0 |
+| **v1.14.0 — the stale-reading stop** | done, this session |
+| **W4 — disconfirmation (Seam 4)** | **done, v1.15.0** — Seam 4 closed |
+| **W6c/6e/6f — recommendation serviceability** | **done, v1.16.0** |
+| **W5 — quantitative reasoning** | **designed, fork settled, NOT built** — [w5-design.md](../researcher/w5-design.md), four forks open |
+| **W6d — instrument validity** | **not designed, deliberately** — see below |
 
-**Eval standing.** 29 scenarios, 24 golden, **6 active gates** (down from 7 — see below). Five
-tracked-not-golden: `rep-audit-clean-pass`, `rep-synthesize-methodology`, `adv-adverse-search-summary`,
+Five scenarios remain tracked rather than golden: `rep-audit-clean-pass`,
+`rep-synthesize-methodology`, `adv-adverse-search-summary`,
 `adv-init-guard-refuses-existing-project`, `adv-init-upgrade-invalid-pieces`.
 
 ## Done this session
 
-**v1.14.0 shipped**, `924f378`, tagged and pushed. It began as a v1.13.1 patch to release eight
-fixes that had been sitting on `main`; the sweep meant to verify them found three real defects, and
-one of them needed a behaviour change (Kelsey's call), which made it a minor.
-
-- **The gap check stops and asks.** When the saturation reading is unavailable and coverage looks
-  adequate, it no longer discloses-then-drafts. It presents what is known, both routes, and a
-  recommendation, then stops. **Stop Decision 1 → 3/3.**
-- **Counter-evidence can no longer fall off `gaps.md`'s priority list**, and now outranks thin
-  coverage there. Verified 3/3, ranked #1.
-- **Two disclosures now reach the durable record**, not just the spoken turn.
-- **Eight earlier fixes released** (six of them `/research-init`).
-- **Two eval fixtures repaired** that expected a PASS while seeding a draft the skill must reject.
-- **`claim_graph_source_count` retired** — it was mine and it was wrong twice.
+- **v1.14.0** — the gap check stops and asks instead of deciding for you when the saturation reading
+  is unavailable; counter-evidence can no longer fall off `gaps.md`'s priority list; eight held
+  fixes released.
+- **v1.15.0 (W4)** — the counter-evidence gate keys on the **claim**, not the research type. Nine of
+  eleven types previously had no disconfirmation requirement at all. Three dispositions including an
+  honest not-disconfirmable exit. The assumption loop closes: `Status` gains four values, a break
+  propagates as a ledger `correction`, closeout asks whether a conclusion rests on a still-`Open`
+  assumption. Seam 4 closed.
+- **v1.16.0 (W6c/6e/6f)** — a recommendation names what would show it wrong (vacuous refutations
+  rejected), discloses prerequisites **at the claim site**, and closeout refuses to close on a
+  self-contradicting status picture. One battery item (B18) + a `Recommendation Serviceability`
+  rubric dimension.
+- **W5's fork settled** and the standing family question with it (below).
+- **Pronouns are a sourced fact** — Person Research and Customer Safari default to they/them unless
+  a source records the person's own usage; the audit battery enforces it as `Identity assertion`.
+- **`claim_graph_source_count` retired**; `na_when` added to the gate engine; `lint-scenarios.mjs`
+  added.
 
 ## In flight / uncommitted
 
-None. Tree clean, tag pushed. Two follow-ups were **deliberately not taken** before the tag and are
-Next Steps 1–2 below.
+None. Tree clean, three tags pushed.
 
 ## Next steps (in order)
 
-1. **One-line Clarity fix in check-gaps 7d, route 2.** A run said "treating the **current** reading
-   as a stated limitation" two sentences after establishing the reading is *not* current. `gaps.md`
-   has clean wording; the turn is what gets remembered. Held only because editing again would have
-   invalidated the 3× verification the tag rests on. Fix, then re-run `adv-saturation-stale-record`
-   3× to confirm Stop Decision stays 3.
-2. **The shared-figure independence heuristic — a real design gap, five judges across three
-   iterations.** In `adv-saturation-stale-record`, a fleet legal review's "65–70% cluster" exactly
-   reproduces OEM A's 70% and OEM B's 65%, and its origin is counsel's own reading of nine warranty
-   contracts that plausibly include both. Runs report "three independent sources" and
-   `Independence unverified: 0`. `research-check-gaps` step 5 groups by `origin_chain` and has **no**
-   figure-match check, so a derived source that restates its inputs reads as independent. Needs design
-   (when does a repeated/bracketing figure demote independence?), not a wording patch.
-3. **Decide W4's four author forks, then build W4.** Design is complete with a recommendation on each:
-   [dev/researcher/w4-design.md](../researcher/w4-design.md) § Author forks. It also corrects the
-   plan's entry: `assumptions.md` *is* read by `start-phase` step 5a — what is missing is the *close*.
-4. **3× and promote the two tracked init scenarios** (`adv-init-guard-refuses-existing-project`,
-   `adv-init-upgrade-invalid-pieces`), each passing at 1×. One green is not a promotion.
-5. **Promote `adv-adverse-search-summary` at 3/3.**
-6. **W5** (quantitative reasoning + specialist-bench roles fork) and **W6c–f**.
-7. **Re-seed `adv-exclusion-visibility` onto a different corpus.** It shares the SecureStack corpus
-   with the skill's own worked example, so part of its green measures transcription rather than
-   behaviour — the same defect posture rule 8 had.
+1. **Build W5.** Design complete with four forks, each carrying a recommendation:
+   [dev/researcher/w5-design.md](../researcher/w5-design.md). The defect is **positional, not
+   analytical** — `source-assessment-guide.md` §2/§4 already carry the criteria, they are read at
+   assessment time and dropped, and integrity runs on drafts and never on notes. The mechanism
+   extends W1's existing figure record with `basis` and `carries-to` rather than adding a parallel
+   quantitative block.
+2. **Design W6d (instrument validity)** — the last unbuilt check, and the only one with no design.
+   **C7 is scoped to "ONLY these named patterns", which is the corpus reviewer's own author
+   conceding that unbounded study-design critique did not work even at Tier 2 with a whole corpus in
+   view.** A Tier-1 version has less context and more chances to fire, so it needs its own decision
+   about which patterns are worth checking at synthesis time. Do not bundle it with anything.
+3. **3× and promote the two tracked init scenarios**, each passing at 1×.
+4. **Promote `adv-adverse-search-summary` at 3/3.**
+5. **Carried findings** — none blocking, recorded in `_eval/iteration-74/scores.md` and
+   `iteration-68/scores.md`. Cheapest first: the v1.14.0 Clarity fix in check-gaps 7d route 2; the
+   "stamped" vocabulary leak; a FAIL audit opening with clean figures (seen on two scenarios);
+   closeout naming documents descriptively rather than by filename (C4 wants `file:line` at Tier 2);
+   range drift with a **direction** (three instances, compressing toward the favourable end — the
+   skill already names this tendency in exactly one place, the adverse-search summary, and the fix
+   is moving that sentence up rather than writing a new rule); the shared-figure independence gap
+   (five judges, three iterations).
 
 ## Open questions / decisions pending
 
-- **W4's four forks** — needs Kelsey, or "go with your recommendation."
+- **W5's four author forks** — needs Kelsey, or "go with your recommendation."
 - **Kelsey's engine corpus: 8 open material findings** from the W7 live proof.
   `/research-init upgrade` then `/research-review-corpus final` in that repo.
-- **Should `source_count` be renamed or re-scoped?** It sits in a *per-claim* node holding a
-  *per-section* value, and an audit report's own tier line already misread it as per-claim.
-  `section_source_count` is the cheap fix; making it per-claim is better but changes what
-  `research-graph-analysis`'s `source_count == 1` filters mean.
-- Whether B13's four-element supersession route should sanction a **short-form second statement**.
+- **Should `source_count` be renamed or re-scoped?** It sits in a per-claim node holding a
+  per-section value, and an audit's own tier line already misread it as per-claim.
+- Whether B13's supersession route should sanction a **short-form second statement**.
 
 ## Session knowledge worth keeping
 
-- **3× sampling earned itself a fourth time, and the sharpest instance yet.** The first version of
-  the stop-and-ask branch passed two samples and scored **0** on the third. Structure was right on all
-  three; one run declared the question unanswerable and then recommended drafting because re-running
-  was "unlikely to change an already-solid picture" — answering the question it had just declared
-  unanswerable, as the *sole* reason for its recommendation. **The defect was in wording written an
-  hour earlier to fix a different defect.**
-- **The general shape: asking for a recommendation invites predicting the unknown.** Whenever a step
-  says "recommend, then stop", check what the cheapest available reason is. If the cheapest reason is
-  a forecast about the thing the step exists because you cannot forecast, name that move and give it
-  a test. The test that worked: *if your reason would let a reader skip the check on the grounds that
-  it probably would not matter, it is the forbidden move.* Same family as the post-decision
-  re-argument test ("if a clause would still work as an argument for the other side, it is one").
-- **Seventh and eighth instances of: a requirement stated for one surface does not bind the other.**
-  Both this session's check-gaps defects were "the turn was right, the record was wrong", and both
-  runs followed their instruction exactly. When writing a disclosure requirement, name every surface
-  in the same sentence — `check-gaps` step 7c already had the idiom ("binds two surfaces and each
-  carries it in full") two steps below the step that lacked it.
-- **A rule can be right and still be reached from only one side.** Evidence Against had a single
-  conditional bucket in the priority list while every other status had a non-imminent route; the
-  list's own rule 4 had already written the argument for why that fails and never generalised it.
-- **Four eval fixtures expected a PASS while seeding a draft the skill is obliged to reject** (missing
-  sampling disclosure; "verified" on a single-source figure). One was on its *second* revision — a
-  2026-08-06 fix aligned one qualifier and left an identical construction elsewhere, exactly what the
-  plugin's own B12 regression sweep catches and the eval pack has no equivalent of. **Candidate pack
-  work:** check a promotion-expecting scenario's seeded draft against the target's terminal fail
-  conditions before admitting it. Deliberately not built as a gate — it would encode the skill's rules
-  and drift, which is the mistake `claim_graph_source_count` made.
-- **Judges can reason wrongly in a specific, repeatable way:** one cited a later *scripted* user turn
-  as "direct evidence a reader read it as a route." `user_messages` are fixed before the run, so a
-  user turn is a stimulus and never a reaction. **Candidate calibration note for
-  `eval/targets/researcher/briefs/judge.md`.**
-- **Judge convergence is a real signal.** Three judges independently flagged the Evidence Against
-  ranking; five flagged the independence gap. Unprompted agreement across isolated judges has been
-  right every time this session.
-- Two lessons were written into their proper docs rather than here: the pre-staging cost in
-  `.claude/skills/eval-run/SKILL.md` Step 3, and the gate-invariant rule in
-  `eval/reference/target-pack-spec.md`.
-- **Iterations 57–61 exist only in this checkout** (`eval/**/_eval/` is gitignored; ~40 MB). The
-  committed record is the CHANGELOG, `iteration-59/scores.md`, `iteration-61/scores.md`, and
-  `iteration-57/_scenarios/{_findings,_ledger,_contamination}.md`.
+- **THE decision of record: significance and disconfirmation stay INLINE unless a seam proves
+  otherwise.** Kelsey settled W5's fork as (b) — strengthen the note schema and integrity agent, no
+  data-analyst specialist. Two proofs: W4 shipped disconfirmation inline and holds at 3/3, and
+  Codex's advice to wire integrity where `init` already promises it runs. **The specialist is
+  deferred with a condition, not rejected** — if the note fields exist and inline assessment still
+  misses what matters, that is evidence, and evidence buys the role.
+- **Once a verification pass starts, the skill freezes until it finishes.** Broken twice this
+  session; each time the samples became uncertifiable and had to be re-run. Stamp the commit and the
+  file hashes when the pass starts.
+- **The runner tells you what happened; the judge tells you whether it mattered.** Re-seeding a
+  fixture off a runner's report before its judge lands caused one round of thrashing — the runner
+  reported a FAIL, but the check under test had come back clean.
+- **Three passes returned green on W4's scenarios and all three measured the wrong thing** — one
+  against a rubric with no anchor for the expected outcome, two against a fixture matching the
+  skill's own example. **The passes that failed are what made the eventual greens worth having.**
+- **Eleven fixture defects this session, all one shape: the fixture could not let a correct run
+  finish.** Missing setup keys, an over-application trap with no valid disposition, a missing
+  acknowledgment turn, an incoherent seeded STATE, a claim that was not actually undisconfirmable.
+  **When most samples do the thing the expectation forbids, read the test** — that tell has now been
+  right more often than the alternative.
+- Lessons written into the docs that own them rather than here:
+  `eval/reference/generate-scenarios.md` (the worked-example collision, with all five instances, and
+  the sharper "what does the setup *permit*" test) · `eval/reference/target-pack-spec.md` (a
+  deterministic check may assert only what the target's spec guarantees) ·
+  `.claude/skills/eval-run/SKILL.md` Step 3 (the measured cost of pre-staging `gate-context.json`).
+- **A new dimension needs its applicability registration, not just its anchors.** Adding
+  `Recommendation Serviceability` without updating the rubric's "Applicability by entry" list left
+  judges scoring it by reading the scenario instead of the list — same class as adding a scenario
+  without revisiting gate applicability.
+- **Iterations 57–74 exist only in this checkout** (`eval/**/_eval/` is gitignored, ~47 MB). The
+  committed record is the CHANGELOG, the design docs, and `scores.md` under iterations 59, 61, 66,
+  67, 68, 70, 74.
 - **Contract-hash sync rule** (unchanged): editing `researcher/reference/validate-corpus-review.py`
-  requires regenerating `review-protocol-contract.json` (`protocols.1.validator_sha256`). Battery 74/74.
+  requires regenerating `review-protocol-contract.json` (`protocols.1.validator_sha256`).
 
 ## How to resume
 
 1. Read `AGENTS.md`, then `dev/STATE.md` (index), then this file.
-2. Read `~/.claude/plans/shimmying-sauteeing-storm.md` § Program status + the W1–W7 legend.
-3. Start at Next Step 1 (the held Clarity fix) — it is small, and doing it first clears the only
-   thing knowingly left imperfect in a tagged build.
+2. Read `~/.claude/plans/shimmying-sauteeing-storm.md` § Program status — current as of today.
+3. Start at Next Step 1 (build W5) or 2 (design W6d). Both are self-contained; W5 has a finished
+   design and W6d has a deliberate warning about why it was left alone.

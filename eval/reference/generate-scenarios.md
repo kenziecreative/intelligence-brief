@@ -66,3 +66,33 @@ first. An unexplained gap between a scenario and its siblings is indistinguishab
 The invariant comes from the pack comparing against itself, never from the target's skills — see
 `target-pack-spec.md`, *"A deterministic check may assert only what the target's spec guarantees."*
 A lint that encoded the plugin's own pre-check rules would drift out of sync with the plugin.
+
+
+## Never seed a fixture with wording the skill itself uses as an example
+
+**Five instances in this repo, the most recent written by an author who had recorded the lesson
+four times.** The trap is not ignorance of the rule — it is that the worked example and the fixture
+get drafted in the same sitting, and the phrasing carries across without anyone deciding it should.
+
+When a scenario's seeded text matches an example in the skill under test, a green is ambiguous: the
+run may have applied the rule, or it may have recognised a string. You cannot tell which from the
+capture, and the greens are therefore worth nothing for promotion.
+
+Instances, so the shape is recognisable:
+- `posture-register.md` rule 8 — the worked example *was* the scenario's case, so a green measured
+  transcription. Fixed by deliberately decoupling the example (clinics/escalation policies).
+- `adv-exclusion-visibility` shares the SecureStack corpus with the skill's own worked example; a
+  judge flagged that "the register read is partly supplied by doctrine."
+- W4's Outcome 3 example matched `adv-disconfirmation-honest-exit` almost verbatim — and when the
+  example was decoupled, the scenario **stopped working**, revealing it had never tested anything.
+- `adv-recommendation-vacuous-refutation` seeded "further research may refine this" and "we will
+  continue to monitor", both listed verbatim in B18 as its examples of vacuity.
+
+**Before admitting a scenario, grep the skill it tests for the fixture's distinctive phrases.** If
+one hits, change the fixture — not the skill, whose example is usually the clearer one. Then the run
+has to reason from the rule, which is the only thing worth measuring.
+
+**And the sharper version of the same test:** a fixture can be well-formed, reach the code under
+test, and still not *corner* it. Ask what the setup **permits**, not only what it contains — the
+first honest-exit fixture seeded a retrieval log that made a second, easier exit available, so the
+exit under test never had to be considered.
