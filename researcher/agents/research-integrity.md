@@ -94,10 +94,19 @@ When given a file to review (a source note, a draft, or a synthesis document), p
   "DRIFT WARNING ACTIVE: claim [id] references figure [figure_id]. Expected value: [expected_value], current canonical value: [canonical_value]. The claim has not been re-audited since this figure changed. Run `/research-audit-claims` on the relevant draft to clear or confirm this warning."
 - Drift warnings are advisory — they do not block promotion. Surface them so the human is prompted to act; do not silently pass over nodes with a `drift_warning` field set.
 
+### 10. Quantitative Basis (source notes)
+- **Applies only to source notes carrying at least one figure record.** A note with no figures has nothing here to check; skip it silently and do not report that you skipped it. A step that usually says nothing is a step people learn to ignore.
+- For each figure record, read `basis` and `carries-to` against `measures` and the note's own prose.
+- **`basis` missing entirely** — flag it. The field records what the number was computed from, and **"unknown" is a legitimate value while omission is not**: a recorded "undisclosed sample size" survives into the draft as a fact about the evidence, and a blank field loses it.
+- **The note's prose widens the figure past its `carries-to`** — flag it. This is range narrowing's sibling: not a changed number, a changed *population*. A figure measured on 212 self-selected respondents and discussed in the note as though it described the market has drifted before any draft was written.
+- **`basis` says unknown and the note treats the figure as solid** — flag it. Confidence has to survive contact with the basis; a figure whose methodology nobody disclosed cannot be the note's firmest finding.
+- **`carries-to` restates `measures` verbatim** — that is usually a filled-in field rather than a considered one. Worth a note, not a finding.
+- This check reads what the note claims about its own numbers. It does not judge whether the study was any good — that is a human's call, and the fields exist so a human can make it later.
+
 ## How to Use This Agent
 
 Invoke this agent after:
-- Writing a source note (check for internal inconsistencies)
+- **Writing a source note** — checks 1–7 for internal inconsistencies, plus **check 10** when the note carries figure records. Until v1.16.x this line was a promise nothing kept: no skill invoked the agent after a note was written, so every quantitative check ran for the first time on a draft, three steps downstream of the material it was checking.
 - Writing a draft via `/research-summarize-section` (check everything before running `/research-audit-claims`)
 - Writing a synthesis document (check everything, especially cross-phase drift)
 - `/research-init` generates a research plan when `source-material/` contained files (pass BOTH the plan path and the digest path so check 8 runs)

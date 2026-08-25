@@ -357,7 +357,26 @@ blind spots; those are noted.
   prevention for checks that already exist one tier up. All three use their C-check's vocabulary
   verbatim so Tier 2 reads the record instead of reconstructing it.
 
-- **Seam 5 — Source-level quantitative reasoning is thin.** The quantitative assessment criteria
+- **Seam 5 — Source-level quantitative reasoning is thin. CLOSED — W5, v1.16.x.** The criteria
+  always existed (`source-assessment-guide.md` §2 Methodology Quality, §4 Sample Size and
+  Representativeness, including an explicit instruction to flag extrapolation) — they were read at
+  assessment time, used to pick a credibility tier, and dropped. Nothing carried them forward, and
+  the integrity agent ran on drafts, plans and digests but **never on notes**, so a number's basis
+  was first examined three steps after the sample had left the building. **The defect was
+  positional, not analytical**, which is why no new specialist role was added.
+
+  The figure record W1 put in every note gains **`basis`** (n, selection, who ran it, when — with
+  "unknown" a legitimate value and omission not) and **`carries-to`** (the population the figure
+  supports a claim *about*, which is not always the one it was measured on). The integrity agent
+  gains **check 10**, invoked from `research-process-source` when a note carries figures — making
+  true a promise the agent's own usage list had made since it was written and no skill had ever
+  kept. Synthesis rule 4b binds draft **and turn** to `carries-to`, beside 4a's `measures` rule.
+
+  **Decision of record:** significance and disconfirmation stay **inline** unless a seam proves
+  otherwise — W4 shipped disconfirmation inline at 3/3, and the specialist is deferred with a
+  condition rather than rejected. See `dev/researcher/w5-design.md`.
+
+- **Seam 5 (original entry, superseded) — Source-level quantitative reasoning is thin.** The quantitative assessment criteria
   live in a guide but are **not wired into the note schema**, and integrity runs on drafts, not
   notes **[enforced]**. So there is no reliable source-level quantitative check — weaker than v1's
   "checklist + post-hoc net" framing.
