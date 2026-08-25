@@ -142,11 +142,14 @@ convergence build).
 - `audit` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with figure records), Provenance Conformance (whenever the draft carries load-bearing "so what" statements — a label needs no Core Question), Conclusion vs Brief (when the scenario seeds a Core Question the draft must answer), Standard Enforcement (when the scenario seeds an
   evidence standard), Contract Close, Record-Never-Restrict (when overrides/waivers are in
   play), Completion Integrity (when the scenario seeds completion criteria at a final-phase
-  close), Disposition Conformance (when the scenario seeds a decision ledger), State
+  close), Disposition Conformance (when the scenario seeds a decision ledger), **Recommendation
+  Serviceability (whenever the draft makes a recommendation, or a closeout preflight could meet
+  contradictory status claims — B18 and the closeout status question)**, State
   Integrity, Register, No-Tics, Clarity.
 - `synthesize` runs score: Traceability, Referent Fidelity (when the scenario seeds notes with
   figure records — **scored on the spoken turn as well as the draft**), Valve Honesty (when the
-  counter-evidence gate is in play), Search-Record Fidelity (when the scenario seeds a retrieval
+  counter-evidence gate is in play), **Recommendation Serviceability (when the draft makes a
+  recommendation — step 7a requires it to carry its refutation and prerequisites)**, Search-Record Fidelity (when the scenario seeds a retrieval
   log the run must characterize), Record-Never-Restrict (when overrides are seeded), Consent Default (for the
   two real-person types), State Integrity, Register, No-Tics, Clarity.
 - `process-source` runs score: Recovery, Record-Never-Restrict (skip-ledger cases), State
