@@ -75,6 +75,13 @@ None. Tree clean, `main` and `researcher-v1.18.0` agree.
 
 ## Session knowledge worth keeping
 
+- **This eval produces findings every time it runs — that is the artifact working, not a
+  regression.** Do not read a fresh finding list as evidence the last session left things broken.
+  The meaningful measure is the state of the workstreams and the golden set: as of v1.18.0 every
+  workstream is built and the set is 45/45. A session that runs the suite and surfaces three new
+  observations has done its job; a session that surfaces none probably did not look hard enough.
+  Report new findings as *new*, separately from whether the requested work finished.
+
 - **Enumerate the set, don't fix the instance.** This session's single most repeated error, in the
   plugin and in my own fixtures: the silence rule listed five mechanisms and missed the sixth; the
   battery listed B1–B17 and missed B18; B9 checked the claim in front of it; and I patched one
