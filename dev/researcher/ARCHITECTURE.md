@@ -337,6 +337,26 @@ blind spots; those are noted.
   (W6a/b→closeout classes, W3→C2/C14, W4→C5). C5's brief now says a Tier-1 record may exist and to
   **check it rather than trust it**.
 
+- **Recommendation serviceability — CLOSED, W6c/6e/6f, v1.15.x.** Until now the plugin examined
+  whether a conclusion was *supported* (B17, C2) and never whether a recommendation was **usable**.
+  Three checks close that, each the Tier-1 layer for a check the corpus reviewer already carried:
+
+  - **6e → C5.** A recommendation names what would show it wrong and whether anything planned could
+    produce that observation, with an honest exit for recommendations nothing observable could
+    refute. B18 rejects a refutation that would survive any observation — "further research may
+    refine this" is the expected failure, because it is what fluent writing produces when asked.
+  - **6f → C6.** A recommendation resting on an unmade decision or an unbuilt dependency says so
+    **at the recommendation**. C6's failure is "presented as actionable", so the fix is positional:
+    the reader who acts is the one who read the first sentence.
+  - **6c → C4.** Closeout collects every status claim across promoted outputs, STATE, and the ledger,
+    and reports contradictions **as a pair without resolving them** — a status claim is only wrong
+    relative to another, and the plugin cannot know which document is current.
+
+  Fifth instance of the program-level pattern: the corpus reviewer enumerated the failure class
+  first, because it was written from a real failed project, and the in-line layer keeps building
+  prevention for checks that already exist one tier up. All three use their C-check's vocabulary
+  verbatim so Tier 2 reads the record instead of reconstructing it.
+
 - **Seam 5 — Source-level quantitative reasoning is thin.** The quantitative assessment criteria
   live in a guide but are **not wired into the note schema**, and integrity runs on drafts, not
   notes **[enforced]**. So there is no reliable source-level quantitative check — weaker than v1's

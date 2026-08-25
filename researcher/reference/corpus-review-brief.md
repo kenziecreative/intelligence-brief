@@ -120,6 +120,10 @@ attached.
 - **C4 Status coherence** (`status-coherence`). Collect every blocker/dependency/status claim
   across outputs and STATE. Is there one authoritative picture? FAIL on contradictory status
   claims. *Required evidence: each contradicting status claim, file:line.*
+  **A Tier-1 record may now exist — check it, do not trust it.** Closeout collects the same claims and
+  surfaces contradictions as a pair for the commissioner to resolve. A contradiction it *reported* and
+  the commissioner *answered* is resolved; one it reported and nobody answered is still live, and a
+  closeout that proceeded anyway is itself the finding.
 - **C5 Falsifiability** (`falsifiability`). Does the recommendation name what evidence would
   show it WRONG, and can some planned measurement produce that evidence? FAIL if no planned
   measurement could refute the core recommendation. *Required evidence: the recommendation
@@ -131,11 +135,19 @@ attached.
   verify them the way you verify any other claim in the corpus: a `Tested — held` with nothing
   named behind it, or a not-disconfirmable statement that names no channel it would have needed,
   is itself the finding. The record existing is not the check passing — same posture C14 takes
-  toward provenance labels, and for the same reason.
+  toward provenance labels, and for the same reason. **As of v1.15.x a second Tier-1 record exists**:
+  synthesis requires a recommendation to name what would show it wrong, and B18 rejects a refutation
+  that would survive any observation. Read it as a claim about what was done — a refutation naming an
+  observation no planned measurement could produce is exactly C5's fail condition wearing a Tier-1
+  pass.
 - **C6 Prerequisite honesty** (`prerequisite-honesty`). Does any recommendation rest on an
   unmade decision or an unbuilt/uncosted dependency presented as actionable? FAIL if so,
   naming it. *Required evidence: the recommendation (file:line) and the corpus's own record
   that the prerequisite is unmade/unbuilt (file:line).*
+  **A Tier-1 record may now exist — check it, do not trust it.** As of v1.15.x synthesis requires a
+  recommendation to carry its prerequisites at the claim site, and B18 checks they are there. Verify
+  the disclosure is at the recommendation rather than buried in a limitations section — buried is the
+  failure this check names, and a draft can satisfy B18's presence test while still failing C6.
 - **C7 Instrument validity** (`instrument-validity`; only if the corpus proposes
   studies/instruments; else n/a). Check ONLY these named patterns: decision rules comparing
   quantities the instrument never measures; rubrics that structurally predetermine the

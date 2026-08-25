@@ -49,6 +49,15 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
 
    **B11 — Structure & consistency (mechanics elaborated below, run and reported as battery items).** The Methodology & Limitations structural check (step 5b), the cross-document consistency check (step 6), and the canonical-figures/drift pass (step 6a) are part of the battery, not separate from it. Run all three every pass and list them alongside the rest in `Checks run this pass`.
 
+   **B18 — Recommendation serviceability.** Only when the draft makes a **recommendation** — a statement that someone should do something. Otherwise report `B18 — n/a (no recommendation)` and move on; a battery item that fires on every descriptive phase output is noise, and noise is what gets an item skipped.
+
+   Two things must be present at the recommendation, and this checks **presence and non-vacuity, never quality** — whether the recommendation is *right* is C5 and C6's job at Tier 2, and B18's job is making sure there is something there for them to read:
+
+   - **A refutation.** Something named that, if observed, would mean not to follow the recommendation. **A vacuous refutation fails the same as a missing one**, and it is the likelier of the two: "further research may refine this", "this may change as the market evolves", "we will continue to monitor" — each is a sentence that survives any observation, which is exactly what a refutation must not do. The test: *could a reader tell, from this sentence, what would have to happen for the recommendation to be wrong?* If not, it is **Refutation vacuous** (moderate).
+   - **Its prerequisites, at the claim site.** A recommendation resting on an unmade decision or an unbuilt, uncosted, or unscheduled dependency must say so where the recommendation is made. Buried in a limitations section is the failure C6 names — "presented as actionable" — because the reader who acts is the reader who read the first sentence. **Check the decision ledger**: where it records a decision as open and the recommendation speaks as though it is closed, that is **Prerequisite undisclosed** (high — it is the one that gets acted on).
+
+   A recommendation stated as genuinely not refutable by anything the project could observe **passes**, provided it says so. That is the honest exit, and an audit that punished it would teach the next run to write a vacuous refutation instead of an honest one.
+
    **B12 — Regression sweep (re-audits only).** On any pass after the first, for **every defect class fixed in a prior pass on this artifact**, re-scan the *whole document*, not the location that was fixed — a fix applied to one instance while an identical construction survives elsewhere is exactly what this catches. On a first audit, report `B12 — n/a (first pass)`.
 
    **B13 — Disposition conformance.** Read `research/reference/decision-ledger.md`; if the file is absent, nothing is ledgered — report `B13 — n/a (no ledger)` and move on, never treat absence as an error. For every claim in the draft whose subject matter a ledger entry covers, the claim must conform to the **latest entry in that subject's supersession chain**, or carry an explicit supersession: a new ledger entry citing the superseded `D-<n>` plus disclosure at the claim site and in Methodology & Limitations (the B10 pattern). A claim asserting a pre-correction frame, re-adopting the losing side of a resolved contradiction, claiming coverage a ledgered acceptance concedes is missing, or contradicting a recorded directive — without the supersession record — is **Disposition reversal undisclosed** (high-severity). B13's job is not to freeze dispositions; new evidence can supersede any of them. Its job is to make *silent* reversal impossible: the record moves forward by appending, and the reader is always told.
@@ -139,6 +148,9 @@ The user will provide a filepath to audit (should be a file in `research/drafts/
    - **Broken cross-reference** — An internal `§`/section/table reference resolves to nothing in the draft (B5)
    - **Missing required component** — A deliverable component the phase's research plan requires is absent from the draft (B6; high-severity — the only defect class that finds absent content, since there is no claim to trace)
    - **Constructed bracket unflagged** — Each component traces, but the frame combining them is the research's own synthesis, presented as one sourced finding (B7)
+   - **Refutation vacuous** — A recommendation's stated refutation would survive any observation ("further research may refine this"), so nothing could show it wrong (B18; moderate)
+   - **Prerequisite undisclosed** — A recommendation rests on an unmade decision or an unbuilt/uncosted dependency and does not say so at the claim site (B18; high — this is the one that gets acted on)
+   - **Status contradiction** — Two documents the project stands behind disagree about what is blocked, done, or depended on (closeout status check; reported as the pair, never resolved by the agent)
    - **Internal table inconsistency** — A claim the draft makes about its own table is false by that table (B8; high-severity — it is a factual misstatement)
 8. **Generate audit scorecard:**
    - Total specific claims checked: N
@@ -346,6 +358,16 @@ Only audience-standard violations are waivable. The standard gate has a waiver e
      take — before a reviewer run is ever suggested: a review is expensive and its
      receipt freezes to the corpus hash, so spending it on a self-detectably unmet
      criterion wastes the run.
+
+     **Stage 1 also asks whether the project's own documents agree about what is blocked.** Collect every blocker, dependency, and status claim across `research/outputs/`, `research/STATE.md`, and the decision ledger. **Promoted material only** — a draft in flight is allowed to disagree with the record, that is what drafting is; the contradiction matters once both statements are things the project stands behind.
+
+     **A contradiction is the finding, and it is reported as the pair.** This output says the vendor integration is blocked on a signed contract; that one says it shipped in phase 3. Name both, with their locations. **Do not resolve it** — a status claim is only wrong relative to another status claim, and the plugin has no way to know which document is current. Guessing writes a fact nobody recorded.
+
+     **A stop, not a block** — the same shape as the stale-reading decision and the standing-assumption question above, which is now this skill's one way of handing a decision back. Say which claims disagree, say the project cannot close on a contradictory status picture without someone saying which holds, and ask. The commissioner answers and closeout proceeds.
+
+     **This belongs at closeout and nowhere earlier.** Status claims accumulate: a contradiction between phase 2 and phase 5 does not exist until phase 5 does, and running this at every phase would report the same not-yet-contradiction repeatedly until it became invisible.
+
+     This is the Tier-1 half of the corpus reviewer's **C4 Status coherence**, and uses its framing so the reviewer reads this record rather than rebuilding it.
 
      **Stage 1 also asks the standing-assumption question.** Read `research/assumptions.md`
      (absent file → nothing to ask; never treat absence as an error). **Does any load-bearing
