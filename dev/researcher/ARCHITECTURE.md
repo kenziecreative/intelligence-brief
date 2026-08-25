@@ -1,474 +1,578 @@
-# researcher — operating model (the map)
+# researcher — how it works
 
-The plugin's model of itself. This is the source of truth for **how researcher works end to
-end**: the pipeline, who owns which decision, the state model, where each research judgment is
-made, the role/expertise split, the invariants that hold across the whole system, and the known
-unreconciled edges.
+This explains what the Researcher plugin does, how it does it, and what it adds on top of the
+tool you are already running it in. It is written to be read start to finish by someone who
+wants to understand the system, not to be searched by someone who already does.
 
-It exists so that maintainers (human or agent) work from a durable model instead of
-re-deriving the system by parsing 22 skill files every session — the same reason the research
-agent reads STATE.md instead of reconstructing its position from the conversation. Re-derivation
-is lossy, and the loss hides at the seams and in the unstated principles, which is exactly what
-no single skill file holds.
-
-> **Revision note (v2).** This map was rewritten after an adversarial Codex review of v1 caught
-> two reversed write-owners, an overstated outputs gate, and a more fundamental omission (Seam
-> 0). Tracks 1–2 also landed since v1 (three doc/routing bug fixes + the audit check battery),
-> and this reflects them. Where v1 presented behavioral guesses as fact, v2 labels claims by
-> evidence type (below).
-
-## What this doc is authoritative on — and what it is not
-
-- **Authoritative on:** relationships between skills, decision/state ownership, the judgment
-  map, the role model, the cross-cutting principles, and the seams. These live nowhere else.
-- **Subordinate on:** per-skill mechanics (the actual steps). Those live in the skill files.
-  When this map and a skill disagree about *how a step works*, the skill is right and this map
-  gets fixed. Do not duplicate skill mechanics here — duplicated mechanics rot, and when they
-  rot the skill wins (template beats prose). Reference, don't restate.
-- **Freshness discipline:** when a change alters an ownership boundary, a judgment home, a
-  principle, or a seam, update this map in the same change. A stale map that looks authoritative
-  is worse than none.
-
-## Evidence labels (read before trusting a behavioral claim)
-
-v1's central defect, per the Codex review, was conflating four different kinds of claim. Every
-behavioral claim below is tagged:
-
-- **[enforced]** — a hook, gate, or hard skill rule makes it so. Verifiable from the code.
-- **[observed]** — seen in real project runs / transcripts. Evidence exists, but outside this
-  repo (Kelsey's live projects), so it is not derivable from the code alone.
-- **[inferred]** — deduced from the code as a *possibility* or *exposure*, not demonstrated to
-  happen.
-- **[proposed]** — a fix under consideration, not built and not vetted.
-
-## How current this is (read-provenance)
-
-Built from a first-hand read of all 11 skills, the integrity agent, and the reference guides
-`coverage-assessment-guide`, `source-assessment-guide`, `evidence-failure-modes`, plus
-`posture-register`, `workflow-ownership`, and `where-am-i.py`. Corrected against a Codex read of
-the same files. **Not yet fresh-read:** `pattern-recognition-guide`, `writing-standards`,
-`tools-guide`, the 11 type templates, and the discovery channel playbooks. Sections leaning on
-those are marked `[unverified]`.
+If you maintain the plugin and need exact write-ownership, the current status of every known
+limit, or the version each piece landed in, that lives in
+[MAINTAINERS.md](MAINTAINERS.md). This document stays clear of all of it.
 
 ---
 
-## Layer 1 — The pipeline (flow)
+## The idea underneath this: the model is not the whole thing
 
-Research is **phase-sequential**: one phase at a time, each completing a five-step cycle before
-the next begins. The cycle and its artifact flow:
+When you use an AI tool, you are not really choosing a model. You are choosing the environment
+built around the model: what it can read, what tools it can reach, what it remembers between
+sessions, what it is allowed to do on its own, and where it has to stop and ask you.
 
-| Step | Skill | Produces |
+That environment is the harness. Claude Code is a harness. So is Cowork. Each one gives a model
+a place to work, a set of tools, a way to hold context across many steps, and a way for you to
+watch and approve what it does. Call that the **base harness**. It is built and maintained by
+the product company, and it makes the model broadly capable.
+
+A base harness does not know your standards. It does not know what counts as a good source in
+your field, what "enough evidence" means for the decision you are trying to make, which
+judgment calls are yours and not the machine's, or what has to be true before a finding is
+allowed to leave the building. That part is yours to build, and the thing you build is a
+**personal harness**: the reusable way of working that you wrap around a capable model so that
+every project does not start from nothing.
+
+**researcher is a personal harness for research work.** It is not a research assistant that
+answers questions. It is a set of rules, files, named steps, and checkpoints that turn a general
+model into a research partner whose output you can check without redoing it yourself.
+
+That last phrase is the whole point, so it is worth stating on its own:
+
+> The test for whether you can safely delegate work to an AI is not "can it do this?" It is
+> **"can I verify the result without redoing the work?"** Everything in this plugin exists to
+> make the answer yes.
+
+---
+
+## What the base harness gives you, and what researcher adds
+
+| | The base harness (Claude Code / Cowork) | What researcher adds |
 |---|---|---|
-| **Collect** | `discover` → `process-source` | candidates file → source notes + registry rows |
-| **Connect** | `cross-ref` | `cross-reference.md` (patterns, contradictions, saturation) |
-| **Assess** | `check-gaps` | `gaps.md` (coverage verdict) |
-| **Synthesize** | `summarize-section` | draft in `drafts/` (+ integrity check) |
-| **Verify** | `audit-claims` | promotes draft → `outputs/` (the only path in, by convention) |
+| **The model** | Reads, reasons, writes, chooses next steps | Nothing. It uses the model you are running. |
+| **The loop** | Plans a step, acts, checks the result, continues | A fixed five-step research cycle the loop runs inside, one phase at a time |
+| **Tools** | Web search, file access, running commands | A three-tier source-discovery stack, a position helper, a completion validator |
+| **Memory** | Conversation history, project files | A durable set of research files that survive a cleared context, including the agent's in-progress thinking |
+| **Permissions** | Approve or deny individual tool calls | A short, named list of moments where the agent must stop and ask you, and a hard gate before any finding is published |
+| **Interface** | A chat, a terminal, a workspace | Twelve named commands, so you ask for one checkable piece of work at a time |
+| **Standards** | None. It does not know your field. | Source-quality criteria, evidence standards compiled to your audience, and eleven research-type playbooks |
 
-Read-only decision-support runs alongside the cycle, never in it: `phase-insight` (per-phase
-strength), `graph-analysis` (evidence-base structural health), `progress` (project dashboard).
-`start-phase` briefs the next phase; `init` scaffolds the project once.
-
-(Structural note: each `commands/research/<x>` is a thin wrapper delegating to its
-`skills/research-<x>` engine — behavior lives in the skill. This map describes the skills. See
-`researcher/AGENTS.md` for the wrapper/engine split and hook manifest.)
+The base harness makes the model capable. researcher makes it accountable.
 
 ---
 
-## Layer 2 — Ownership map (who owns which decision + which state write)
+## The problem it is built for
 
-This is the seam-exposer. Read it when a change might touch a boundary. **Corrected in v2** where
-noted.
+Ask a capable model to research something and it will produce something useful. The trouble
+starts one step later, when you try to act on it.
 
-| Skill (step) | Owns (decisions) | Writes (state) |
-|---|---|---|
-| **init** | plan generation, **subject identity**, evidence-standard compilation, STATE template, helper install, discovery strategy | everything, once (dirs, CLAUDE.md, STATE.md, registries incl. empty `canonical-figures.json`/`claim-graph.json`, gate-policy, standards) |
-| **start-phase** | phase-entry briefing, carryover (assumptions/commonplace/gaps/backstage), source-material reconciliation | Phase Tier Record row; backstage check-offs; **`source-material-digest.md`** (created/updated during reconciliation — v2 correction) |
-| **discover** (Collect) | channel selection, query construction, candidate prioritization, **batch cadence + auto cross-ref**, exclusion recording | `discovery/*-candidates.md`, `exclusions.md`, `retrieval-log.json` |
-| **process-source** (Collect) | per-source note, **credibility assessment**, contradiction flagging, counter increments, candidate `[PROCESSED]` marking | `notes/`, `registry.md`, candidate tags, **STATE counters**, source-material-digest |
-| **cross-ref** (Connect) | **contradiction materiality**, **shared-origin/echo detection (triangulation)**, **saturation signals (advisory)**, pattern ID | `cross-reference.md`, **`saturation.json`** (W2 — the machine-readable half of the saturation verdict), resets counter, checks **Connect** box, backstage-tasks, Next Action, **`decision-ledger.md` `resolution` entries** (material resolutions only, at resolution time — W6b) |
-| **check-gaps** (Assess) | **coverage adequacy verdict** (2-test), candidate disposition, **owns the Collect box + cycle reconciliation**; routes `Evidence Against` to synthesis (v2: bug fixed); **reads `saturation.json` and owns the saturation↔adequacy precedence contract + the collection-exhausted decision** (W2) | `gaps.md`, STATE (Collect box, Cycle step, Next Action, gap-check date), **`decision-ledger.md` `acceptance` entries** (first acceptance only — W6b) |
-| **summarize-section** (Synthesize) | **synthesis / "so what"**, qualifier+range preservation, **counter-evidence gate**, assumption logging, methodology section, runs integrity; **reads the decision ledger pre-draft** (conformance-by-default — W6b) | `drafts/`, `assumptions.md`, `negative-searches.md`, STATE (draft pending) |
-| **audit-claims** (Verify) | **the provenance gate** — now an enumerated **check battery B1–B15** (v2: track 2; B13 disposition conformance — W6b; **B14 referent conformance + B15 source-anchor presence — W1**), confidence tiers, deliverable manifest, waivers, **phase closeout** incl. the **criteria preflight** (W6a: SC self-assessment at final-close stage 1, hard stop on plain unmet) and the **advisory criteria trajectory** in phase debriefs | `outputs/` (by convention the only deliverable writer), `audits/`, `gate-log.md`, **`claim-graph.json` incl. drift annotations** (v2 correction — audit writes the graph and the `drift_warning`, and only *reads* `canonical-figures.json`), **`decision-ledger.md` `correction` + `directive` entries** (frame corrections at fix time; commissioner directives at (b-final) — W6b) |
-| phase-insight / graph-analysis / progress | read-only decision-support (progress + start-phase also *validate completion claims* via `check-completion` — verdict outranks STATE text) | nothing |
-| **research-integrity** (agent) | independent provenance/consistency/drift check | **registers cross-phase figures in `canonical-figures.json`** (v2 correction); *reads and surfaces* drift warnings — it does **not** write them |
-| **review-corpus** (runner, W7) | reviewer orchestration, execution metadata, four-inputs coldness, disclosure preflight | **sole writer of `research/reviews/`** pre-close: receipts + reports (immutable), `.failed.json` attempts. Reviewers write nothing. |
-| **validator** (`research/bin/validate-corpus-review.py`, W7) | **the completion verdict** (gate), the allowed STATE transition, post-close validation | `completion.json` + the four-op final STATE transition (`transition --apply`) — the only writer of project completion on adopted projects |
+You cannot tell which sentences came from a source and which came from the model's general
+knowledge. A number that was measured on nine depots over one summer is now a claim about the
+whole region, and nothing in the output marks the moment it widened. Three sources agreed, but
+two of them were reprinting the third. Nobody went looking for evidence that the conclusion was
+wrong, so of course none appeared. The recommendation sounds decisive because decisive is how
+fluent writing sounds.
 
-Boundaries worth stating because they are load-bearing:
-- **discover never crosses into process-source's territory** (never writes notes/registry). The
-  discovery→processing boundary is a human gate. **[enforced]** (discover guardrail 1).
-- **check-gaps owns the Collect box** — gathering sources ≠ gathering *enough*.
-- **The `canonical-figures.json` / `claim-graph.json` split is easy to get backwards** (v1 did):
-  **integrity registers canonical figures; audit writes the claim graph and its drift
-  annotations.** Read is not write.
+None of these are lying. They are the normal failure modes of compressing a lot of material
+into a short answer, and they are invisible in the output itself. That is what makes them
+expensive: you find them when someone acts on the work.
+
+researcher's answer is to slow one part down. Every claim has to trace back to a specific note,
+every note to a declared source, and nothing reaches the finished-work folder until an audit
+has walked that chain. The cost is real. The return is that you can read the output and check
+the parts that matter instead of rebuilding all of it.
 
 ---
 
-## Layer 3 — State model
+## The working cycle
 
-STATE.md is the durable position digest (read first every session, written after every
-significant action). Sections: Current Position (Active phase, Cycle step, Blocking), Current
-Phase Cycle (5-step checklist), Completed Phases, Key Decisions, Sources Processed (counters),
-**Next Action** (a startable command), Phase Tier Record.
+Research runs one **phase** at a time. A phase is a chunk of the question with its own
+sub-questions, defined in the research plan when the project is set up. Phases are sequential:
+each one finishes its full cycle before the next begins.
 
-| Artifact | Role | Volatility |
-|---|---|---|
-| `STATE.md` | position digest; Next Action is the resume anchor | durable |
-| `research-plan.md` | the assignment (phases + questions) | durable |
-| `bin/where-am-i.py` | computes position from files (project-local so Cowork can run it) | durable |
-| `sources/registry.md` | completion ledger | durable |
-| `discovery/*-candidates.md` | **batch ledger** (`[PROCESSED]` tags = disposition) | durable |
-| `notes/` | per-source structured notes, each carrying **per-figure records** (`measures` / `not` / `locator` / `verbatim` — W1) — **the trust anchor (see Seam 0)** | durable |
-| `cross-reference.md`, `gaps.md` | regenerated each run (patterns, coverage) | derived |
-| `drafts/` → `outputs/` + `audits/` | synthesis → audited output + reports | durable |
-| `reference/canonical-figures.json` | cross-phase figure registry (written by **integrity**) | durable |
-| `reference/claim-graph.json` | claim nodes + drift warnings (written by **audit**) | durable |
-| `reference/decision-ledger.md` | **append-only disposition record** (corrections/resolutions/acceptances/directives; each class written by its owning skill at decision time; supersession by new entry, never edit; enforced by B13; in the reviewed corpus manifest) | durable — the anchor for records whose working views regenerate |
-| `reference/retrieval-log.json` | discovery audit trail | durable |
-| `reference/evidence-standard.md` | compiled audience rules, enforced at audit | durable |
-| `reference/backstage-tasks.md` | agent's private prep queue (worked at phase start) | disposable |
-| `assumptions.md` | thin-evidence judgments (Open/Validated/Challenged + validate/challenge criteria) | durable |
-| `commonplace.md` | the agent's carried thinking — Working Reads **read by `start-phase`** (v2: bug fixed, docs no longer claim "nothing reads it") | durable |
-| `source-material-digest.md` | digest of user-dropped files; reconciled each phase | durable |
-| `discovery/exclusions.md`, `negative-searches.md` | curation + adverse-search ledgers | durable |
+Every phase runs the same five steps.
 
-`commonplace.md` carries the agent's *in-flight reasoning* (hypotheses, half-formed reads)
-across context clears, re-adopted at phase start — the "carry the thinking" analog to STATE.md's
-"carry the position."
+**1. Collect.** `/research-discover` searches for sources and writes a candidate list. It does
+not process anything. You look at the list and say which ones to take, and that human step is
+deliberate: choosing which evidence goes in is the judgment the whole system is built to
+protect. Then `/research-process-source` reads each chosen source and writes a structured note
+for it, recording what was claimed, how good the source is, and for every number, what it
+actually measured.
 
----
+**2. Connect.** `/research-cross-ref` reads across all the notes so far and looks for the same
+claim appearing more than once, claims that contradict each other, and agreement that is not
+really agreement because the sources share an origin. It also measures whether new sources are
+still telling you new things.
 
-## Layer 4 — Judgment map (the family)
+**3. Assess.** `/research-check-gaps` asks whether what you have is enough to answer the
+phase's questions. This is a separate question from whether you have gathered sources, which is
+why it is a separate step with a separate owner. It reads the saturation signal from step 2 and
+crosses it with coverage. If a question is both well-searched and still not adequately
+answered, that is a decision for you, not a loop the agent keeps running.
 
-The recurring problem: judgments that live only in the human's head. Without an encoded criterion
-the agent drifts (decides silently) or stalls (hands the call back). **Framing caveat (v2):** the
-"family" is a **diagnostic lens for finding gaps, not an architectural unit.** The members share
-no common object or control mechanism — position is state-recovery, saturation is a novelty
-ratio, triangulation is provenance clustering, significance is normative, disconfirmation is an
-evidence-search discipline. Design each in its own place; do not build "one judgment system."
+**4. Synthesize.** `/research-summarize-section` writes the draft. This is where the reasoning
+happens, and it is the step with the most rules on it, because it is where evidence turns into
+conclusions. Ranges stay ranges. Qualifiers stay attached. Every load-bearing "so what" is
+labelled with what stands behind it. Every load-bearing claim has to show that somebody looked
+for evidence against it.
 
-| Judgment | Where it's made today | Status / gap |
-|---|---|---|
-| **Position** ("where am I") | STATE.md + `where-am-i.py` + candidates ledger | **Shipped** (1.6.0). Computable **with a legacy/fallback path** — not "fully computable": untagged legacy ledgers and helper failure fall back to manual file derivation. **[enforced]** |
-| **Sufficiency / saturation** ("enough to stop") | cross-ref XREF-02 computes per-question confirmatory ratio over independent origins and writes `saturation.json`; check-gaps reads it and owns the stop verdict | **Reconciled in v1.11.0 (W2)** by a precedence contract: adequacy governs the stop, saturation governs the route. The collection-exhausted state is a commissioner decision with three enumerated outcomes, and it holds the cycle at `Assess (3 of 5)` until answered. Accepted gaps are wired to it. Seam 1 closed. |
-| **What matters / triangulation** | cross-ref: "a pattern from one source is a claim" (guardrail 1), echo detection, independence-defaults-unknown | Fires in the pipeline *before* synthesis **[enforced]**. The concern that significance gets elevated in conversation *before* cross-ref runs is **[inferred]**, not demonstrated. See Seam 3. |
-| **Significance / interpretive license** ("this is a priority for us") | summarize-section labels each load-bearing "so what" inline (implication / inference / commissioner priority — W3); audit enforces per label via B16, and B17 checks the conclusion against the Core Question + ledger directives | **Closed in v1.13.0 (W3).** Was a design exposure: audit and integrity checked facts, not normative leaps, so a properly cited fact could carry an uncited priority. The three labels are C14's, verbatim, so the corpus reviewer's end-of-project check reads the writer's own labels instead of reconstructing them. See Seam 2. |
-| **Disconfirmation / confirmation bias** | counter-evidence gate (summarize, **claim-keyed, all types**); `negative-searches.md`; `Evidence Against` (all types); `assumptions.md` "what would challenge" + a four-value `Status` | **Seam 4 CLOSED (W4, v1.14.x).** The gate keys on the load-bearing claim rather than the research type, with three dispositions including an honest not-disconfirmable exit; the assumption loop now records outcomes, not just criteria, and a break propagates as a ledger `correction`. Tier-1 layer for the reviewer's C5. |
+**5. Verify.** `/research-audit-claims` walks the finished draft against the notes it cites,
+check by check, through a fixed battery. If it passes, the draft is promoted to `outputs/`,
+which is the only way anything gets there. If it fails, it says what failed and where.
 
----
+Three more commands run alongside the cycle without being part of it, and none of them change
+anything: `/research-progress` shows where the project stands, `/research-phase-insight` reports
+how strong the current phase's evidence is, and `/research-graph-analysis` looks at the shape of
+the evidence base as a whole. `/research-start-phase` opens the next phase and carries forward
+what matters from the last one. `/research-init` sets the project up once.
 
-## Layer 5 — Roles & expertise
+There is a twelfth command, `/research-review-corpus`, and it belongs to the end of the project.
+It is covered further down.
 
-Three research-team roles map onto the plugin:
+### Why it is named steps rather than one big prompt
 
-- **Strategic owner (PI) = the human.** Accountable; makes the load-bearing calls. Encoded as
-  the workflow-ownership **stop list**: source selection, material contradiction, waiver, access
-  failure, genuine fork, promotion to outputs.
-- **Operational coordinator = the main agent.** Holds position, sequences the batch, runs the
-  cycle, mutates shared state, stays interruptible. **Must stay inline and in-conversation** —
-  process-source guardrail 7 and discover forbid delegating it to subagents. **[enforced]**
-- **Specialist contributors = isolated agents.** researcher ships exactly one:
-  `research-integrity`. A specialist adds **context isolation and independence**, not a separate
-  knowledge store — its expertise comes from the shared reference docs.
+A long, perfect prompt is brittle. It works until the day the work is slightly different, and
+then it fails in a way that is hard to see, because there was never a checkpoint where you could
+tell whether it was still on track.
 
-Canonical expertise stays in reference docs (`source-assessment-guide`,
-`pattern-recognition-guide`, `coverage-assessment-guide`, `evidence-failure-modes`,
-`writing-standards`, `posture-register`, `workflow-ownership`). Both the coordinator and any
-specialist read those.
-
-**Where the family lands (all [proposed] except integrity):**
-
-| Work | Role | Execution | Note |
-|---|---|---|---|
-| The cycle, state, batch cadence | coordinator | inline, in-conversation | mutates shared state; must be interruptible |
-| Provenance / integrity check | specialist | isolated agent (**built**) | can't self-audit work you produced |
-| Significance / interpretive-license | — | **at synthesis, not a new agent yet** | Codex: label `Evidence-supported implication` / `Analyst inference` / `Commissioner priority` where "so what" is generated, with audit rules. New agent is premature. |
-| Disconfirmation / adversarial verify | specialist? | **[proposed]** | first wire integrity where `init` already promises it runs, then reconsider |
-| Saturation, triangulation | coordinator | inline / cross-ref | computations over shared state; isolation buys nothing |
-
-### The data-analyst question
-
-Splits in two:
-
-1. **Structural analysis** (`graph-analysis`, `phase-insight`) — already exists as read-only
-   decision-support **[enforced]**. Simple counting over the claim graph; no independence needed,
-   so **not** a persona agent. If anything, the metrics could move to a helper.
-2. **Deep quantitative reasoning** — interpreting a statistically complex source; combining
-   figures without interpolation/denominator-drift. A genuine specialist gap. **Codex correction
-   to v1:** it is *not* a "checklist + post-hoc net." The source-assessment checklist is **not
-   wired into the note schema** at all, and the integrity agent runs on **drafts, not notes**,
-   and checks compression defects (interpolation, ranges) — **not** sample adequacy, methodology
-   validity, or whether a study supports its headline. So there is *less* quantitative
-   safeguarding than v1 implied.
-
-Verdict: a real but **narrow, conditional** role, and a genuine **build-vs-strengthen fork** (new
-conditional agent vs. wiring integrity + a quantitative note-schema), to decide alongside the
-significance/disconfirmation specialists. **[proposed]**
+Named steps behave differently. Each one does a single thing you can check when it finishes. If
+the gap check says coverage is thin, that is a specific claim about a specific question, and you
+can disagree with it. If the audit fails on one claim, you know which claim. The value is not the
+names. It is that the work arrives in pieces you can inspect.
 
 ---
 
-## Layer 6 — Principles / invariants
+## What it remembers, and why
 
-The constitution. A change that violates one is almost certainly wrong.
+Long research runs across many sessions. Context gets cleared. The single most common way an AI
+research session goes wrong is that the agent reconstructs where it is from the conversation
+instead of from the files, and reconstruction is lossy. It picks the wrong next step, and then
+it hedges, because a guess feels uncertain and uncertainty asks permission.
+
+So the plugin's rule is blunt: **your position in the workflow is a fact on disk, not a memory.**
+There is a script that computes it, and the agent runs the script rather than remembering.
+
+Two different things get carried between sessions, and the distinction matters.
+
+**The position** lives in `STATE.md`: which phase is active, which of the five steps is current,
+how many sources have been processed, and a `Next Action` line that is always a command you
+could actually run. This is read at the start of every session and written after anything
+significant.
+
+**The thinking** lives in `commonplace.md`: the hypotheses the agent is holding, the half-formed
+reads, the thing that seemed interesting three sources ago. This is picked back up at the start
+of the next phase. Carrying the position without the thinking gets you a partner who knows where
+the bookmark is and has forgotten the argument.
+
+The rest of the durable files each hold one kind of record.
+
+| File | What it holds |
+|---|---|
+| `research-plan.md` | The assignment: the phases and the questions each one has to answer |
+| `sources/notes/` | One structured note per source, including what each figure measured and how far it travels |
+| `sources/registry.md` | The ledger of what has been processed |
+| `discovery/*-candidates.md` | Each batch of found sources, tagged as they are worked through |
+| `discovery/exclusions.md` | Sources considered and not taken, and why |
+| `negative-searches.md` | Searches run specifically to find contradicting evidence, including the ones that came back empty |
+| `assumptions.md` | Judgments made on thin evidence, each with what would confirm or break it, and whether that has been tested |
+| `reference/decision-ledger.md` | An append-only record of decisions: corrections, resolutions, accepted gaps, and your explicit directives. Nothing in it is ever edited; a later entry supersedes an earlier one. |
+| `reference/canonical-figures.json` | Every number that appears in more than one phase, so it cannot quietly change between them |
+| `reference/claim-graph.json` | Claims as nodes with edges to the sources and figures behind them |
+| `reference/evidence-standard.md` | Your audience's rules for what counts as adequate evidence, compiled at setup and enforced at the audit |
+| `cross-reference.md`, `gaps.md` | The current read on patterns and coverage. Regenerated every run. |
+| `drafts/` → `outputs/` | Work in progress, and work that has passed the audit |
+| `audits/`, `gate-log.md` | What each audit checked and what it found |
+
+The ones that regenerate are cheap and disposable. The ones that append are the record.
+
+---
+
+## Who decides what
+
+Three roles, and the split follows what each is actually good for.
+
+**You are the principal investigator.** You are accountable for the work, so you make the calls
+that carry consequence: which sources go in, what a material contradiction means, whether to
+carry a flagged claim anyway, and whether anything gets published.
+
+**The agent is the coordinator.** It holds the position, runs the cycle, sequences the batch,
+and updates the shared files. It works in the conversation with you and stays interruptible,
+which is a deliberate constraint: the coordinator is never handed off to a background process,
+because you have to be able to interrupt it.
+
+**Specialists are separate, isolated agents,** and researcher ships two. The integrity agent
+checks provenance and consistency on work the coordinator just produced. The corpus reviewer
+runs the end-of-project review. What a specialist adds is not extra knowledge, since it reads
+the same reference guides everyone else does. What it adds is **independence**. You cannot audit
+your own work in the same context that produced it.
+
+A useful way to think about the split, borrowed from how people talk about delegating to AI
+generally:
+
+- **Automate** the work that is routine and easy to check: computing position, counting
+  agreements, tagging processed sources, running the battery.
+- **Augment** the work where the machine moves fast and you supply judgment: finding candidates,
+  drafting a section, spotting contradictions.
+- **Anchor** the work where the value is your accountability: what the research is for, which
+  evidence counts, what the finding means for the decision, and whether it ships.
+
+The stop list below is that third category, written down.
+
+---
+
+## Where it stops and asks you
+
+The default is that the agent proceeds. This is not a preference, it is a fix for a specific
+failure: an agent that is unsure asks permission, and an agent that asks permission constantly
+reads as a partner who will not drive. "Should I keep going? Should I cross-reference now?" is
+not caution. It is uncertainty being handed to you to resolve.
+
+So stopping is a short, closed list. Everything not on it, it does.
+
+1. **Which sources to process** after a discovery run.
+2. **Curating sources mid-batch** — a swap, a skip, a reorder.
+3. **A material contradiction**, meaning one that would actually move a finding.
+4. **A waiver** — your call to carry a flagged claim anyway.
+5. **A real access failure**, where a source cannot be fetched and the options need a person.
+6. **A genuine strategic fork**, such as a gap result suggesting the phase needs different
+   sources entirely.
+7. **Promotion to `outputs/`.** The one irreversible action, never automatic.
+8. **A material finding from the end-of-project review**, which only you can close.
+
+The test behind the list: would your answer change what happens, and could the agent not have
+known it from the files? If the answer is predictably "yes, go on," it was not a question.
+
+---
+
+## How it talks to you
+
+Everything above governs what the agent does. None of it governs how the agent sounds, and that
+is a separate problem with its own failure mode:
+
+> The evidence layer can hold perfectly while the conversation quietly fails.
+
+You can have every claim traced, every audit green, every gate honored, and still walk away with
+the wrong impression, because the impression was formed in the conversation rather than in the
+document. So voice is governed on its own, in its own file, at the plugin level rather than
+inside each step. A human researcher does not become a different person when they switch from
+finding sources to checking coverage, and neither should this.
+
+The person it is written to sound like is a working researcher who is genuinely good at
+explaining things. Someone who can make a hard idea land for everyone in the room without making
+anyone feel behind. That person starts where you already are rather than where the topic starts.
+They say one idea per sentence. They reach for something concrete the moment an idea turns
+abstract, and they never use a term they have not given you. What they never do is perform
+expertise, hedge in order to sound careful, or hide a simple point inside a complicated sentence.
+
+### Four ways the conversation fails
+
+**It agrees with you.** The research-specific form of flattery is not "great question." It is
+converging on the conclusion you were hoping for. You arrive wanting the thesis to hold, the
+market to be big, the candidate to check out. Nothing in the gates stops the *conversation* from
+drifting toward where you want to land. And the obvious fix makes it worse: an agent simply told
+to push back manufactures skepticism instead, which is the same failure wearing a different hat.
+
+**It sounds like every other answer.** Left alone, a model drifts toward the median response for
+a prompt of that shape. Generic caution. Generic "the evidence is mixed." Generic synthesis. The
+correction is not picking a direction to lean. It is having an actual method for thinking about
+the specific question.
+
+**It narrates instead of checking.** Over a long project the agent's memory of what you have both
+been building becomes very strong, and it can quietly turn into a consistent narrator of the
+working thesis rather than a useful check on it. Continuity feels like understanding. It is not
+the same thing.
+
+**It becomes unreadable.** A turn that is accurate, honest, and impenetrable has failed. If you
+spend your attention decoding the prose, you have none left for the research, so you skim, and
+you miss the thing that mattered. The test is blunt: **if you have to reread a sentence, that
+sentence failed.** Density is not rigor. It is a tax charged for work the writer declined to do.
+
+### The first sentence carries the evidence, not the agreement
+
+Agreement does not mostly live in words like "great." It lives in a turn shape: validate first,
+then elaborate. That shape survives every list of banned phrases because it mutates. "You're
+right, and…" "Agreed, and that's exactly what the sources show." The problem is that you read the
+handshake before you read the substance, and after enough handshakes you cannot tell genuine
+agreement from lubricant.
+
+So the rule is positional. The first sentence of a response carries the agent's read of the
+evidence. Agreement, where it is earned, arrives later and attached to the specific claim it
+covers.
+
+### It grades your idea before it builds on it
+
+When you offer a hunch, an interpretation, or a conclusion you would like to be true, it
+classifies before running with it. There are four verdicts:
+
+- **Supported.** Here is what supports it, and which notes.
+- **Partly supported.** Here is the part the evidence carries, and here is what the rest needs.
+- **Contradicted.** Here is the source that disagrees.
+- **Untested.** The evidence base does not speak to that yet. Here is what would settle it.
+
+**Untested is the most important verdict in a research product**, and it is the one a fluent model
+is least likely to reach for, because "we don't know yet" reads as a non-answer. An untested hunch
+is a hypothesis. It gets logged, and then somebody goes looking.
+
+### Pushback has to be sourced
+
+Two things get challenged specifically, because they are the two ways research goes wrong in
+conversation rather than on paper.
+
+**Premature certainty**, when you want to conclude before the evidence carries the conclusion. The
+pushback names what the notes support, what they do not, and what is still resting on one source.
+Never a vague "we should be careful."
+
+**Preferred-conclusion steering**, when a run of choices has all leaned the same direction. You
+shape the evidence universe and you shape the conclusions. That is your right, and the ledgers
+record it. What the agent does is name the shape neutrally and ask which project it is running.
+Observation, not accusation, and once you answer, your answer stands.
+
+Underneath both sits the rule that keeps this from becoming theater:
+
+> Every challenge names where in the material the softness lives. If it cannot point at the
+> place, the correct amount of pushback in that moment is zero.
+
+Manufactured skepticism spends your trust on performance. The counterpart matters just as much:
+when it looks honestly and the evidence is genuinely solid, **"I tried to break this and it held"
+is a real verdict**, delivered as good news with the reasoning shown rather than as a suspiciously
+easy pass.
+
+### Confidence stays proportional to the evidence, in both directions
+
+This is the part people get wrong when they tune an agent's voice. Tell it "you're too hedged"
+and the naive correction is to hedge less, which just moves the failure to the other end.
+
+The governing variable is confidence proportional to evidence. Unqualified certainty violates it
+exactly as much as reflexive hedging does. Overclaiming and underclaiming are the two poles of one
+failure, not a good direction and a bad one. The same discipline runs into the written outputs,
+where the language is fixed to the count of genuinely independent sources: one source is "a single
+source suggests," two is "supported by limited evidence," three or more is "confirmed by multiple
+sources." Evidence strength is visible in the sentence rather than left to the reader's
+impression.
+
+### It does not make you learn its vocabulary
+
+The plugin has a lot of internal terms. You are not expected to know any of them, and the rule is
+that a term gets defined the first time you see it or does not get used. An undefined term
+silently turns a decision into a guess, because you cannot evaluate a claim built on a word you do
+not know.
+
+So the internal vocabulary gets translated on the way out.
+
+| What it means internally | What you actually hear |
+|---|---|
+| Lopsided | "this rests on a single independent source" |
+| Shared-origin cluster | "these three trace back to one original, so they're one data point" |
+| Saturation advisory | "more sources probably won't change this answer" |
+| Echo level | "repetition, not confirmation" |
+| Independence-unknown | "we can't tell where this one originally came from" |
+| Check IDs like C-01 or XREF-02 | never said aloud; the thing gets described instead |
+
+The same instinct governs process talk. You should hear "that's five sources since the last
+cross-reference, so that's next," never "updating STATE.md and resetting the counter." The
+behaviors are required. Announcing them is not allowed.
+
+---
+
+## The rules it will not break
+
+These hold across the whole system. A change that violates one is almost certainly wrong.
 
 1. **Provenance.** Every claim traces to a note, every note to a declared source. Nothing reaches
-   `outputs/` without a passing audit. **Caveat (Seam 0):** the audit terminates at the
-   *note*, not the original source — the note→source link is asserted once at capture and never
-   re-checked.
-2. **Independence defaults to unknown, never assumed.** Echo/shared-origin/shared-wording
-   heuristics collapse false convergence. **[enforced]**, consistently, across cross-ref and
-   check-gaps.
-3. **Template beats prose.** Doctrine and the concrete skill edits must land together.
-4. **Silent pipeline (posture rule 7).** Machinery invisible; findings spoken. **[enforced]** in
-   most skills; `discover` prints tool/strategy status and "Results saved to…", a **partial
-   exception** (Codex).
-5. **Stop only for X (autonomy).** Proceeding is the default; stopping is enumerated.
-6. **Position is computed from files, not inferred from conversation** (with the fallback path
-   noted in Layer 4).
-7. **Non-invention.** Subject identity from the user only; author names from bylines only; no
-   fabricated data.
-8. **Phases are sequential.** Each completes its full five-step cycle before the next.
-9. **The outputs gate is Write/Edit-protected + convention + audit trail — NOT a hard filesystem
-   gate** (v2 correction). On Claude Code the hook blocks Write/Edit/MultiEdit to `outputs/`; it
-   does **not** gate Bash, and audit itself promotes via `mv`, which bypasses the hook by design.
-   `init` also writes `.gitkeep`/`.gate-policy.md` there. So "only writer" is a **convention**
-   (audit is the only *deliverable* writer) backed by the `gate-log.md` audit trail, not a
-   filesystem guarantee. In Cowork the hook is inert and only the convention holds.
-10. **Curation is the user's; visibility is the plugin's.** Exclusions/non-selections recorded and
-    surfaced, never hidden.
-11. **Carry the thinking, not just the position.** `commonplace.md` Working Reads, read back by
-    `start-phase`.
+   `outputs/` without a passing audit. (There is an honest limit to this, described further down.)
+2. **Independence is unknown until shown.** Two sources agreeing is not corroboration until you
+   know they are not repeating each other. The default is unknown, never assumed.
+3. **Non-invention.** The subject's identity comes from you. Author names come from bylines. No
+   number is ever estimated, interpolated, or filled in.
+4. **A figure carries what it measured.** A number that keeps its digits and changes what it
+   counts has become a different claim. This binds the written draft and the spoken sentence
+   equally, and the spoken one is the harder case, because speech compresses and compression
+   always runs toward the stronger reading.
+5. **Machinery stays backstage.** You hired a research partner, not a pipeline. The behaviors are
+   required; announcing them is not allowed. You should hear "that's five sources since the last
+   cross-reference, so that's next," never "updating STATE.md and resetting the counter."
+6. **Position is computed, not recalled.**
+7. **Phases are sequential.** Each finishes its full cycle before the next starts.
+8. **Curation is yours; visibility is the plugin's.** What was excluded gets recorded and shown,
+   never quietly dropped.
+9. **Carry the thinking, not just the position.**
+10. **The record is append-only where it matters.** Decisions supersede; they do not get edited
+    into looking like they were always that way.
+11. **A recorded unknown beats a blank field.** "The source did not publish its methodology" is a
+    finding. An omitted field reads as a question nobody asked.
 
 ---
 
-## Layer 7 — Surface model (Claude Code vs Cowork)
+## The judgment calls, and how each one is made
 
-- **Hooks are Claude-Code-only** (outputs-gate + PreCompact staleness). In Cowork the outputs
-  gate holds **only by convention** (audit is the only deliverable writer); "structural" here
-  means *not enforced, dependent on the skill obeying its own rule* — not technically impossible.
-- **Executables must be project-local.** `where-am-i.py` is copied into `research/bin/` at init.
-- **Cowork file deletion is gated per folder**; setup uses Read/Write/Glob, never shell.
+This is the intellectual center of the plugin, and it is the part that took the longest to get
+right.
 
----
+Research is full of judgments that normally live only in an experienced researcher's head. Is
+this enough evidence to stop looking? Do these three sources actually agree? Does this finding
+matter? Has anyone tried to break this conclusion? An expert makes these calls without noticing
+they are calls.
 
-## Layer 8 — Known unreconciled edges (where feedback docks)
+An AI given the same work and no encoded criterion does one of two things. It drifts, deciding
+silently and moving on. Or it stalls, handing the judgment back to you every single time. Both
+are failures, and they look nothing alike, which is why they took so long to see as the same
+problem.
 
-Each labeled by evidence type. Track 2 (the audit battery) partially closed several draft-vs-note
-blind spots; those are noted.
+Each of these judgments now has a home. They are handled in different places, in different ways,
+because they are genuinely different kinds of question and building "one judgment system" would
+have been a mistake.
 
-- **Seam 0 — Source-note fidelity (the trust anchor) — PARTLY addressed in v1.12.0 (W1).**
-  Every downstream gate — cross-ref, integrity, audit, synthesis — terminates at the
-  **AI-authored note**, not the original source, and no step reopens the original. A
-  transcription error, dropped qualifier, or selective quote baked into a note passes every later
-  check clean. Still **[inferred]**, and still the most fundamental gap: it is the one failure
-  class whose *observation* requires the control that does not exist.
+**Where am I?** Computed from the files by a helper script, with a fallback to reading the state
+files directly. Not remembered, not inferred from the conversation.
 
-  **What v1.12.0 changed.** Notes now carry a per-figure record (`measures`, `not`, `locator`,
-  `verbatim`), and battery item **B15** asserts every cited figure has a usable anchor. That
-  makes the corpus *checkable* and makes an unlocatable figure a stated fact rather than a silent
-  one. **It does not check the note against the source** — nothing re-reads originals, and a green
-  B15 must never be read as "the notes are faithful." Sampled re-validation at audit was
-  deliberately deferred (W1 fork 2): it needs fetching inside the audit path and fails on exactly
-  the sources that matter most — paywalled, dated, moved.
+**Is this enough to stop looking?** Two measurements that used to fight each other. The
+cross-reference step computes saturation: for each question, how much of what new sources say is
+confirming what you already had. The gap check computes adequacy: whether the question is
+actually answered. They are related and they are not the same, and the rule between them is that
+**adequacy governs the stop, saturation governs the route.** A well-searched question is not
+answered just because searching stopped paying. When a question is saturated and still
+inadequate, that is a decision handed to you with three named options, and the phase holds there
+until you take one.
 
-  **What v1.12.0 also closed, which is a different seam wearing this one's clothes.** The defect
-  observed in eval iteration 28 was draft-vs-note, not note-vs-original: a note's "60–70% of teams
-  report a reduction" became "a 60–70% reduction" in the draft. The digits matched, so every
-  numeric check passed — **referent drift**, now battery item **B14**, with prevention at the
-  writing site (`summarize-section` guardrail 4a). Design and the correction to how W1 got
-  promoted: `dev/researcher/w1-design.md`.
+**Do these sources really agree?** Handled in the cross-reference step, before synthesis rather
+than after. A pattern from one source is a claim, not a pattern. Sources that share an origin,
+share wording, or trace back to the same underlying study are clustered rather than counted.
 
-- **Seam 1 — Saturation ↔ adequacy — CLOSED in v1.11.0 (W2).** Was: cross-ref computed
-  saturation (Connect); check-gaps owned the stop (Assess) and never read it, so a question
-  that was saturated *and* inadequate routed back to Collect every run — every step correct,
-  the loop the defect, invisible to every gate because each state was well-formed. The stall
-  was **[observed]** in Kelsey's runs and not derivable from the code. **Fix as built:** a
-  precedence contract, not a merged score. cross-ref writes `saturation.json` (step 7a);
-  check-gaps reads it (step 4a) and crosses it with coverage status (step 6h). Adequacy governs
-  the stop — saturation never promotes a question to covered. Saturation governs the route
-  inside the gaps-remain branch. The saturated+inadequate cell is a commissioner decision
-  (step 7c: three enumerated outcomes, a recommendation, and the mapped-channels limit), and
-  step 8 gained the cycle state that decision lives in. Accepted gaps are now reached by
-  computation rather than only by volunteer. Design: `dev/researcher/w2-design.md`.
+**Does this matter, and who says so?** This one is subtle. The audit checks facts, so a
+perfectly cited fact could carry an uncited priority: the sentence traced fine, and the reason it
+was in the recommendation did not. Now every load-bearing "so what" gets labelled at the moment
+it is written, as one of three things — something the evidence supports, something the analyst
+inferred, or something you told them to prioritize. The audit then checks each label against what
+actually stands behind it. Mislabelling an inference as evidence-supported is a serious finding.
 
-- **Seam 2 — Significance has no synthesis-time control — CLOSED in v1.13.0 (W3).** Was: "so
-  what" generated at `summarize-section` with audit and integrity checking *facts* rather than
-  normative leaps, so a properly cited fact could carry an uncited priority. **[observed]** in a
-  finished project four ways — a range became a point, an option was "ruled out" on the absence
-  of evidence for it, the recommendation drifted from leadership's stated frame, and a constraint
-  was asserted as immovable that the research found was not a lever. None was a citation error;
-  all four traced.
+**Has anyone tried to break this?** Every load-bearing claim has to carry one of three things: a
+credible source that disputes it, a documented search for opposing evidence that came back empty,
+or an honest statement that the claim cannot be disconfirmed through the channels this project
+mapped, with what would have been needed. The third option is the important one, because without
+an honest exit the requirement gets satisfied dishonestly. Separately, assumptions record whether
+their break-test was ever actually run, not just what the test would be.
 
-  **Fix as built, and the shape of it matters:** the taxonomy and the failure patterns already
-  existed one tier up, in the corpus reviewer's **C2** (conclusion-vs-brief) and **C14**
-  (recommendation provenance). W3 is the Tier-1 prevention layer for them, exactly as W6a/b is
-  for W7 — so it adopts C14's three labels verbatim rather than inventing a parallel taxonomy,
-  because C14's failure condition ("inference *dressed as* evidence-supported") is unrunnable if
-  writer and reviewer use different words. `summarize-section` labels each load-bearing "so what"
-  inline (evidence-supported implication / analyst inference / commissioner priority) and carries
-  the provenance into the turn as well; **B16** checks each label against what stands behind it,
-  with a wrong label high and a missing one moderate; **B17** compares the conclusion against the
-  Core Question plus any `directive` ledger entries, at every phase close rather than only the
-  final one, because drift accumulates. Design: `dev/researcher/w3-design.md`.
-
-- **Seam 3 — Significance-before-triangulation.** In the pipeline, triangulation fires before
-  synthesis **[enforced]**, so v1's "triangulation fires too late" was **wrong**. The residual
-  concern — that significance gets elevated *in conversation* before cross-ref runs — is
-  **[inferred]** and unproven. Keep as a watch item, not a confirmed seam.
-
-- **Seam 4 — Disconfirmation is partly type-limited.** **CLOSED — W4, v1.14.x.** The
-  counter-evidence gate is now keyed on the **claim**, not the research type: every load-bearing
-  claim (B16's bar, reused rather than redefined) must carry one of three dispositions — a credible
-  disputing source, a documented adverse search that came back empty, or an explicit statement that
-  the claim is not disconfirmable through the mapped channels, with what would have been needed.
-  The `CHALLENGED`/`CONTRADICTED` tags survive as tags and stop being the trigger, so the nine types
-  that previously had no disconfirmation requirement now have the same one as the other two.
-
-  The falsification loop is closed at the other end too. `assumptions.md`'s "what would challenge"
-  was always *read* — `start-phase` step 5a surfaces relevant Open assumptions — but nothing ever
-  recorded that a criterion had been **tested**. `Status` now carries four values (`Open`,
-  `Tested — held`, `Tested — broke`, `Untestable via mapped channels`), a break propagates as a
-  `correction` in the decision ledger, and closeout asks whether any load-bearing conclusion rests
-  on a still-`Open` assumption — as a **stop, not a block**, in the shape v1.14.0 verified.
-
-  This is the Tier-1 prevention layer for the corpus reviewer's **C5 Falsifiability**, the third
-  instance of the program-level pattern that the reviewer already carries the check one tier up
-  (W6a/b→closeout classes, W3→C2/C14, W4→C5). C5's brief now says a Tier-1 record may exist and to
-  **check it rather than trust it**.
-
-- **Recommendation serviceability — CLOSED, W6c/6e/6f, v1.15.x.** Until now the plugin examined
-  whether a conclusion was *supported* (B17, C2) and never whether a recommendation was **usable**.
-  Three checks close that, each the Tier-1 layer for a check the corpus reviewer already carried:
-
-  - **6e → C5.** A recommendation names what would show it wrong and whether anything planned could
-    produce that observation, with an honest exit for recommendations nothing observable could
-    refute. B18 rejects a refutation that would survive any observation — "further research may
-    refine this" is the expected failure, because it is what fluent writing produces when asked.
-  - **6f → C6.** A recommendation resting on an unmade decision or an unbuilt dependency says so
-    **at the recommendation**. C6's failure is "presented as actionable", so the fix is positional:
-    the reader who acts is the one who read the first sentence.
-  - **6c → C4.** Closeout collects every status claim across promoted outputs, STATE, and the ledger,
-    and reports contradictions **as a pair without resolving them** — a status claim is only wrong
-    relative to another, and the plugin cannot know which document is current.
-
-  Fifth instance of the program-level pattern: the corpus reviewer enumerated the failure class
-  first, because it was written from a real failed project, and the in-line layer keeps building
-  prevention for checks that already exist one tier up. All three use their C-check's vocabulary
-  verbatim so Tier 2 reads the record instead of reconstructing it.
-
-- **Seam 5 — Source-level quantitative reasoning is thin. CLOSED — W5, v1.16.x.** The criteria
-  always existed (`source-assessment-guide.md` §2 Methodology Quality, §4 Sample Size and
-  Representativeness, including an explicit instruction to flag extrapolation) — they were read at
-  assessment time, used to pick a credibility tier, and dropped. Nothing carried them forward, and
-  the integrity agent ran on drafts, plans and digests but **never on notes**, so a number's basis
-  was first examined three steps after the sample had left the building. **The defect was
-  positional, not analytical**, which is why no new specialist role was added.
-
-  The figure record W1 put in every note gains **`basis`** (n, selection, who ran it, when — with
-  "unknown" a legitimate value and omission not) and **`carries-to`** (the population the figure
-  supports a claim *about*, which is not always the one it was measured on). The integrity agent
-  gains **check 10**, invoked from `research-process-source` when a note carries figures — making
-  true a promise the agent's own usage list had made since it was written and no skill had ever
-  kept. Synthesis rule 4b binds draft **and turn** to `carries-to`, beside 4a's `measures` rule.
-
-  **Decision of record:** significance and disconfirmation stay **inline** unless a seam proves
-  otherwise — W4 shipped disconfirmation inline at 3/3, and the specialist is deferred with a
-  condition rather than rejected. See `dev/researcher/w5-design.md`.
-
-- **Seam 5 (original entry, superseded) — Source-level quantitative reasoning is thin.** The quantitative assessment criteria
-  live in a guide but are **not wired into the note schema**, and integrity runs on drafts, not
-  notes **[enforced]**. So there is no reliable source-level quantitative check — weaker than v1's
-  "checklist + post-hoc net" framing.
+**Do the numbers support the rule built on top of them?** A decision rule reads as rigorous
+because it contains an operator. "Adopt when time-to-value drops below thirty days" sounds
+measurable. If every figure in the corpus measures *the share of teams reporting any reduction*,
+then no figure measures *the size of the reduction*, and the rule cannot be evaluated at all. The
+synthesis step checks that at the rule and says so, and separately checks that two figures with
+overlapping populations state how they relate rather than sitting side by side implying
+arithmetic nobody established. Anything more complicated than those two patterns is explicitly
+handed to a human expert rather than settled, because study-design critique with partial context
+is worse than no critique at all.
 
 ---
 
-## Layer 9 — The corpus-level credibility gate (W7 shipped v1.8.0; W6a/b prevention layer shipped alongside it in v1.10.0)
+## Two rounds of checking
 
-**W6a/b (the prevention half).** W7 is mitigation — the authority that says no at final
-close. W6a/b make it rare that it has to: the **criteria preflight** (final-close stage 1
-self-assesses every SC with evidence pointers; plain unmet = hard stop before a reviewer
-run is spent; accepted-unmet requires the commissioner's recorded words), the **advisory
-criteria trajectory** in every phase debrief (nobody meets the criteria for the first
-time at final close), the **settled-framing guard** (a qualified record — waivers,
-accepted gaps, sub-headline confidence tiers — never reads unqualified, at phase or
-project close), and the **decision ledger** + **B13** (durable append-only disposition
-record; silent cross-phase reversal is a high-severity audit finding at every audit, not
-a hope that the final reviewer notices). Design + fork record:
-`dev/researcher/w6ab-design.md`.
+The audit at step 5 checks claims one at a time. It is thorough at that, and it is structurally
+blind to a whole class of failure, because some problems only exist at the level of the finished
+body of work.
 
-**W7 build record (stages, all complete):**
+Completion criteria that were never actually met. A conclusion that outruns the evidence when you
+read the whole thing but not any single paragraph. A position reversed between phase two and
+phase six with both versions still standing. A project can pass every per-claim check and still
+not be ready for anyone to act on. That has happened, which is why the second round exists.
 
-Corpus-level failures (completion criteria unmet, conclusions exceeding evidence, cross-phase
-reversals) are invisible to every per-claim gate above — a real project closed all-green and
-was not decision-ready. W7 adds an independent adversarial corpus review as a hard completion
-gate. Design: `dev/researcher/W7-corpus-review-design.md` (v3.1). Build status by stage:
+**The end-of-project review** dispatches an independent reviewer against a fixed battery of
+checks. It is cold, meaning it has not seen the project's history. It is read-only. It reads only
+what the manifest hands it, so it cannot go looking for context that would make a weak corpus
+look stronger. Its output is a receipt and a report, both immutable, and a verdict computed by a
+validator rather than argued for in prose.
 
-- **Stage 2 — contract spine: shipped, not wired.** The plugin carries
-  `reference/corpus-review-protocol.md` (the frozen protocol v1: manifest/hash identities
-  with STATE split out of the corpus hash, receipt + ledger + completion-record schemas, the
-  four-op STATE transition and completion sentinels, trust contract, verdict logic, exit
-  codes), `reference/validate-corpus-review.py` (manifest / gate / transition /
-  check-completion + an embedded deterministic fixture battery — 64 cases at the freeze),
-  `reference/review-protocol-contract.json` (the shipped trust anchor: expected validator
-  hash per protocol version), and templates for the project marker and the canonical
-  completion-criteria file.
-- **Stage 3 — reviewer implementation: built, corpus-scale proof pending.** The review
-  surface exists: `skills/research-review-corpus/` (the runner — only writer of review
-  artifacts, four-inputs coldness, exclusive-create publishes, failed attempts as
-  `.failed.json` in both run kinds, fail-closed disclosure preflight) +
-  `commands/research/review-corpus.md`; `reference/corpus-review-brief.md` (the fixed
-  C1–C15 battery with required-evidence fields, coverage/verdict discipline, the
-  read-nothing-outside-the-manifest rule, and the reviewer-result schema — promoted from
-  the spike-validated base); `agents/corpus-reviewer.md` (Tier 2, cold, read-only). The
-  validator gained one **additive** mode, `validate-receipt` (runner preflight through the
-  one implementation; malformed candidates land as incomplete-receipt, never a crash; the
-  new flags are rejected outside the mode; battery now 69 cases; contract hash
-  regenerated). Corpus-scale fixtures live in the eval pack
-  (`eval/targets/researcher/fixtures/corpus-a/` — the known-bad corpus, 7 seeded defect
-  classes → not-ready — and `corpus-b/` — clean → zero material findings; names are
-  neutral so the blind eval-runner cannot infer the expected condition) behind two golden
-  `review-corpus` scenarios and a deterministic `review_receipt_validates` gate.
-  Codex-hardened (fix-first: 5 blockers / 5 majors, all applied). **The goldens have not
-  yet been run** — stage 3's proof half completes when they pass, which is also the
-  stage-4 switch-on precondition; nothing invokes the gate at closeout yet, and cold
-  reviewer behavior is proven only by the stage-5 live dual-tier run.
-- **Stage 3 proof: complete.** The corpus-scale golden campaign (eval iterations 10–18)
-  closed with both goldens judged PASS — known-bad `corpus-a` at iteration 10
-  (Credibility Gate 3, 7/7 seeded-class recall) and clean `corpus-b` at iteration 18
-  (Credibility Gate 3, zero material findings). Every intermediate red was a true
-  positive (six fixture authoring defects, one runner-register deficiency, three
-  turn-phrasing gaps — all fixed). The stage-4 switch-on precondition is met.
-- **Stage 4 — gate wiring: built.** `audit-claims`' final-phase closeout is now the
-  three-stage validated closeout (read-only preflight with no conversational
-  authorization; validator gate verdict routed by exit code, legacy exit-10 path keeps
-  pre-W7 behavior with a visible no-credibility-gate notice; STATE written only via
-  `transition --apply`, every apply exit routed) with a mutation-free closeout-only
-  re-entry (a completed final manifest skips the audit entirely, so the reviewed corpus
-  is never touched between review and close). Side doors closed: init's STATE/CLAUDE
-  templates scope manual completion to non-final phases; discover's inconsistency menu
-  drops manual advance for the final phase. Sentinel readers (`progress`,
-  `start-phase`) treat completion as a claim — `check-completion` runs and its verdict
-  outranks STATE text (progress's phase table carries an explicit 22/23 override;
-  start-phase refuses phases on closed projects, with no conversational reopen of
-  archives). `init` installs the protocol kit (validator → `research/bin/`, marker,
-  STATE discriminator, SC-ID'd criteria + canonical file, reviews/ scaffold, pre-allow
-  additions) and gained a verify-not-presence adoption path (`/research-init upgrade`)
-  for existing projects, including the pre-adoption-receipts staleness case. The
-  validator gained archive drift-checking (closed-unreviewed + corpus/STATE drift →
-  stale, never a quiet archive; battery 69→71). Codex-hardened (fix-first: 4 blockers /
-  5 majors / 1 minor, all applied). Audit-entry golden regression run post-refactor
-  (iteration 19).
-- **Stage 5 [proposed]:** live proof on the remediated engine corpus, Cowork path, five
-  release surfaces + CHANGELOG + tag, merge.
+That verdict is a real gate. On projects set up for it, the final phase closes only through the
+validator, and a material finding is yours to close: fix it and re-review, reject it with a cited
+reason, or accept it as a recorded exception. The agent never dispositions one on its own.
 
-Ownership (now enforced): the **runner** is the only writer of review artifacts;
-reviewers are read-only samplers; the **validator** owns the completion verdict and the
-allowed STATE transition, and the closeout calls it (see the Layer 2 rows).
+**The relationship between the two rounds is the design pattern worth understanding.** The
+end-of-project reviewer was written first, from a real project that failed. It enumerated the
+ways a research corpus goes wrong. Almost everything added to the day-to-day cycle since then has
+been built as prevention for a check the reviewer already carried: the "so what" labels, the
+disconfirmation requirement, the recommendation checks, the instrument-validity checks. Each one
+uses the reviewer's exact vocabulary, on purpose, so the reviewer reads the record instead of
+reconstructing it.
+
+The reviewer is the authority that says no at the end. The in-line checks exist so it rarely has
+to.
 
 ---
 
-*This map is the base for precise adjustment. W7 and W6a/b (Layer 9) are shipped; W2
-(saturation→stop routing, Seam 1) and W3 (conclusion-vs-brief, Seam 2) are the next build
-chapters; Seam 0 and the remaining Layer 4 judgment gaps follow; the specialist-bench
-decisions (Layer 5) ride with them.*
+## What it does not protect against
+
+Being straight about this is more useful than a longer feature list.
+
+**Nothing re-reads the original source.** This is the deepest limit in the system. Every check
+downstream — the cross-reference, the integrity agent, the synthesis rules, the audit — terminates
+at the AI-authored note. The link from that note back to the actual source is asserted once, when
+the note is written, and never checked again. A transcription error, a dropped qualifier, or a
+quote pulled out of context passes every later gate cleanly, because every later gate is reading
+the note.
+
+What has been done about it is narrower than fixing it. Notes now carry a locator and a verbatim
+snippet for every figure, and the audit checks that each cited figure has a usable anchor. That
+makes the corpus checkable by a person. It does not make it verified, and a passing audit must
+never be read as "the notes are faithful." Sampled re-fetching at audit time was considered and
+deliberately not built, because it fails on exactly the sources that matter most: the paywalled
+ones, the dated ones, the ones that moved.
+
+**The agent has to remember to re-anchor.** After a long, free-ranging conversation about a
+source, returning to the protocol is the one reflex nothing can force. The helper makes returning
+a single cheap call. It cannot make the agent reach for it.
+
+**Significance can still get elevated in conversation.** The controls fire in the pipeline. A
+finding that gets talked up in the chat before the cross-reference runs is not covered by them.
+This is a watch item rather than a demonstrated failure.
+
+**Deep quantitative critique is out of scope, on purpose.** Whether a study's method actually
+supports its headline is a human's call. The plugin records what it would take to make that call
+and routes the question to a person rather than answering it.
+
+---
+
+## Running it in Claude Code versus Cowork
+
+The plugin works on both and detects which one it is in. Three differences are worth knowing.
+
+**Hooks only run in Claude Code.** The gate that physically blocks writes to `outputs/` is a
+Claude Code hook, as is the warning before context gets compacted. In Cowork neither runs, and
+the outputs gate holds because the audit skill is the only thing that writes deliverables there.
+That is a rule the system follows rather than a wall it cannot cross. The audit trail in
+`gate-log.md` is what makes it checkable either way.
+
+**Scripts have to live inside the project.** The position helper and the completion validator are
+copied into `research/bin/` at setup rather than being referenced from the plugin, because that
+is the only path both surfaces can run.
+
+**Cowork gates file deletion per folder.** Approve the prompt once, or anything that needs to
+remove a file will fail.
+
+---
+
+## How this keeps getting better
+
+A harness that does not learn is just a checklist.
+
+When something goes wrong, the fix is not to correct that output. It is to ask which part of the
+system let it through. Was a rule missing? Did the durable record fail to carry something? Was a
+check running too late to matter? Was the requirement written in a way that one surface satisfied
+and another did not?
+
+Two things make that loop real here.
+
+**An evaluation set** runs the plugin against fixed scenarios, including adversarial ones built
+to provoke the specific failures above, and scores the runs against a rubric. It surfaces new
+findings nearly every time it runs, and that is the tool working rather than a sign of breakage.
+
+**A register of known limits** records what is still exposed, in what way, and on what evidence.
+It distinguishes what is enforced by code from what has been observed in real runs from what is
+merely a deduced possibility. That distinction matters, because the honest answer to "is this
+safe?" is different for each.
+
+Both live in [MAINTAINERS.md](MAINTAINERS.md) and the eval pack.
+
+---
+
+## Where to look next
+
+- **Exact ownership, current limit status, version history** — [MAINTAINERS.md](MAINTAINERS.md)
+- **What changed and when** — [`researcher/CHANGELOG.md`](../../researcher/CHANGELOG.md)
+- **How a specific step actually works** — the skill file in `researcher/skills/`. When this
+  document and a skill disagree about mechanics, the skill is right and this document is wrong.
+- **Working on the plugin** — [`researcher/AGENTS.md`](../../researcher/AGENTS.md)
+- **Why a particular design went the way it did** — the design records in this folder

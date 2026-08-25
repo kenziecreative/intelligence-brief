@@ -14,11 +14,17 @@ Turns Claude Code / Cowork into an audited research partner: a phased plan groun
 - `reference/` — read-only knowledge base: root guides, templates, and per-type discovery playbooks + channel maps (11 research types).
 - `hooks/` — Claude Code hooks (the `outputs/` gate and the `PreCompact` save warning).
 
-**End-to-end operating model:** `dev/researcher/ARCHITECTURE.md` is the source-of-truth map —
-the pipeline, decision/state ownership, the state model, the judgment map, the role/expertise
-split, cross-cutting invariants, and known unreconciled seams. Read it before non-trivial
-changes; update it in the same change when a boundary, judgment home, principle, or seam moves.
-It is authoritative on relationships and principles, subordinate to the skills on mechanics.
+**End-to-end operating model, two files.**
+
+- `dev/researcher/ARCHITECTURE.md` — the explanation. What researcher does, how the cycle works,
+  what it remembers, who decides what, and what it does not protect against, framed against the
+  base harness it runs on. Plain language, no internal shorthand. Read this first, and hand it to
+  anyone who needs to understand the system.
+- `dev/researcher/MAINTAINERS.md` — the ledger. Exact decision and write ownership, the seam
+  register with current status, the workstream→version map, evidence labels, and W7 build status.
+  Read it before non-trivial changes; **update it in the same change** when a boundary, judgment
+  home, principle, or seam moves. Authoritative on relationships and principles, subordinate to
+  the skills on mechanics.
 
 ## Key mechanics
 

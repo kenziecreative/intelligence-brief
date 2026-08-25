@@ -7,9 +7,11 @@ The eval set is **45 of 45 golden**, each verified 3× against the shipped build
 
 ## Where it stands
 
-Full history: [researcher/CHANGELOG.md](../../researcher/CHANGELOG.md). Architecture and seam
-status: [dev/researcher/ARCHITECTURE.md](../researcher/ARCHITECTURE.md). W6d's design and the
-reasoning for taking two of C7's four patterns: [dev/researcher/w6d-design.md](../researcher/w6d-design.md).
+Full history: [researcher/CHANGELOG.md](../../researcher/CHANGELOG.md). How the system works, in
+plain language: [dev/researcher/ARCHITECTURE.md](../researcher/ARCHITECTURE.md). Ownership, seam
+status, and the workstream→version map: [dev/researcher/MAINTAINERS.md](../researcher/MAINTAINERS.md).
+W6d's design and the reasoning for taking two of C7's four patterns:
+[dev/researcher/w6d-design.md](../researcher/w6d-design.md).
 
 | Workstream | State |
 |---|---|
