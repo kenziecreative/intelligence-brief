@@ -66,7 +66,9 @@ Use these exact patterns. They map 1:1 onto the brief's content — same items, 
   <span class="detail">Everything due today was scanned — 6 cells, 4 driver falsifiers, 1 signpost — and none are overdue. Nothing moved.</span>
 </div>
 
-<!-- run idle: nothing was due. NOT a failure, and not "0 of 0 complete". -->
+<!-- run idle: NOTHING was owed — no due cells, no due signposts, AND no active drivers.
+     Rare by construction: an active driver always owes a falsifier search. A morning with no
+     cells due but drivers tested is `complete`, not idle. NOT a failure, and never "0 of 0". -->
 <div class="collect is-quiet">
   <span class="state">Nothing due today</span>
   <span class="detail">No cells fall due until tomorrow; the rotation is 71% through this week and on schedule. Reporting on the picture as it stands.</span>

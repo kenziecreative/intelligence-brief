@@ -101,6 +101,11 @@ Read the latest run record in `runs.json` and render exactly one of these five:
 >
 > *(zero cells due, a falsifier failed)* **Assessment degraded.** No cells fell due today, but the falsifier search against *AI advisory commoditization* did not complete, so 3 of your 4 drivers were tested and one was not. **No driver moved today.**
 
+**Baseline not yet complete** (some applicable cell has never had a successful scan — the first sweep is still in progress). This is an *addition* to whichever rendering above applies, not a replacement:
+> Still establishing baseline coverage: 7 of 15 cells have been scanned at least once. **No driver moves until the first full sweep completes** — the picture is not yet founded on a look at the whole territory.
+
+**A driver may not move before the system has looked at the world once**, and the brief says so plainly rather than moving quietly and letting the rotation percentage carry the caveat. A staggered matrix means "nothing is overdue" is true on day three while twelve cells have never been searched; "Collection current" over the top of a driver movement, in that state, claims more than the evidence supports. Expect this line for roughly the first cycle of a new deployment, and expect it to disappear on its own.
+
 **No scan at all:**
 > Reporting on state last collected [date]. No scan has run since. Nothing below reflects anything that happened after that date.
 
@@ -145,7 +150,7 @@ Each run, produce one brief by executing these steps in order:
 
 8. **Write the disconfirming section.** The scan runs a mandatory falsifier search against every active driver and records the result of each one in the run record's `falsifiers` array. **Read that array. Do not infer the outcome from the absence of items.**
 
-   - Any falsifier returned `ok` → report what it found: observations that cut against a driver's current direction, naming the driver they challenge.
+   - Any falsifier returned `ok` → report what it found. **The row tells you exactly what that was: `result_observation_ids` names the observations the counter-search turned up, and `cuts` says whether they run `against` the driver, unexpectedly `for` it, or `mixed`.** Read those; do not re-infer which observations the search meant from the surrounding state. Name the driver each item challenges, and if `cuts` is `for`, say so — a falsifier that came back supporting the driver is a *stronger* result than a quiet one, and burying it would be the most self-serving edit in the brief.
    - **Every falsifier returned `empty`** → and only then may you write *"Nothing surfaced against your four active drivers this week."* That sentence is a claim about the world, and it is true only when every driver was actually searched against and the world came back quiet.
    - **Any falsifier `failed`** → say that instead, naming the drivers that went untested: *"Two of your four drivers went untested today — the searches against commoditization and regulatory hardening did not complete. Nothing below should be read as evidence they still hold."* **An empty result and a failed search are not the same fact and must never render as the same sentence.** One says the world offered no counter-evidence; the other says nobody looked.
 

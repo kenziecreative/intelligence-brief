@@ -79,7 +79,13 @@ Write a `noise` feedback record against the item and its cell. If noise records 
 
 ### Confirming a proposed driver
 
-Set the proposal's `status: "confirmed"`. Create the driver in `drivers.json` with `origin: "emergent"`, a `definition` in plain language (a force, not an outcome), `direction` and `certainty` as the evidence supports (never `High` certainty at creation), `status: "active"`, the thread's observations as `supporting_observations`, and a seed `confidence_log` entry naming the thread and observations it emerged from. Write a `driver_confirm` feedback record.
+Set the proposal's `status: "confirmed"`. **Create the driver by following the one constructor** — "Creating a driver" in the environmental-scan skill's `drivers.json` section. Do not improvise the field list from this page.
+
+The parts specific to this case: `origin: "emergent"`; a `definition` in plain language (a force, not an outcome); `direction` and `certainty` as the evidence supports; the thread's observations as `supporting_observations`; and a seed `confidence_log` entry naming the thread it emerged from.
+
+**The constructor's counting rule is the one that matters here, and it is the one this surface used to get wrong.** `observation_count` and the seed entry's `moved_by` count **`material_advance` observations only.** A thread that accumulated three real advances and twenty syndicated restatements becomes a driver with an `observation_count` of **3**. Confirming it as a twenty-three-observation force is how an echo chamber becomes a held belief.
+
+Write a `driver_confirm` feedback record.
 
 ### Killing or retiring a driver
 
@@ -87,7 +93,7 @@ Set `status: "retired"`. **Never delete it.** Retired drivers and their confiden
 
 ### A stated belief
 
-If the user asserts a view of the world worth tracking (*"I think the edge is in proprietary data"*), offer to hold it as a driver with `origin: "user_asserted"` — direction and certainty as they state it (never seeded at `High` certainty without evidence on file), plus a seed `confidence_log` entry. This is how held beliefs enter the system, and it is what the scan's mandatory falsifier search will then actively test.
+If the user asserts a view of the world worth tracking (*"I think the edge is in proprietary data"*), offer to hold it as a driver with `origin: "user_asserted"` — direction and certainty as they state it. **Build it with the one constructor** ("Creating a driver", environmental-scan skill), which is also what keeps a stated belief from being seeded at `High` certainty with no evidence on file. This is how held beliefs enter the system, and it is what the scan's mandatory falsifier search will then actively test.
 
 ### A story that's over
 

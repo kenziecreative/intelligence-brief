@@ -181,6 +181,19 @@ Two fields foresight does not have, which are the whole point:
 
 `origin`: `derived` (setup inferred it from the relevance context) | `user_asserted` (the user stated it — this is what held beliefs are now) | `emergent` (the system proposed it from a thread and the user confirmed).
 
+### Creating a driver — the one constructor
+
+**Three surfaces create drivers** (`/intel-setup` from the relevance context; the review conversation when the user confirms a proposal or asserts a belief) **and they all use this one definition.** There is no second way to build a driver. If you are writing a driver anywhere, you are following this list:
+
+- Every field in the schema above is present. No partial drivers.
+- **`observation_count` counts `material_advance` observations only** — never derivatives. `supporting_observations` may list both, but the count is evidence, and a restatement is not evidence. A driver confirmed from a thread carrying three advances and twenty syndicated echoes has an `observation_count` of **3**, not 23.
+- **The seed `confidence_log` entry's `moved_by` lists `material_advance` observation ids only**, for the same reason.
+- **Never seed at `High` certainty.** Certainty is earned from evidence over time. A driver created today has, at most, the evidence of today.
+- `steep_primary: null`, `steep_secondary: []` — always. Those are export-domain fields and the daily runtime never touches them.
+- `status: "active"`, `created` set, `last_reassessed: null`.
+
+> Why this is stated once and pointed at from everywhere: the material-vs-derivative rule was added to collection and to export, and the constructor in the review conversation was missed — so the one door left open let a thread of twenty echoes walk in as a twenty-three-observation driver. **A rule that lives in three places will eventually be true in two of them.** Point at this block; do not restate it.
+
 `status`: `active` | `retired`. **Retired drivers are never deleted.** They and their confidence logs are what the reckoning reads.
 
 `proposals` holds emergent-driver proposals awaiting the user (see step 10). Each: `{ "proposal_id": "PRO-YYYY-MM-DD-NN", "thread_id": "...", "statement": "one-sentence force, in plain language", "observation_count": N, "proposed": "YYYY-MM-DD", "status": "open" }`. `status`: `open` | `confirmed` | `dismissed`. Only the review conversation changes it.
@@ -273,6 +286,11 @@ Empty form: `{ "runs": [] }`
       "status": "complete",
       "run_window_start": "2026-06-06T07:02:00-05:00",
       "run_window_end": "2026-06-07T07:02:00-05:00",
+      "planned": {
+        "cells":     [{ "zone": "Policy Levers", "cell_id": "ai-advice-regulation" }],
+        "signposts": ["SIG-2026-06-07-001"],
+        "drivers":   ["DRV-001"]
+      },
       "cells_due": 6,
       "cells_completed": 6,
       "cells_failed": [],
@@ -285,6 +303,8 @@ Empty form: `{ "runs": [] }`
           "counter_hypothesis": "SMB distribution platforms are retreating from bundled AI advisors, or the advisors are failing to retain users.",
           "query": "platform withdraws AI assistant small business retention churn",
           "status": "empty",
+          "result_observation_ids": [],
+          "cuts": null,
           "checked": "2026-06-07T07:09:00-05:00"
         }
       ],
@@ -304,6 +324,8 @@ Empty form: `{ "runs": [] }`
 - **`idle` exists because "every due cell succeeded" and "no cell completed" are both vacuously true when nothing is due.** Without a name for that state, the same morning can be reported as full health or as a total collection failure. Test for `idle` before you test for `complete`.
 - **Every mandatory obligation records an outcome, and the vocabulary is the same for all three classes:** `ok` (ran, found something) · `empty` (ran, found nothing — a success) · `failed` (errored, rate-limited, or timed out). Cells record theirs in `coverage.json`; signposts and falsifiers record theirs here. **An obligation with no recorded outcome is indistinguishable from one that was never run**, which is how a mandatory step becomes theater.
 - **`falsifiers` is what makes the brief's disconfirming section honest.** One row per active driver, every run: the counter-hypothesis you searched against, the query you used, and what came back. The briefing skill may only write *"nothing surfaced against your drivers"* when every row here is `empty` — an `empty` falsifier means the world offered no counter-evidence; a `failed` one means **you did not look**, and those must never render as the same sentence.
+  - On an `ok` falsifier, record **`result_observation_ids`** (the observations the counter-search actually turned up) and **`cuts`**: `against` (the evidence cuts against the driver's current direction) | `for` (it unexpectedly supports it) | `mixed`. **Without these, an `ok` row says only that counter-evidence exists somewhere and leaves the brief to guess which observations it meant** — and a section whose whole purpose is disconfirmation cannot be assembled by inference. `result_observation_ids` is empty and `cuts` is `null` on `empty` and `failed` rows.
+- **`planned`** — the obligations this run committed to at step 3, before executing any of them. Step 11 reconciles the recorded outcomes against it, and **any planned obligation with no recorded outcome is written down as `failed`.** This is the mechanism that makes "every mandatory obligation records an outcome" enforceable rather than merely stated: absence and success must not be the same thing on disk.
 - `brief_written` is null when the scan runs standalone; the briefing skill fills it when it reports on this run. A run whose brief included a reckoning also carries `"reckoning": true`, set by the briefing skill.
 - **`run_window_start` / `run_window_end` bound the run, not the collection.** They exist so a reader can see what interval a run covers. **They are not the search window for any cell** — each cell derives its own window from its own `last_successful_scan` (see `coverage.json`). Three windows exist in this system and they are not interchangeable: the **cell collection window** (what a given cell searches), the **run window** (what this run covers, recorded here), and the **reader window** (what the brief reports on, derived by the briefing skill from `brief_written`). Collapsing them is how a weekly cell ends up searching one day.
 - **`last_successful_run` is derived from this file**, never stored separately: the most recent run whose status is `complete`, `degraded`, or `idle`. A quiet run still writes a run record, so a quiet day never causes the next day to think it is a first run.
@@ -413,6 +435,18 @@ Every other missing field silently takes its default.
 
 **3. Build the collection plan.** Three sources of queries, in this order. **All three are mandatory collection obligations: each one records an outcome, and any failure degrades the run.**
 
+   **Write the plan into the run record before you execute it.** Once the three lists below are built, set `planned` on this run's row:
+
+   ```json
+   "planned": {
+     "cells":     [{ "zone": "Policy Levers", "cell_id": "ai-advice-regulation" }],
+     "signposts": ["SIG-2026-06-07-001"],
+     "drivers":   ["DRV-001", "DRV-002"]
+   }
+   ```
+
+   **This is what makes "every obligation records an outcome" an actual rule instead of an intention.** Step 11 compares the outcomes you recorded against this list, and **any planned obligation with no recorded outcome becomes a `failed` one.** Without the plan on disk, a missing row and an obligation that was never owed are the same thing, and a run that quietly skipped half its work closes `complete`. A rule that nothing checks is not a rule. Write the plan first, then do the work.
+
    **(a) Due cells.** Every `matrix` row where `applicable: true` and `next_due <= today`. A row whose `next_due` is null — a hand-authored matrix, or a cell added outside setup — is due immediately, and gets a real `next_due` when it closes.
 
    **A cell whose last attempt `failed` is due again — failure does not discharge the obligation.** It kept its old `next_due` (step 11), so it simply stays due, with no special case needed here.
@@ -485,7 +519,13 @@ Every other missing field silently takes its default.
 
 **9. Reassess drivers.** A driver is re-decided **only when both conditions hold**:
 
-   - **Standing.** **No `applicable` cell has `next_due <= today` still outstanding** — that is, every cell that was due today (or earlier) actually completed with `ok` or `empty` this run. A cell that failed today kept its `next_due` and is therefore still outstanding, which fails standing: *due-but-not-done* and *overdue* are the same thing here, and a gate that only tested "overdue" would let a cell that failed this very morning pass. **And** this run's falsifier search for this driver did not `fail`. Collection is current, and the driver was actually tested against.
+   - **Standing.** **This run has no failed obligation of any kind** — no failed cell, no failed signpost check, and no failed falsifier search **for any driver, not only this one.** That is exactly the condition that will close the run `complete` at step 11: **if the run would not close `complete`, no driver moves.** (A cell that failed today kept its `next_due` and is still outstanding, so *due-but-not-done* and *overdue* both fail standing — a gate that only tested "overdue" would wave through a cell that failed this very morning.)
+
+     > **Why the gate is global and not per-driver.** The brief's degraded rendering makes a *global* claim — "No driver moved today, because collection is incomplete." A gate scoped narrower than the claim it protects is a contradiction waiting to be printed: scope the falsifier check to *this* driver, and a run where driver B's search rate-limited is degraded while driver A moves anyway, so the brief must simultaneously report A's movement and assert that nothing moved. **One gate, one claim, same scope.** The cost is real and it is the right cost: one failed search freezes every driver for one run. They are retried next run and confidence catches up. Confidence that moves on an incomplete look is the thing this whole system exists to prevent.
+
+   - **Baseline.** **Every `applicable` cell has at least one successful scan on record.** Until the matrix has completed its first full sweep, no driver moves.
+
+     > The rotation is staggered, so on day three most cells have never been searched and their turn has not yet come — which means "nothing is overdue" is true while the system has still seen almost nothing. Without this clause a driver seeded at setup can move on day one, off three cells of evidence, while twelve cells have never been looked at, and the brief says "Collection current" over the top of it. That is not a lie the rotation percentage repairs; it is an assessment the evidence does not support. **A driver cannot be re-decided before the system has looked at the world once.** Say so in the brief (see the briefing skill's baseline rendering) rather than moving quietly.
    - **Cause.** At least one new **`material_advance`** observation or resolved signpost has attached to this driver since its `last_reassessed`. **Derivative observations are not a cause.** Restatement is not evidence; if ten outlets repeat one announcement, nothing has happened since the announcement.
 
    **If standing fails, no driver moves. Full stop.** Confidence may not move on a partial look, and it may not move on a look that never tried to disconfirm it. This is the same doctrine as the quiet-day rule, applied one level up: *silence must be attributable, and so must confidence movement.*
@@ -499,6 +539,14 @@ Every other missing field silently takes its default.
 **10. Propose emergent drivers.** If a thread has accumulated three or more material observations and does not roll up to any existing driver, record a proposal in `drivers.json` → `proposals` with `status: "open"` (skip if an open or dismissed proposal already exists for that thread). **Do not create the driver.** It is offered to the user in the next brief and confirmed or dismissed through the review conversation.
 
 **11. Close the run record.** Set `completed`, `cells_due`, `cells_completed`, `cells_failed`, `observations_added`, `drivers_reassessed`, and `status`. The `signposts` and `falsifiers` arrays were filled as you went (steps 4, 8).
+
+   **Reconcile the plan first, before anything else in this step.** Read `planned` (step 3) and check every entry against what you actually recorded:
+
+   - Every planned cell has a `last_status` written this run. Every planned signpost has a row in `signposts`. Every planned driver has a row in `falsifiers`.
+   - **Any planned obligation with no recorded outcome is recorded as `failed`, right now.** Not omitted, not assumed fine — `failed`. You planned it, you did not record doing it, and the honest reading of that is that it did not happen.
+   - Any *recorded* outcome for something that was never planned is a bug in your own bookkeeping. Fix the record rather than the plan.
+
+   > **This reconciliation is the mechanism behind the release's central rule.** "Every mandatory obligation records an outcome" is doctrine; this comparison is what enforces it. Skip it and the rule degrades into a hope — a weaker runtime that simply never writes a falsifier row closes the run `complete`, and the brief goes on to say "nothing surfaced against your drivers" about searches that never ran.
 
    **Update the matrix, and be precise about which timestamp moves.** For every cell you *attempted*:
 
