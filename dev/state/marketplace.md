@@ -16,7 +16,13 @@ README table, the AGENTS list): blueprint 0.3.1, goal-setting 0.2.8, intelligenc
 photo-generator 1.2.0, researcher 1.18.0, sage 0.2.0, security 0.1.0, strategist 0.7.0,
 thinkers 0.1.0, trailhead 0.1.0.
 
-`main` is pushed at `eadc89e` and the primary checkout sits on it, clean.
+`main` is pushed and the primary checkout sits on it, clean.
+
+**Remote branches are down to two:** `origin/main` and `origin/review/intelligence-briefing`.
+`origin/convergence/goal-setting` was pruned 2026-09-01 after verifying it was a strict ancestor
+of `main` (zero commits not already there; tip was `0a6e50f` if it is ever wanted back). The
+August stragglers — `security`, `trailhead-v0.1.0`, `goal-setting-eval-target`,
+`backup/ec65313-two-releases` — are all gone.
 
 ## Done this session (2026-09-01)
 
@@ -49,20 +55,16 @@ version-prefix checker green across all four surfaces.
 
 ## Next steps (in order)
 
-1. **Prune one stale remote branch.** `origin/convergence/goal-setting` is fully merged into
-   `main`. Safe to delete with `git push origin --delete convergence/goal-setting`; nothing is
-   lost. (The other three stale remotes from August — `security`, `trailhead-v0.1.0`,
-   `goal-setting-eval-target` — are already gone, as is `backup/ec65313-two-releases`.)
-2. **Full strategist eval suite** against merged `main`. v0.7.0 is tagged on a 5× verification of
+1. **Full strategist eval suite** against merged `main`. v0.7.0 is tagged on a 5× verification of
    the blocker scenario only; the other nine surfaces the narration firewall touches have not been
    re-run. See `dev/state/strategist.md`.
-3. **Consider enforcing the pathspec/worktree rule.** It is currently a convention in `AGENTS.md`,
+2. **Consider enforcing the pathspec/worktree rule.** It is currently a convention in `AGENTS.md`,
    which binds only sessions that read it at startup. A `pre-commit` hook refusing plugin-path
    commits on `main` in the primary checkout would make it real. Not built; scoped and offered.
 
 ## Open questions / decisions pending
 
-- Nothing blocking. Item 3 above is a build decision, not a question.
+- Nothing blocking. Item 2 above is a build decision, not a question.
 
 ## Session knowledge worth keeping
 
