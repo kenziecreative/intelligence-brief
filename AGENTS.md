@@ -55,10 +55,27 @@ afterwards. Naming your paths costs nothing and would have prevented it.
 **2. Plugin work takes a worktree. Docs and state work does not.**
 
 - **Changing a plugin's shipped surface** — anything under `<plugin>/`, or a release — happens on
-  its own branch in its own worktree (`kenzie-build-<plugin>`, branched from current `main`). One
-  plugin, one branch, one worktree. Set it up before the first edit, not after.
+  its own branch in its own worktree. One plugin, one branch, one worktree. Set it up before the
+  first edit, not after.
 - **Docs, `dev/`, state files, the catalog, the root README** — work in the primary checkout on
   `main`.
+
+**Two worktree locations, and they are for different things.**
+
+- **A task** — one fix, one workstream chunk, work that finishes in a session or two — uses
+  `EnterWorktree`, which creates it under `.claude/worktrees/<name>` off `origin/main`. That path
+  is excluded locally, so it never shows as untracked. On session exit you are asked whether to
+  keep or remove it. **This is the default; reach for it first.**
+- **A long-lived stream** — parked for weeks, referenced by absolute path from a state file —
+  gets a sibling checkout named `kenzie-build-<plugin>`, created with `git worktree add` and
+  entered with `EnterWorktree`'s `path` argument. `review/intelligence-briefing` is the live
+  example. Use this only when the work will outlast the sessions working on it, because a
+  session-exit prompt should never be able to clean up a stream.
+
+**Saying the word is load-bearing.** `EnterWorktree` refuses to run unless "worktree" appears in
+what the user typed or in `CLAUDE.md`. "Start on researcher W8" will not trigger it; "set up a
+worktree and start on researcher W8" will. `CLAUDE.md` carries the standing instruction so the
+common case works without the user remembering, but an explicit mention is still the reliable path.
 
 The test is a property of the task, not of the environment: *am I about to edit inside a plugin
 directory?* You can answer that alone. "Take a worktree if another agent is working" cannot be
@@ -71,12 +88,22 @@ one switches branches under the other. Sending all plugin work to a worktree rem
 to move the primary checkout off `main`, which closes the hazard without making a typo fix build
 a worktree first. The primary checkout stays on `main` and stays clean.
 
-**What a worktree does not carry.** Only tracked files. `.claude/settings.local.json` is
-gitignored, so a new worktree starts with **no permission allowlist** and you will be prompted for
-things that are pre-approved here — copy it in when you create the worktree. Gitignored working
-docs do not travel either; see `dev/STATE.md` § *Gitignored working docs do not travel* for which
-ones and what to do instead. The cheap check that a move carried anything: **a branch sitting at
-the same commit as `main` has carried nothing.**
+**What a worktree does not carry.** Only tracked files, whichever location you used.
+`.claude/settings.local.json` is gitignored, so a new worktree starts with **no permission
+allowlist** and prompts for things that are pre-approved here. Copy it in as the first act in a
+new worktree:
+
+```bash
+cp "$(git rev-parse --path-format=absolute --git-common-dir)/../.claude/settings.local.json" .claude/
+```
+
+Gitignored working docs do not travel either; see `dev/STATE.md` § *Gitignored working docs do not
+travel* for which ones and what to do instead. The cheap check that a move carried anything: **a
+branch sitting at the same commit as `main` has carried nothing.**
+
+The allowlist also **drifts** once copied, because approvals accumulate wherever you work. The
+`kenzie-build-intelligence-briefing` copy is 84 entries behind the primary checkout's. That is a
+reason to prefer short-lived task worktrees over long-lived ones, not a reason to sync them.
 
 **This file only reaches sessions that start after it lands.** A session already running has the
 version it read at startup. If you change a convention here, tell the running sessions directly.
