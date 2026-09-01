@@ -25,6 +25,7 @@ and trivial; conflicts on a shared body were not.
 |---|---|---|---|
 | **goal-setting** | merged to `main` 2026-08-09 | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-08-07 |
 | **researcher** | `core-kenzie-marketplace` · `main` — **v1.18.0 tagged**; every workstream built, eval set 45/45 golden. Docs split: ARCHITECTURE = the explanation, MAINTAINERS = the ledger | [dev/state/researcher.md](state/researcher.md) | 2026-09-01 |
+| **intelligence-briefing** | `kenzie-build-intelligence-briefing` · `review/intelligence-briefing` — **unmerged**; v1.1.0 tagged on the branch, `main` still ships 0.3.1. Parked on Kelsey running Codex pass 3 | [dev/state/intelligence-briefing.md](state/intelligence-briefing.md) | 2026-08-25 |
 | **strategist** | merged to `main` 2026-08-09 | [dev/state/strategist.md](state/strategist.md) | 2026-08-09 |
 | **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-08-09 |
 
