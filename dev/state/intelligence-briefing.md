@@ -64,8 +64,8 @@ it protects:
 - **Driver standing made global, plus a new baseline gate.** No driver moves unless the whole run
   closes clean, and none moves before every applicable cell has been scanned at least once.
 
-**Branch is one commit ahead of `origin/review/intelligence-briefing` — not yet pushed.** Until it
-is, the work exists on one machine.
+**Pushed** to `origin/review/intelligence-briefing` on 2026-09-01. Branch and remote agree; the
+work is backed up.
 
 ## Next steps (in order)
 
@@ -74,8 +74,7 @@ is, the work exists on one machine.
    `plugin/` directory beside it, then paste the verdict back into a session. **That path is
    outside any repo and therefore outside every checkout** — it does not travel and it is not
    backed up by git.
-2. **Push the branch.** `8af2c28` is committed locally and not yet on the remote, so the work is
-   still single-machine. One command, and it is the last of the exposure.
+2. ~~Push the branch.~~ **Done 2026-09-01** — `8af2c28` is on the remote.
 3. **Kelsey: the merge-to-main call.** Sequencing recommendation from the branch's own state doc:
    let pass 3 land first. Two equivalent paths — merge from `core-kenzie-marketplace` (the
    strategist pattern), or the PR GitHub offers for the pushed branch.
