@@ -1,113 +1,127 @@
 # Stream: researcher
 
-**Status:** live, nothing red. **v1.18.0 tagged and pushed — every workstream is now built.**
-The eval set is **45 of 45 golden**, each verified 3× against the shipped build.
+**Status:** live, nothing red. **v1.18.0 is current and still the right tag** — this session
+changed documentation only, no shipped surface. Eval set 45 of 45 golden, each verified 3×
+against the tagged build.
 **Worktree:** primary checkout (`core-kenzie-marketplace`) · branch `main`
-**Last touched:** 2026-08-25
+**Last touched:** 2026-09-01
 
 ## Where it stands
 
-Full history: [researcher/CHANGELOG.md](../../researcher/CHANGELOG.md). How the system works, in
-plain language: [dev/researcher/ARCHITECTURE.md](../researcher/ARCHITECTURE.md). Ownership, seam
-status, and the workstream→version map: [dev/researcher/MAINTAINERS.md](../researcher/MAINTAINERS.md).
-W6d's design and the reasoning for taking two of C7's four patterns:
-[dev/researcher/w6d-design.md](../researcher/w6d-design.md).
+The build is done. Every workstream (W1–W7, W6a–W6f) is shipped; the seam register has two
+entries still open and both are observation problems rather than build problems.
 
-| Workstream | State |
-|---|---|
-| W7 · /upskill · W6a+W6b · W2 · W1 · W3 | done — v1.8.0 → v1.13.0 |
-| v1.14.0 — the stale-reading stop | done |
-| W4 — disconfirmation (Seam 4) | done, v1.15.0 |
-| W6c/6e/6f — recommendation serviceability | done, v1.16.0 |
-| W5 — quantitative reasoning | done, v1.17.0 |
-| **W6d — instrument validity** | **done, v1.18.0 — the last one** |
+Three documents carry the plugin, and the split between them is now deliberate:
 
-Tracked-not-golden scenarios: **none.** All five that had been sitting tracked were promoted
-this session; in every case the blocker was a fixture or a skill defect, never the behaviour
-they tested.
+| Doc | What it is | Read it when |
+|---|---|---|
+| [ARCHITECTURE.md](../researcher/ARCHITECTURE.md) | The explanation. Plain language, no internal shorthand. Harness framing, the agent loop, the cycle, state, roles, voice, the judgment calls, honest limits, and the plugin-vs-product contrast. | You want to understand the system, or hand it to someone who does |
+| [MAINTAINERS.md](../researcher/MAINTAINERS.md) | The ledger. Layers 1–9: exact decision and write ownership, seam register with status, workstream→version map, evidence labels, W7 build status, and the four open design calls. | You are changing something |
+| [CHANGELOG.md](../../researcher/CHANGELOG.md) | Full release history | You need what changed and when |
 
-## Done this session (2026-08-24 → 25)
+**Tag vs HEAD, deliberately.** `researcher-v1.18.0` points at `934882a`; HEAD is `5fea214`, five
+commits ahead. Everything in between touched only `dev/` and `researcher/AGENTS.md` — verified
+with `git diff --name-only researcher-v1.18.0..HEAD | grep -vE "^dev/|AGENTS\.md$"`, which returns
+nothing. The tag still marks the verified build. Do not re-tag for documentation.
 
-- **v1.17.0 (W5)** — figure records gain `basis` and `carries-to`; a withheld methodology is
-  recorded as the finding; `carries-to` binds the spoken turn as tightly as the draft.
-- **v1.18.0 (W6d)** — two of C7's four instrument-validity patterns at Tier 1, with a mandatory
-  route-to-a-person escape hatch. Plus eight defects found by running the set: a false-PASS audit
-  that promoted a live breach, an itemization rule leaking through four surfaces, a manifest that
-  never reached the user, an init ordering defect with two opposite symptoms, a guard offering to
-  run its own destructive command, an advisory arriving after the decision it informed, a
-  corrupted template line that re-created the fabrication path, and a stale "B1–B17" enumeration
-  hiding B18 since v1.16.0.
-- **New deterministic gate** `stamp_implies_record` — a draft claiming a documented adverse search
-  must be accompanied by the record.
-- **New scenario** `adv-audience-standard-partial` — guards the false-PASS enumeration defect,
-  which my own fixture repair would otherwise have concealed.
+## Done this session (2026-09-01)
+
+Documentation restructure. No plugin behavior touched, no version bump owed.
+
+- **`991aedc` — split the map.** ARCHITECTURE.md had become unreadable to its own author: it
+  opened with three sections about the document, mixed open seams with closed-seam build history,
+  and threaded revision bookkeeping through every paragraph. It is now the explanation, and the
+  precise material moved to the new MAINTAINERS.md. Facts corrected in the move: W6d was missing
+  entirely, every workstream version was one low (W4 is 1.15.0, W6c/e/f 1.16.0, W5 1.17.0, W6d
+  1.18.0), the battery is B1–B19 not B1–B15, a superseded Seam 5 duplicate was still present, and
+  the closing paragraph still called W2 and W3 the next build chapters.
+- **Voice section added** to ARCHITECTURE.md. The posture register is a substantial doctrine and
+  the explanation had described a system with no manner at all.
+- **`9389149` — repointed nine design-doc map-sync lines** at MAINTAINERS.md, each naming the
+  specific layer it touches. `constraint-audit.md` got a header note instead of line edits: its
+  references are dated read-provenance from 2026-08-06 and editing them would falsify the record.
+- **`5fea214` — the agent loop and the two-shapes contrast.** Both were added because a statement
+  drafted for the team claimed the doc covered them and it did not. Loops had been one table cell;
+  the Hello Alice contrast had zero mentions.
 
 ## In flight / uncommitted
 
-None. Tree clean, `main` and `researcher-v1.18.0` agree.
+None. Tree clean, `main` synced with `origin/main`, both manifests validate, version-prefix
+checker green across all ten plugins.
 
 ## Next steps (in order)
 
-1. **The side-file coverage gap (design call, do not patch).** The referent rules bind notes and
-   drafts. They do not bind the durable side-files a synthesize run also writes — `assumptions.md`,
-   `negative-searches.md`, arguably the registry. Three separate instances appeared this session:
-   a share→magnitude drift invisible because a fixture's notes carry no figure records; an M&L
-   stamp for a record never written (now gated); a referent widened to national-industry scope
-   inside `assumptions.md`. **Enumerate which artifacts a run writes and decide which the referent
-   rules should bind** — fixing the instance you noticed is the exact error this session paid for
-   four separate times.
-2. **Pre-schema-note fixtures.** Several goldens seed notes with no figure records, so Referent
-   Fidelity is `n/a` on them and W5's protection is not exercised. Enumerate the set first.
-3. **Unfalsifiable `must_not_do` clauses.** Two judges independently flagged that the
-   integrity-agent clause cannot be confirmed or refuted: the skill forbids narrating the check and
-   the capture records only narration. Either observe it mechanically or delete the clause; keeping
-   an unverifiable one is the wrong option. Applies to any scenario whose `must_not_do` names a
-   silent step — enumerate before fixing.
-4. **Recommendation-vs-implication boundary.** A judge flagged that descriptive "so what" lines can
-   be prescriptive in grammar ("needs its own transfer activities") while labeled implications; a
-   stricter read of 7a would score them and they would not score well. Genuine scope question.
-5. **Carried, non-blocking:** No-Tics clustering at 1–2 across many runs (parallel closers,
-   repeated caveat openers); gate vocabulary leaking into turns on the new 7b step; citations
-   pointing at the wrong artifact while the substance traces elsewhere (2 instances).
+**The four open design calls now live in [MAINTAINERS.md](../researcher/MAINTAINERS.md) § Open
+work**, not here — they survive a checkpoint rewrite there and they did not here. Read them in
+that file. In summary, and in order:
+
+1. **The side-file coverage gap** — enumerate which artifacts a synthesize run writes, then decide
+   which the referent rules bind. Do not patch the instance.
+2. **Pre-schema-note fixtures** — several goldens seed notes with no figure records, so W5's
+   protection is never exercised. Enumerate the set first.
+3. **Unfalsifiable `must_not_do` clauses** — either observe the integrity-agent step mechanically
+   or delete the clause.
+4. **Recommendation-vs-implication boundary** — descriptive "so what" lines that are prescriptive
+   in grammar. Genuine scope question.
+
+All four want a human's judgment on scope, not more evidence.
 
 ## Open questions / decisions pending
 
-- Nothing blocking. Items 1–4 above are design calls that want a human's judgment on scope, not
-  more evidence.
+- **One factual check, on Kelsey.** ARCHITECTURE.md's "Two shapes of agent" section describes the
+  Hello Alice AI Advisor as a playbook config validated against engineering's schema, stored in
+  White Rabbit, executed by alice-ai's LangGraph path. That is read from
+  `core-helloalice-marketplace/playbooks/README.md`, not from the system. If engineering has moved
+  since that README was written, the section needs a correction.
 
 ## Session knowledge worth keeping
 
+- **A design doc without a map-sync line is why the map goes stale.** `w6d-design.md` was the only
+  one of nine missing its "update the map in the same change" line, and W6d was correspondingly
+  the only workstream absent from the map — for a full release, alongside a version table that had
+  drifted one number on four rows. The line now exists in all nine and says why. When writing the
+  next design doc, the map-sync line is not boilerplate.
+
 - **This eval produces findings every time it runs — that is the artifact working, not a
   regression.** Do not read a fresh finding list as evidence the last session left things broken.
-  The meaningful measure is the state of the workstreams and the golden set: as of v1.18.0 every
-  workstream is built and the set is 45/45. A session that runs the suite and surfaces three new
-  observations has done its job; a session that surfaces none probably did not look hard enough.
-  Report new findings as *new*, separately from whether the requested work finished.
+  The meaningful measure is the workstream state and the golden set. Report new findings as *new*,
+  separately from whether the requested work finished.
 
-- **Enumerate the set, don't fix the instance.** This session's single most repeated error, in the
-  plugin and in my own fixtures: the silence rule listed five mechanisms and missed the sixth; the
-  battery listed B1–B17 and missed B18; B9 checked the claim in front of it; and I patched one
-  flagged claim of two, reused one search log across four scenarios, and seeded two searches for a
-  three-claim fixture. Rules that enumerate leak. Rules that state a principle hold.
+- **Enumerate the set, don't fix the instance.** The most repeated error across the v1.18.0
+  session, in the plugin and in the fixtures: the silence rule listed five mechanisms and missed
+  the sixth; the battery listed B1–B17 and missed B18. Rules that enumerate leak; rules that state
+  a principle hold. This session applied it deliberately — the design-doc sweep enumerated all
+  nine before editing any.
+
 - **A rule that binds one surface does not bind the next.** Turn, durable record, draft prose,
-  closing recap — one itemization rule leaked through all four, each time on the surface it did not
+  closing recap: one itemization rule leaked through all four, each time on the surface it did not
   name.
-- **An obligation that can be satisfied late is not the obligation it claims to be.** A stop-and-ask
-  arriving after the draft is a caveat. This is now fixed in two places (check-gaps 7d, and
-  summarize-section pre-check 6) and the rubric has a timing anchor so judges stop splitting on it.
-- **Freeze discipline, broken once more.** I edited two skills while nine runs were in flight; a
-  runner noticed the file changing under it and called the change "reflow only" in good faith. It
-  was not. Cost: nine void runs. The person who can judge whether a change is substantive is the
-  one who made it.
-- **Verify by reading, not by grepping.** Three times a fragile pattern gave a misleading zero —
-  once nearly causing me to reverse a correct rule because a run had routed to "a statistician"
-  rather than the literal "domain expert".
+
+- **An obligation that can be satisfied late is not the obligation it claims to be.** A
+  stop-and-ask arriving after the draft is a caveat. Fixed in check-gaps 7d and summarize-section
+  pre-check 6; the rubric has a timing anchor so judges stop splitting on it.
+
+- **Verify by reading, not by grepping.** A fragile pattern gave a misleading zero three times
+  during v1.18.0, once nearly reversing a correct rule.
+
+- **Cross-repo gotcha.** The advisory-board roster in the `playbooks` skill *description* is wrong
+  (it says Marcus). The roster in `core-helloalice-marketplace/playbooks/README.md` is
+  authoritative: Alice, Nathan, Priya, Elena, David. Read the README, not the description, before
+  writing anything about that system.
+
+- **Consistency check worth re-running** after any doc edit. Counts asserted across
+  ARCHITECTURE.md, MAINTAINERS.md and `researcher/AGENTS.md` all agree with reality as of this
+  session: 12 commands, 12 skills, 2 agents, 11 research types.
+
 - **Scratch:** `_eval/iteration-77` … `iteration-92` are local-only (gitignored). Gate helper
   scripts live in the session scratchpad as `g77.sh` … `g92.sh`; each writes `gate-context.json`
-  post-run and `g83.sh` onward also stage `_seed/research/STATE.md` for `state_unchanged_on_write_free`.
+  post-run, and `g83.sh` onward also stage `_seed/research/STATE.md` for
+  `state_unchanged_on_write_free`. These do not survive a machine change; recreate from the
+  scenario definitions in the eval pack if needed.
 
 ## How to resume
 
-1. Read `AGENTS.md`, then `dev/STATE.md`, then this file.
-2. Next work is item 1 above — a design call on which durable artifacts the referent rules bind.
-   Do the enumeration before proposing a fix.
+1. Read root `AGENTS.md`, then `dev/STATE.md`, then this file.
+2. For the system itself, read `dev/researcher/ARCHITECTURE.md`. For anything you intend to
+   change, read `dev/researcher/MAINTAINERS.md` first and update it in the same change.
+3. Next work is the design call in item 1 above. Do the enumeration before proposing a fix.

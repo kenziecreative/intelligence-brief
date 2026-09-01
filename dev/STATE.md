@@ -24,7 +24,7 @@ and trivial; conflicts on a shared body were not.
 | Stream | Worktree / branch | State | Last touched |
 |---|---|---|---|
 | **goal-setting** | merged to `main` 2026-08-09 | [dev/state/goal-setting.md](state/goal-setting.md) | 2026-08-07 |
-| **researcher** | `core-kenzie-marketplace` · `main` — **v1.18.0 tagged**; every workstream built, eval set 45/45 golden | [dev/state/researcher.md](state/researcher.md) | 2026-08-25 |
+| **researcher** | `core-kenzie-marketplace` · `main` — **v1.18.0 tagged**; every workstream built, eval set 45/45 golden. Docs split: ARCHITECTURE = the explanation, MAINTAINERS = the ledger | [dev/state/researcher.md](state/researcher.md) | 2026-09-01 |
 | **strategist** | merged to `main` 2026-08-09 | [dev/state/strategist.md](state/strategist.md) | 2026-08-09 |
 | **marketplace** | `core-kenzie-marketplace` · `main` | [dev/state/marketplace.md](state/marketplace.md) | 2026-08-09 |
 
