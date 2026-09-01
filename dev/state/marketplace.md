@@ -118,4 +118,4 @@ version-prefix checker green across all four surfaces.
 
 1. Read root `AGENTS.md` (orientation, and the worktree rules), then `dev/STATE.md` (the index),
    then this file.
-2. Nothing here is urgent. Item 1 in Next steps is a one-command cleanup.
+2. Nothing here is urgent, and nothing is blocked. Both remaining items are elective.
