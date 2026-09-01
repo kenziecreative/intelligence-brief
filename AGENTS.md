@@ -40,6 +40,47 @@ Every plugin must work on **both Claude Code and Cowork**. Surface-specific mech
 
 Verification is split, not duplicated — each surface is tested by the only tool that can see it. A single code executor avoids split-brain edits.
 
+## Where you work: worktrees and commits
+
+Several Claude sessions run against this repo at once. Two things follow from that, and both are
+rules rather than preferences.
+
+**1. Always commit with explicit pathspecs.** `git add -- <paths>` and never a bare `git add .`
+or `git add -A`. Two sessions in one checkout share one git index, so a pathspec-less commit
+takes whatever the other session has staged. This is not hypothetical here: `825429a` is an
+attribution-recovery commit written after exactly that happened — an intelligence-briefing
+release was swallowed by a concurrent blueprint commit, and the content had to be re-attributed
+afterwards. Naming your paths costs nothing and would have prevented it.
+
+**2. Plugin work takes a worktree. Docs and state work does not.**
+
+- **Changing a plugin's shipped surface** — anything under `<plugin>/`, or a release — happens on
+  its own branch in its own worktree (`kenzie-build-<plugin>`, branched from current `main`). One
+  plugin, one branch, one worktree. Set it up before the first edit, not after.
+- **Docs, `dev/`, state files, the catalog, the root README** — work in the primary checkout on
+  `main`.
+
+The test is a property of the task, not of the environment: *am I about to edit inside a plugin
+directory?* You can answer that alone. "Take a worktree if another agent is working" cannot be
+answered alone — two sessions starting a minute apart both correctly conclude they are the only
+one.
+
+**Why this split rather than worktrees for everything.** The hazard is *branch switching*, not
+co-location. Two sessions both sitting on `main` share a HEAD harmlessly; the damage happens when
+one switches branches under the other. Sending all plugin work to a worktree removes every reason
+to move the primary checkout off `main`, which closes the hazard without making a typo fix build
+a worktree first. The primary checkout stays on `main` and stays clean.
+
+**What a worktree does not carry.** Only tracked files. `.claude/settings.local.json` is
+gitignored, so a new worktree starts with **no permission allowlist** and you will be prompted for
+things that are pre-approved here — copy it in when you create the worktree. Gitignored working
+docs do not travel either; see `dev/STATE.md` § *Gitignored working docs do not travel* for which
+ones and what to do instead. The cheap check that a move carried anything: **a branch sitting at
+the same commit as `main` has carried nothing.**
+
+**This file only reaches sessions that start after it lands.** A session already running has the
+version it read at startup. If you change a convention here, tell the running sessions directly.
+
 ## Working in Cowork (the real constraints)
 
 - **File deletion is gated per folder.** Until you approve it (a delete prompt appears the first time), `rm` and git's own lock-cleanup fail with `Operation not permitted` on the FUSE mount — even on files you just created. Approve once and both `rm` and sandbox `git` work normally for that folder. This — not "git is broken in Cowork" — is why earlier sessions saw commits leave stale `.git/*.lock` files behind.

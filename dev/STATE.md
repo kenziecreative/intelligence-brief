@@ -45,9 +45,11 @@ nobody re-partitions something that was never a problem:
   streams changing the same file there will conflict legitimately. Keep those edits small and
   merge them promptly instead of parking them on a long-lived plugin branch.
 
-**One plugin, one branch, branched from current `main`.** Don't branch from another plugin's
-branch. The August 2026 backlog had branches 40–114 commits behind `main`; they all still
-merged clean, but that was luck, not design.
+**The worktree and pathspec rules live in root `AGENTS.md` § *Where you work*** — one definition,
+pointed at from here rather than restated, because a rule kept in two places ends up true in one.
+What is specific to this file: don't branch from another plugin's branch, and the August 2026
+backlog had branches 40–114 commits behind `main` that all merged clean by luck rather than
+design. `review/intelligence-briefing` is currently past that range.
 
 ## Shared ground (true regardless of stream)
 
