@@ -51,8 +51,31 @@ merged clean, but that was luck, not design.
 ## Shared ground (true regardless of stream)
 
 - Orientation: root `AGENTS.md`, then the plugin's own `AGENTS.md`.
-- Convergence work: `dev/convergence/README.md` (local-only) → the relevant build brief →
-  `dev/backstage-convergence-plan.md` § Decisions of Record.
+- Convergence work: `dev/convergence/README.md` → the relevant build brief →
+  `dev/backstage-convergence-plan.md` § Decisions of Record. **The first two are gitignored —
+  see the note below before following that path from a worktree.**
 - Release ritual, versioning, and the three registration points: root `AGENTS.md` § Release.
 - Eval harness: `eval/README.md` + `eval/AGENTS.md`. Runs are local-only (`eval/**/_eval/` is
   gitignored), so a scorecard exists only in the checkout that produced it.
+
+### Gitignored working docs do not travel
+
+Some orientation this file points at is **deliberately gitignored** and therefore exists only in
+the checkout that created it. A `git worktree`, a fresh clone, and a CI checkout all get the
+tracked repo and nothing else, so a pointer to one of these paths resolves to nothing there.
+
+Today that covers `dev/convergence/` (build execution layer) and `dev/blind-reviews/` (candid
+defect lists of live products). Both stay ignored on purpose — they are not for distribution.
+Check `.gitignore` rather than trusting this list; anything ignored under `dev/` behaves the
+same way.
+
+**What to do instead: read them in place, by absolute path, in the primary checkout
+(`core-kenzie-marketplace`). Do not copy them into a worktree.** These are documents a person
+also edits, and a second copy of a live document diverges silently — you would be reconciling
+two versions later instead of reading one now. Copy only what is yours alone.
+
+The same property is why an eval scorecard exists only where it was produced, and it is worth
+checking before you assume a move succeeded: **a branch sitting at the same commit as `main`
+has carried nothing.** Tracked tooling is fine — `dev/scripts/` and `eval/lib/` are tracked
+deliberately, and only their outputs are ignored. Keep it that way; a checker that lives in an
+ignored directory does not exist in a worktree.
