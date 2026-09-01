@@ -37,25 +37,35 @@ independently, and the grace-window fix is correctly *absent* because the rewrit
 grace-window mechanism entirely. A naive merge could resurrect that deleted text — the v0.3.1
 commit predicted this in writing. Read it before merging.
 
-## In flight / uncommitted
+## In flight
 
-**Six modified files in the worktree, uncommitted.** They read as finished work rather than a
-half-edit — the largest adds a single-constructor rule for drivers, falsifier result recording
-(`result_observation_ids` / `cuts`), and a `planned` block so a run reconciles what it committed to
-against what it recorded.
+**None uncommitted.** The six modified files were committed on the branch as `8af2c28`
+(2026-09-01), staged with explicit pathspecs. They validate at both scopes.
 
-| File | Scale |
-|---|---|
-| `skills/environmental-scan/SKILL.md` | +50 |
-| `skills/intelligence-review/SKILL.md` | +10 |
-| `commands/brief.md` | +8 |
-| `skills/environmental-briefing/SKILL.md` | +7 |
-| `skills/environmental-briefing/references/html-brief.md` | +4 |
-| `commands/intel-setup.md` | +2 |
+**Committed, not released.** The version stays 1.1.0 and the `intelligence-briefing-v1.1.0` tag
+still points at `a0eb932`, which does **not** include this work. Codex pass 3 has not run, and
+this repo's rule is that a tag only ever marks a verified build.
 
-**These are unprotected.** Nothing is committed, stashed, or pushed, so there is no history behind
-them. Whether they are complete is a question only their author can answer — deciding that from
-outside is exactly the call this repo's per-stream rule forbids.
+The change closes five paths around 1.1.0's own doctrine, "every mandatory obligation records an
+outcome" — all the same disease, a rule stated but not enforced, or scoped narrower than the claim
+it protects:
+
+- **One constructor for drivers.** The definition lived in three places and was true in two. The
+  material-vs-derivative counting rule reached collection and export and missed the review
+  conversation, so a thread of three real advances and twenty restatements could become a driver
+  with `observation_count: 23`.
+- **`planned` + step-11 reconciliation.** A run records what it committed to before executing,
+  then writes down any planned obligation with no recorded outcome as `failed`. This is what
+  turns the doctrine from a hope into a mechanism.
+- **Falsifier results named, not inferred** — `result_observation_ids` and `cuts`, and the brief
+  must report a `cuts: for` result rather than bury it.
+- **`idle` narrowed** so a quiet-cell morning stops routing around the mandatory falsifier
+  searches.
+- **Driver standing made global, plus a new baseline gate.** No driver moves unless the whole run
+  closes clean, and none moves before every applicable cell has been scanned at least once.
+
+**Branch is one commit ahead of `origin/review/intelligence-briefing` — not yet pushed.** Until it
+is, the work exists on one machine.
 
 ## Next steps (in order)
 
@@ -64,8 +74,8 @@ outside is exactly the call this repo's per-stream rule forbids.
    `plugin/` directory beside it, then paste the verdict back into a session. **That path is
    outside any repo and therefore outside every checkout** — it does not travel and it is not
    backed up by git.
-2. **Resolve the six uncommitted files** — commit them on the branch, or record what finishing
-   them looks like. Leaving finished work with no history is the larger risk of the two.
+2. **Push the branch.** `8af2c28` is committed locally and not yet on the remote, so the work is
+   still single-machine. One command, and it is the last of the exposure.
 3. **Kelsey: the merge-to-main call.** Sequencing recommendation from the branch's own state doc:
    let pass 3 land first. Two equivalent paths — merge from `core-kenzie-marketplace` (the
    strategist pattern), or the PR GitHub offers for the pushed branch.
